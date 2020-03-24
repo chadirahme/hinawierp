@@ -1,0 +1,141 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+	<borderlayout id="mainlayout2">
+
+		<center autoscroll="true">
+			<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+				viewModel="@id('vm')
+	 @init('timesheet.AssignEmployeeToProject')"
+				vflex="1">
+
+
+
+				<label value="Assign Employees to Project"
+					style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+
+				<grid>
+					<columns>
+						<column width="100px"></column>
+						<column width="200px"></column>
+						<column width="200px"></column>
+						<column width="200px"></column>
+					</columns>
+					<rows>
+
+						<row>
+						
+							<label value="Company"></label>
+							<listbox multiple="false" hflex="1" mold="select"
+								model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item.enCompanyName)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+							<cell>
+							<label value="Filter "></label>
+							<listbox multiple="false" hflex="1" mold="select"
+								model="@load(vm.lstFilterValues)" selectedItem="@bind(vm.selectedFilter)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+							</cell>
+							<cell>
+								<!-- <button label="Filter" onClick="@command('filterCommand')"></button> -->
+								<button label="Clear"  onClick="@command('clearCommand')"></button>
+								<button label="View" onClick="@command('findEmployeesForProjectCommand')" visible="@bind(vm.companyRole.canView)"></button>
+							</cell>
+						</row>
+					</rows>
+				</grid>
+
+
+				<grid vflex="1" emptyMessage="There is no data found for this criteria"
+					model="@load(vm.lstEmployeeHistory)">
+					<auxhead sclass="category-center">
+						<auxheader colspan="1">
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value="@bind(vm.employeeFilter.employeeNo)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.fullName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value="@bind(vm.employeeFilter.department)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.position)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value=""
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							
+						</auxheader>
+					</auxhead>
+					<columns sizable="true">
+						<column label="SNO." width="50px" />
+						<column label="Emp No." width="120px" sort="auto(employeeNo)" />
+						<column label="Name" width="200px" sort="auto(fullName)" />
+						<column label="Department" width="250px" sort="auto(department)" />
+						<column label="Posotion" width="200px" sort="auto(position)" />
+						<column label="Start Work" width="120px" sort="auto(employeementDate)" />
+						<column label="Select Project" width="150px" sort="">
+							<checkbox onCheck="@command('checkProjectAll')" checked="@bind(vm.checkedAll)"></checkbox>
+						</column>
+					</columns>
+
+
+					<template name="model">
+						<row>
+							<label value="@bind(forEachStatus.index+1)"></label>
+							<label value="@bind(each.employeeNo)"></label>
+							<label value="@bind(each.fullName)"></label>
+							<label value="@bind(each.department)" />
+							<label value="@bind(each.position)"></label>
+							<label value="@bind(each.employeementDate)"></label>
+							<listbox hflex="1" mold="select" model="@load(vm.lstProject)"
+								selectedItem="@bind(each.selectedProject)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item.projectName)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+						</row>
+
+
+					</template>
+				</grid>
+				<hbox align="right">
+					<space></space>
+					<space></space>
+					<label value="Total Employees : "
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<label value="@load(vm.footer)"
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+				</hbox>
+				<hbox pack="center" hflex="1">
+					<button label="Save"
+						onClick="@command('saveAssignedEmployeeToProjectCommand')" visible="@bind(vm.companyRole.canAdd)"></button>
+				</hbox>
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

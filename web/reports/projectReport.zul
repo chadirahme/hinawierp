@@ -1,0 +1,167 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/css/style.css"?>
+<?link rel="stylesheet" type="text/css" href="/css/hstyle.css"?>
+
+<zk>
+	<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('reports.ProjectReportViewModel')"
+		vflex="1">
+
+		<label value="Timesheet By Project Report"
+			style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+
+
+		<grid>
+			<columns>
+				<column width="100px"></column>
+				<column width="180px"></column>
+				<column width="100px"></column>
+				<column width="180px"></column>
+				<column width="100px"></column>
+				<column width="250px"></column>
+			</columns>
+			<rows>
+
+				<row>
+					<label value="Company"></label>
+					<listbox multiple="false" hflex="1" mold="select"
+						model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+						<template name="model" var="item">
+							<listitem>
+								<listcell label="@load(item.enCompanyName)"></listcell>
+							</listitem>
+						</template>
+					</listbox>
+
+					 <label value="Project"></label> <listbox hflex="1" mold="select" 
+						model="@load(vm.lstProject)" selectedItem="@bind(vm.selectedProject)"> <template 
+						name="model" var="item"> <listitem > <listcell label="@load(item.projectName)"></listcell> 
+						</listitem> </template> </listbox> 
+
+					<label value="Employee"></label>
+					<listbox multiple="false" hflex="1" mold="select"
+						model="@load(vm.lstCompEmployees)" selectedItem="@bind(vm.selectedCompEmployee)">
+						<template name="model" var="item">
+							<listitem>
+								<listcell label="@load(item.fullName)"></listcell>
+							</listitem>
+						</template>
+					</listbox>
+
+				</row>
+
+				<row>
+					<cell colspan="4">
+						<hbox>
+							<label value="Period From"></label>
+							<!-- <listbox multiple="false" mold="select" selectedIndex="@bind(vm.selectedPeriod)"> 
+								<listitem label="All"></listitem> <listitem label="Period"></listitem> </listbox> -->
+
+							<listbox multiple="false" mold="select" model="@load(vm.lstMonths)"
+								selectedIndex="@bind(vm.selectedFromMonth)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+
+							<listbox multiple="false" mold="select" model="@load(vm.lstYears)"
+								selectedItem="@bind(vm.selectedYear)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+
+							<label value="To"></label>
+							<listbox multiple="false" mold="select" model="@load(vm.lstToMonths)"
+								selectedIndex="@bind(vm.selectedToMonth)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+
+							<listbox multiple="false" mold="select" model="@load(vm.lstToYears)"
+								selectedItem="@bind(vm.selectedToYear)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+
+							<button label="Search" onClick="@command('searchCommand')"></button>
+						</hbox>
+					</cell>
+
+					<cell colspan="2">
+						<hbox>
+
+
+							<button label="Filter" onClick="@command('filterCommand')"></button>
+
+							<button label="Clear" onClick="@command('clearCommand')"></button>
+
+						<!-- 	<button label="PDF" onClick="@command('exportCommand',ref=lstHistory)"></button> -->
+
+							<button label="Excel" onClick="@command('exportToExcel',ref=lstHistory)"></button>
+
+						</hbox>
+					</cell>
+
+				</row>
+			</rows>
+		</grid>
+
+		<listbox id="lstHistory" model="@bind(vm.lstEmployeeHistory)"
+			hflex="1" width="820px" vflex="1" emptyMessage="No data found">
+			<listhead menupopup="auto" sizable="true">
+				<listheader label="Project Code" width="110px" sort="auto('projectCode')" />
+				<listheader label="Project Name" sort="auto('projectName')"
+					width="200px" />
+				<listheader label="Time Sheet Months" sort="auto('tsMonthDesc')"
+					width="120px" />
+				<listheader width="120px" label="Time Sheet Years"
+					sort="auto('tsYear')" />
+				<listheader width="150px" label="Work" sort="auto('workWithPay')" />
+				<listheader width="150px" label="Absence" sort="auto('absenceWithPay')" />
+				<listheader width="150px" label="Holidays" sort="auto('holidaysWithPay')" />
+				<listheader width="150px" label="Sick" sort="auto('sickWithPay')" />
+				<listheader width="150px" label="Leave" sort="auto('leave')" />
+
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell label="@bind(each.projectCode)">
+					</listcell>
+					<listcell label="@bind(each.projectName)">
+					</listcell>
+					<listcell label="@bind(each.tsMonthDesc)">
+					</listcell>
+					<listcell label="@bind(each.tsYear)">
+					</listcell>
+					<listcell  label="${c:formatNumber(each.workWithPay, '###.##')}">
+					</listcell>
+					<listcell  label="${c:formatNumber(each.absenceWithPay, '###.##')}">
+					</listcell>
+					<listcell  label="${c:formatNumber(each.holidaysWithPay, '###.##')}">
+					</listcell>
+
+					<listcell  label="${c:formatNumber(each.sickWithPay, '###.##')}" >
+					</listcell>
+
+					<listcell label="${c:formatNumber(each.leave, '###.##')}" >
+					</listcell>
+
+				</listitem>
+			</template>
+		</listbox>
+
+	</vlayout>
+</zk>

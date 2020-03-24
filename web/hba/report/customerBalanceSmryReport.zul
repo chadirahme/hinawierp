@@ -1,0 +1,298 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('hba.CustomerBlanceSummaryReport')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<label value="Customer Balance Report"
+					style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+				<grid>
+					<columns>
+						<column width="200px"></column>
+						<column width="200px"></column>
+						<column width="270px"></column>
+						<column width="230px"></column>
+						<column width="200px"></column>
+					</columns>
+					<rows>
+					<row>
+							<cell sclass="">
+								Customer Job *:
+							</cell>
+
+							<cell colspan="1">
+								<listbox hflex="1" mold="select" model="@load(vm.lstCustomers)"
+									selectedItem="@bind(vm.selectedCustomer)">
+									<template name="model" var="item">
+										<listitem>
+											<listcell label="@load(item.fullName)"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+
+							</cell>
+
+							<cell colspan="1">
+								<checkbox checked="@bind(vm.inactiveCustomer)" label="Inculde InActive Customers"
+									visible="true"></checkbox>
+
+							</cell>
+							
+							<cell>								
+								<checkbox checked="@bind(vm.hideZero)"  label="Hide Customers with balances Zero"
+									visible="true" />
+							</cell>
+							
+							
+							<cell colspan="1" visible="false">
+								<checkbox checked="@bind(vm.inculdeOtherTrasctions)"
+									label="Inculde other Trascations" visible="true"></checkbox>
+
+							</cell>
+						</row>
+					
+					
+						<row>
+							<cell>
+								<button id="btn1" label="View" width="100px"
+									onClick="@command('searchCommand')"></button>
+							</cell>
+							<cell>
+								<button id="btn2" label="Reset" width="100px"
+									onClick="@command('resetCustomerSummaryReport')"></button>
+							</cell>
+							<cell>
+								<button label="Excel Summary"
+									onClick="@command('exportToExcel',ref=customerSummaryReport)"></button>
+							</cell>
+							<!-- <cell>
+								<button label="Excel Detailed"
+									onClick="@command('exportToExcelDeatiled',ref=customerDeatiledReport)"></button>
+							</cell> -->
+						</row>
+						
+
+						<row>
+							<cell visible="false">
+								<label value="Till Date :"></label>
+							</cell>
+							<cell visible="false">
+								<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy" />
+							</cell>
+
+							
+						</row>
+
+						<!-- <row> <cell> <label value="Date Range :"></label> </cell> <cell> 
+							<hbox> <label value="From"></label> <datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy"></datebox> 
+							</hbox> </cell> <cell> <hbox> <label value="To"></label> <datebox value="@bind(vm.toDate)" 
+							format="dd/MM/yyyy"></datebox> </hbox> </cell> </row> -->
+					</rows>
+				</grid>
+
+				<tabbox id="tb" vflex="1">
+					<tabs id="tabs">
+						<tab id="Summary" label="Customer Balance Summary Report" />
+						<tab id="Detailed" label="Customer Balance Detailed Report" visible="false" />
+					</tabs>
+					<tabpanels>
+						<tabpanel>
+							<listbox model="@load(vm.customerSummaryReport)" vflex="1"
+								id="customerSummaryReport" emptyMessage="No data found" hflex="1"
+								width="920px">
+								<auxhead sclass="category-center">
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" hflex="1"
+											value="@bind(vm.filter.enityName)" onChange="@command('changeFilter')" />
+									</auxheader>
+									<!-- <auxheader colspan="1"> <image src="/images/funnel.png" /> 
+										<textbox instant="true" width="150px" value="@bind(vm.filter.enityNameAr)" 
+										onChange="@command('changeFilter')" /> </auxheader> -->
+									<auxheader colspan="1">
+										<!-- <image src="/images/funnel.png" />
+										<textbox instant="true" width="150px"
+											value="@bind(vm.filter.amount)" onChange="@command('changeFilter')" /> -->
+									</auxheader>
+									<auxheader colspan="1">
+										<!-- <image src="/images/funnel.png" />
+										<textbox instant="true" width="150px"
+											value="@bind(vm.filter.amount)" onChange="@command('changeFilter')" /> -->
+									</auxheader>
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" hflex="1"
+											value="@bind(vm.filter.amount)" onChange="@command('changeFilter')" />
+									</auxheader>
+									
+									<!-- <auxheader colspan="1"> <image src="../images/funnel.png" /> 
+										<textbox instant="true" width="150px" value="@bind(vm.filter.period)" onChange="@command('changeFilter')" 
+										/> </auxheader> -->
+								</auxhead>
+
+								<listhead menupopup="auto" sizable="true">
+									<listheader label="Name " sort="auto('enityName')"
+										width="200px" />
+									<!-- <listheader label="Arabic Name" sort="auto('enityNameAr')" 
+										width="200px" /> -->
+										<listheader label="Credit" sort="auto('credit')"
+										align="right" width="200px" />
+										<listheader label="Debit" sort="auto('debit')"
+										align="right" width="200px" />
+										
+									<listheader label="Amount" sort="auto('balance')"
+										align="right" width="200px" />
+
+									<!-- <listheader label="Period" sort="auto('period')" width="200px" 
+										/> -->
+								</listhead>
+								<template name="model">
+									<listitem
+										style="@bind(each.istotal eq 1 ? 'background:#66A3C2;' : 'background:;')">
+										<listcell>
+											<label value="@bind(each.enityName)" />
+										</listcell>
+										<!-- <listcell> <label value="@bind(each.enityNameAr)" /> </listcell> -->
+										<listcell>
+											<label value="${c:formatNumber(each.credit, '###,###,###.00')}"
+												 />
+										</listcell>
+										<listcell>
+											<label value="${c:formatNumber(each.debit, '###,###,###.00')}"
+											 />
+										</listcell>
+										<listcell>
+											<label value="${c:formatNumber(each.balance, '###,###,###.00')}"
+												style="@bind(each.balance ge 0 ? 'color:black;font-weight:bold;' : 'color:red;margin-left:0px') " />
+										</listcell>
+
+									</listitem>
+								</template>
+
+							</listbox>
+						</tabpanel>
+
+						<tabpanel>
+							<listbox model="@load(vm.customerDeatiledReport)" vflex="1"
+								id="customerDeatiledReport" emptyMessage="No data found" hflex="1" mold="paging" pageSize="500"
+								width="920px">
+								<auxhead sclass="category-center">
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" width="150px"
+											value="@bind(vm.filter.enityName)" onChange="@command('changeFilterDetailed')" />
+									</auxheader>
+									<!-- <auxheader colspan="1"> <image src="/images/funnel.png" /> 
+										<textbox instant="true" width="150px" value="@bind(vm.filter.enityNameAr)" 
+										onChange="@command('changeFilterDetailed')" /> </auxheader> -->
+									<!-- <auxheader colspan="1"> <image src="/images/funnel.png" /> 
+										<textbox instant="true" width="100px" value="@bind(vm.filter.txnType)" onChange="@command('changeFilterDetailed')" 
+										/> </auxheader> <auxheader colspan="1"> <image src="/images/funnel.png" /> 
+										<textbox instant="true" width="80px" value="@bind(vm.filter.txnDate)" onChange="@command('changeFilterDetailed')" 
+										/> </auxheader> <auxheader colspan="1"> <image src="/images/funnel.png" /> 
+										<textbox instant="true" width="80px" value="@bind(vm.filter.refranceNumber)" 
+										onChange="@command('changeFilterDetailed')" /> </auxheader> <auxheader colspan="1"> 
+										<image src="/images/funnel.png" /> <textbox instant="true" width="100px" 
+										value="@bind(vm.filter.acountName)" onChange="@command('changeFilterDetailed')" 
+										/> </auxheader> <auxheader colspan="1"> <image src="/images/funnel.png" /> 
+										<textbox instant="true" width="100px" value="@bind(vm.filter.className)" 
+										onChange="@command('changeFilterDetailed')" /> </auxheader> <auxheader colspan="1"> 
+										<image src="/images/funnel.png" /> <textbox instant="true" width="80px" value="@bind(vm.filter.debit)" 
+										onChange="@command('changeFilterDetailed')" /> </auxheader> <auxheader colspan="1"> 
+										<image src="/images/funnel.png" /> <textbox instant="true" width="80px" value="@bind(vm.filter.credit)" 
+										onChange="@command('changeFilterDetailed')" /> </auxheader> <auxheader colspan="1"> 
+										<image src="/images/funnel.png" /> <textbox instant="true" width="80px" value="@bind(vm.filter.amount)" 
+										onChange="@command('changeFilterDetailed')" /> </auxheader> <auxheader colspan="1"> 
+										<image src="/images/funnel.png" /> <textbox instant="true" width="80px" value="@bind(vm.filter.balance)" 
+										onChange="@command('changeFilterDetailed')" /> </auxheader> -->
+								</auxhead>
+
+								<listhead menupopup="auto" sizable="true">
+									<listheader label="Name " sort="auto('enityName')"
+										width="200px" />
+									<!-- <listheader label="Arabic Name" sort="auto('enityNameAr')" 
+										width="200px" /> -->
+									<listheader label="Type" sort="auto('txnType')"
+										width="120px" />
+									<listheader label="Date " sort="auto('txnDate')"
+										width="120px" />
+									<listheader label="Number" sort="auto('refranceNumber')"
+										width="120px" />
+									<listheader label="Account/Item" sort="auto('acountName')"
+										width="200px" />
+									<!-- <listheader label="Class" sort="auto('className')" width="200px" 
+										/> -->
+									<listheader label="Debit " sort="auto('debit')"
+										align="right" width="120px" />
+									<listheader label="Credit" sort="auto('credit')"
+										align="right" width="120px" />
+									<listheader label="Amount" sort="auto('amount')"
+										align="right" width="120px" />
+									<listheader label="Balance" sort="auto('balance')"
+										align="right" width="120px" />
+								</listhead>
+								<template name="model">
+									<listitem
+										style="@bind(each.txnType eq 'Total' ? 'background:#99EBD6;' :  'background:#green;')">
+										<listcell>
+											<label value="@bind(each.enityName)" />
+										</listcell>
+										<!-- <listcell> <label value="@bind(each.enityNameAr)" /> </listcell> -->
+										<listcell>
+											<label value="@bind(each.txnType)" />
+										</listcell>
+										<listcell>
+											<label value="@bind(each.txnDate)" />
+										</listcell>
+										<listcell>
+											<label value="@bind(each.refranceNumber)" />
+										</listcell>
+										<listcell>
+											<label value="@bind(each.acountName)" />
+										</listcell>
+										<!-- <listcell> <label value="@bind(each.className)" /> </listcell> -->
+										<listcell>
+											<label value="${c:formatNumber(each.debit, '###,###,###.00')}" />
+										</listcell>
+										<listcell>
+											<label value="${c:formatNumber(each.credit, '###,###,###.00')}" />
+										</listcell>
+										<listcell>
+											<label value="${c:formatNumber(each.amount, '###,###,###.00')}"
+												style="@bind(each.amount ge 0 ? 'color:black;font-weight:bold;' : 'color:red;margin-left:0px')" />
+										</listcell>
+										<listcell>
+											<label value="${c:formatNumber(each.balance, '###,###,###.00')}"
+												style="@bind(each.balance ge 0 ? 'color:black;font-weight:bold;' : 'color:red;margin-left:0px')" />
+										</listcell>
+
+									</listitem>
+								</template>
+
+							</listbox>
+						</tabpanel>
+
+
+					</tabpanels>
+				</tabbox>
+				<hbox align="right">
+					<space></space>
+					<space></space>
+					<label value="Total Customers
+					: "
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<label value="@load(vm.totalNoOfCustomer)"
+						style="color:#2c6f99;text-align: right;font-weight: 
+					bold;"></label>
+					<space></space><label value="Total Balance : " style="color:#2c6f99;text-align: 
+						right;font-weight: bold;"></label>
+						
+						 <label value="@load(vm.totalAmountStr)" 
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label><space></space>
+				</hbox>
+
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

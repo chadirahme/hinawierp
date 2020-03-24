@@ -1,0 +1,32 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<div apply="hr.DetailsViewCtrl">
+<label value="${arg.emp.fullName }"></label>
+
+<grid width="100%" id="dgDetails">
+
+		<columns>	
+		  	
+           <column label="Destination" width="200px"/>   
+            <column label="Prefix" width="100px"/> 
+            <column label="Destination" width="200px"/>   
+            <column label="Prefix" width="100px"/> 
+            <column label="Destination" width="200px"/>   
+            <column label="Prefix" width="100px"/> 
+            <column label="Destination" width="200px"/>   
+            <column label="Prefix" width="100px"/> 
+            <column label="Destination" width="200px"/>   
+            <column label="Prefix" width="100px"/> 
+            <column label="Destination" width="200px"/>   
+            <column label="Prefix" width="100px"/>       
+                       
+        </columns>
+       
+        			
+		</grid>	
+		
+</div>
+		
+		
+</zk>

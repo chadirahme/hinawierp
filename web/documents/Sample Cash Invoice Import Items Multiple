@@ -1,0 +1,4 @@
+InvoiceNo,CustomerName,TxnDate,Amount,Memo,Item Name,Quantity
+1,Customer1,26/05/2015,200.5,Memo For the Invoice,Item Name 1,1
+1,Customer1,26/05/2015,500.25,Memo For the Invoice,Item Name 2,2
+2,Customer2,26/05/2015,30000,Memo For the Invoice,Item Name 2,2

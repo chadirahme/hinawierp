@@ -1,0 +1,124 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<vlayout apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('school.SchoolViewModel' , type='assignsection' )" >
+	 
+	 <label value="Assign Sections to Grade" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+
+	 <grid>
+	 <columns>
+	 <column width="150px"></column>
+	 <column width="200px"></column>
+	 <column width="200px"></column>
+	 <column width="200px"></column>
+	 </columns>
+	 
+	 <rows>
+	 <row>
+	 <label value="School"></label>
+	 <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstSchool)" selectedItem="@bind(vm.selectedSchool)">
+	<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item.enschoolname)"></listcell>
+					</listitem>
+				</template>
+
+	</listbox>
+	
+	<cell rowspan="5" colspan="2">
+	<listbox id="demoGrid" height="300px"
+           model="@load(vm.lstSectionsInGrade)">
+          <listhead sizable="true">
+           <listheader label="Grade Name" sort="auto('enGradeName')" />
+             <listheader label="Section Name" sort="auto('enSectionName')" />
+              <listheader label="Max No of Students" sort="auto('maxStudents')" />      
+              <listheader label="Delete"  />           
+            </listhead>
+          
+         <template name="model" var="item">
+             <listitem>
+              <listcell>
+                        <label value="@load(item.enGradeName)" />
+                   </listcell>
+                    <listcell>
+                        <label value="@load(item.enSectionName)" />
+                   </listcell>
+                   <listcell>
+                        <label value="@load(item.maxStudents)" />
+                  </listcell>                 
+                 
+                  <listcell>
+                        <button image="/images/cross.png"
+                         onClick="@command('deleteAssignedSectionsCommand', row=item )" />
+                 </listcell>
+                 
+               </listitem>
+           </template>
+       </listbox>
+	
+	</cell>
+	 </row>
+	 
+	 <row>
+	 <label value="Program"></label>
+	 <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstPrograms)" selectedItem="@bind(vm.selectedProgram)">
+	<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item.enprogramname)"></listcell>
+					</listitem>
+				</template>
+
+	</listbox>
+	 </row>
+	 
+	  <row>
+	 <label value="Grade"></label>
+	 <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstFromGrades)" selectedItem="@bind(vm.selectedFromGrade)">
+	<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item.enGradeName)"></listcell>
+					</listitem>
+				</template>
+
+	</listbox>
+		
+	 </row>
+	 
+	 <row>
+	 <label value="Sections (Press ctrl for multi select)"></label>
+	<listbox multiple="true" hflex="1" mold="select" model="@load(vm.lstSections)" selectedItems="@bind(vm.selectedAssignedSections)" >
+	<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item.enSectionName)"></listcell>
+					</listitem>
+				</template>
+
+	</listbox>
+			
+			
+	 </row>
+	 
+	 <row>
+	 <label value="Max. No. of Students"></label>
+	 <intbox value="@bind(vm.maxNoOfStudents)"></intbox>
+	 </row>
+	 
+	 <row>
+	 <cell colspan="3">
+	 <hbox hflex="1" pack="center">
+	 <button label="Save" onClick="@command('saveAssignedSectionsCommand')"></button>
+	 </hbox>
+	 </cell>
+	 
+	 </row>
+	 </rows>
+	 </grid>
+	 
+	 
+	 
+       
+	 
+	 
+	 </vlayout>
+</zk>

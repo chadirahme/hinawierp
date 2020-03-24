@@ -1,0 +1,62 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+<?page id="popMain" title="new page title" contentType="text/html;charset=UTF-8" ?>
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+
+	<window id="sponsorListModalDialog" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Edit Sponsor" border="normal" position="center,center"
+		closable="true" viewModel="@id('vm')  @init('hr.SponsorEditViewModel')"
+		sizable="true" onCancel="sponsorListModalDialog.detach()" width="500px"
+		height="250px">
+		<grid id="grid_id"
+			form="@id('fx') @load(vm.selectedSponsor)  @save(vm.selectedSponsor, before='updateSponsorList')"
+			hflex="1" vflex="1">
+			<columns>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="0px"></column>
+			</columns>
+			<rows>
+				<row>
+					<cell>Sponsor Name *</cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.sponsorName)" maxlength="31" hflex="1" />
+					</cell>
+
+				</row>
+				<row>
+					<cell>Sponsor Name-Arabic</cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.sponsorNameArabic)" hflex="1" />
+					</cell>
+
+				</row>
+				<row>
+					<cell>Employer Unique Id </cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.companyId)" hflex="1" />
+					</cell>
+
+				</row>
+				<row>
+					<cell>Bank Code Of Employer</cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.bankCode)" hflex="1" />
+					</cell>
+				</row>
+				<row>
+					<cell colspan="4">
+						<hbox pack="center" hflex="1">
+							<button label="Save"
+								onClick="@command('updateSponsorList',cmp=sponsorListModalDialog)"
+								visible="@bind(vm.canSave)"></button>
+							<button label="Close" onClick="sponsorListModalDialog.detach()"></button>
+						</hbox>
+					</cell>
+				</row>
+			</rows>
+		</grid>
+
+	</window>
+</zk>

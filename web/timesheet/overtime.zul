@@ -1,0 +1,147 @@
+<zk>
+<zscript>
+void openContexMenu()
+ { 
+	editCheckITemsPopup.open(grd);
+  }
+</zscript>
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('timesheet.OverTimeViewModel' )" vflex="1">
+
+ 		<label value="OverTime Setup" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+ 
+  			<menupopup id="editCheckITemsPopup">
+       	 	<menuitem label="Insert Line" onClick="@command('insertOTDetailRow')"></menuitem>
+       	 	<menuitem label="Delete Line" onClick="@command('deleteOTDetailRow')"></menuitem>
+       	 	</menupopup>
+       	 
+ <hbox style="margin:15px">
+ <label value="Company"></label>
+			<listbox multiple="false" width="200px" mold="select" model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enCompanyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+		
+		 <button label="Add Shift overtime" onClick="@command('addshiftOTCommand')" visible="@bind(vm.companyRole.canAdd)"></button>
+ 	
+ </hbox>
+ 
+
+ 
+ <grid height="350px"  emptyMessage="There is no overtime for this company" model="@load(vm.lstOverTime)" id="grd">
+<columns sizable="true">
+<column width="50px"></column>
+<column label="Shift" width="200px"></column>
+<column label="Max OT" width="100px"></column>
+<column label="OT" width="120px"></column>
+<column label="Calculate" width="300px"></column>
+
+
+</columns>
+
+				<template name="model">	        	
+	        	<row>
+	        	<custom-attributes
+				   lstot="${each.lstOverTime}" item="${each}" type="${each.recNo}"/>
+							        
+	             <hbox>
+	              	<listbox mold="select" model="@bind(vm.lstShiftMaster)" selectedItem="@bind(each.shiftType)" onSelect="@command('selectShiftCommand',row=each)">		                  
+		                <template name="model" var="item">
+						<listitem >
+						<listcell label="@bind(item.shiftCode)" ></listcell>
+						</listitem>
+						</template>
+		                  </listbox>
+		                 <button 
+                        image="/images/cross.png"
+                        onClick="@command('deleteShiftCommand', row=each)" visible="@bind(vm.companyRole.canDelete)" />
+	              </hbox>
+	             <intbox value="@bind(each.maxOT)" />
+	           	 <checkbox checked="@bind(each.calculateOT)" />
+	           	  <doublebox value="@bind(each.calcHours)" />
+	           	  
+	               	    <detail open="true" >
+	               	  	
+	               	  	<listbox model="@bind(each.lstOverTime)" selectedItem="@bind(vm.selectedOverTime)" >
+						<listhead sizable="true">
+						<listheader label="Day" width="120px"></listheader>
+						<listheader label="" width="30px"></listheader>
+						<listheader label="Rate"></listheader>
+						<listheader label="Hours"></listheader>
+						<listheader label="Auto Fill" width="100px"></listheader>
+						<listheader label="Calculate" width="100px"></listheader>
+						<listheader label="Salary Item" width="220px"></listheader>
+						</listhead>
+						
+						<template name="model">
+						 <listitem >
+						     <listcell>
+						  <listbox mold="select" model="@bind(vm.lstDayType)" selectedItem="@bind(each.dayType)" disabled="@bind(!item.calculateOT)">		                  
+		                <template name="model" var="item">
+						<listitem >
+						<listcell label="@bind(item)" ></listcell>
+						</listitem>
+						</template>
+		                  </listbox>	  
+		                  </listcell>
+		                      <listcell>
+		                <image src="/images/edit.png" width="20px" height="20px" context="editCheckITemsPopup" onClick="openContexMenu()"/>
+						</listcell>
+						    <listcell>
+						<doublebox value="@bind(each.otRate)" disabled="@bind(!item.calculateOT)"></doublebox>
+						</listcell>
+						    <listcell>
+						<doublebox value="@bind(each.otHours)" onChange="@command('changeOTHoursCommand',row=each)" disabled="@bind(!item.calculateOT)"></doublebox>
+						</listcell>
+						    <listcell>
+						  <listbox mold="select" model="@bind(vm.lstAutoFill)" selectedItem="@bind(each.autoFill)" disabled="@bind(!item.calculateOT)">		                  
+		                <template name="model" var="item">
+						<listitem >
+						<listcell label="@bind(item)" ></listcell>
+						</listitem>
+						</template>
+		                  </listbox>	
+		                  				</listcell>
+		                  <listcell>		
+						  <listbox mold="select" model="@bind(vm.lstAutoCalculate)" selectedItem="@bind(each.calculate)" disabled="@bind(!item.calculateOT)">		                  
+		                <template name="model" var="item">
+						<listitem >
+						<listcell label="@bind(item)" ></listcell>
+						</listitem>
+						</template>
+		                  </listbox>	
+		                  			</listcell>
+		                  			    <listcell>
+		                 <listbox mold="select" model="@bind(vm.lstSalaryItemsHRValues)" selectedItem="@bind(each.hrSalaryItem)" disabled="@bind(!item.calculateOT || each.calculate eq 'No' )">		                  
+		                <template name="model" var="item">
+						<listitem >
+						<listcell label="@bind(item.enDescription)" ></listcell>
+						</listitem>
+						</template>
+		                  </listbox>	
+		                  </listcell>
+		                  									
+						</listitem>
+						</template>
+						
+						</listbox>
+	               	    					
+						</detail>
+	           	</row>
+	           	</template>
+</grid>
+<hbox pack="left">
+<checkbox label="Allow to change over time manualy" checked="@bind(vm.allowChangeOvertime)"></checkbox>
+<checkbox label="Automaticaly Adjust time" checked="@bind(vm.automaticallAdjustTime)"></checkbox>
+</hbox>
+<hbox pack="center" hflex="1">
+<button label="Save" onClick="@command('saveOTCommand')" visible="@bind(vm.companyRole.canAdd)"></button>
+
+</hbox>
+ </vlayout>
+ </zk>
+ 

@@ -1,0 +1,357 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk >
+<window id="receiptVoucherPopUp" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Add/Edit Customer" border="normal" position="center,center"
+		closable="true" sizable="true" onCancel="receiptVoucherPopUp.detach()"
+		width="1100px" height="650px">
+	<zscript>
+		void openContexMenu(Integer type) { if(type==1)
+		editPopupCashInvoice.open(lstReceiptVoucherGrid);
+		}
+	</zscript>
+	<style>
+		<!-- .z-datebox-disd,
+		.z-datebox-focus .z-datebox-disd {
+		opacity: 1;
+		filter: alpha(opacity=100);
+		}
+		.z-datebox-text-disd {
+		background-color: #FFFFFF;
+		color: #000000 !important;
+		} -->
+	</style>
+
+	<borderlayout apply="org.zkoss.bind.BindComposer" style="overflow:auto"
+		id="printId" viewModel="@id('vm') @init('hba.EditReceiptVoucher')">
+		<center autoscroll="true" border="none">
+			<vlayout style="overflow:auto">
+				<panel title="" collapsible="true">
+					<caption>
+							<div  align="left">
+									<hbox pack="stretch" style="align:right;valign:top">
+								<div  align="left">
+									<button hoverImage="/images/arrow-left-Green.png" onClick="@command('navigationReceiptVoucher',cmp='prev')" label="Previous" width="100px" src="/images/grrn-left-arrow.png" height="50px"></button>
+									<button onClick="@command('navigationReceiptVoucher',cmp='next')" label="Next  "  hoverImage="/images/arrow-right-green.png"  width="100px" src="/images/green-right-arrow.png" height="50px"></button>	
+									 <image style="cursor: help" tooltip="isSupervisorHint"  src="/images/hint-icon.png"></image>	
+									 <popup id="isSupervisorHint" width="400px">
+       			 					 <html><![CDATA[Browsing is displaying transaction created by current user.]]></html>        				
+				   					 </popup>						
+								</div>
+									<div width="150px"></div>
+									<div>
+									<label value="@bind(vm.labelStatus)" style="color:#0AA0AB;text-align: right;font-weight: bold;font-size:18px"></label>
+									</div>
+
+								</hbox>
+							</div>
+					</caption>
+					<panelchildren>
+						<grid
+							form="@id('fx') @load(vm.objReceiptVoucher) @save(vm.objReceiptVoucher, before='addNewCashInvoice') ">
+							<columns>
+								<column width="100px"></column>
+								<column width="150px"></column>
+								<column width="170px"></column>
+								<column width="130px"></column>
+								<column width="170px"></column>
+								<column width="170px"></column>
+								<column width="150px"></column>
+
+
+							</columns>
+							<rows>
+								<row>
+									<cell>
+
+										<label value=" Invoice_Date">Date*</label>
+									</cell>
+									<cell>
+										<datebox width="120px" value="@bind(vm.rvDate)"
+											format="dd/MM/yyyy"></datebox>
+										<checkbox label="" checked="@bind(vm.checkRvDate)" width="15px" visible="false"/>
+									</cell>
+									<cell>
+										<label value="Invoice_sale_No">No.*</label>
+									
+										<textbox width="120px" value="@bind(vm.receiptVoucherNo)"
+											constraint="no empty: Please enter Sale Number !!!"></textbox>
+										<checkbox label="" checked="@bind(vm.checkRvNO)" width="15px" visible="false"/>
+									</cell>
+									<cell colspan="1">
+										<label value="Customer Balance"></label>
+									</cell>
+									<cell>
+										<intbox value="@bind(vm.customerBalance)" readonly="false"  format="###,###,###.00"></intbox>
+									
+								
+											<button label="Refresh" onClick="@command('refreshCustomerBalance')" ></button> <image style="cursor: help" tooltip="isSupervisorHint1"  src="/images/hint-icon.png"></image>	
+									 <popup id="isSupervisorHint1" width="200px">
+       			 					 <html><![CDATA[Refresh Customer Balance.]]></html>        				
+				   					 </popup>	
+								</cell>
+									<cell colspan="1">
+										<label value="Amount "></label>
+									
+										<doublebox value="@bind(vm.toatlAmount)" style="color:green;margin:0;padding:0;"
+											readonly="true" format="###,###,###.00"></doublebox>
+									</cell>
+								</row>
+								<row>
+									<cell colspan="1">
+										<label value="Recived From *"></label>
+									</cell>
+									<cell colspan="2">
+										<combobox autodrop="true" mold="rounded" hflex="1"
+											buttonVisible="true" model="@load(vm.lstReceivedFrom)"
+											selectedItem="@bind(vm.selectedReceivedFrom)">
+											<template name="model" var="item">
+												<comboitem label="${item.name}" description="@bind(item.listType)"
+													style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
+											</template>
+
+										</combobox>
+									</cell>
+									<cell>
+										<checkbox label="" checked="@bind(vm.makeAsDeferedIncome)" width="15px" visible="@bind(vm.makeAsDeferedIncomeVisible)"/>
+										<label value="defferediNcome" visible="@bind(vm.makeAsDeferedIncomeVisible)">Make as Differed Income</label>
+									</cell>
+									<cell>
+										<label value="">Print On Receipt </label>
+									</cell>
+									<cell colspan="2">
+										<textbox hflex="1" multiline="true" placeholder=""
+											rows="1" value="@bind(vm.printOnReciptVoucher)" />
+									</cell>
+
+								</row>
+								<row>
+									<cell valign="center">
+										<vlayout>
+
+											<label value="Account(Cr.) *"></label>
+										</vlayout>
+									</cell>
+									<cell colspan="2" valign="center">
+										<vlayout>
+											<combobox autodrop="true" mold="rounded" hflex="1"  onSelect="@command('onselectOfAccountCr')"
+												buttonVisible="true" model="@load(vm.lstAccountCr)"
+												selectedItem="@bind(vm.selectedAccountCr)">
+												<template name="model" var="item">
+													<comboitem label="@load(item.accountName)" description="@bind(item.accountType)"
+														style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
+												</template>
+
+											</combobox>
+										</vlayout>
+									</cell>
+									<cell colspan="1">
+										<label value="Post to QB By *"></label>
+									</cell>
+									<cell colspan="1">
+										<listbox mold="select" model="@load(vm.postToQbBy)"
+											id="invoice_method" selectedItem="@bind(vm.selectedPostToQbBy)">
+											<template name="model" var="item">
+												<listitem>
+													<listcell label="@load(item)"></listcell>
+												</listitem>
+											</template>
+										</listbox>
+									</cell>
+
+								</row>
+								<row>
+									<cell>
+										<label value="Amount In Words"></label>
+									</cell>
+									<cell colspan="5">
+										<textbox hflex="1" id="invoice_Memo1" multiline="true"
+											readonly="true" placeholder="" rows="1" value="@bind(vm.amountInWords)" />
+									</cell>
+
+								</row>
+								<row>
+									<cell>
+										<label value="Memo"></label>
+									</cell>
+									<cell colspan="3">
+										<textbox hflex="1" id="rV_Memo" multiline="true"
+											placeholder="" rows="2" value="@bind(vm.memo)" />
+									</cell>
+									<cell colspan="2">
+											<textbox hflex="1" multiline="true"
+												placeholder="Message displayed on bottom of RV PDF file"
+												rows="3" value="@bind(vm.msgToBeDispalyedOnInvoice)" />
+										</cell>
+
+								</row>
+
+							</rows>
+
+						</grid>
+					</panelchildren>
+				</panel>
+
+				<menupopup id="editPopupCashInvoice">
+					<menuitem label="Insert Line"
+						onClick="@command('insertCheckItems',row=vm.selectedReceiptValucherGrid)"></menuitem>
+					<menuitem label="Delete Line"
+						onClick="@command('deleteCheckItems',row=vm.selectedReceiptValucherGrid)"></menuitem>
+				</menupopup>
+
+				<vlayout style="overflow:auto" hflex="1">
+					<listbox id="lstReceiptVoucherGrid" model="@load(vm.lstRecieptVoucherGrid)"
+						hflex="1" selectedItem="@bind(vm.selectedReceiptValucherGrid)">
+						<!--" -->
+						<listhead menupopup="auto" sizable="true">
+							<listheader label="SNo" width="40px"></listheader>
+							<listheader label="Add/Delete" width="70px"></listheader>
+							<listheader label="Payment Method" width="120px"
+								style="background-color: #E3F2FF;"></listheader>
+							<listheader label="Cheque No" width="120px"
+								sort="auto('invoiceDescription')"></listheader>
+							<listheader label="Cheque Date " width="100px"></listheader>
+							<listheader label="Bank Name" width="100px"
+								sort="auto('invoiceQtyOnHand')"></listheader>
+							<listheader label="Deposite To" width="150px"
+								sort="auto('invoiceQty')"></listheader>
+							<listheader label="CUC" width="150px" sort="auto('invoiceQty')"></listheader>
+							<listheader label="Amount" width="100px" sort="auto('invoiceRate')"></listheader>
+							<listheader label="Class" width="120px"></listheader>
+							<listheader label="Memo" width="200px"
+								sort="auto('invoiceAmmount')"></listheader>
+						</listhead>
+						<template name="model" var="each">
+							<listitem>
+								<listcell>
+									<label value="@bind(each.lineNo)"></label>
+								</listcell>
+
+								<listcell>
+									<image src="/images/edit.png" width="20px" height="20px"
+										context="editPopupCashInvoice" onClick="openContexMenu(1)" />
+								</listcell>
+								<listcell>
+
+
+									<combobox autodrop="true" mold="rounded"
+										buttonVisible="true" model="@load(vm.lstPyamentMethod)" hflex="1" readonly="true"
+										selectedItem="@bind(each.selectedPaymentMethod)">
+										<template name="model" var="item">
+											<comboitem label="${item}" />
+										</template>
+
+									</combobox>
+								</listcell>
+								<listcell>
+									<textbox value="@bind(each.chequeNO)" hflex="1" 	
+										readonly="@bind(each.readonlyForTYpeCash)"></textbox>
+								</listcell>
+								<listcell>
+								 <datebox width="120px" value="@bind(each.checkDate)"
+										disabled="@bind(each.readonlyForTYpeCash)" format="dd/MM/yyyy"></datebox> 
+								</listcell>
+								<listcell>
+									<combobox autodrop="true" mold="rounded"
+										disabled="@bind(each.readonlyForTYpeCash)" buttonVisible="true"
+										model="@load(vm.lstBankModel)" hflex="1"
+										selectedItem="@bind(each.selectedBank)">
+										<template name="model" var="item">
+											<comboitem label="${item.bankName}" />
+										</template>
+
+									</combobox>
+								</listcell>
+								<listcell>
+									<combobox autodrop="true" mold="rounded"
+										buttonVisible="true" selectedItem="@bind(each.seletedDepositeTo)" onChange="@command('receiptVoucherGridAjax' , type=each ,parm='dpst')"
+										model="@load(vm.lstDepositeTo)" hflex="1">
+										<template name="model" var="item">
+											<comboitem label="${item.accountName}" description="@bind(item.accountType)"
+												style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
+										</template>
+
+									</combobox>
+								</listcell>
+
+								<listcell>
+									<combobox autodrop="true" mold="rounded"
+										buttonVisible="true" selectedItem="@bind(each.seletedCuc)"
+										visible="@bind(each.cucVisible)" model="@load(vm.lstcuc)"
+										hflex="1">
+										<template name="model" var="item">
+											<comboitem label="${item.accountName}" description="@bind(item.accountType)"
+												style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
+										</template>
+
+									</combobox>
+								</listcell>
+
+								<listcell>
+									<doublebox value="@bind(each.amount)" hflex="1" format="###,###,###.00" onChange="@command('receiptVoucherGridAjax' , type=each ,parm='amount')"
+										readonly="false"></doublebox>
+								</listcell>
+								<listcell>
+									<combobox autodrop="true" mold="rounded"
+										buttonVisible="true" model="@load(vm.lstsClassModel)"  onChange="@command('receiptVoucherGridAjax' , type=each ,parm='class')"
+										selectedItem="@bind(each.selectedClass)" hflex="1">
+										<template name="model" var="item">
+											<comboitem label="${item.name}"
+												style="@bind(item.sublevel eq 0 ? 'color:black;font-weight:bold;' : item.sublevel eq 1 ? 'text-indent:30px' : item.sublevel eq 2 ? 'text-indent:60px' : item.sublevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
+										</template>
+
+									</combobox>
+								</listcell>
+								<listcell>
+									<textbox value="@bind(each.memo)" hflex="1"></textbox>
+								</listcell>
+							</listitem>
+						</template>
+					</listbox>
+				</vlayout>
+				<div hflex="1" style="align:right;valign:top">
+
+					<grid>
+						<columns>
+							<column></column>
+							<column></column>
+
+						</columns>
+						<rows>
+							<row>
+								<cell align="left">
+									<hlayout>
+										<label value=""></label>
+										<label value=""></label>
+
+									</hlayout>
+								</cell>
+
+
+								<cell align="right">
+									<hlayout>
+										<button label="E-mail" onClick="@command('CustomerSendEmail')" visible="@bind(vm.canPrint)"></button>
+										<button label="Save" onClick="@command('addNewReceiptVoucher',cmp=receiptVoucherPopUp)" visible="@bind(vm.canCreate)"></button>
+									 	<button label="Print" onClick="@command('createPdfForPrinting')" visible="@bind(vm.canPrint)"/>
+									 	<button label="Copy" onClick="@command('copyFunctinality')" visible="@bind(vm.canCreate)"></button>
+										<button label="Clear" onClick="@command('clearReceiptVoucher')"></button>
+										<button label="Close" onClick="receiptVoucherPopUp.detach()"></button>
+									</hlayout>
+								</cell>
+
+
+							</row>
+						</rows>
+					</grid>
+
+				</div>
+
+
+			</vlayout>
+
+		</center>
+	</borderlayout>
+
+</window>
+
+
+</zk>

@@ -1,0 +1,135 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="Setup Users" border="normal"  apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('setup.users.WebusersViewModel')"  hflex="1" vflex="1" validationMessages="@id('vmsgs')"
+	>
+<caption src="/images/todo.png" sclass="fn-caption" label="Manage"/>
+
+  <borderlayout>
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+			
+			<hbox align="center" hflex="1" sclass="todo-box">
+					<label value="Add New User" />
+					<button onClick="@command('addUser')" image="/images/plus.png" width="36px"/>
+				</hbox>	
+				
+				
+			<listbox model="@bind(vm.lstDataModel)" vflex="1" selectedItem="@bind(vm.selectedUser)" width="700px">
+					<listhead>
+						<listheader label="First Name" />
+						<listheader label="Last Name" />
+						<listheader label="Email" />
+						<listheader label="Roles" hflex="min"/>
+						<listheader label="Delete" hflex="min"/>
+					</listhead>
+					<template name="model">
+						<listitem>							
+							<listcell>
+								<label value="@bind(each.firstname)"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.lastname)"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.useremail)"/>
+							</listcell>
+							<listcell>
+								<button onClick="@command('userRole',userid=each.userid)" image="/images/ccess.gif" width="36px"/>
+							</listcell>
+							<listcell>
+								<button onClick="@command('deleteUser',todo=each)" image="/images/cross.png" width="36px" />
+							</listcell>
+							
+						</listitem>
+					</template>
+				</listbox>
+				
+				
+			</vlayout>
+			</center>
+			
+			
+			<east width="500px"  visible="@bind(not empty vm.selectedUser)"  border="none" collapsible="false" splittable="true" minsize="300" autoscroll="true">
+			<vlayout 
+				form="@id('fx') @load(vm.selectedUser) @save(vm.selectedUser, before='updateUser') @validator(vm.todoValidator)">
+				
+				<grid hflex="1">
+					<columns>
+						<column align="right" hflex="min"/>
+						<column/>
+					</columns>
+					<rows>
+						<row>
+							<cell sclass="row-title">First Name :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.firstname)"/>
+							<label value="@bind(vmsgs['lastnameContentError'])" style="color: red;" />
+							</hlayout>
+						</row>
+						<row>
+							<cell sclass="row-title">Last Name :</cell>																		
+							<textbox value="@bind(fx.lastname)" hflex="1"/>												
+						</row>
+						<row>
+							<cell sclass="row-title">User Name :</cell>
+							<textbox value="@bind(fx.username)" hflex="1" constraint="no empty: *"/>
+						</row>
+						<row>
+							<cell sclass="row-title">Password :</cell>
+							<textbox value="@bind(fx.userpwd)" hflex="1" constraint="no empty: *"/>
+						</row>
+						<row>
+							<cell sclass="row-title">Email :</cell>
+							<textbox value="@bind(fx.useremail)"  constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address"  hflex="1"/>
+						</row>
+						<row>
+							<cell sclass="row-title">Mobile :</cell>
+							<textbox value="@bind(fx.usermobile)" hflex="1"/>
+						</row>
+						
+						
+						<row>
+						<cell colspan="2" align="left" style="color:green">Data Base Configuration :</cell>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Server IP :</cell>
+							<textbox value="@bind(fx.userip)" hflex="1"/>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Database :</cell>
+							<textbox value="@bind(fx.dbname)" hflex="1"/>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Database User :</cell>
+							<textbox value="@bind(fx.dbuser)" hflex="1"/>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Database Password:</cell>
+							<textbox value="@bind(fx.dbpwd)" hflex="1"/>
+						</row>
+											
+					</rows>
+				</grid>
+				<hlayout>
+					<button onClick="@command('updateUser')" label="Update"/>
+					<button onClick="@command('reloadUser')" label="Reload"/>
+				</hlayout>
+				
+				<label value="@bind(vmsgs['lastnameContentError'])" style="color: red;" />
+				
+			</vlayout>
+			
+			
+			</east>
+			
+			
+			</borderlayout>
+			
+			
+</window>
+</zk>

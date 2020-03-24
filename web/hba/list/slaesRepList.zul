@@ -1,0 +1,134 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="Items List" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('hba.SalesRepViewModel')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<panel title="" collapsible="true" hflex="1" sizable="false"
+					id="panelll" border="true">
+					<panelchildren>
+						<grid>
+							<columns>
+								<column width="300px"></column>
+								<column width="250px"></column>
+								<column width="250px"></column>
+								<column width="200px"></column>
+								<column width="0px"></column>
+								<column width="0px"></column>
+							</columns>
+							<rows>
+								<row>
+									<cell>
+										<label value="No. of Records"></label>
+										<space></space>
+										<space></space>
+										<listbox multiple="false" width="120px" mold="select"
+											model="@load(vm.lstAllPageSize)" selectedItem="@bind(vm.selectedAllPageSize)">
+											<template name="model" var="item">
+												<listitem>
+													<listcell label="@load(item)"></listcell>
+												</listitem>
+											</template>
+
+										</listbox>
+									</cell>
+									<cell>
+										<label value="Sales Rep Status"></label>
+										<space></space>
+										<listbox multiple="false" width="100px" mold="select"
+											model="@load(vm.lstStatus)" selectedItem="@bind(vm.selectedStatus)">
+											<template name="model" var="item">
+												<listitem>
+													<listcell label="@load(item)"></listcell>
+												</listitem>
+											</template>
+										</listbox>
+									</cell>
+									<cell>
+										<button label="Add New Sales Rep" onClick="@command('addSalesRepCommand')" visible="@bind(vm.companyRole.canAdd)"
+											></button>
+										<space></space>
+										<space></space>
+										<button label="Reset" visible="true" width="70px"
+											onClick="@command('resetSalesRep')" id="salesRepReset">
+										</button>
+									</cell>
+								</row>
+							</rows>
+
+
+						</grid>
+					</panelchildren>
+				</panel>
+				<listbox model="@bind(vm.lstItems)" vflex="1" hflex="1"
+					selectedItem="@bind(vm.selectedItems)" width="900px" mold="paging"
+					pageSize="@bind(vm.selectedPageSize)" pagingPosition="top">
+					<auxhead sclass="category-center">
+						<auxheader colspan="1">
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value="@bind(vm.filter.intials)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.salesRepName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.salesRepType)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value="@bind(vm.filter.isActive)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<doublebox  instant="true" hflex="1"  value="@bind(vm.filter.commissionPercent)"
+								 onChange="@command('changeFilter')" />
+						</auxheader>
+					</auxhead>
+					<listhead menupopup="auto" sizable="true">
+						<listheader label="Edit" width="60px" />
+
+						<listheader label="Initials" sort="auto('intials')" />
+						<listheader label="Sales Rep Name" sort="auto('salesRepName')" />
+						<listheader label="Sales Rep Type" sort="auto('salesRepType')" />
+						<listheader label="Status" sort="auto('isActive')" />
+						<listheader label="Commission Percent" sort="auto('commissionPercent')" />
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell>
+								<button image="/images/rowedit.png" onClick="@command('editSalesRepCommand', row=each)" visible="@bind(vm.companyRole.canModify)"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.intials)" onDoubleClick="@command('viewSalesRepCommand', row=each)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.salesRepName)" onDoubleClick="@command('viewSalesRepCommand', row=each)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.salesRepType)" onDoubleClick="@command('viewSalesRepCommand', row=each)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.isActive)" onDoubleClick="@command('viewSalesRepCommand', row=each)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.commissionPercent)" onDoubleClick="@command('viewSalesRepCommand', row=each)" />
+							</listcell>
+							
+						</listitem>
+					</template>
+				</listbox>
+
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

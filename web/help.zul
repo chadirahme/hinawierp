@@ -1,0 +1,26 @@
+<?page title="Hinawi Software" contentType="text/html;charset=UTF-8"?>
+
+<?link rel="stylesheet" type="text/css" href="/css/navmenustyle.css"?>
+<?link rel="stylesheet" type="text/css" href="/css/hstyle.css"?>
+
+
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout/template.zul"?>
+
+<zk>
+<html>
+<body onload="setActiveMenu()">
+</body>
+<script type="text/javascript">
+   function setActiveMenu() 
+   {
+      var elem = document.getElementById("help");    
+       elem.style.background='rgba(168, 168, 168, 0.5)';
+       //elem.style= 'background-image: -moz-linear-gradient(left center , rgba(168, 168, 168, 0.5), rgba(168, 168, 168, 0) 50%, rgba(168, 168, 168, 0.5));';
+   }
+</script>
+
+</html>
+
+<include self="@define(content)" src="helpcontent.zul"></include>
+
+</zk>

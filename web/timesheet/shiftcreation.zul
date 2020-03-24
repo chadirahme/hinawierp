@@ -1,0 +1,261 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('timesheet.ShiftCreationViewModel' )" vflex="1">
+
+ <label value="Shift &amp; Holiday Setup" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+ 
+ <hbox style="margin:15px">
+ <label value="Company"></label>
+			<listbox multiple="false" width="200px" mold="select" model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enCompanyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+ </hbox>
+ 
+<tabbox selectedIndex="@bind(vm.selectedTab)">
+<tabs >
+<tab label="Create Shifts"></tab>
+<tab label="Set Shifts"></tab>
+<tab label="Set Holidays"></tab>
+</tabs>
+
+<tabpanels>
+
+<tabpanel>
+
+<vlayout>
+<button label="Add New Shift" onClick="@command('addshiftCommand')" visible="@bind(vm.companyRole.canAdd)"></button>
+<grid height="230px"  emptyMessage="There is no shift for this company" model="@load(vm.lstShift)">
+<columns sizable="true">
+<column label="SNo." width="50px"></column>
+<column label="Delete" width="80px" visible="@bind(vm.companyRole.canDelete)" if="${vm.companyRole.canDelete}"></column>
+<column label="Shift Code" width="200px"></column>
+<column label="Type" width="100px"></column>
+<column label="No of Shifts" width="120px"></column>
+<column label="Units" width="100px"></column>
+		<column label="From Time" width="100px"></column>
+<column label="To Time" width="100px"></column>
+</columns>
+
+			<template name="model">
+	        	
+	        	<row>
+	        	  <cell rowspan="@bind(each.noOfShifts)" if="${each.firstRecord}"> 
+	              <label value="@load(each.recNo)" />
+	           	</cell>
+	          <cell rowspan="1" if="${!each.timingShift}"> 
+          	 <label value="@load(each.recNo)" />
+           	</cell>
+           	
+           	 <cell rowspan="@bind(each.noOfShifts)" if="${each.firstRecord}" visible="@bind(vm.companyRole.canDelete)"> 
+	              <button 
+                        image="/images/cross.png"
+                        onClick="@command('deleteShiftCommand', row=each)" />
+	           	</cell>
+	          <cell rowspan="1" if="${!each.timingShift}" visible="@bind(vm.companyRole.canDelete)"> 
+          	 <button
+                        image="/images/cross.png"
+                        onClick="@command('deleteShiftCommand', row=each)" />
+           	</cell>
+           		           
+	            <cell rowspan="@bind(each.noOfShifts)" if="${each.firstRecord}"> 
+	         	<textbox value="@bind(each.shiftCode)"  constraint="no empty" hflex="1" onChange="self.setValue(self.getValue().toUpperCase().trim());"/>
+	           	</cell>
+	           	
+	           <cell rowspan="1" if="${!each.timingShift}"> 
+          	 	<textbox value="@bind(each.shiftCode)"  constraint="no empty" hflex="1" onChange="self.setValue(self.getValue().toUpperCase().trim());"/>
+           	   </cell>
+           	
+           	 <cell rowspan="@bind(each.noOfShifts)" if="${each.firstRecord}"> 
+           	  <listbox mold="select" model="@bind(vm.lstShiftType)" selectedItem="@bind(each.shiftType)" onSelect="@command('changeShiftType',row=each)">		                  
+		                <template name="model" var="item">
+						<listitem >
+						<listcell label="@bind(item.unitName)" ></listcell>
+						</listitem>
+						</template>
+		                  </listbox>	       
+	           	</cell>
+	          <cell rowspan="1" if="${!each.timingShift}"> 
+          	 <listbox mold="select" model="@bind(vm.lstShiftType)" selectedItem="@bind(each.shiftType)" onSelect="@command('changeShiftType',row=each)" >		                  
+		                <template name="model" var="item">
+						<listitem >
+						<listcell label="@bind(item.unitName)" ></listcell>
+						</listitem>
+						</template>
+		                 </listbox>	
+           	</cell>
+	           	     	          
+	        <cell rowspan="@bind(each.noOfShifts)" if="${each.firstRecord}"> 
+           <intbox value="@bind(each.noOfShifts)" readonly="@bind(!each.timingShift)" onChange="@command('changeNoofShift' , row=each)"/>
+           </cell>	
+            <cell rowspan="1" if="${!each.timingShift}"> 
+           <intbox value="@bind(each.noOfShifts)" readonly="@bind(!each.timingShift)"/>
+           </cell>	
+           
+	        	<cell>
+	        	<doublebox value="@bind(each.units)" constraint="no negative,no empty" onChange="@command('changeFromTime',row=each,type=1)" if="${each.timingShift}"></doublebox>	        	
+	        	<intbox if="${!each.timingShift}" value="@bind(each.units)" readonly="true"></intbox>
+	        	</cell>
+	        	
+	        <cell>
+        	<timebox value="@bind(each.fromTime)" hflex="1" if="${each.timingShift}" onChange="@command('changeFromTime',row=each,type=2)" format="hh:mm a"></timebox>        	
+        	</cell>
+        	
+        	<cell>
+        	<timebox value="@bind(each.toTime)" hflex="1" if="${each.timingShift}" readonly="true" buttonVisible="false" format="hh:mm a" ></timebox>
+        	</cell>
+	        
+	        </row>
+	        	
+	        	</template>
+
+
+</grid>
+<hbox>
+<label value="If shift is not setup or assigned Default Hours taken for the calculation" style="color:blue;"></label>
+<intbox value="@bind(vm.defaultHours)"></intbox>
+</hbox>
+
+<hbox>
+<checkbox label="Allow To Change Time (To Time /No. of Units)" checked="@bind(vm.objCompanySetup.timesheetChangeTime)"></checkbox>
+<checkbox label="Calculate Extra Hours" disabled="@bind(!vm.objCompanySetup.timesheetChangeTime)" checked="@bind(vm.objCompanySetup.timesheetCalculateExtraHours)" onCheck="@command('changeIncludeHoliday')"></checkbox>
+
+
+</hbox>
+
+<hbox hflex="1" pack="center">
+<button label="Save" onClick="@command('saveShiftCommand')" visible="false"></button>
+</hbox>
+</vlayout>
+</tabpanel>
+
+<tabpanel>
+<vlayout>
+<hbox>
+<label value="Week Start Day"></label>
+<listbox multiple="false" width="200px" mold="select" model="@load(vm.lstDayOfWeek)" selectedItem="@bind(vm.selectedDayOfWeek)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+		</hbox>	
+	<grid height="250px"  emptyMessage="There is no shift for this company" model="@load(vm.lstSetShift)">
+<columns sizable="true">
+
+<column label="Shift Code" width="200px"></column>
+<column label="Day" width="200px"></column>
+<column label="Off Day" width="60px"></column>
+<column label="Units" width="100px"></column>
+		<column label="From Time" width="100px"></column>
+<column label="To Time" width="100px"></column>
+</columns>
+
+<template name="model">
+<row>
+<cell rowspan="@load(each.shiftCodeRowspan)" if="${each.firstRecord}" >
+<label value="@load(each.shiftCode)" style="color:blue"></label>
+<separator hflex="1" style="color:red"></separator>
+</cell>
+
+<cell rowspan="@load(each.dayRowspan)" if="${each.dayfirstRecord}">
+
+<label value="@load(each.dayName)" ></label>
+</cell>
+ 	<cell rowspan="1" if="${!each.timingShift}">           
+   	<label value="@load(each.dayName)" />
+     </cell>
+     
+     <cell>
+     <checkbox checked="@bind(each.offDay)" ></checkbox>
+     </cell>
+      <cell>           
+	<label value="@bind(each.units)" style="@bind(each.offDay ? 'text-decoration:line-through' : '')" if="${each.units gt 0}"></label>
+	</cell>
+	<cell>
+  	<timebox value="@bind(each.fromTime)" hflex="1" if="${each.timingShift}" readonly="true" buttonVisible="false" format="hh:mm a" style="@bind(each.offDay ? 'text-decoration:line-through' : '')"  ></timebox>
+  	</cell>
+  	<cell>
+  	<timebox value="@bind(each.toTime)" hflex="1" if="${each.timingShift}" readonly="true" buttonVisible="false" format="hh:mm a" style="@bind(each.offDay ? 'text-decoration:line-through' : '')" ></timebox>
+  	</cell>
+</row>
+
+</template>
+</grid>
+<checkbox label="Allow To Change Holiday (Applies only for Summary Timesheet)" checked="@bind(vm.objCompanySetup.canChangeHoliday)"></checkbox>
+<checkbox label="Include Holiday Units in Total Month Units" checked="@bind(vm.objCompanySetup.canIncludeholidayUnit)" onCheck="@command('changeIncludeHoliday')"></checkbox>
+<hbox hflex="1" pack="center">
+<button label="Save Shifts" onClick="@command('saveSetShiftCommand')" visible="false"></button>
+</hbox>
+
+</vlayout>
+</tabpanel>
+
+
+<tabpanel>
+<!-- <label value="Data Length (outside grid): ${c:length(vm.columnList)}"></label> -->
+
+<grid height="300px"  emptyMessage="There is no holidays for this company" model="@load(vm.lstHolidays)">
+<columns sizable="true">
+
+<column label="Type" width="100px"></column>
+<column label="From Date" width="100px"></column>
+<column label="To Date" width="100px"></column>
+<column label="Days" width="100px"></column>
+<column label="Description" width="200px"></column>
+
+ <column forEach="${vm.columnList}" label="${each}" width="100px"></column> 
+   		
+</columns>
+
+<template name="model" var="r">	        	
+	<row>
+	<label value="@load(r.holidayType)"></label>
+	<label value="@load(r.fromDate)"></label>
+	<label value="@load(r.toDate)"></label>
+	<label value="@load(r.totalDays)"></label>
+	<label value="@load(r.holidayDescription)"></label>
+	
+	 <checkbox forEach="${vm.columnList}" checked="${r.shiftHolidays[forEachStatus.index]}" ></checkbox> 
+	
+	<!-- <label forEach="${vm.columnList}"							
+	value="${c:length(r.labelColor)} ${r.labelColor[forEachStatus.index]}  ${forEachStatus.index}" /> -->
+							
+	
+	<!-- <cell forEach="${vm.columnList} ${r.holidayType[forEachStatus.index]}" colspan="3">
+	<hlayout>
+	<template name="children" var="node">
+	 <variables key="${each.key}" map="${each.mapShifts}" /> 
+	<checkbox checked="${(map[key])}"></checkbox>
+	</template>
+	</hlayout>
+	</cell> -->
+	
+	
+	 
+	
+	</row>
+	
+	</template>
+
+</grid>
+
+
+</tabpanel>
+</tabpanels>
+
+</tabbox>
+
+<hbox hflex="1" pack="center">
+<button label="Save" onClick="@command('saveALLCommand')" visible="@bind(vm.companyRole.canAdd)"></button>
+</hbox>
+
+</vlayout>
+</zk>

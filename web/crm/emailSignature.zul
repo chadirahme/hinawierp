@@ -1,0 +1,72 @@
+<?page title="Cutomer Feed Back" contentType="text/html;charset=UTF-8"?>
+<?page title="Hinawi Online" contentType="text/html;charset=UTF-8"?>
+
+
+<zk>
+	<script src="/scripts/myScript.js" defer="true" />
+	<style>
+
+		.H1 {
+		font-family:Arial, Helvetica, sans-serif;
+		color:#2c6f99;
+		font-size:16px;
+		font-weight:bold;
+		margin:0 0 11px 0;
+		padding:10px;
+		float:left;
+		width:526px;
+		padding-right:20px;
+		padding-top:6px;
+		}
+
+		.H2
+		{
+		font-size:16px;
+		font-weight:bold;
+		}
+
+		.MyRowHeight tr.z-row td.z-row-inner
+		{
+		height:50px;
+		}
+
+		.z-checkbox-cnt
+		{
+		margin-left:5px;
+		}
+	</style>
+
+	<window id="EmailSignature" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Set Up Signature" border="normal" position="center,center"
+		closable="true" sizable="true" onCancel="EmailSignature.detach()"
+		width="40%" height="60%">
+		<borderlayout apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('home.SignatureViewModel')"
+			validationMessages="@id('vmsgs')">
+			<center autoscroll="true" border="none">
+				<vlayout>
+					<grid >
+						<columns>
+							<column align="left" />
+						</columns>
+						<rows>
+							<row>
+								<cell align="left">
+									<ckeditor value="@bind(vm.signature)" height="280px" />
+								</cell>
+							</row>
+
+						</rows>
+					</grid>
+					<div align="center">
+						<hlayout>
+							<button onClick="@command('saveEmailSignatures',cmp=EmailSignature)" label="Save" />
+							<button label="Close" onClick="EmailSignature.detach()"></button>
+						</hlayout>
+					</div>
+				</vlayout>
+			</center>
+
+		</borderlayout>
+	</window>
+</zk>

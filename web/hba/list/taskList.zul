@@ -1,0 +1,467 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+	<borderlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm') @init('hba.TaskViewModel',type='customer')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<hlayout>
+					<panel collapsible="true">
+						<panelchildren>
+							<grid>
+								<columns>
+									<column width="120px"></column>
+									<column width="170px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+								</columns>
+								<rows>
+									<row>
+
+										<cell>
+											<label value="No. of Records"></label>
+										</cell>
+										<cell>
+											<listbox multiple="false" width="120px" mold="select"
+												model="@load(vm.lstAllPageSize)" selectedItem="@bind(vm.selectedAllPageSize)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item)"></listcell>
+													</listitem>
+												</template>
+
+
+											</listbox>
+										</cell>
+										<cell>
+											<label value="Task Status"></label>
+										</cell>
+										<cell>
+											<listbox multiple="false" width="100px" mold="select"
+												model="@load(vm.lstTaskStatus)" selectedItem="@bind(vm.selectedTaskStatus)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item.enDescription)"></listcell>
+													</listitem>
+												</template>
+											</listbox>
+										</cell>
+
+										<cell>
+											<label value="By Employee"></label>
+										</cell>
+										<cell colspan="2">
+											<listbox multiple="false" width="200px" mold="select"
+												model="@load(vm.lstAssignToEmployees)" selectedItem="@bind(vm.selectedAssignToEmployee)"
+												disabled="@bind(!vm.adminUser)">
+												
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item.fullName)"></listcell>
+													</listitem>
+												</template>
+											</listbox>
+										</cell>
+										
+										
+									</row>
+									<row>
+										<cell>
+											<label value="Date Range :"></label>
+										</cell>
+										<cell>
+											<hbox>
+												<label value="From"></label>
+												<datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy"></datebox>
+											</hbox>
+										</cell>
+										<cell>
+											<hbox>
+												<label value="To"></label>
+												<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy"></datebox>
+											</hbox>
+										</cell>
+										<cell>
+											<label value="Activity Filter"></label>
+										</cell>
+										<cell colspan="2">
+											<listbox multiple="false" width="200px" mold="select"
+												model="@load(vm.taskActivityFilter)" selectedItem="@bind(vm.selectedTaskActivityFilter)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item)"></listcell>
+													</listitem>
+												</template>
+											</listbox>
+										</cell>
+
+
+									</row>
+									<row>
+										<cell colspan="5">
+											<button label="View Tasks" onLongOp="@command('searchTask')" id="btn1"
+												visible="true"></button>
+											<space></space>
+											<space></space>
+											<space></space>
+											<button label="Add New Task" onClick="@command('addTask')"
+											 visible="@bind(vm.companyRole.canAdd)"
+												></button>
+											<space></space>
+											<space></space>
+											<space></space>
+											<button label="Add Group Of Tasks" onClick="@command('groupOfTask')"
+											visible="false"
+												></button>
+												
+											<space></space>
+											<space></space>
+											<space></space>
+											<button label="Reset" onClick="@command('resetTask')"
+												visible="true"></button>
+												<space></space>
+											<space></space>
+											<space></space>
+											<checkbox checked="@bind(vm.notMappedTask)" label="Not Mapped Tasks" onClick="@command('getNotMappedTocustomerTasks')"
+												visible="true"></checkbox>	
+										</cell>
+									</row>
+									<!-- <row> <cell> <label value="Sort By"></label> </cell> <cell> 
+										<listbox multiple="false" width="120px" mold="select" model="@load(vm.lstAllPageSize)" 
+										selectedItem="@bind(vm.selectedAllPageSize)"> <template name="model" var="item"> 
+										<listitem> <listcell label="@load(item)"></listcell> </listitem> </template> 
+										</listbox> </cell> </row> -->
+								</rows>
+							</grid>
+						</panelchildren>
+					</panel>
+
+
+				</hlayout>
+				<listbox model="@bind(vm.lstTask)" vflex="1" hflex="1"
+					selectedItem="@bind(vm.selectedTask)" width="900px" mold="paging"
+					emptyMessage="No data found" pageSize="@bind(vm.selectedPageSize)">
+
+					<auxhead sclass="category-center">
+						<auxheader colspan="1" label="" width="50px">
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.taskNumber)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value="@bind(vm.filter.taskName)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.mostRecentUpdate)" onChange="@command('changeFilter')" />
+						</auxheader>
+						
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.feedbackNo)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value="@bind(vm.filter.taskType)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.priorityNAme)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.statusName)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.createdUserName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.employeeName)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.clientTypeFullName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.customerNAme)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.projectName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.creationDateStr)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.serviceName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.expectedDatetofinishStr)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.reminderDateStr)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value="@bind(vm.filter.remindIn)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.estimatatedNumber)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.actualNumber)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value="@bind(vm.filter.memo)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value="@bind(vm.filter.comments)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<!-- <auxheader colspan="1"> <image src="/images/funnel.png" /> <textbox 
+							instant="true" width="100px" value="@bind(vm.filter.taskStep)" onChange="@command('changeFilter')" 
+							/> </auxheader> -->
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value="@bind(vm.filter.history)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.previossTaskName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							
+
+						</auxheader>
+					</auxhead>
+					<listhead menupopup="auto" sizable="true">
+						<listheader label="Edit" width="60px" />
+						<listheader label="Task No." sort="auto('taskNumber')"
+							width="120px" />
+						<listheader label="Task Name" sort="auto('taskName')"
+							width="120px" />
+						<listheader label="Last Updated On" sort="auto('updatedTime')"
+							width="150px" />
+						<listheader label="FeedBack No." sort="auto('mostRecentUpdate')" align="center"
+							width="150px" />	
+						<listheader label="Task Type" sort="auto('taskType')"
+							width="120px" />
+						<listheader label="Task Priority" sort="auto('priorityNAme')"
+							width="120px" />
+						<listheader label="Task Status" sort="auto('taskType')"
+							width="120px" />
+						<listheader label="Task Created By" sort="auto('employeeName')"
+							width="120px" />
+						<listheader label="Task Assigned To" sort="auto('employeeName')"
+							width="120px" />
+						<listheader label="Customer Type" sort="auto('clientTypeFullName')"
+							width="120px" />
+						<listheader label="Customer" sort="auto('customerNAme')"
+							width="120px" />
+
+						<listheader label="Project" sort="auto('projectName')"
+							width="120px" />
+						<listheader label="Service Type" sort="auto('serviceName')"
+							width="120px" />
+						<listheader label="Task Date" sort="auto('creationDateStr')"
+							width="120px" />
+						<listheader label="Task Expected Date" sort="auto('expectedDatetofinishStr')"
+							width="130px" />
+						<listheader label="Task Remind In Date" sort="auto('reminderDateStr')"
+							width="140px" />
+						<listheader label="Task Remind In Time" sort="auto('remindIn')"
+							width="120px" />
+						<listheader label="Estimated Time" sort="auto('estimatatedNumber')"
+							width="120px" />
+						<listheader label="Actulal Time" sort="auto('actualNumber')"
+							width="120px" />
+						<listheader label="Memo" sort="auto('memo')" width="250px" />
+						<listheader label="Recent Comments" sort="auto('comments')"
+							width="250px" />
+						<!-- <listheader label="Steps To Reproduce" sort="auto('taskStep')" 
+							width="250px" /> -->
+						<listheader label="Total History" sort="auto('history')"
+							width="250px" />
+						<listheader label="Linked To" sort="auto('previossTaskName')"
+							width="120px" />
+						<listheader label="Download Attachment" sort="auto('isactive')"
+							width="180px" />
+					</listhead>
+					<template name="model">
+						<listitem >
+							<listcell tooltip="colrTip">
+								<button  image="/images/rowedit.png" onClick="@command('editTask', row=each)" style="@bind(each.statusName eq 'Done' ? 'background:#A3FFA3;font-weight: bold;' : each.statusName eq 'Closed' ? 'background:#A3FFA3;font-weight: bold;' : each.statusName eq 'In Progress' ? 'background:#FFB547;font-weight: bold;' : 'background:#FF8B8B;font-weight: bold;')" autodisable="self"/>
+							</listcell>
+							<listcell onDoubleClick="@command('viewTask', row=each)" >
+								<label value="@bind(each.taskNumber)"  />
+							</listcell>
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.taskName)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.mostRecentUpdate)" />
+							</listcell>
+							
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.feedbackNo)" /><space></space>
+								<button label="view" onClick="@command('openFeedback', row=each)" visible="@bind(each.hideFeedbackButton)" />
+							</listcell>
+
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.taskType)" />
+							</listcell>
+
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.priorityNAme)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.statusName)" style="@bind(each.statusName eq 'Done' ? 'color:green;font-weight: bold;' : each.statusName eq 'Closed' ? 'color:green;font-weight: bold;' : 'color:none;')"/>
+							</listcell>
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.createdUserName)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.employeeName)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.clientTypeFullName)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.customerNAme)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.projectName)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.serviceName)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.creationDateStr)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.expectedDatetofinishStr)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.reminderDateStr)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.remindIn)" />
+							</listcell>
+
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.estimatatedNumber)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.actualNumber)" />
+							</listcell>
+
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<textbox multiline="true" rows="6" readonly="false"
+									hflex="1" value="@bind(each.memo)" style="color:#008FD2;"></textbox>
+							</listcell>
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<!-- <label value="@bind(each.comments)" /> -->
+								<textbox multiline="true" rows="6" readonly="false"
+									hflex="1" value="@bind(each.comments)" style="color:#008FD2;"></textbox>
+							</listcell>
+							<!-- <listcell onDoubleClick="@command('viewTask', row=each)"> <textbox 
+								multiline="true" rows="6" readonly="false" hflex="1" value="@bind(each.taskStep)" 
+								style="color:#008FD2;"></textbox> </listcell> -->
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<textbox multiline="true" rows="6" readonly="false"
+									hflex="1" value="@bind(each.history)" style="color:#008FD2;"></textbox>
+							</listcell>
+							<listcell onDoubleClick="@command('viewTask', row=each)">
+								<label value="@bind(each.previossTaskName)" />
+							</listcell>
+							<listcell>
+								<listbox model="@bind(each.listOfattchments)" height="100px"
+									hflex="1" onDoubleClick="@command('download', row=each)"
+									selectedItem="@bind(each.selectedAttachements)">
+
+									<listhead menupopup="auto" sizable="true">
+										<listheader label="" />
+									</listhead>
+									<template name="model">
+										<listitem>
+											<listcell>
+												<label value="@bind(each.filename)" />
+											</listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</listcell>
+						</listitem>
+					</template>
+				</listbox>
+
+				<hlayout hflex="1" style="text-align: right">
+					<label value="@load(vm.footer)"
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<space></space>
+					<space></space>
+					<space></space>
+					<space></space>
+				</hlayout>
+						 <popup id="colrTip" width="400px">
+       			 					 <html><![CDATA[Green Indicates Done/Closed Tasks, Yellow Indicates In Progress Tasks And Red Indiacates All Other Status Tasks.]]></html>        				
+				   					 </popup>	
+
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

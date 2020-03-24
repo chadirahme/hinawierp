@@ -1,0 +1,82 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+<?page id="popMain" title="new page title" contentType="text/html;charset=UTF-8" ?>
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+
+	<window id="bankListModalDialog" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Edit Bank Info" border="normal" position="center,center"
+		closable="true" viewModel="@id('vm')  @init('hba.EditBanksNameList')"
+		sizable="true" onCancel="bankListModalDialog.detach()" width="500px"
+		height="300px">
+		<grid id="grid_id"
+			form="@id('fx') @load(vm.selectedBanksName)  @save(vm.selectedBanksName, before='updateBanksNameList')"
+			hflex="1" vflex="1">
+			<columns>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="0px"></column>
+			</columns>
+			<rows>
+				<row>
+					<cell>Bank Name *</cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.bankName)" maxlength="31" hflex="1" />
+					</cell>
+
+				</row>
+				<row>
+					<cell>Account</cell>
+					<cell colspan="2">
+						<combobox model="@load(vm.lstaccounts)" selectedItem="@bind(vm.selectedAccount)"
+							hflex="1" autodrop="true" mold="rounded">
+
+							<template name="model" var="item">
+								<comboitem label="${item.accountName} : ${item.accountType}"
+									style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
+							</template>
+
+						</combobox>
+					</cell>
+				</row>
+				<row>
+					<cell>Account Name </cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.actName)" hflex="1" />
+					</cell>
+
+				</row>
+				<row>
+					<cell>Account Number </cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.actNumber)" hflex="1" />
+					</cell>
+				</row>
+				<row>
+					<cell>IBAN No. </cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.IBANNo)" hflex="1" />
+					</cell>
+
+				</row>
+				<row>
+					<cell>Branch </cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.branch)" hflex="1" />
+					</cell>
+				</row>
+				<row>
+					<cell colspan="4">
+						<hbox pack="center" hflex="1">
+							<button label="Save"
+								onClick="@command('updateBanksNameList',cmp=bankListModalDialog)"
+								visible="@bind(vm.canSave)"></button>
+							<button label="Close" onClick="bankListModalDialog.detach()"></button>
+						</hbox>
+					</cell>
+				</row>
+			</rows>
+		</grid>
+
+	</window>
+</zk>

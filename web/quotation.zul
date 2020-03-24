@@ -1,0 +1,1602 @@
+<?page title="Quotation" contentType="text/html;charset=UTF-8"?>
+<?page title="Hinawi Software" contentType="text/html;charset=UTF-8"?>
+
+<zk>
+	<html>
+		<body onload="setActiveMenu()">
+
+		</body>
+		<script type="text/javascript">
+
+			function setActiveMenu()
+			{
+			document.getElementById("nav1").setAttribute("class", "");
+			document.getElementById("nav2").setAttribute("class", "");
+			//document.getElementById("nav3").setAttribute("class", "");
+
+
+			document.getElementById("nav4").setAttribute("class", "active");
+			}
+		</script>
+	</html>
+
+	<style>
+
+		.H1 {
+		font-family:Arial, Helvetica, sans-serif;
+		color:#2c6f99;
+		font-size:16px;
+		font-weight:bold;
+		margin:0 0 11px 0;
+		padding:10px;
+		float:left;
+		width:526px;
+		padding-right:20px;
+		padding-top:6px;
+		}
+
+		.H2
+		{
+		font-size:16px;
+		font-weight:bold;
+		}
+
+		.MyRowHeight tr.z-row td.z-row-inner
+		{
+		height:50px;
+		}
+
+		.z-checkbox-cnt
+		{
+		margin-left:5px;
+		}
+	</style>
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('home.QuotationViewModel')"
+		validationMessages="@id('vmsgs')" >
+
+		<west style="padding-left:45px;margin-left:0px;" 
+			hflex="false" vflex="false" border="0" splittable="false" autoscroll="true">
+
+			<vlayout
+				form="@id('fx') @load(vm.quotModel) @save(vm.quotModel, before='sendMail') @validator(vm.todoValidator)">
+
+				<grid zclass="MyRowHeight" >
+					<columns>
+
+						<column align="left" width="150px" />
+						<column width="570px" />
+						<column width="400px" />
+					</columns>
+
+					<rows>
+
+						 <row>
+							<cell colspan="3" align="left">
+								<hlayout hflex="1">
+									<label hflex="1" value="Contact Us \ Request for Quotation "
+										style="color:#2c6f99;font-weight:bold;font-size:16px;"></label>
+									<hbox align="end" pack="end" hflex="2">
+										<a href="http://hinawi.com">
+											<label value="Back "
+												style="color:#2c6f99;font-weight:bold;font-size:16px;"></label>
+										</a>
+										<button onClick="@command('testsendMail')" label="testsendMail"
+											visible="false" />
+									</hbox>
+								</hlayout>
+							</cell>
+						</row> 
+						<row>
+							<cell sclass="row-title" colspan="2">
+								<label value="Company information :" zclass="H2"></label>
+	<space></space>		<space></space>					
+								<label value="( * ) fields are mandatory." />
+							</cell>
+						</row>
+
+						<row height="40px">
+							<cell sclass="row-title">
+								Are you :
+								<label style="color:red" value="*"></label>
+							</cell>
+							<cell>
+								<hlayout>
+									<checkbox checked="@bind(vm.custtype1)" label="Visitor"></checkbox>
+
+									<checkbox checked="@bind(vm.custtype2)" label="Customer"></checkbox>
+
+									<checkbox checked="@bind(vm.custtype3)" label="Reseller"></checkbox>
+									<checkbox checked="@bind(vm.custtype4)" label="QuickBooks User"></checkbox>
+
+								</hlayout>
+							</cell>
+						</row>
+
+						<row height="40px">
+							<cell sclass="row-title">
+								Company Name :
+								<label style="color:red" value="*"></label>
+							</cell>
+							<cell>
+								<textbox constraint="no empty: Please enter Company Name"
+									width="300px" value="@bind(fx.companyName)" />
+							</cell>
+						</row>
+
+						<row height="40px">
+							<cell sclass="row-title">
+								Contact person :
+								<span style="color:red">*</span>
+							</cell>
+							<cell>
+								<hlayout>
+									<listbox rows="1" width="50px" mold="select"
+										selectedItem="@bind(fx.contactTitle)">
+										<listitem value="Mr." label="Mr." selected="true"></listitem>
+										<listitem value="Ms." label="Ms."></listitem>
+									</listbox>
+									<textbox constraint="no empty: Please enter Contact person"
+										width="250px" value="@bind(fx.contactName)" />
+								</hlayout>
+
+							</cell>
+						</row>
+
+						<row height="40px">
+							<cell sclass="row-title">
+								Position :
+								<span style="color:red">*</span>
+							</cell>
+							<cell>
+								<vlayout>
+									<listbox mold="select" width="300px" model="@bind(vm.lstPositions)"
+										selectedItem="@bind(vm.selectedPosition)">
+										<template name="model" var="item" status="s">
+											<listitem>
+												<listcell label="@bind(item.positionname)" />
+											</listitem>
+										</template>
+									</listbox>
+									<textbox visible="@bind(vm.selectedPosition.positionname eq 'Other')"
+										value="@bind(vm.otherPosition)" width="300px"></textbox>
+								</vlayout>
+							</cell>
+						</row>
+
+						<row height="40px">
+							<cell sclass="row-title">
+								Country :
+								<span style="color:red">*</span>
+							</cell>
+							<cell>
+								<listbox mold="select" model="@bind(vm.lstCountry)"
+									width="300px" selectedItem="@bind(vm.selectedCountry)">
+									<template name="model" var="item" status="s">
+										<listitem>
+											<listcell label="@bind(item.countryname)" />
+										</listitem>
+									</template>
+								</listbox>
+							</cell>
+						</row>
+
+						<row height="40px">
+							<cell sclass="row-title">
+								City :
+								<span style="color:red">*</span>
+							</cell>
+							<cell>
+								<textbox constraint="no empty: Please enter your City"
+									width="300px" value="@bind(fx.city)" />
+							</cell>
+						</row>
+
+
+						<row>
+							<cell sclass="row-title">
+								Telephone No.:
+								<span style="color:red">*</span>
+							</cell>
+							<cell>
+								<vlayout>
+									<hlayout>
+										<textbox width="50px" value="@bind(vm.selectedCountry.countrycode)"
+											readonly="true" />
+										<textbox width="250px" constraint="no empty: Please enter your Phone"
+											value="@bind(fx.telephone1)" />
+									</hlayout>
+									<hlayout>
+										<textbox width="50px" value="@bind(vm.selectedCountry.countrycode)"
+											readonly="true" />
+										<textbox width="250px" value="@bind(fx.telephone2)" />
+									</hlayout>
+
+									<span class="fs11">(You can fill one of these)</span>
+								</vlayout>
+
+							</cell>
+						</row>
+
+						<row>
+							<cell sclass="row-title">
+								Mobile No. :
+								<span style="color:red">*</span>
+							</cell>
+							<cell>
+								<vlayout>
+									<hlayout>
+										<textbox width="50px" value="@bind(vm.selectedCountry.countrycode)"
+											readonly="true" />
+										<textbox width="250px" constraint="no empty: Please enter your Mobile"
+											value="@bind(fx.mobile1)" />
+									</hlayout>
+									<hlayout>
+										<textbox width="50px" value="@bind(vm.selectedCountry.countrycode)"
+											readonly="true" />
+										<textbox width="250px" value="@bind(fx.mobile2)" />
+									</hlayout>
+									<span class="fs11">(You can fill one of these)</span>
+								</vlayout>
+							</cell>
+						</row>
+
+
+						<row height="40px">
+							<cell sclass="row-title">
+								Email :
+								<span style="color:red">*</span>
+							</cell>
+							<cell>
+								<textbox
+									constraint="/^[A-Za-z0-9_\-\.]+@[A-Za-z0-9_\-\.]{2,}\.[A-Za-z0-9]{2,}(\.[A-Za-z0-9])?/: Please enter a valid e-mail address"
+									width="300px" value="@bind(fx.email)" />
+							</cell>
+
+						</row>
+
+						<row height="40px">
+							<cell sclass="row-title">Website :</cell>
+							<cell>
+								<vlayout>
+									<hlayout>
+										<label value="http://"></label>
+										<textbox width="280px" value="@bind(fx.website)" />
+									</hlayout>
+									<label value="(i.e : www.xyz.com)"></label>
+								</vlayout>
+							</cell>
+
+						</row>
+
+						<row height="40px">
+							<cell colspan="2" align="left">
+
+								<label value="How Did You Know Our Company *" zclass="H2"></label>
+							</cell>
+						</row>
+						<row>
+							<cell colspan="2" align="left">
+								<label value="You can select more than one Options"></label>
+							</cell>
+						</row>
+
+						<row>
+							<cell colspan="2" align="left">
+								<vlayout>
+
+									<listbox width="300px" multiple="true" checkmark="true"
+										model="@bind(vm.lstHowyouknow)" selectedItems="@bind(vm.selectedHowyouknow)">
+									</listbox>
+								</vlayout>
+							</cell>
+						</row>
+
+						<row>
+							<cell colspan="2" align="left">
+								<label value="If Customer, Auditor or Other, Please specify Name."></label>
+							</cell>
+						</row>
+						<row>
+							<cell colspan="2" align="left">
+								<textbox width="300px" value="@bind(fx.auditor)"></textbox>
+							</cell>
+						</row>
+
+						<row>
+							<cell colspan="2" align="left">
+								<label value="Products *" zclass="H2">
+								</label>
+							</cell>
+						</row>
+
+						<row>
+							<cell colspan="2" align="left">
+								<label
+									value=" Use checkbox to select option, you can select more than one product"></label>
+							</cell>
+						</row>
+
+						<row hflex="true">
+							<cell colspan="2" align="left" >
+					
+								<grid width="750px">
+									<columns>
+										<column align="left" hflex="min" label="Hinawi Products" />
+									<!-- 	<column label="No. of License" width="100px" />
+										<column label="Memo" /> -->
+									</columns>
+
+									<rows>
+									
+									<row>
+									
+									
+								<grid width="700px">
+									<columns>
+										<column align="left" hflex="1" label="Hinawi Deskstop Application (Hinawi ERP) Ver.1" width="100px" />
+										<column label="No. of License" width="100px" />
+										<column label="Memo" />
+									</columns>
+
+									<rows>
+
+										<row>
+											<cell tooltip="erpMain_info">
+												<checkbox label="Hinawi Accounting and CRM " tooltip="erpMain_info"
+													checked="@bind(vm.product1)"></checkbox>
+												
+											</cell>
+											<cell>
+												<listbox mold="select" hflex="1" selectedItem="@bind(vm.nol1)">
+													<listitem value="Select" label="Select"></listitem>
+													<listitem value="1" label="1"></listitem>
+													<listitem value="3" label="3"></listitem>
+													<listitem value="5" label="5"></listitem>
+													<listitem value="10" label="10"></listitem>
+													<listitem value="15" label="15"></listitem>
+													<listitem value="20" label="20"></listitem>
+													<listitem value="30" label="30"></listitem>
+													<listitem value="30+" label="30+"></listitem>
+												</listbox>
+											</cell>
+											<cell>
+												<vlayout>
+													<listbox mold="select" hflex="1" selectedItem="@bind(vm.pmemo1)"
+														onSelect='self.setPopup("status, at_pointer")'>
+														<listitem value="Buy License only" label="Buy License only"
+															selected="true"></listitem>
+														<listitem value="Buy License with training and support"
+															label="Buy License with training and support"></listitem>
+														<listitem value="Want to try the software" label="Want to try the software"></listitem>
+														<listitem value="Others" label="Others"></listitem>
+													</listbox>
+													<!-- <popup id="status" width="300px"> <vlayout> This user is 
+														online now ! <a label="Mail him/her"/> </vlayout> </popup> -->
+													<textbox visible="@bind(vm.pmemo1 eq 'Others')"
+														value="@bind(vm.memo1)" hflex="1"></textbox>
+												</vlayout>
+											</cell>
+										</row>
+
+										<row>
+											<cell align="left" tooltip="fixed_asset_info">
+												<checkbox label="Fixed Asset Module" checked="@bind(vm.product2)" tooltip="fixed_asset_info"></checkbox>
+											
+											</cell>
+											<cell>
+												<listbox hflex="1" mold="select" selectedItem="@bind(vm.nol2)">
+													<listitem value="Select" label="Select"></listitem>
+													<listitem value="1" label="1" selected="false"></listitem>
+													<listitem value="3" label="3"></listitem>
+													<listitem value="5" label="5"></listitem>
+													<listitem value="10" label="10"></listitem>
+													<listitem value="15" label="15"></listitem>
+													<listitem value="20" label="20"></listitem>
+													<listitem value="30" label="30"></listitem>
+													<listitem value="30+" label="30+"></listitem>
+												</listbox>
+											</cell>
+											<cell>
+												<vlayout>
+													<listbox mold="select" hflex="1" selectedItem="@bind(vm.pmemo2)">
+														<listitem value="Buy License only" label="Buy License only"
+															selected="true"></listitem>
+														<listitem value="Buy License with training and support"
+															label="Buy License with training and support"></listitem>
+														<listitem value="Want to try the software" label="Want to try the software"></listitem>
+														<listitem value="Others" label="Others"></listitem>
+
+													</listbox>
+													<textbox visible="@bind(vm.pmemo2 eq 'Others')"
+														value="@bind(vm.memo2)" hflex="1"></textbox>
+												</vlayout>
+											</cell>
+										</row>
+
+										<row>
+											<cell align="left" tooltip="real_estate_info">
+												<checkbox label="Real Estate Module" checked="@bind(vm.product3)" tooltip="real_estate_info"></checkbox>
+												
+											</cell>
+											<cell>
+												<listbox hflex="1" mold="select" selectedItem="@bind(vm.nol3)">
+													<listitem value="Select" label="Select"></listitem>
+													<listitem value="1" label="1" selected="false"></listitem>
+													<listitem value="3" label="3"></listitem>
+													<listitem value="5" label="5"></listitem>
+													<listitem value="10" label="10"></listitem>
+													<listitem value="15" label="15"></listitem>
+													<listitem value="20" label="20"></listitem>
+													<listitem value="30" label="30"></listitem>
+													<listitem value="30+" label="30+"></listitem>
+												</listbox>
+											</cell>
+											<cell>
+												<vlayout>
+													<listbox mold="select" hflex="1" selectedItem="@bind(vm.pmemo3)">
+														<listitem value="Buy License only" label="Buy License only"
+															selected="true"></listitem>
+														<listitem value="Buy License with training and support"
+															label="Buy License with training and support"></listitem>
+														<listitem value="Want to try the software" label="Want to try the software"></listitem>
+														<listitem value="Others" label="Others"></listitem>
+
+													</listbox>
+													<textbox visible="@bind(vm.pmemo3 eq 'Others')"
+														value="@bind(vm.memo3)" hflex="1"></textbox>
+												</vlayout>
+											</cell>
+										</row>
+
+										<row>
+											<cell align="left" tooltip="garage_info">
+												<checkbox label="Garage Module" checked="@bind(vm.product4)" tooltip="garage_info"></checkbox>
+												
+											</cell>
+											<cell>
+												<listbox hflex="1" mold="select" selectedItem="@bind(vm.nol4)">
+													<listitem value="Select" label="Select"></listitem>
+													<listitem value="1" label="1" selected="false"></listitem>
+													<listitem value="3" label="3"></listitem>
+													<listitem value="5" label="5"></listitem>
+													<listitem value="10" label="10"></listitem>
+													<listitem value="15" label="15"></listitem>
+													<listitem value="20" label="20"></listitem>
+													<listitem value="30" label="30"></listitem>
+													<listitem value="30+" label="30+"></listitem>
+												</listbox>
+											</cell>
+											<cell>
+												<vlayout>
+													<listbox mold="select" hflex="1" selectedItem="@bind(vm.pmemo4)">
+														<listitem value="Buy License only" label="Buy License only"
+															selected="true"></listitem>
+														<listitem value="Buy License with training and support"
+															label="Buy License with training and support"></listitem>
+														<listitem value="Want to try the software" label="Want to try the software"></listitem>
+														<listitem value="Others" label="Others"></listitem>
+													</listbox>
+													<textbox visible="@bind(vm.pmemo4 eq 'Others')"
+														value="@bind(vm.memo4)" hflex="1"></textbox>
+												</vlayout>
+											</cell>
+										</row>
+
+
+										<row>
+											<cell align="left" tooltip="Hrms_info">
+												<checkbox label="HRMS Module" checked="@bind(vm.product11)" tooltip="Hrms_info"></checkbox>
+											</cell>
+											<cell>
+												<listbox hflex="1" mold="select" selectedItem="@bind(vm.nol11)">
+													<listitem value="Select" label="Select"></listitem>
+													<listitem value="1" label="1" selected="false"></listitem>
+													<listitem value="3" label="3"></listitem>
+													<listitem value="5" label="5"></listitem>
+													<listitem value="10" label="10"></listitem>
+													<listitem value="15" label="15"></listitem>
+													<listitem value="20" label="20"></listitem>
+													<listitem value="30" label="30"></listitem>
+													<listitem value="30+" label="30+"></listitem>
+												</listbox>
+											</cell>
+											<cell>
+												<vlayout>
+													<listbox mold="select" hflex="1" selectedItem="@bind(vm.pmemo11)">
+														<listitem value="Buy License only" label="Buy License only"
+															selected="true"></listitem>
+														<listitem value="Buy License with training and support"
+															label="Buy License with training and support"></listitem>
+														<listitem value="Want to try the software" label="Want to try the software"></listitem>
+														<listitem value="Others" label="Others"></listitem>
+													</listbox>
+													<textbox visible="@bind(vm.pmemo11 eq 'Others')"
+														value="@bind(vm.memo11)" hflex="1"></textbox>
+												</vlayout>
+											</cell>
+										</row>
+										</rows>
+										</grid>
+										</row>
+										
+
+										<!-- <hr></hr> -->
+											<row>
+										<grid width="700px">
+									<columns>
+										<column align="left" hflex="1" label="Hinawi Web Application"  width="100px"/>
+										<column label="No. of Users" width="100px" />
+										<column label="Memo" />
+									</columns>
+									<rows>
+									<row>
+											<cell tooltip="onlineMain_info">
+												<checkbox label="Hinawi Web Application" checked="@bind(vm.product8)" tooltip="onlineMain_info"></checkbox>
+											
+											</cell>
+											<cell>
+												<listbox hflex="1" mold="select" selectedItem="@bind(vm.nol8)">
+													<listitem value="Select" label="Select"></listitem>
+													<listitem value="1" label="1" selected="false"></listitem>
+													<listitem value="2" label="2"></listitem>
+													<listitem value="3" label="3"></listitem>
+													<listitem value="4" label="4"></listitem>
+													<listitem value="5" label="5"></listitem>
+													<listitem value="6" label="6"></listitem>
+													<listitem value="7" label="7"></listitem>
+													<listitem value="8" label="8"></listitem>
+													<listitem value="9" label="9"></listitem>
+													<listitem value="10" label="10"></listitem>
+													<listitem value="30+" label="30+"></listitem>
+												</listbox>
+											</cell>
+											<cell>
+												<vlayout>
+													<listbox mold="select" hflex="1" selectedItem="@bind(vm.pmemo8)">
+														<listitem value="Buy License only" label="Buy License only"
+															selected="true"></listitem>
+														<listitem value="Buy License with training and support"
+															label="Buy License with training and support"></listitem>
+														<listitem value="Want to try the software" label="Want to try the software"></listitem>
+														<listitem value="Others" label="Others"></listitem>
+													</listbox>
+													<textbox visible="@bind(vm.pmemo8 eq 'Others')"
+														value="@bind(vm.memo8)" hflex="1"></textbox>
+												</vlayout>
+											</cell>
+											</row>
+										 	<row>
+											<cell align="left" tooltip="online_fixed_asset_info">
+												<checkbox label="Fixed Asset Module (Web)" checked="@bind(vm.product9)" tooltip="online_fixed_asset_info"></checkbox>
+										
+											</cell>
+											<cell>
+												<listbox hflex="1" mold="select" selectedItem="@bind(vm.nol9)">
+													<listitem value="Select" label="Select"></listitem>
+													<listitem value="1" label="1" selected="false"></listitem>
+													<listitem value="2" label="2"></listitem>
+													<listitem value="3" label="3"></listitem>
+													<listitem value="4" label="4"></listitem>
+													<listitem value="5" label="5"></listitem>
+													<listitem value="6" label="6"></listitem>
+													<listitem value="7" label="7"></listitem>
+													<listitem value="8" label="8"></listitem>
+													<listitem value="9" label="9"></listitem>
+													<listitem value="10" label="10"></listitem>
+													<listitem value="30+" label="30+"></listitem>
+												</listbox>
+											</cell>
+											<cell>
+												<vlayout>
+													<listbox mold="select" hflex="1" selectedItem="@bind(vm.pmemo9)">
+														<listitem value="Buy License only" label="Buy License only"
+															selected="true"></listitem>
+														<listitem value="Buy License with training and support"
+															label="Buy License with training and support"></listitem>
+														<listitem value="Want to try the software" label="Want to try the software"></listitem>
+														<listitem value="Others" label="Others"></listitem>
+													</listbox>
+													<textbox visible="@bind(vm.pmemo9 eq 'Others')"
+														value="@bind(vm.memo9)" hflex="1"></textbox>
+												</vlayout>
+											</cell>
+										</row>
+
+										<row>
+											<cell align="left" tooltip="online_real_estate_info">
+												<checkbox label="Real Estate Module (Web)" checked="@bind(vm.product10)"  tooltip="online_real_estate_info"></checkbox>
+											
+											</cell>
+											<cell>
+												<listbox hflex="1" mold="select" selectedItem="@bind(vm.nol10)">
+													<listitem value="Select" label="Select"></listitem>
+													<listitem value="1" label="1" selected="false"></listitem>
+													<listitem value="2" label="2"></listitem>
+													<listitem value="3" label="3"></listitem>
+													<listitem value="4" label="4"></listitem>
+													<listitem value="5" label="5"></listitem>
+													<listitem value="6" label="6"></listitem>
+													<listitem value="7" label="7"></listitem>
+													<listitem value="8" label="8"></listitem>
+													<listitem value="9" label="9"></listitem>
+													<listitem value="10" label="10"></listitem>
+													<listitem value="30+" label="30+"></listitem>
+												</listbox>
+											</cell>
+											<cell>
+												<vlayout>
+													<listbox mold="select" hflex="1" selectedItem="@bind(vm.pmemo10)">
+														<listitem value="Buy License only" label="Buy License only"
+															selected="true"></listitem>
+														<listitem value="Buy License with training and support"
+															label="Buy License with training and support"></listitem>
+														<listitem value="Want to try the software" label="Want to try the software"></listitem>
+														<listitem value="Others" label="Others"></listitem>
+													</listbox>
+													<textbox visible="@bind(vm.pmemo10 eq 'Others')"
+														value="@bind(vm.memo10)" hflex="1"></textbox>
+												</vlayout>
+											</cell>
+										</row>
+
+
+										<row >
+											<cell align="left" tooltip="online_garage_info">
+												<checkbox label="Garage Module (Web)" checked="@bind(vm.product12)" tooltip="online_garage_info"></checkbox>
+												
+											</cell>
+											<cell>
+												<listbox hflex="1" mold="select" selectedItem="@bind(vm.nol12)">
+													<listitem value="Select" label="Select"></listitem>
+													<listitem value="1" label="1" selected="false"></listitem>
+													<listitem value="2" label="2"></listitem>
+													<listitem value="3" label="3"></listitem>
+													<listitem value="4" label="4"></listitem>
+													<listitem value="5" label="5"></listitem>
+													<listitem value="6" label="6"></listitem>
+													<listitem value="7" label="7"></listitem>
+													<listitem value="8" label="8"></listitem>
+													<listitem value="9" label="9"></listitem>
+													<listitem value="10" label="10"></listitem>
+													<listitem value="30+" label="30+"></listitem>
+												</listbox>
+											</cell>
+											<cell>
+												<vlayout>
+													<listbox mold="select" hflex="1" selectedItem="@bind(vm.pmemo12)">
+														<listitem value="Buy License only" label="Buy License only"
+															selected="true"></listitem>
+														<listitem value="Buy License with training and support"
+															label="Buy License with training and support"></listitem>
+														<listitem value="Want to try the software" label="Want to try the software"></listitem>
+														<listitem value="Others" label="Others"></listitem>
+													</listbox>
+													<textbox visible="@bind(vm.pmemo12 eq 'Others')"
+														value="@bind(vm.memo12)" hflex="1"></textbox>
+												</vlayout>
+											</cell>
+										</row>
+
+
+										<row >
+											<cell align="left" tooltip="online_Hrms_info">
+												<checkbox label="HRMS Module (Web)" checked="@bind(vm.product13)" tooltip="online_Hrms_info"></checkbox>
+												
+											</cell>
+											<cell>
+												<listbox hflex="1" mold="select" selectedItem="@bind(vm.nol13)">
+													<listitem value="Select" label="Select"></listitem>
+													<listitem value="1" label="1" selected="false"></listitem>
+													<listitem value="2" label="2"></listitem>
+													<listitem value="3" label="3"></listitem>
+													<listitem value="4" label="4"></listitem>
+													<listitem value="5" label="5"></listitem>
+													<listitem value="6" label="6"></listitem>
+													<listitem value="7" label="7"></listitem>
+													<listitem value="8" label="8"></listitem>
+													<listitem value="9" label="9"></listitem>
+													<listitem value="10" label="10"></listitem>
+													<listitem value="30+" label="30+"></listitem>
+												</listbox>
+											</cell>
+											<cell>
+												<vlayout>
+													<listbox mold="select" hflex="1" selectedItem="@bind(vm.pmemo13)">
+														<listitem value="Buy License only" label="Buy License only"
+															selected="true"></listitem>
+														<listitem value="Buy License with training and support"
+															label="Buy License with training and support"></listitem>
+														<listitem value="Want to try the software" label="Want to try the software"></listitem>
+														<listitem value="Others" label="Others"></listitem>
+													</listbox>
+													<textbox visible="@bind(vm.pmemo13 eq 'Others')"
+														value="@bind(vm.memo13)" hflex="1"></textbox>
+												</vlayout>
+											</cell>
+										</row>
+											
+											
+										</rows>
+											</grid>	
+											</row>
+
+										
+									<row>
+									<grid width="700px">
+									<columns>
+										<column align="left" hflex="1" label="QucikBook Application" width="100px" />
+										<column label="No. of License" width="100px" />
+										<column label="Memo" />
+									</columns>
+									<rows>
+										<row >
+											<cell tooltip="qucikBook_Pro_info">
+												<checkbox label="QuickBooks Pro" checked="@bind(vm.product5)" tooltip="qucikBook_Pro_info"></checkbox>
+											
+											</cell>
+											<cell>
+												<listbox hflex="1" mold="select" selectedItem="@bind(vm.nol5)">
+													<listitem value="Select" label="Select"></listitem>
+													<listitem value="1" label="1" selected="false"></listitem>
+													<listitem value="2" label="2"></listitem>
+													<listitem value="3" label="3"></listitem>
+												</listbox>
+											</cell>
+											<cell>
+												<vlayout>
+													<listbox mold="select" hflex="1" selectedItem="@bind(vm.pmemo5)">
+														<listitem value="Buy License only" label="Buy License only"
+															selected="true"></listitem>
+														<listitem value="Buy License with training and support"
+															label="Buy License with training and support"></listitem>
+														<listitem value="Want to try the software" label="Want to try the software"></listitem>
+														<listitem value="Others" label="Others"></listitem>
+													</listbox>
+													<textbox visible="@bind(vm.pmemo5 eq 'Others')"
+														value="@bind(vm.memo5)" hflex="1"></textbox>
+												</vlayout>
+											</cell>
+										</row>
+
+										<row >
+											<cell tooltip="qb_premimum_info">
+												<checkbox label="QuickBooks Premier" checked="@bind(vm.product6)" tooltip="qb_premimum_info"></checkbox>
+												
+											</cell>
+											<cell>
+												<listbox hflex="1" mold="select" selectedItem="@bind(vm.nol6)">
+													<listitem value="Select" label="Select"></listitem>
+													<listitem value="1" label="1" selected="false"></listitem>
+													<listitem value="3" label="3"></listitem>
+													<listitem value="5" label="5"></listitem>
+												</listbox>
+											</cell>
+											<cell>
+												<vlayout>
+													<listbox mold="select" hflex="1" selectedItem="@bind(vm.pmemo6)">
+														<listitem value="Buy License only" label="Buy License only"
+															selected="true"></listitem>
+														<listitem value="Buy License with training and support"
+															label="Buy License with training and support"></listitem>
+														<listitem value="Want to try the software" label="Want to try the software"></listitem>
+														<listitem value="Others" label="Others"></listitem>
+													</listbox>
+													<textbox visible="@bind(vm.pmemo6 eq 'Others')"
+														value="@bind(vm.memo6)" hflex="1"></textbox>
+												</vlayout>
+											</cell>
+										</row>
+
+										<row >
+											<cell tooltip="qb_enterprice_info">
+												<checkbox label="QuickBooks Enterprise" checked="@bind(vm.product7)" tooltip="qb_enterprice_info"></checkbox>
+												
+											</cell>
+											<cell>
+												<listbox hflex="1" mold="select" selectedItem="@bind(vm.nol7)">
+													<listitem value="Select" label="Select"></listitem>
+													<listitem value="1" label="1" selected="false"></listitem>
+													<listitem value="2" label="2"></listitem>
+													<listitem value="3" label="3"></listitem>
+													<listitem value="4" label="4"></listitem>
+													<listitem value="5" label="5"></listitem>
+													<listitem value="6" label="6"></listitem>
+													<listitem value="7" label="7"></listitem>
+													<listitem value="8" label="8"></listitem>
+													<listitem value="9" label="9"></listitem>
+													<listitem value="10" label="10"></listitem>
+													<listitem value="30" label="30"></listitem>
+												</listbox>
+											</cell>
+											<cell>
+												<vlayout>
+													<listbox mold="select" hflex="1" selectedItem="@bind(vm.pmemo7)">
+														<listitem value="Buy License only" label="Buy License only"
+															selected="true"></listitem>
+														<listitem value="Buy License with training and support"
+															label="Buy License with training and support"></listitem>
+														<listitem value="Want to try the software" label="Want to try the software"></listitem>
+														<listitem value="Others" label="Others"></listitem>
+													</listbox>
+													<textbox visible="@bind(vm.pmemo7 eq 'Others')"
+														value="@bind(vm.memo7)" hflex="1"></textbox>
+												</vlayout>
+											</cell>
+										</row>
+
+
+										<row>
+											<cell>
+												<checkbox label="Others" checked="@bind(vm.product14)"></checkbox>
+											</cell>
+											<cell>
+												<listbox hflex="1" mold="select" selectedItem="@bind(vm.nol14)">
+													<listitem value="Select" label="Select"></listitem>
+													<listitem value="1" label="1" selected="false"></listitem>
+													<listitem value="2" label="2"></listitem>
+													<listitem value="3" label="3"></listitem>
+													<listitem value="4" label="4"></listitem>
+													<listitem value="5" label="5"></listitem>
+													<listitem value="6" label="6"></listitem>
+													<listitem value="7" label="7"></listitem>
+													<listitem value="8" label="8"></listitem>
+													<listitem value="9" label="9"></listitem>
+													<listitem value="10" label="10"></listitem>
+													<listitem value="30" label="30"></listitem>
+												</listbox>
+											</cell>
+											<cell>
+												<vlayout>
+													<listbox mold="select" hflex="1" selectedItem="@bind(vm.pmemo14)">
+														<listitem value="Buy License only" label="Buy License only"
+															selected="true"></listitem>
+														<listitem value="Buy License with training and support"
+															label="Buy License with training and support"></listitem>
+														<listitem value="Want to try the software" label="Want to try the software"></listitem>
+														<listitem value="Others" label="Others"></listitem>
+													</listbox>
+													<textbox visible="@bind(vm.pmemo14 eq 'Others')"
+														value="@bind(vm.memo14)" hflex="1"></textbox>
+												</vlayout>
+											</cell>
+										</row>
+										</rows>
+										</grid>
+										</row>
+										
+
+										<row height="20px">
+											<cell colspan="2" align="left">
+											</cell>
+										</row>
+
+										<row>
+											<cell colspan="2" align="left">
+												<label value="Select Services:" zclass="H2"></label>
+											</cell>
+										</row>
+										<row>
+											<cell colspan="2" align="left">
+												<label value="You can select more than one Service"></label>
+											</cell>
+										</row>
+
+										<row>
+											<cell colspan="3">
+												<grid width="680px">
+													<columns>
+														<column hflex="min"></column>
+														<column hflex="min" label="Type of service"></column>
+														<column label="Memo"></column>
+													</columns>
+
+													<rows>
+
+														<row>
+															<cell>
+																<checkbox checked="@bind(vm.service1)"></checkbox>
+															</cell>
+															<cell>
+																<label value="Training and Support"></label>
+															</cell>
+															<cell>
+																<textbox hflex="1" value="@bind(vm.smemo1)"></textbox>
+															</cell>
+														</row>
+
+														<row>
+															<cell>
+																<checkbox checked="@bind(vm.service2)"></checkbox>
+															</cell>
+															<cell>
+																<label value="Consulting and Analysis"></label>
+															</cell>
+															<cell>
+																<textbox hflex="1" value="@bind(vm.smemo2)"></textbox>
+															</cell>
+														</row>
+
+														<row>
+															<cell>
+																<checkbox checked="@bind(vm.service3)"></checkbox>
+															</cell>
+															<cell>
+																<label value="Accounting Services"></label>
+															</cell>
+															<cell>
+																<textbox hflex="1" value="@bind(vm.smemo3)"></textbox>
+															</cell>
+														</row>
+
+														<row>
+															<cell>
+																<checkbox checked="@bind(vm.service4)"></checkbox>
+															</cell>
+															<cell>
+																<label value="Special Programming"></label>
+															</cell>
+															<cell>
+																<textbox hflex="1" value="@bind(vm.smemo4)"></textbox>
+															</cell>
+														</row>
+
+														<row>
+															<cell>
+																<checkbox checked="@bind(vm.service5)"></checkbox>
+															</cell>
+															<cell>
+																<label value="Converting and Importing of Data"></label>
+															</cell>
+															<cell>
+																<textbox hflex="1" value="@bind(vm.smemo5)"></textbox>
+															</cell>
+														</row>
+
+													</rows>
+												</grid>
+											</cell>
+										</row>
+									</rows>
+								</grid>
+
+						 </cell> <!-- <cell  valign="top" align="center" >
+
+								<html><![CDATA[<h1><u>Please select the modules you are interested in from left side.</u></h1>
+       			 					  <br/><br/>
+								<ul>
+								<div style="text-align: justify; text-justify: inter-word;font-size: 13px;">
+								<li> • Note that (Hinawi ERP) Ver.1 and Hinawi web application are complete modules.If you select these all modules under them are selected by default,If you want specific one, you can select them individually.</li><br/> 
+								<li> • Accounting and CRM are available on all the modules by default. </li></div> 
+								</ul>
+
+]]></html>
+
+
+
+							</cell> -->
+
+						</row>
+
+						<row height="20px">
+							<cell colspan="2" align="left">
+							</cell>
+						</row>
+
+						<row>
+							<cell colspan="2" align="left">
+								<label value="Additional Info:" zclass="H2"></label>
+							</cell>
+						</row>
+
+						<row>
+							<cell colspan="2">
+								<grid width="600px">
+									<columns>
+										<column hflex="min"></column>
+										<column hflex="1"></column>
+									</columns>
+
+									<rows>
+
+										<row height="40px">
+											<cell>
+												<label value="P. O. Box:"></label>
+											</cell>
+											<cell>
+												<textbox hflex="1" value="@bind(fx.pobox)"></textbox>
+											</cell>
+										</row>
+
+										<row height="40px">
+											<cell>
+												<label value="Skype Id:"></label>
+											</cell>
+											<cell>
+												<textbox hflex="1" value="@bind(fx.skypeid)"></textbox>
+											</cell>
+										</row>
+
+										<row height="40px">
+											<cell>
+												<label value="Business Type:"></label>
+											</cell>
+											<cell>
+												<vlayout>
+													<listbox mold="select" model="@bind(vm.lstBusinessType)"
+														hflex="1" selectedItem="@bind(vm.selectedBusinessType)">
+													</listbox>
+													<textbox visible="@bind(vm.selectedBusinessType eq 'Others')"
+														value="@bind(vm.otherBusinessType)" hflex="1"></textbox>
+												</vlayout>
+											</cell>
+										</row>
+
+										<row height="40px">
+											<cell>
+												<label value="Company Size:"></label>
+											</cell>
+											<cell>
+												<listbox mold="select" model="@bind(vm.lstCompanySize)"
+													hflex="1" selectedItem="@bind(vm.selectedCompanySize)">
+												</listbox>
+											</cell>
+										</row>
+
+										<row height="40px">
+											<cell>
+												<label value="Company Type:"></label>
+											</cell>
+											<cell>
+												<listbox mold="select" model="@bind(vm.lstCompanyType)"
+													hflex="1" selectedItem="@bind(vm.selectedCompanyType)">
+												</listbox>
+											</cell>
+										</row>
+
+
+										<row height="40px">
+											<cell>
+												<label value="Total Employees and Labors.:"></label>
+											</cell>
+											<cell>
+												<textbox hflex="1" value="@bind(fx.totalEmployee)"></textbox>
+											</cell>
+										</row>
+
+										<row height="40px">
+											<cell>
+												<label value="External Auditor Name:"></label>
+											</cell>
+											<cell>
+												<textbox hflex="1" value="@bind(fx.externalAuditorname)"></textbox>
+											</cell>
+										</row>
+
+										<row height="40px">
+											<cell>
+												<label value="Current Accounting Software Name:"></label>
+											</cell>
+											<cell>
+												<textbox hflex="1" value="@bind(fx.currentAccount)"
+													constraint="no empty: Please enter either Yes/ No /Software Name"></textbox>
+											</cell>
+										</row>
+
+										<row height="40px">
+											<cell>
+												<label value="Current HR Software Name:"></label>
+											</cell>
+											<cell>
+												<textbox hflex="1" value="@bind(fx.currentHr)"
+													constraint="no empty: Please enter either Yes/ No /Software Name"></textbox>
+											</cell>
+										</row>
+
+										<row height="40px">
+											<cell>
+												<label value="Other Software Name:"></label>
+											</cell>
+											<cell>
+												<textbox hflex="1" value="@bind(fx.otherSoftware)"
+													constraint="no empty: Please enter either Yes/ No /Software Name"></textbox>
+											</cell>
+											<cell></cell>
+										</row>
+
+										<row height="40px">
+											<cell>
+												<label value="What Software Laguage you want to Use:"></label>
+											</cell>
+											<cell>
+												<listbox mold="select" model="@bind(vm.lstSoftwareLanguage)"
+													hflex="1" selectedItem="@bind(vm.selectedSoftwareLanguage)">
+												</listbox>
+											</cell>
+										</row>
+
+										<row height="40px">
+											<cell>
+												<label value="Is company part of group?:"></label>
+											</cell>
+											<cell>
+												<hlayout width="100px">
+													<radiogroup id="sv1"
+														onCheck="txtGroup.setDisabled(Boolean.parseBoolean(self.getSelectedItem().getValue().toString()))">
+													</radiogroup>
+													<radio width="50px" label="Yes" radiogroup="sv1"
+														value="false"></radio>
+													<radio width="50px" label="No" radiogroup="sv1"
+														value="true" checked="true"></radio>
+
+
+												</hlayout>
+											</cell>
+										</row>
+
+
+										<row>
+											<cell colspan="2">
+												<label value="If yes, please specify :"></label>
+											</cell>
+										</row>
+
+										<row>
+											<cell>
+												<label value="Group Name:"></label>
+											</cell>
+											<cell>
+												<textbox hflex="1" value="@bind(fx.groupName)" id="txtGroup"
+													disabled="true"></textbox>
+											</cell>
+										</row>
+
+
+										<row height="20px">
+											<cell colspan="2" align="left">
+											</cell>
+										</row>
+
+
+									</rows>
+								</grid>
+							</cell>
+						</row>
+
+
+						<row>
+							<cell colspan="2">
+								<grid>
+									<columns>
+										<column width="200px"></column>
+										<column hflex="min"></column>
+										<column width="100px"></column>
+										<column hflex="min"></column>
+										<column width="100px"></column>
+									</columns>
+
+									<rows>
+										<row>
+											<label value="Office Timing:"></label>
+											<label value="From:"></label>
+											<listbox mold="select" model="@bind(vm.lstFromTime)"
+												hflex="1" selectedItem="@bind(vm.selectedFromTime)">
+											</listbox>
+
+											<label value="To:"></label>
+											<listbox mold="select" model="@bind(vm.lstToTime)"
+												hflex="1" selectedItem="@bind(vm.selectedToTime)">
+											</listbox>
+
+										</row>
+
+										<row>
+											<label value="Days:"></label>
+											<label value="From:"></label>
+											<listbox mold="select" model="@bind(vm.lstFromDay)"
+												hflex="1" selectedItem="@bind(vm.selectedFromDay)">
+											</listbox>
+											<label value="To:"></label>
+											<listbox mold="select" model="@bind(vm.lstToDay)"
+												hflex="1" selectedItem="@bind(vm.selectedToDay)">
+
+											</listbox>
+
+										</row>
+
+
+									</rows>
+								</grid>
+							</cell>
+						</row>
+
+
+						<row>
+							<cell colspan="2" align="left">
+								<label value="Address" zclass="H2"></label>
+							</cell>
+						</row>
+
+						<row>
+							<cell colspan="2" align="left">
+								<textbox height="50px" hflex="1" multiline="true"
+									value="@bind(fx.address)"></textbox>
+							</cell>
+						</row>
+
+						<row>
+							<cell colspan="2" align="left">
+								<label value="Notes" zclass="H2"></label>
+							</cell>
+						</row>
+
+						<row>
+							<cell colspan="2" align="left">
+								<textbox height="50px" hflex="1" multiline="true"
+									value="@bind(fx.notes)"></textbox>
+							</cell>
+						</row>
+
+						<row>
+							<cell colspan="2" align="left">
+								<label value="Attachments" zclass="H2"></label>
+							</cell>
+						</row>
+
+						<row>
+							<cell colspan="2">
+								<grid width="500px">
+									<columns>
+										<column width="100px"></column>
+										<column width="100px"></column>
+										<column></column>
+									</columns>
+									<rows>
+
+										<row>
+											<label value="Location Map:"></label>
+											<button label="Choose File" upload="true"
+												onUpload="@command('uploadFile',attId=1)"></button>
+											<label value="@bind(vm.attFile1)" />
+										</row>
+
+										<row>
+											<label value="Attachment 1:"></label>
+											<button label="Choose File" upload="true"
+												onUpload="@command('uploadFile',attId=2)"></button>
+											<label value="@bind(vm.attFile2)" />
+										</row>
+
+										<row>
+											<label value="Attachment 2:"></label>
+											<button label="Choose File" upload="true"
+												onUpload="@command('uploadFile',attId=3)"></button>
+											<label value="@bind(vm.attFile3)" />
+										</row>
+
+										<row>
+											<label value="Attachment 3:"></label>
+											<button label="Choose File" upload="true"
+												onUpload="@command('uploadFile',attId=4)"></button>
+											<label value="@bind(vm.attFile4)" />
+										</row>
+
+										<row>
+											<label value="Attachment 4:"></label>
+											<button label="Choose File" upload="true"
+												onUpload="@command('uploadFile',attId=5)"></button>
+											<label value="@bind(vm.attFile5)" />
+										</row>
+
+									</rows>
+								</grid>
+							</cell>
+						</row>
+
+
+						<row>
+							<cell colspan="4" align="center">
+								<hlayout>
+									<button onClick="@command('sendMail')" label="Submit" />
+									<button onClick="@command('clearCommand')" label="Clear" />
+								</hlayout>
+							</cell>
+						</row>
+
+						<row>
+							<cell colspan="4" align="center">
+								<label value="@bind(vmsgs['lastnameContentError'])" style="color: red;" />
+							</cell>
+						</row>
+
+					</rows>
+				</grid>
+
+				<popup id="erpMain_info" width="400px">
+					<html><![CDATA[Hinawi Business Management (Hianwi ERP) Ver.1 and Hinawi web application are complete modules.<br/><br/> If you select these, all modules under them are selected by default, If you want specific one, you can select them individually.<br/><br/>
+
+
+									Hinawi Business Management (Hianwi ERP) Ver.1 includes the following integrated modules.
+       			 					  <br/><br/>
+								<ul>
+								<li> • CRM</li> 
+								<li> • Accounting</li> 
+								<li> • Fixed Assets</li> 
+								<li> • Real Estate</li> 
+								<li> • Garage</li> 
+								<li> • HRMS (HR, Timesheet, Payroll, Recruitment, Taxes and WPS)</li> 
+ 								</ul>
+ 								<br/>
+ 							<b>	Accounting and CRM are available by Default.</b>
+
+]]></html>
+				</popup>
+
+				<popup id="fixed_asset_info" width="400px">
+					<html><![CDATA[This is one of the module under Hinawi ERP<br/><br/>
+					
+					
+					Fixed Assets includes the following modules.
+
+
+       			 					  <br/><br/>
+								<ul>
+								<li> • Fixed Asset Item List</li> 
+								<li> • Purchase New Asset</li> 
+								<li> • Maintenance</li> 
+								<li> • Real Estate</li> 
+								<li> • Create Bill For Insurance</li> 
+								<li> • Asset Maintance</li> 
+ 								<li> • Tansfer Assets</li>
+ 								<li> • Disposal</li>
+ 								<li> • Import Assets From Excel</li>
+ 								</ul>
+ 								<br/>
+ 								<b>Accounting and CRM are available by Default.</b>
+
+]]></html>
+				</popup>
+
+
+				<popup id="real_estate_info" width="400px">
+					<html><![CDATA[This is one of the module under Hinawi ERP<br/><br/>Real Estate includes the following modules.
+
+
+       			 					  <br/><br/>
+								<ul>
+								<li> • Prperty List</li> 
+								<li> • Unit List</li> 
+								<li> • Tenant List</li> 
+								<li> • Real Estate</li> 
+								<li> • Change Unit Status</li> 
+								<li> • Convert Fixed Asset To Property</li> 
+ 								<li> • Map Fixed Asset Names With Property</li>
+ 								<li> • Convert Property To Fixed Asset</li>
+ 								<li> • Contract </li>
+ 								<li> • Contract Comission</li>
+ 								<li> • Refund Deposite</li>
+ 								<li> • Post Deffered Income</li>
+ 								<li> • Maintenance</li>
+ 								<li> • Notice</li>
+ 								<li> • General Memo</li>
+ 								<li> • Reniew Passport</li>
+ 								</ul>
+ 									<br/>
+ 								<b>Accounting and CRM are available by Default.</b>
+
+]]></html>
+				</popup>
+
+				<popup id="garage_info" width="400px">
+					<html><![CDATA[This is one of the module under Hinawi ERP<br/><br/>Garage includes the following modules.
+
+
+       			 					  <br/><br/>
+								<ul>
+								<li> • Chassis (Vehicle) List</li> 
+								<li> • Convert Fixed Asset To Vehicle</li> 
+								<li> • Convert Vehicle To Fixed Asset</li>
+								<li> • Job Card</li> 
+								<li> • Add Service To Job Card</li> 
+								<li> • Spare Parts Request</li> 
+								<li> • Assign Employee's To Job Order (Progress Sheet)</li> 
+								<li> • Pro Forma Invoice</li> 
+ 								<li> • Cash Invoice</li> 
+ 								<li> • Credit Invoice</li> 
+ 								</ul>
+ 									<br/>
+ 								<b>Accounting and CRM are available by Default.<b>
+ 								
+ 							
+
+]]></html>
+				</popup>
+
+
+				<popup id="Hrms_info" width="400px">
+					<html><![CDATA[This is one of the module under Hinawi ERP<br/><br/>HRMS includes the following modules.
+
+       			 					  <br/><br/>
+								<ul>
+								<li> • HR</li> 
+								<li> • Timesheet</li> 
+								<li> • Payroll</li> 
+								<li> • Recruitment</li> 
+								<li> • Taxes</li> 
+								<li> • WPS</li> 
+ 								</ul>
+ 								
+ 									<br/>
+ 								<b>Accounting and CRM are available by Default.</b>
+ 								
+ 							
+
+]]></html>
+				</popup>
+
+
+
+				<popup id="onlineMain_info" width="400px">
+					<html><![CDATA[Hinawi Web Application includes the following integrated modules.
+       			 					  <br/><br/>
+								<ul>
+								<li> • CRM</li> 
+								<li> • Accounting</li> 
+								<li> • Fixed Assets</li> 
+								<li> • Real Estate</li> 
+								<li> • Garage</li> 
+								<li> • HRMS (HR, Timesheet, Payroll, Recruitment, Taxes and WPS)</li> 
+ 								</ul>
+ 								<br/>
+ 								Accounting and CRM are registered by Default.
+ 								
+ 								<br/>	<br/>
+ 								
+								<b>Go to Hinawi Web Application: <a href="http://hinawi2.dyndns.org:8181/sata/index.zul" target="_blank">http://hinawi2.dyndns.org:8181/sata/index.zul</a></b>
+								
+								<br/>	<br/>
+
+								<b>Whatever seen online is what is available now. This is under beta version. Anything new it will be auto updated.</b>
+								
+								<br/>	<br/>
+
+								<b>Price start from: US$ 15/user per month.</b><br/><br/>
+
+ 								
+
+]]></html>
+				</popup>
+
+
+				<popup id="online_fixed_asset_info" width="400px">
+					<html><![CDATA[<b>Available modules you can check from web: <br/><br/><a href="http://hinawi2.dyndns.org:8181/sata/fixedasset/list/sidebar.zul" target="_blank">http://hinawi2.dyndns.org:8181/sata/fixedasset/list/sidebar.zul</a></b><br/><br/>
+]]></html>
+				</popup>
+
+
+				<popup id="online_real_estate_info" width="400px">
+					<html><![CDATA[<b>Available modules you can check from web: <br/><br/><a href="http://hinawi2.dyndns.org:8181/sata/realestate/list/sidebar.zul" target="_blank">http://hinawi2.dyndns.org:8181/sata/realestate/list/sidebar.zul</a></b><br/><br/>
+
+]]></html>
+				</popup>
+
+				<popup id="online_garage_info" width="400px">
+					<html><![CDATA[<b>Available modules you can check from web: <br/><br/><a href="http://hinawi2.dyndns.org:8181/sata/garage/list/sidebar.zul" target="_blank">http://hinawi2.dyndns.org:8181/sata/garage/list/sidebar.zul</a></b><br/><br/>
+
+]]></html>
+				</popup>
+
+
+				<popup id="online_Hrms_info" width="400px">
+					<html><![CDATA[HRMS includes the following modules.
+
+       			 					  <br/><br/>
+								<ul>
+								<li> • HR</li> 
+								<li> • Timesheet</li> 
+								<li> • Payroll</li> 
+								<li> • Recruitment</li> 
+								<li> • Taxes</li> 
+								<li> • WPS</li> 
+ 								</ul>
+ 								
+ 									<br/>
+ 							<b>Whatever available you will see in web.<b>
+
+
+ 								
+ 							
+
+]]></html>
+				</popup>
+
+				<popup id="qucikBook_Pro_info" width="400px">
+					<html><![CDATA[Qucik Books Pro <br/><br/>
+
+								<ul>
+								<li> • It is a readymade software produced by Intuit Company</li> 
+								<li> • Maximum 3 concurrent users for each accounts file. </li> 
+								<li> • Hinawi Software is fully integrated with QuickBooks. </li> 
+ 								</ul>
+ 								
+ 								
+
+ 								
+ 							
+
+]]></html>
+				</popup>
+
+
+				<popup id="qb_premimum_info" width="400px">
+					<html><![CDATA[Qucik Books Premier <br/><br/>
+
+								<ul>
+								<li> • It is a readymade software produced by Intuit Company. </li> 
+								<li> • Maximum 3 concurrent users for each accounts file. </li> 
+								<li> • Hinawi Software is fully integrated with QuickBooks.</li> 
+ 								</ul>
+ 								
+ 					
+ 								
+ 							
+
+]]></html>
+				</popup>
+
+
+
+				<popup id="qb_enterprice_info" width="400px">
+					<html><![CDATA[Qucik Books Enterprise <br/><br/>
+
+								<ul>
+								<li> • It is a readymade software produced by Intuit Company. </li> 
+								<li> • Maximum 3 concurrent users for each accounts file</li> 
+								<li> • Hinawi Software is fully integrated with QuickBooks </li> 
+ 								</ul> 
+
+
+ 								
+ 							
+
+]]></html>
+				</popup>
+
+
+
+			</vlayout>
+		</west>
+
+		<!-- <east title="Contacts" size="30%" collapsible="true" border="none" 
+			visible="false" autoscroll="true"> <grid> <columns> <column align="left" 
+			width="100px"/> <column/> </columns> <rows> <row> <cell colspan="2"> <label 
+			value=" Explorer Computer LLC" style="font-family:Arial, Helvetica, sans-serif;color:#2c6f99;font-size:16px;font-weight:bold;"></label> 
+			</cell> </row> <row> <cell colspan="2">Al Salam Street, Corner Sheikh. Zayed 
+			2nd Street (Electra), Mashreq Bank Building Mezzanine Floor, Room No. 4.</cell> 
+			</row> <row> <cell colspan="2">P.O. Box 29006, Abu Dhabi, United Arab Emirates.</cell> 
+			</row> <row> <cell colspan="2">Saturdays to Wednesdays 8:30 a.m. to 6:00 
+			p.m. (GMT + 4)</cell> </row> <row> <cell colspan="2">Thursdays 8:30 a.m. 
+			to 2:00 p.m. (GMT + 4)</cell> </row> <row> <cell ><label value="Phone:" style="color:#424242;font-weight:bold;"></label></cell> 
+			<vlayout> <label value="+971 2 671 42 42"></label> <label value="+971 50 
+			622 80 24"></label> </vlayout> </row> <row> <cell><label value="Libya:" style="color:#424242;font-weight:bold;"></label></cell> 
+			<cell> <vlayout> <label value="+218 91 7 23 23 20"></label> <label value="+218 
+			92 54 30 54 7"></label> </vlayout> </cell> </row> <row> <cell><label value="Fax:" 
+			style="color:#424242;font-weight:bold;"></label></cell> <cell>+971 2 671 
+			13 11</cell> </row> <row> <cell><label value="E-mail:" style="color:#424242;font-weight:bold;"></label></cell> 
+			<cell> <a href="mailto:hinawi@eim.ae">hinawi@eim.ae</a> </cell> </row> <row> 
+			<cell><label value="Skype ID:" style="color:#424242;font-weight:bold;"></label></cell> 
+			<cell>hinawi.skype</cell> </row> <row> <cell><label value="Facebook:" style="color:#424242;font-weight:bold;"></label></cell> 
+			<cell><a href="https://www.facebook.com/hinawisoftware" target="blank">hinawisoftware</a></cell> 
+			</row> <row> <cell colspan="2"> Al Salam Street, Corner Sheikh. Zayed 2nd 
+			Street (Electra), Mashreq Bank Building Mezzanine Floor, Room No. 4. </cell> 
+			</row> <row> <cell colspan="2">P.O. Box 29006, Abu Dhabi, United Arab Emirates.</cell> 
+			</row> <row> <cell colspan="2">Saturdays to Wednesdays 8:30 a.m. to 6:00 
+			p.m. (GMT + 4)</cell> </row> <row> <cell colspan="2">Thursdays 8:30 a.m. 
+			to 2:00 p.m. (GMT + 4)</cell> </row> <row> <cell colspan="2"> <iframe width="520px" 
+			height="250px" scrolling="no" src="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Al+Mansoor+Tower+-+Al+Markaziyah+-+Abu+Dhabi+-+United+Arab+Emirates&amp;aq=0&amp;oq=al+mansoor+tower+&amp;sll=37.0625,-95.677068&amp;sspn=43.443045,107.138672&amp;ie=UTF8&amp;hq=&amp;hnear=Al+Mansoor+Tower+-+Al+Markaziyah+-+Abu+Dhabi+-+United+Arab+Emirates&amp;t=m&amp;ll=24.494256,54.374063&amp;spn=0.006834,0.00912&amp;z=16&amp;iwloc=A&amp;output=embed"></iframe> 
+			<a target="_blank" href="http://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Al+Mansoor+Tower+-+Al+Markaziyah+-+Abu+Dhabi+-+United+Arab+Emirates&amp;aq=0&amp;oq=al+mansoor+tower+&amp;sll=37.0625,-95.677068&amp;sspn=43.443045,107.138672&amp;ie=UTF8&amp;hq=&amp;hnear=Al+Mansoor+Tower+-+Al+Markaziyah+-+Abu+Dhabi+-+United+Arab+Emirates&amp;t=m&amp;ll=24.494256,54.374063&amp;spn=0.006834,0.00912&amp;z=16&amp;iwloc=A" 
+			style="color:#0000FF;text-align:left">View Explorer Computer on a Larger 
+			Map</a> </cell> </row> </rows> </grid> </east> -->
+	</borderlayout>
+
+</zk>

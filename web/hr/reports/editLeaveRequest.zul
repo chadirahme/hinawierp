@@ -1,0 +1,88 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+<?page id="popMain" title="new page title" contentType="text/html;charset=UTF-8" ?>
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+
+	<window id="bankListModalDialog" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Edit Leave Request" border="normal" position="center,center"
+		closable="true" viewModel="@id('vm')  @init('hr.LeaveRequestViewModel')"		
+		sizable="true" onCancel="bankListModalDialog.detach()" width="700px"
+		height="400px">
+		
+		<grid id="grid_id"
+			form="@id('fx') @load(vm.editLeaveRequest)  @save(vm.editLeaveRequest, before='updateLeaveRequest')"
+			hflex="1" vflex="1">
+			<columns>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="0px"></column>
+			</columns>
+			<rows>
+				<row>
+					<cell>Employee Name</cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.empName)" maxlength="31" hflex="1" readonly="true" />
+					</cell>
+
+				</row>
+				
+			   <row>
+               <label value="Start From:"></label>
+               <datebox  value="@bind(vm.fromDate)" format="dd/MM/yyyy" hflex="1" constraint="no empty" ></datebox>
+               </row>
+               
+                  <row>
+               <label value="To:"></label>
+               <datebox value="@bind(vm.toDate)" format="dd/MM/yyyy" hflex="1" constraint="no empty" ></datebox>
+               </row>
+               
+                <row>
+                <label value="Type of Leave:"></label>
+               <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstType)" selectedItem="@bind(vm.selectedType)">
+				<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enDescription)"></listcell>
+					</listitem>
+				</template>
+				</listbox>
+				
+				<checkbox label="Encash Leave" disabled="@bind(vm.useEncashLeave)" checked="@bind(vm.checkUseEncash)"></checkbox>
+               	</row>
+               
+                <row>
+                <label value="Reason For Request:"></label>
+               <vlayout>
+               <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstReason)" selectedItem="@bind(vm.selectedReason)">
+				<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enDescription)"></listcell>
+					</listitem>
+				</template>
+				</listbox>
+				  <textbox  visible="@bind(vm.selectedReason.enDescription eq 'Other')" hflex="1" value="@bind(fx.otherLeaveReason)"></textbox>
+				  </vlayout>
+               </row>
+               
+                <row>
+             <label value="Notes"></label>
+             <cell colspan="2">
+             <textbox multiline="true" rows="3" hflex="1" value="@bind(fx.reason)"></textbox>
+             </cell>
+             </row>
+                             
+				
+				<row>
+					<cell colspan="4">
+						<hbox pack="center" hflex="1">
+							<button label="Save"
+								onClick="@command('updateLeaveRequest',cmp=bankListModalDialog)"></button>
+							<button label="Close" onClick="bankListModalDialog.detach()"></button>
+						</hbox>
+					</cell>
+				</row>
+			</rows>
+		</grid>
+
+	</window>
+</zk>

@@ -1,0 +1,84 @@
+<zk>
+
+<borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('company.UsersViewModel',type='company')">
+		<center autoscroll="true" border="none">
+		
+			<vlayout hflex="1" vflex="1">
+				<label value="Assign Default Company To User"
+					style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+				<grid>
+					<columns>
+						<column width="100px"></column>
+						<column width="200px"></column>
+						<column width="300px"></column>
+						<column width="400px"></column>
+						<column width="100px"></column>
+					</columns>
+					<rows>
+						<row>
+							<cell>
+								<label value="Select User"></label>
+							</cell>
+							<cell>
+								<listbox multiple="false" width="150px" mold="select" model="@load(vm.lstUsers)" selectedItem="@bind(vm.selectedUser)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.firstname)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+							</cell>
+							<label value="Select the default company for selected User"></label>
+							<cell>
+								 <listbox model="@load(vm.lstdefaultCompanies)" mold="select" width="220px"  emptyMessage="No data found" selectedItem="@bind(vm.selectedDeafultCompanies)">
+						<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enCompanyName)"></listcell>
+					</listitem>
+				</template>
+						
+			</listbox>
+							</cell>
+							<cell>
+							<button label="Save" onClick="@command('saveDefaultCompanyCommand')" visible="true"></button>
+							</cell>
+
+						</row>
+					</rows>
+					</grid>
+				</vlayout>
+			<!-- <vlayout hflex="1" vflex="1">
+			
+			<hbox>
+<label value="Select User"></label>
+<listbox multiple="false" width="150px" mold="select" model="@load(vm.lstUsers)" selectedItem="@bind(vm.selectedUser)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.firstname)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			
+			<button label="View" onClick="@command('viewCompanyCommand')" visible="false"></button>
+			</hbox>
+
+	<label value="Select the default comapny for selected User"></label>
+	   <listbox model="@load(vm.lstdefaultCompanies)" mold="select" width="320px"  emptyMessage="No data found" selectedItem="@bind(vm.selectedDeafultCompanies)">
+						<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enCompanyName)"></listcell>
+					</listitem>
+				</template>
+						
+			</listbox>
+
+<hbox pack="center" hflex="1">	
+<label value="To setup users company go to users list."></label>
+<button label="Save" onClick="@command('saveDefaultCompanyCommand')" visible="true"></button>
+</hbox>
+
+			</vlayout> -->
+			</center>
+			</borderlayout>
+</zk>

@@ -1,0 +1,139 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk:zk xmlns="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:zk="http://www.zkoss.org/2005/zul">
+
+ <!--  http://tracker.zkoss.org/browse/ZK-783 -->
+
+<zk:zscript><![CDATA[
+	void showme(int x)
+	{
+	if(x==1)
+	{
+	v1.setVisible(true);	
+	v2.setVisible(false);
+	lblCompany.setStyle("cursor:pointer;color:#2c6f99;text-decoration:underline;background:#C6C6C6");
+	lblNews.setStyle("cursor:pointer;color:#2c6f99;text-decoration:underline;background:none");
+	}
+	if(x==2)
+	{
+		v1.setVisible(false);	
+		v2.setVisible(true);
+		lblCompany.setStyle("cursor:pointer;color:#2c6f99;text-decoration:underline;background:none");
+		lblNews.setStyle("cursor:pointer;color:#2c6f99;text-decoration:underline;background:#C6C6C6");
+	}
+	}
+]]></zk:zscript>
+
+<zk:borderlayout hflex="1" style="background:none">
+  <zk:west width="150px" maxsize="250" margins="1,105,1,1" border="normal">
+  
+  <zk:vlayout>
+
+ 
+
+
+
+<div class="leftMenu">
+	
+<h:ul> 
+		<h:li style='background:none'>
+		<zk:label id="lblCompany" value="Company" onClick="showme(1)" style="cursor:pointer;color:#2c6f99;text-decoration:underline;"></zk:label>			
+		</h:li>
+		<h:li style='background:none'>		
+			
+			<zk:label id="lblNews" value="News" onClick="showme(2)" style="cursor:pointer;color:#2c6f99;text-decoration:underline;background:none"></zk:label>
+		</h:li>
+		
+	</h:ul>
+	  
+</div>
+
+
+
+ 
+ </zk:vlayout>
+      </zk:west>
+      
+      
+<zk:center margins="1,15,1,1" border="none" hflex="1">
+<zk:vlayout>
+
+<zk:vbox id="v1">
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>Company</h1>
+  
+  <br></br>
+<p>Our company, Explorer Computer LLC, was established in year 1998. Our office is based in Abu Dhabi, UAE. We are certified Fellow of Arab Society of Certified Accountants (ASCA) and our staffs are certified accountants with extensive experience in accounting.
+<br/><br/>
+We are Certified QuickBooks Professional Advisor acknowledged by Intuit. We are the only certified Pro Advisor in the UAE and the Middle East.<br/><br/>
+We have clients in all over the MENA Region; most of them are in the United Arab Emirates, Saudi Arabia, and Libya. <br/><br/>
+We are recognized for our full support on the software on time and in professional manner.
+We provide training, consulting and technical support on the latest QuickBooks Accounting Software designed for the Middle Eastern and North African regions.  
+Our service experience is the Quickbooks Accounting Software based on training we received in the years 1995 and 2000 including meeting with professional advisors certified by Intuit, USA. 
+
+<br/><br/>Recently we expanded our business by starting to deal with companies whose software product is integrated with QuickBooks to meet the needs in Middle Eastern and North African regions. Different companies whose line of business deal with medical, real estate, engineering and consultation, retail, trading and other types of business started integrating their software products with Intuit products specifically QuickBooks Software. With this works will be easier for the user and more required reports will be generated.<br/><br/>
+We are proud to say that the majority of our customers who use the Quickbooks Accounting software since year 1998 are still operating the system. This status is very rare because we know most of the companies change their accounting system due to non-satisfaction with the product and local technical support.
+
+</p></div>
+</div>
+</body>
+</html>
+
+</zk:vbox>
+
+
+<zk:vbox id="v2" visible="false">
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>News</h1>
+  
+  <br></br>
+		
+  
+<h2>Explorer Computer is announcing the new version of Hinawi Business Accounting Software. Quickbooks 2013 is available now.</h2>
+<br></br>
+<p>We are Certified QuickBooks Professional Advisor acknowledged by Intuit. We are the first certified Pro Advisor in the UAE and the Middle East.</p>
+<p>Using combined experience in both accounting and software, Explorer Computer provides accounting services to companies. Also we provide training, consulting and technical support on the latest QuickBooks Accounting Software.</p>
+<p>Our company accepts special programming. We offer solutions for various levels of complexity to any platform, using the latest technologies and tools.</p>
+
+
+</div>
+</div>
+
+</body>
+</html>
+
+</zk:vbox>
+
+
+
+
+
+
+</zk:vlayout>
+</zk:center>
+
+
+ <zk:east title="Contacts" size="15%"  margins="1,1,55,1">
+<div class="contact" style="padding-bottom: 40px;margin:5px;">
+            	
+                <p><img src="images/i_tel.gif" width="20" height="20" />Tel:<span > +971 2 671 42 42</span></p>
+                <p><img src="images/i_fax.gif" width="20" height="20" alt="Fax Hinawi Software" />Fax:<span> +971 2  671 13 11</span></p>
+                <p><img src="images/i_mail.gif" width="20" height="20" alt="Mail Hinawi Software" /><a href="mailto:hinawi@eim.ae">hinawi@eim.ae</a></p>
+                <div class="adress">Abu Dhabi - UAE<br />
+                P.O. Box: 29006</div>    
+              
+            </div>
+</zk:east>
+
+</zk:borderlayout>
+
+
+
+</zk:zk>

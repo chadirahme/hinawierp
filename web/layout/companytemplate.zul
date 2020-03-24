@@ -1,0 +1,25 @@
+<zk>
+<html>
+<head>
+			<link rel="shortcut icon" href="http://hinawi2.dyndns.org:8181/sata/images/favicon.ico" />
+		
+		</head>
+</html>
+
+		<borderlayout id="mainlayout1" hflex="1" vflex="1" style="background-image: url('http://localhost:8080/beta/images/backgroundlogo.jpeg');">
+	
+				<north border="none" height="105px">
+		
+				<include src="/layout/companytopnav.zul"></include>
+									
+			</north>
+		
+		<center id="mainContent" autoscroll="true" hflex="1" vflex="1"  border="none" self="@insert(content)" style="margin-left:0px">
+		</center>
+		
+			<south size="5%">
+		<include src="/layout/companyfooter.zul"></include>
+	</south>
+	</borderlayout>
+
+</zk>

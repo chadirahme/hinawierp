@@ -1,0 +1,226 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+<?page id="popMain" title="new page title" contentType="text/html;charset=UTF-8" ?>
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+<style>
+.z-notification .z-notification-cl, 
+.z-notification .z-notification-cnt {
+    height: 100px;
+    width: 350px;
+}
+
+.z-datebox-text-disd {
+        background:transparent;
+    }
+    .z-datebox-disd .z-datebox-inp {
+        color:black !important;
+    }
+</style>
+<style>
+.z-combobox-inp *, .z-combobox-text-disd {
+background: none repeat scroll 0 0 #FFFFFF;
+color: #000000 important;
+}
+.z-combobox-rounded-disd, .z-combobox-rounded-disd *, .z-comboitem-disd, .z-comboitem-disd *, .z-combobox-disd, .z-combobox-disd * {
+    color: #000000 !important;
+    cursor: default !important;
+}
+</style>
+
+
+
+
+	<window id="modalDialog" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Chart Of Account Info" border="normal" 
+		position="center,center" closable="true"
+		viewModel="@id('vm')  @init('hba.EditChartOfAccountViewModel')"
+		sizable="true" onCancel="modalDialog.detach()" width="770px" height="500px">
+
+		<grid id="grid_id"
+			form="@id('fx') @load(vm.selectedChatOfAccounts) @save(vm.selectedChatOfAccounts, before='updateChatOfAccounts')"
+			hflex="1" vflex="1">
+
+			<columns>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="20px"></column>
+				<column width="100px"></column>
+				<column width="150px"></column>
+			</columns>
+
+			<rows id="rows_id">
+
+				<row>
+					<cell >
+						Account Type *
+						<space></space>
+					</cell>
+					<cell colspan="2">
+						<listbox hflex="1" mold="select" selectedItem="@bind(vm.selectedAccountTypeModel)"
+							model="@load(fx.accountTypedropDown)" id="invoice1" disabled="@bind(vm.diabaleAccountType)">
+							<template name="model" var="item">
+								<listitem>
+									<listcell label="@load(item)"></listcell>
+								</listitem>
+							</template>
+						</listbox>
+					</cell>
+					<cell>
+					</cell>
+					<cell >Account No.*</cell>
+					<cell>
+						<textbox value="@bind(fx.accountNumber)" hflex="1" maxlength="7"/>
+					</cell>
+				</row>
+				<row>
+					<cell >Account Name *</cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.name)" hflex="1" maxlength="31"/>
+					</cell>
+					<cell></cell>
+					<cell >Created Date </cell>
+					<cell><datebox value="@bind(fx.createdDate)" hflex="1" disabled="@bind(vm.disableBalnceDate)" /></cell>
+					
+				</row>
+				<row>
+				<cell >Account Arabic Name </cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.description)" hflex="1" maxlength="31"/>
+					</cell>
+					
+				</row>
+				<row>
+
+					<cell>Sub Of
+					</cell>
+					<cell colspan="2">
+					<checkbox id="l1" label="" onCheck="@command('doChecked')"  checked="@bind(vm.selectedCheckBox)" width="15px" />
+					<space></space>
+					<combobox autodrop="true" mold="rounded" buttonVisible="true"
+										model="@load(fx.subOfdropDown)" hflex="1" readonly="true" id="comboSubOf" disabled="@bind(vm.disableSubOf)"
+										selectedItem="@bind(fx.selectedSubOf)">
+										<template name="model" var="option">
+											<comboitem label="${option.accountName}"
+											
+												style="@bind(option.subLevel eq 0 ? 'color:black;font-weight:bold;' : option.subLevel eq 1 ? 'text-indent:30px;' : option.subLevel eq 2 ? 'text-indent:60px' : option.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px')"
+												/>
+										</template>
+
+									</combobox>
+									
+					
+						<!-- <listbox hflex="1"  multiline="true" rows="5" mold="default" selectedItem="@bind(fx.selectedSubOf)"
+							model="@load(fx.subOfdropDown)" id="invoice">
+							<template name="model">
+								<listitem>
+									<listcell label="@bind(each.accountName)" ></listcell>
+									<listcell label="@bind(each.accountName)" ></listcell>
+								</listitem>
+								<listitem>
+								
+								</listitem>
+							</template>
+						</listbox> -->
+					</cell>
+				</row>
+				<row id="row1_id" visible="@bind(!vm.showBankFields)">
+					<cell colspan="1">
+						Bank Information :-
+					</cell>
+				</row>
+				<row  visible="@bind(!vm.showBankFields)">
+
+					<cell >Bank Name </cell>
+					<cell colspan="2">
+						<listbox hflex="1" mold="select" selectedItem="@bind(fx.selectedBankName)" disabled="@bind(vm.showBankFields)"
+							model="@load(fx.bankNameList)" id="pop_rep">
+							<template name="model" var="item">
+								<listitem>
+									<listcell label="@load(item)"></listcell>
+								</listitem>
+							</template>
+						</listbox>
+					</cell>
+				</row>
+				<row visible="@bind(!vm.showBankFields)">
+
+					<cell >Bank Account No. </cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.bankAcountNumber)"  hflex="1" disabled="@bind(vm.showBankFields)"/>
+
+					</cell>
+					<cell></cell>
+					<cell >IBAN No. </cell>
+					<cell>
+						<textbox value="@bind(fx.iBanNumber)"  hflex="1" disabled="@bind(vm.showBankFields)"/>
+					</cell>
+
+				</row>
+				<row visible="@bind(!vm.showBankFields)">
+					<cell >Branch Name</cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.branchName)" hflex="1"  disabled="@bind(vm.showBankFields)"/>
+					</cell>
+					</row>
+					
+					<row visible="@bind(!vm.showBankFields)">
+
+					<cell >Bank Account Name</cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.bankAccountName)" hflex="1" disabled="@bind(vm.showBankFields)"/>
+					</cell>
+				</row>
+
+
+				<row visible="@bind(vm.showBalance)">
+					<!-- <cell sclass="row-title">Balance </cell>
+					<cell>
+						<doublebox value="@bind(fx.balance)" hflex="1"
+							format="###,###,###.00" />
+					</cell> -->
+
+					<cell >Balance </cell>
+					<cell colspan="2">
+						<doublebox value="@bind(fx.balance)" hflex="1" 
+							format="###,###,###.00" />
+					</cell>
+				</row>
+				<row >
+					<cell >Balance Date As Of</cell>
+					<datebox value="@bind(fx.balaceDate)" hflex="1"  />
+				</row>
+				<row>
+					<cell >Notes</cell>
+					<cell colspan="2">
+						<textbox hflex="1" multiline="true" rows="5" value="@bind(fx.notes)"
+							style="color:#008FD2;"></textbox>
+					</cell>
+
+				</row>
+				<row>
+					
+					<cell >INActive</cell>
+
+					<cell>
+						<checkbox checked="@bind(vm.activeChatOfAccounts)"></checkbox>
+					</cell>
+				</row>
+
+				<row>
+					<cell colspan="6">
+						<hbox pack="center" hflex="1">
+							<button label="Save"
+								onClick="@command('updateChatOfAccounts',cmp=modalDialog)"
+								visible="@bind(vm.canSave)"></button>
+							<button label="Close" onClick="modalDialog.detach()"></button>
+						</hbox>
+					</cell>
+				</row>
+
+			</rows>
+
+		</grid>
+
+	</window>
+</zk>

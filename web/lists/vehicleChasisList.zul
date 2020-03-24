@@ -1,0 +1,216 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('hba.HBAViewModel',type='vehicle')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<vlayout>
+
+					<panel collapsible="true">
+						<panelchildren>
+							<grid>
+								<columns>
+									<column width="120px"></column>
+									<column width="150px"></column>
+									<column width="100px"></column>
+									<column width="100px"></column>
+									<column width="120px"></column>
+									<column width="150px"></column>
+								</columns>
+								<rows>
+									<row>
+
+										<cell>
+											<label value="Filter By"></label>
+										</cell>
+										<cell>
+											<listbox multiple="false" width="120px" mold="select"
+												model="@load(vm.lstAllPageSize)" selectedItem="@bind(vm.selectedAllPageSize)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item)"></listcell>
+													</listitem>
+												</template>
+
+											</listbox>
+										</cell>
+									</row>
+									<!-- <row> <cell> <label value="Sort By"></label> </cell> <cell> 
+										<listbox multiple="false" width="120px" mold="select" model="@load(vm.lstAllPageSize)" 
+										selectedItem="@bind(vm.selectedAllPageSize)"> <template name="model" var="item"> 
+										<listitem> <listcell label="@load(item)"></listcell> </listitem> </template> 
+										</listbox> </cell> </row> -->
+								</rows>
+							</grid>
+						</panelchildren>
+					</panel>
+
+
+				</vlayout>
+
+				<listbox model="@bind(vm.lstVehicle)" vflex="1" hflex="1"
+					selectedItem="@bind(vm.selectedVehicle)" width="900px" mold="paging"
+					pageSize="@bind(vm.selectedPageSize)" pagingPosition="both">
+
+					<auxhead sclass="category-center">
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.chassisNumber)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.vehicleType)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.regNumber)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.brand)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.type)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.ownerName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.phone)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.mobile)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.assetCode)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.assetName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.color)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.power)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.odoMeter)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.year)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.engine)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+					</auxhead>
+					<listhead menupopup="auto" sizable="true">
+
+						<listheader label="Chasis No." sort="auto('chassisNumber')"
+							width="150px" />
+						<listheader label="Vehicle Type" sort="auto('vehicleType')"
+							width="150px" />
+						<listheader label="Reg No." sort="auto('regNumber')"
+							width="150px" />
+						<listheader label="Brand" sort="auto('brand')" width="150px" />
+						<listheader label="Type" sort="auto('type')" width="150px" />
+						<listheader label="Owner Name" sort="auto('ownerName')"
+							width="150px" />
+						<listheader label="Phone" sort="auto('phone')" width="150px" />
+						<listheader label="Mobile" sort="auto('mobile')" width="150px" />
+						<listheader label="Asset Code" sort="auto('assetCode')"
+							width="150px" />
+						<listheader label="Asset Name" sort="auto('assetName')"
+							width="150px" />
+						<listheader label="Color" sort="auto('color')" width="150px" />
+						<listheader label="Power" sort="auto('power')" width="150px" />
+						<listheader label="Odo Meter" sort="auto('odoMeter')"
+							width="150px" />
+						<listheader label="Year" sort="auto('year')" width="150px" />
+						<listheader label="Engine" sort="auto('engine')" width="150px" />
+
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell>
+								<label value="@bind(each.chassisNumber)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.vehicleType)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.regNumber)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.brand)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.type)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.ownerName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.phone)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.mobile)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.assetCode)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.assetName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.color)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.power)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.odoMeter)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.year)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.engine)" />
+							</listcell>
+
+
+
+						</listitem>
+					</template>
+				</listbox>
+
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

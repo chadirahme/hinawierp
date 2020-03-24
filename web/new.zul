@@ -1,0 +1,82 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<style>
+.first-layout{
+    background-color:gray
+}
+ 
+.second-layout{
+    height: 100%; 
+}
+ 
+.first-layout>.z-hlayout-inner:first-child {
+    width: 66%;
+    height: 100%;
+}   
+.first-layout>.z-hlayout-inner:last-child {
+    width: 33%;
+    height: 100%;
+}   
+ 
+.second-layout>.z-hlayout-inner{
+    width: 100%;
+    height: 50%;
+    display:block;
+}
+ 
+@media screen and (max-width: 1024px) {
+.first-layout>.z-hlayout-inner:first-child {
+        width: 100%;
+        height: 50%;
+    }   
+.first-layout>.z-hlayout-inner:last-child {
+        width: 100%;
+        height: 50%;
+        display:block;
+    }
+.second-layout>.z-hlayout-inner{
+        width: 50%;
+        height: 100%;
+        display:inline-block;
+    }       
+}
+ 
+@media screen and (max-width: 750px) {
+.first-layout>.z-hlayout-inner:first-child {
+        width: 100%;
+        height: 33%;
+    }
+.first-layout>.z-hlayout-inner:last-child {
+        width: 100%;
+        height: 66%;
+    }   
+.second-layout>.z-hlayout-inner{
+        width: 100%;
+        height: 50%;
+        display:block;
+    }       
+}
+ 
+</style>
+<hlayout vflex="1" hflex="1" sclass="first-layout">
+		<vbox  width="100%" height="100%" pack="center" align="center">
+			<label sclass="title">ZK Car Center</label>
+			<image src="images/car3.png"/>
+		</vbox>
+		<hlayout sclass="second-layout">
+			<div sclass="description-area" height="100%">
+				<label sclass="description">
+				Nissan Primera
+				</label>
+			</div>
+			<div sclass="description-area" height="100%">
+				<label sclass="description">
+				The Nissan Primera was produced between 2002 and 2008. It was available as a 4-door sedan 
+				or a 5-door hatchback or estate.
+				The entry-level 1.6-liter petrol feels underpowered for a large car. The 1.8-liter petrol is keen, 
+				the refined 2.0-liter unit is the star performer. 
+				</label>
+			</div>
+		</hlayout>
+	</hlayout>
+</zk>

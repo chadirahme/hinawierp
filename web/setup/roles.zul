@@ -1,0 +1,40 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="new page title" border="normal" width="460px" closable="true" position="center,center"
+action="show: slideDown;hide: slideUp"
+apply="org.zkoss.bind.BindComposer"
+     viewModel="@id('vm') @init('setup.users.RoleViewModel')">
+
+<vlayout>
+      <listbox hflex="min" height="300px" model="@bind(vm.lstMainMenu)" selectedItems="@bind(vm.selectedEntities)"  multiple="true" checkmark="true" >
+          <listhead>
+           <listheader label="Item"  width="100px"/>
+        </listhead>
+         <template name="model" var="item">         
+           <listitem  value="@bind(item)">           
+             <listcell label="@bind(item.title)" onClick="@command('showSubMenu',todo=item)">             
+             </listcell>
+           </listitem>
+        </template>
+      </listbox>
+      
+      
+        <listbox hflex="min" height="300px" model="@bind(vm.lstSubMenu)" selectedItems="@bind(vm.selectedEntities)"  multiple="true" checkmark="true" >
+          <listhead>
+           <listheader label="Item"  width="100px"/>
+        </listhead>
+         <template name="model" var="item">         
+           <listitem  value="@bind(item)">           
+             <listcell label="@bind(item.title)" onClick="@command('showSubMenu',todo=item)">             
+             </listcell>
+           </listitem>
+        </template>
+      </listbox>
+      
+      
+      <checkbox checked="@bind(vm.checked)"/>
+      	<button  label="show" onClick="@command('show')"/>
+    </vlayout>
+
+</window>
+</zk>

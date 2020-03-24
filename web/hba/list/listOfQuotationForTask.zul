@@ -1,0 +1,178 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="taskQuotation" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Select Task Customers" border="normal"
+		position="center,center" closable="true" sizable="true"
+		onCancel="taskQuotation.detach()" width="80%" height="85%">
+		<borderlayout apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('hba.QuotationHbaReport')">
+			<center autoscroll="true" border="none">
+				<vlayout hflex="1" vflex="1">
+					<label value="Select quotation from below list"
+						style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+					<grid>
+						<columns>
+							<column width="200px"></column>
+							<column width="200px"></column>
+							<column width="200px"></column>
+							<column width="200px"></column>
+						</columns>
+						<rows>
+							<row>
+								<cell>
+									<button id="btn1" label="View" width="100px"
+										visible="@bind(vm.companyRole.canView)" onClick="@command('searchCommand')"></button>
+								</cell>
+								<cell>
+									<button id="btn2" label="Reset" width="100px"
+										onClick="@command('resetCashInvoiceReport')"></button>
+								</cell>
+								<!-- <cell> <button label="PDF Summary" visible="@bind(vm.companyRole.canExport)" 
+									onClick="@command('exportCommand',ref=customerSummaryReport)"></button> </cell> -->
+								<!-- <cell>
+									<button label="Export To Excel" visible="@bind(vm.companyRole.canExport)"
+										onClick="@command('exportToExcel',ref=customerSummaryReport)"></button>
+								</cell> -->
+								<cell>
+									<button label="Create New Quotation" onClick="@command('createCashInvoice')"
+										visible="@bind(vm.companyRole.canAdd)"></button>
+								</cell>
+
+							</row>
+							<row>
+								<cell>
+									<label value="Date Range :"></label>
+								</cell>
+								<cell>
+									<hbox>
+										<label value="From"></label>
+										<datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy"></datebox>
+									</hbox>
+								</cell>
+								<cell>
+									<hbox>
+										<label value="To"></label>
+										<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy"></datebox>
+									</hbox>
+								</cell>
+							</row>
+						</rows>
+					</grid>
+					<listbox id="qoutationTaskReport" model="@load(vm.reportGroupModel)"
+						checkmark="true" multiple="true" hflex="1" width="620px" vflex="1" selectedItems="@bind(vm.selectedQuotationEntitiesForTask)"
+						emptyMessage="No data found">
+						<auxhead sclass="category-center">
+							<auxheader colspan="1">
+								<label value="Check" ></label>
+							</auxheader>
+							<auxheader colspan="1">
+								<label value="Edit/View/Print"></label>
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="60px"
+									value="@bind(vm.filter.invoiceSaleNo)" onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="80px"
+									value="@bind(vm.filter.invoiceDateStr)" onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="80px"
+									value="@bind(vm.filter.customerName)" onChange="@command('changeFilter')" />
+							</auxheader>
+							<!-- <auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="80px" value="@bind(vm.filter.amount)"
+									onChange="@command('changeFilter')" />
+							</auxheader> -->
+							
+						</auxhead>
+						<listhead menupopup="auto" sizable="true">
+							<listheader label=" " width="60px" />
+							<listheader label=" " width="200px" />
+							<listheader label="Quotation No. " sort="auto('invoiceSaleNo')"
+								width="120px" />
+							<listheader label="Quotation Date " sort="auto('invoiceSaleNo')"
+								width="130px" />
+							<listheader label="CustomerName Name " sort="auto('invoiceSaleNo')"
+								width="150px" />
+							<listheader label="Total Amount" sort="auto('invoiceSaleNo')"
+								width="150px" />
+						</listhead>
+						<template name="model:group">
+							<listitem>
+								<listcell></listcell>
+								<listcell>
+									<button label="Edit" onClick="@command('editCashInvoice',row=each)"
+										visible="@bind(vm.companyRole.canModify)" />
+									<button label="View" onClick="@command('viewCashInvoice', row=each)"
+										visible="@bind(vm.companyRole.canView)" />
+									<button label="Print" onClick="@command('printInvoice', row=each)"
+										visible="@bind(vm.companyRole.canPrint)" />
+								</listcell>
+								<listcell>
+									<label value="@load(each[0])"></label>
+								</listcell>
+								<listcell>
+									<label value="@load(each[2])"></label>
+								</listcell>
+								<listcell>
+									<label value="@load(each[1])"></label>
+								</listcell>
+								<listcell>
+									<label value="@load(each[7])"></label>
+								</listcell>
+							</listitem>
+						</template>
+						<template name="model:groupfoot">
+							<listitem style="font-weight:bold;background:#D6E0FF">
+								<listcell visible="false"
+									style="text-align: right; padding-right: 15px">
+									<label value=" "></label>
+									<!-- <label value="@load(each[1])"></label> -->
+								</listcell>
+							</listitem>
+						</template>
+
+
+					</listbox>
+					
+					<hbox></hbox>
+					<hbox></hbox>
+					<hbox pack="center" hflex="1">
+						<button label="OK"
+							onClick="@command('selectTaskQuotations',cmp=taskQuotation) " />
+						<button label="Close" onClick="taskQuotation.detach()"></button>
+					</hbox>
+					<hbox align="right">
+						<label value="Total Quotation
+					: "
+							style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+						<label value="@load(vm.totalNoOfInvoice)"
+							style="color:#2c6f99;text-align: right;font-weight: 
+					bold;"></label>
+						<space></space>
+						<!-- <space></space> <label value="Total Customers : " style="color:#2c6f99;text-align: 
+							right;font-weight: bold;"></label> <label value="@load(vm.totalNoOfCustomer)" 
+							style="color:#2c6f99;text-align: right;font-weight: bold;"></label> -->
+						<space></space>
+						<label value="Total Amount
+					: "
+							style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+						<label
+							value="@load(vm.totalAmount) @converter('formatedNumber', format='###,###,###.00')"
+							style="color:#2c6f99;text-align: right;font-weight: 
+					bold;"></label>
+						<space></space>
+
+					</hbox>
+
+				</vlayout>
+			</center>
+		</borderlayout>
+	</window>
+</zk>

@@ -1,0 +1,218 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('hr.HRViewModel')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+			<hlayout>
+ 	<label value="No. of Records"></label>
+ 	<listbox multiple="false" width="120px" mold="select" model="@load(vm.lstPageSize)" selectedItem="@bind(vm.selectedPageSize)">
+		<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+
+	</listbox>
+ 	</hlayout>
+	
+			<listbox model="@bind(vm.lstEmployees)" vflex="1" hflex="1" selectedItem="@bind(vm.selectedEmployee)" width="920px" mold="paging"  pageSize="@bind(vm.selectedPageSize)" pagingPosition="both">
+			<auxhead>
+			<auxheader label="Employee List" colspan="5" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;" align="center"/>
+			</auxhead>
+			
+			 <auxhead sclass="category-center">
+            <auxheader colspan="1">
+                  <image src="images/funnel.png" />
+                <textbox instant="true" width="100px" 
+                    value="@bind(vm.employeeFilter.fullName)" onChange="@command('changeFilter')" />
+            </auxheader>
+            <auxheader colspan="1">
+                 <image src="images/funnel.png" />
+                <textbox instant="true"  width="100px"
+                    value="@bind(vm.employeeFilter.department)" onChange="@command('changeFilter')"/>
+            </auxheader>
+            <auxheader colspan="1">
+               <image src="images/funnel.png" />
+                <textbox instant="true" width="100px"
+                    value="@bind(vm.employeeFilter.position)" onChange="@command('changeFilter')"/>
+            </auxheader>
+             <auxheader colspan="1">
+               <image src="images/funnel.png" />
+                <textbox instant="true" width="100px"
+                    value="@bind(vm.employeeFilter.country)" onChange="@command('changeFilter')"/>
+            </auxheader>
+              <auxheader colspan="1">
+               <image src="images/funnel.png" />
+                <textbox instant="true" width="100px"
+                    value="@bind(vm.employeeFilter.age)" onChange="@command('changeFilter')"/>
+            </auxheader>
+           </auxhead>
+        
+					<listhead>
+					
+						<listheader label="Name" />
+						<listheader label="Department" />
+						<listheader label="Position" />
+						<listheader label="Nationality" />
+						<listheader label="Age" />						
+												
+					</listhead>
+					<template name="model">
+						<listitem>														
+							<listcell>
+								<label value="@bind(each.fullName)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.department)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.position)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.country)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.age)"/>
+							</listcell>								
+							
+						</listitem>
+					</template>
+				</listbox>
+				
+			 <hlayout hflex="1" style="text-align: right">
+				<label value="@load(vm.footer)" style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+				</hlayout>
+				
+			</vlayout>
+			</center>
+			
+			
+			<east width="500px" title="Details"  visible="@bind(not empty vm.selectedEmployee)"  collapsible="true" splittable="true" minsize="300" autoscroll="true">
+			<vlayout form="@id('fx') @load(vm.selectedEmployee) @save(vm.selectedEmployee, before='updateEmployee')">			
+				
+				<grid hflex="1" width="500px">
+					<columns>
+						<column align="right" hflex="min"/>
+						<column/>
+					</columns>
+					<rows>
+					
+						<row>
+							<cell sclass="row-title">Employee No :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.employeeNo)" readonly="true"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Name :</cell>
+							<hlayout>
+							
+							<textbox value="@bind(fx.enFirstName)" width="100px"/>
+							<textbox value="@bind(fx.enMiddleName)" width="100px"/>	
+							<textbox value="@bind(fx.enLastName)" width="100px"/>		
+													
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Arabic Name :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.arFirstName)" width="100px"/>
+							<textbox value="@bind(fx.arMiddleName)" width="100px"/>	
+							<textbox value="@bind(fx.arLastName)" width="100px"/>						
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Department :</cell>
+							<hlayout>
+							<listbox width="80%" mold="select"
+							model="@load(vm.lstDepartment)"
+							selectedItem="@bind(vm.selectedDepartment)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+					
+													
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Arabic Department :</cell>
+							<hlayout>
+							<listbox width="80%" mold="select"
+							model="@load(vm.lstDepartment)"
+							selectedItem="@bind(vm.selectedDepartment)">
+						<template name="model">
+							<listitem label="@load(each.arDescription)" />
+						</template>
+					  </listbox>
+					
+													
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Position :</cell>
+							<listbox width="80%" mold="select"
+							model="@load(vm.lstPosition)"
+							selectedItem="@bind(vm.selectedPosition)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Arabic Position :</cell>
+							<listbox width="80%" mold="select"
+							model="@load(vm.lstPosition)"
+							selectedItem="@bind(vm.selectedPosition)">
+						<template name="model">
+							<listitem label="@load(each.arDescription)" />
+						</template>
+					  </listbox>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Nationality :</cell>
+							<hlayout>
+						<listbox width="80%" mold="select"
+							model="@load(vm.lstNationality)"
+							selectedItem="@bind(vm.selectedNationality)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>									
+							</hlayout>
+						</row>										
+						
+						<row>
+							<cell sclass="row-title">DateOfBirth :</cell>
+							<hlayout>
+							<datebox  constraint="between 19400101 and 20001231" value="@bind(vm.dateofbirth)"  format="dd-MMM-yyyy" onChange="@command('changeBirthDate')"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Age :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.age)" readonly="true"/>							
+							</hlayout>
+						</row>
+						<row>
+						<cell colspan="2">
+						<button label="Update" visible="@bind(vm.adminUser)" onClick="@command('updateEmployee')"></button>
+						</cell>
+						</row>
+						</rows>
+						</grid>
+						</vlayout>
+						</east>
+						
+			</borderlayout>
+</zk>

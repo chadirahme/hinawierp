@@ -1,0 +1,114 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('company.EmailSettings')"
+		vflex="1">
+		<style dynamic="true">
+  .savedTab .z-tab-text {
+    color:red;
+  }
+</style>
+		<zscript>
+  void savedTabStyle(Tab t) {
+    t.setSclass("savedTab");
+    t.invalidate();
+  } 
+</zscript>
+
+		<scrollview orient="vertical" vflex="1">
+		<hbox>
+			<label value="Mail Settings"
+				style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+			</hbox>
+			<grid>
+				<columns>
+					<column width="150px"></column>
+					<column width="250px"></column>
+					<column width="30px"></column>
+					<column width="340px"></column>
+					<column></column>
+
+				</columns>
+				<rows>
+					<row>
+						<label value="Company"></label>
+						<listbox multiple="false" hflex="1" mold="select"
+							model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)"
+							>
+							<template name="model" var="item">
+								<listitem>
+									<listcell label="@load(item.enCompanyName)"></listcell>
+								</listitem>
+							</template>
+						</listbox>
+						<space></space>
+							<label value="Please chek here to enable Mail in the online system"></label>
+						<checkbox label="Enable" 
+												checked="@bind(vm.checkEnableEmail)"></checkbox>
+
+					</row>
+					
+					</rows>
+			
+			</grid>
+					
+
+					<tabbox width="100%" sclass="nav_tabs">
+						<tabs id="tabs">
+							<tab label="To be CC'd Emails" onSelect='savedTabStyle(self);'/>
+							<tab label="Company Host Email"/>
+						</tabs>
+
+						<tabpanels>
+							<tabpanel>
+						 <grid>
+									<columns>
+										<column width="170px"></column>
+										<column width="250px"></column>
+									</columns>
+									<rows>
+
+										<row>
+										<label>1.</label>
+											<textbox 
+												value="@bind(vm.email1)"  constraint="/^(?:[\w\.\-]+@([\w\-]+\.)+[a-zA-Z]+)?$/: Please enter an e-mail address"></textbox>
+
+										</row>
+
+										<row>
+										<label>2.</label>
+											<textbox  
+												value="@bind(vm.email2)"  constraint="/^(?:[\w\.\-]+@([\w\-]+\.)+[a-zA-Z]+)?$/: Please enter an e-mail address"></textbox>
+										</row>
+										
+									
+										<row>
+										<label>3.</label>
+											<textbox 
+												value="@bind(vm.email3)"  constraint="/^(?:[\w\.\-]+@([\w\-]+\.)+[a-zA-Z]+)?$/: Please enter an e-mail address"></textbox>
+										</row>
+									</rows>
+								</grid>
+
+							</tabpanel>
+						 <tabpanel>
+						 <hbox>
+						 <label value="Host Email"></label>
+						 <textbox width="200px" value="@bind(vm.emailhost)"></textbox>
+						 </hbox>
+						 </tabpanel>
+
+						</tabpanels>
+					</tabbox>
+
+					<hbox align="center" pack="center" hflex="1">
+						<button id="btn1" label="Save" onLongOp="@command('save')"
+							/><!-- </button>
+						<button label="Clear" onClick="@command('clearData')" /> -->
+					</hbox>
+		</scrollview>
+	</vlayout>
+
+</zk>

@@ -1,0 +1,96 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window id="modalDialog" apply="org.zkoss.bind.BindComposer" mode="highlighted" title="Auto Fill" border="normal" position="center,center" closable="true"
+viewModel="@id('vm')  @init('timesheet.AutoFillViewModel')"  sizable="true"
+onCancel="modalDialog.detach()" onOK="@command('okCommand')"
+ width="600px" height="550px">
+
+<grid>
+<columns>
+<column width="130px"></column>
+<column width="130px"></column>
+<column width="130px"></column>
+<column width="130px"></column>
+</columns>
+
+<rows>
+<row>
+<label value="Date Between"></label>
+			<datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy"  ></datebox>
+			<label value="And"></label>
+			<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy" ></datebox>
+			
+</row>
+
+<row>
+<label value="Project"></label>
+<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstProject)" selectedItem="@bind(vm.selectedProject)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.projectName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			
+		<label value="Service"></label>
+<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstPositions)" selectedItem="@bind(vm.selectedPosition)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enDescription)"></listcell>
+					</listitem>
+				</template>
+			</listbox>	
+			
+</row>
+<row>
+<cell rowspan="2">
+<label value="Over Time"></label>
+</cell>
+<label value="OT Unit 1.25"></label>
+<label value="OT Unit 1.5"></label>
+<label value="OT Unit 2"></label>
+</row>
+<row>
+<intbox placeholder="OT Unit 1.25" value="@bind(vm.ot1)"></intbox>
+<intbox placeholder="OT Unit 1.5" value="@bind(vm.ot2)"></intbox>
+<intbox placeholder="OT Unit 2" value="@bind(vm.ot3)"></intbox>
+
+</row>
+
+
+<row>
+<cell colspan="4">
+<listbox model="@bind(vm.lstEmployees)" hflex="1"  width="620px" height="300px"
+multiple="true" checkmark="true"  selectedItems="@bind(vm.selectedEntities)" >
+<listhead>
+						<listheader width="50px"/>
+						<listheader label="Employee No." width="110px" sort="auto('employeeNo')" />
+						<listheader label="Name" sort="auto('fullName')"/>						
+					</listhead>
+					<template name="model">
+						<listitem>
+						<listcell></listcell>
+						<listcell>
+								<label value="@bind(each.employeeNo)"/>
+							</listcell>														
+							<listcell>
+								<label value="@bind(each.fullName)"/>
+							</listcell>
+								
+						</listitem>
+					</template>
+</listbox>
+</cell>
+</row>
+<row>
+<cell colspan="4">
+<hbox  pack="center" hflex="1">	
+<button label="OK"  onClick="@command('okCommand')"></button>
+</hbox>	
+</cell>
+</row>
+</rows>
+</grid>
+
+</window>
+</zk>

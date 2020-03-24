@@ -1,0 +1,591 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:w="client">
+<window id="cashPaymentPopUp" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Add/Edit Cash Payment" border="normal" position="center,center"
+		closable="true" sizable="true" onCancel="cashPaymentPopUp.detach()"
+		width="1200px" height="550px">
+		
+	<zscript>
+		void openContexMenu(Integer type)
+		{
+		if(type==1)
+		editPopup.open(lstExpenses);
+		else if(type==2)
+		editCheckITemsPopup.open(lstCheckItems);
+		else if(type==3)
+		editFAITemsPopup.open(lstFAItems);
+		}
+	</zscript>
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('hba.CashPaymentViewModel')">
+		<center autoscroll="true" border="none">
+			<vlayout>
+				<panel collapsible="true">
+					<panelchildren>
+						<hbox pack="stretch" style="align:right;valign:top">
+							<div align="left">
+								<button hoverImage="/images/arrow-left-Green.png"
+									onClick="@command('navigationCashPayment',cmp='prev')" label="Previous"
+									width="100px" src="/images/grrn-left-arrow.png" height="50px"></button>
+								<button hoverImage="/images/arrow-right-green.png"
+									onClick="@command('navigationCashPayment',cmp='next')" label="Next "
+									width="100px" src="/images/green-right-arrow.png" height="50px"></button>
+								<image style="cursor: help" tooltip="isSupervisorHint"
+									src="/images/hint-icon.png" />
+								<popup id="isSupervisorHint" width="400px">
+									<html><![CDATA[Browsing is displaying transaction created by current user.]]></html>
+								</popup>
+							</div>
+							<div width="150px"></div>
+							<div>
+								<label value="@bind(vm.labelStatus)"
+									style="color:#0AA0AB;text-align: right;font-weight: bold;font-size:18px"></label>
+							</div>
+							<div width="350px"></div>
+
+						</hbox>
+						<grid
+							form="@id('fx') @load(vm.objCash) @save(vm.objCash, before='addNewCashPayment') ">
+							<columns>
+								<column width="120px"></column>
+								<column width="150px"></column>
+								<column width="100px"></column>
+								<column width="100px"></column>
+								<column width="120px"></column>
+								<column width="150px"></column>
+							</columns>
+							<rows>
+								<row>
+									<cell>
+										<label value="Date"></label>
+									</cell>
+									<cell>
+										<datebox hflex="1" value="@bind(vm.creationdate)"
+											format="dd/MM/yyyy"></datebox>
+									</cell>
+
+									<cell align="right">
+										<label value="No."></label>
+									</cell>
+									<cell>
+										<intbox hflex="1" value="@bind(fx.pvNo)"
+											constraint="no empty: Please enter transaction no !!!"></intbox>
+									</cell>
+									<cell>
+										<hlayout>
+											<checkbox checked="@bind(fx.chkApproved)" visible="false"></checkbox>
+											<label value="Status (New)"></label>
+										</hlayout>
+									</cell>
+								</row>
+								<row>
+									<cell>
+										<label value="Account Number"></label>
+									</cell>
+									<cell colspan="2">
+										<combobox model="@load(vm.lstaccounts)" selectedItem="@bind(vm.selectedAccount)"
+											hflex="1" autodrop="true" mold="rounded">
+											<template name="model" var="item">
+												<comboitem label="${item.accountName} : ${item.accountType}"
+													style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
+											</template>
+										</combobox>
+									</cell>
+									<cell colspan="3">
+										<hlayout>
+											<checkbox checked="@bind(fx.chkBank)"></checkbox>
+											<label value="Tick if you want Account Number as Default"></label>
+										</hlayout>
+									</cell>
+								</row>
+								<row>
+									<cell>
+										<label value="Pay to the order of"></label>
+									</cell>
+
+									<cell colspan="3">
+										<combobox
+											constraint="no empty:Select An Existing 'Pay to the order of' !!!"
+											autodrop="true" mold="rounded" buttonVisible="true"
+											model="@load(vm.lstPayToOrder)" selectedItem="@bind(vm.selectedPaytoOrder)"
+											hflex="1">
+											<template name="model" var="option">
+												<comboitem label="@load(option.fullName)"
+													description="@bind(option.listType)" />
+											</template>
+										</combobox>
+									</cell>
+									<cell>
+									</cell>
+								</row>
+								<row>
+									<cell>
+										<label value="Address"></label>
+									</cell>
+									<cell colspan="3">
+										<textbox hflex="1" multiline="true" rows="3" readonly="true"
+											value="@bind(vm.payToOrderAddress)" style="color:#008FD2;"></textbox>
+									</cell>
+
+									<cell valign="top">
+										<label value="Amount"></label>
+									</cell>
+									<cell valign="top">
+										<vlayout>
+											<doublebox value="@bind(vm.totalAmount)" readonly="true"
+												format="###0.00"></doublebox>
+
+											<hlayout>
+												<checkbox checked="@bind(vm.chkTobePrinted)"></checkbox>
+												<label value="To be Printed"></label>
+											</hlayout>
+										</vlayout>
+									</cell>
+								</row>
+								<row>
+									<cell>
+										<label value="Building"></label>
+									</cell>
+									<cell colspan="3">
+										<combobox autodrop="true" mold="rounded"
+											model="@load(vm.lstBuilding)" width="340px"
+											selectedItem="@bind(vm.selectedBuilding)">
+											<template name="model" var="item">
+												<comboitem label="@load(item.name)"
+													style="@bind(item.sublevel eq 1 ? 'color:black;font-weight:bold;' : item.sublevel eq 2 ? 'text-indent:30px' : item.sublevel eq 3 ? 'text-indent:60px' : item.sublevel eq 4 ? 'text-indent:90px' : 'text-indent:120px') ">
+												</comboitem>
+											</template>
+										</combobox>
+									</cell>
+									<cell>
+										<label value="Unit No"></label>
+									</cell>
+
+									<cell>
+										<listbox mold="select" model="@load(vm.lstFlat)"
+											hflex="1" selectedItem="@bind(vm.selectedFlat)">
+											<template name="model" var="item">
+												<listitem>
+													<listcell label="@load(item.name)"></listcell>
+												</listitem>
+											</template>
+										</listbox>
+									</cell>
+								</row>
+								<row>
+									<cell>
+										<label value="Memo"></label>
+									</cell>
+									<cell colspan="5">
+										<textbox hflex="1" value="@bind(fx.memo)"></textbox>
+									</cell>
+								</row>
+							</rows>
+						</grid>
+					</panelchildren>
+				</panel>
+				<menupopup id="editPopup">
+					<menuitem label="Insert Line"
+						onClick="@command('insertExpense',row=vm.selectedExpenses)"></menuitem>
+					<menuitem label="Delete Line"
+						onClick="@command('deleteExpense',row=vm.selectedExpenses)"></menuitem>
+				</menupopup>
+
+				<menupopup id="editCheckITemsPopup">
+					<menuitem label="Insert Line"
+						onClick="@command('insertCheckItems',row=vm.selectedCheckItems)"></menuitem>
+					<menuitem label="Delete Line"
+						onClick="@command('deleteCheckItems',row=vm.selectedCheckItems)"></menuitem>
+				</menupopup>
+
+				<menupopup id="editFAITemsPopup">
+					<menuitem label="Insert Line"
+						onClick="@command('insertFAItems',row=vm.selectedCheckFAItems)"></menuitem>
+					<menuitem label="Delete Line"
+						onClick="@command('deleteFAItems',row=vm.selectedCheckFAItems)"></menuitem>
+				</menupopup>
+				<tabbox>
+					<tabs>
+						<tab id="A" label="@bind(vm.lblExpenses)" />
+						<tab id="B" label="@bind(vm.lblCheckItems)" />
+						<tab id="C" label="@bind(vm.lblCheckFAItems)" />
+					</tabs>
+					<tabpanels>
+						<tabpanel>
+							<vlayout style="overflow:auto">
+								<listbox id="lstExpenses" model="@load(vm.lstExpenses)"
+									selectedItem="@bind(vm.selectedExpenses)">
+									<listhead sizable="true">
+										<listheader label="SNo" width="50px"></listheader>
+										<listheader label="" width="30px"></listheader>
+										<listheader label="Account" width="300px"></listheader>
+										<listheader label="Net Amount" width="100px"></listheader>
+										<listheader label="Memo" width="300px"></listheader>
+										<listheader label="Bill No" width="150px"></listheader>
+										<listheader label="Bill Date" width="150px"></listheader>
+										<listheader label="Billable" width="75px"></listheader>
+										<listheader label="Customer Job" width="150px"></listheader>
+										<listheader label="Class" width="300px"></listheader>
+										<listheader label="Fixed Asset Item" width="150px"></listheader>
+									</listhead>
+									<template name="model" var="each">
+										<listitem>
+											<listcell>
+												<label value="@bind(each.srNO)"></label>
+											</listcell>
+											<listcell>
+												<image src="/images/edit.png" width="20px" height="20px"
+													context="editPopup" onClick="openContexMenu(1)" />
+											</listcell>
+											<listcell>
+												<combobox autodrop="true" mold="rounded"
+													model="@load(vm.lstGridBankAccounts) " selectedItem="@bind(each.selectedAccount)"
+													hflex="1" onSelect="@command('selectExpenseAccount' , type=each)">
+
+													<template name="model" var="itemx">
+														<comboitem label="${itemx.accountName} : ${itemx.accountType}"
+															style="@bind(itemx.subLevel eq 0 ? 'color:black;font-weight:bold;' : itemx.subLevel eq 1 ? 'text-indent:30px' : itemx.subLevel eq 2 ? 'text-indent:60px' : itemx.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') ">
+														</comboitem>
+													</template>
+
+												</combobox>
+											</listcell>
+											<listcell>
+												<doublebox value="@bind(each.amount)" format="###0.00"
+													inplace="true" onChange="@command('changeAmount' , row=each)"></doublebox>
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.memo)" hflex="1"></textbox>
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.billNo)" width="135px"></textbox>
+											</listcell>
+											<listcell>
+												<datebox value="@bind(each.billDate)" format="dd/MM/yyyy"></datebox>
+											</listcell>
+											<listcell>
+												<checkbox checked="@bind(each.billableChked)"
+													visible="@bind(each.showBillable)"></checkbox>
+											</listcell>
+											<listcell>
+												<listbox mold="select" model="@load(vm.lstGridCustomer)"
+													hflex="1" selectedItem="@bind(each.selectedCustomer)"
+													onSelect="@command('selectExpenseCustomer' , type=each)">
+													<template name="model" var="item">
+														<listitem
+															style="@bind(item.subLevel eq 0 ? '' : 'margin-left:10px')">
+															<listcell label="@load(item.name)">
+															</listcell>
+														</listitem>
+													</template>
+												</listbox>
+											</listcell>
+											<listcell>
+												<combobox autodrop="true" mold="rounded"
+													model="@load(vm.lstGridClass)" selectedItem="@bind(each.selectedClass)"
+													hflex="1" onSelect="@command('selectExpenseClass' , type=each)">
+
+													<template name="model" var="item">
+														<comboitem label="${item.name}"
+															style="@bind(item.sublevel eq 0 ? 'color:black;font-weight:bold;' : item.sublevel eq 1 ? 'text-indent:30px' : item.sublevel eq 2 ? 'text-indent:60px' : item.sublevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') ">
+														</comboitem>
+													</template>
+												</combobox>
+												<!-- <listbox mold="select" model="@load(vm.lstGridClass)" hflex="1" 
+													selectedItem="@bind(each.selectedClass)" onSelect="@command('selectExpenseClass' 
+													, type=each)"> <template name="model" var="item"> <listitem style="@bind(item.sublevel 
+													eq 0 ? 'color:black;font-weight:bold;' : item.sublevel eq 1 ? 'text-indent:10px' 
+													: item.sublevel eq 2 ? 'text-indent:20px' : 'text-indent:30px')"> <listcell 
+													label="${item.name}"> </listcell> </listitem> </template> </listbox> -->
+											</listcell>
+											<listcell>
+												<listbox mold="select" model="@load(vm.lstGridFixedAssetItems)"
+													hflex="1" selectedItem="@bind(each.selectedFixedAsset)">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item.assetName)">
+															</listcell>
+														</listitem>
+													</template>
+												</listbox>
+											</listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</vlayout>
+						</tabpanel>
+						<tabpanel>
+							<vlayout style="overflow:auto">
+
+								<listbox id="lstCheckItems"
+									model="@load(vm.lstCheckItems)" selectedItem="@bind(vm.selectedCheckItems)">
+									<listhead sizable="true">
+										<listheader label="SNo" width="50px"></listheader>
+										<listheader label="" width="30px"></listheader>
+										<listheader label="Item" width="250px"></listheader>
+										<listheader label="Description" width="350px"></listheader>
+										<listheader label="Bill No" width="125px"></listheader>
+										<listheader label="Bill Date" width="150px"></listheader>
+										<listheader label="Billable" width="75px"></listheader>
+										<listheader label="Qty" width="50px"></listheader>
+										<listheader label="Cost" width="100px"></listheader>
+										<listheader label="Net Amount" width="100px"></listheader>
+										<listheader label="Inventory Site" width="100px"></listheader>
+										<listheader label="Customer Job" width="150px"></listheader>
+										<listheader label="Class" width="250px"></listheader>
+										<listheader label="Fixed Asset Item" width="150px"></listheader>
+										<listheader label="Item Receipt No" width="125px"></listheader>
+										<listheader label="Item Receipt Date" width="120px"></listheader>
+									</listhead>
+
+									<template name="model" var="each">
+										<listitem>
+											<listcell>
+												<label value="@bind(each.lineNo)"></label>
+											</listcell>
+
+											<listcell>
+												<image src="/images/edit.png" width="20px" height="20px"
+													context="editCheckITemsPopup" onClick="openContexMenu(2)" />
+											</listcell>
+
+											<listcell>
+												<combobox autodrop="true" mold="rounded"
+													model="@load(vm.lstGridQBItems)" selectedItem="@bind(each.selectedItems)"
+													hflex="1" onSelect="@command('selectCheckItems' , type=each)">
+
+													<template name="model" var="item">
+														<comboitem label="${item.fullName}: ${item.listType}"
+															style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') ">
+														</comboitem>
+													</template>
+
+												</combobox>
+											</listcell>
+											<listcell>
+
+												<textbox value="@bind(each.description)" multiline="true" rows="5" readonly="false" width="340px" ></textbox>
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.billNo)" width="110px"></textbox>
+											</listcell>
+											<listcell>
+												<datebox value="@bind(each.invoiceDate)" format="dd/MM/yyyy"
+													onChange="@command('changeCheckItemsDate' , type=each)"></datebox>
+											</listcell>
+											<listcell>
+												<checkbox checked="@bind(each.billableChked)"
+													visible="@bind(each.showBillable)"></checkbox>
+											</listcell>
+											<listcell>
+												<intbox value="@bind(each.quantity)"
+													onChange="@command('changeCheckItems' , type=each ,parm='qty')" width="35px"></intbox>
+											</listcell>
+											<listcell>
+												<doublebox value="@bind(each.cost)" format="###0.00"
+													inplace="true"
+													onChange="@command('changeCheckItems' , type=each ,parm='cost')"></doublebox>
+											</listcell>
+											<listcell>
+												<doublebox value="@bind(each.amount)" format="###0.00"
+													inplace="true"
+													onChange="@command('changeCheckItems' , type=each ,parm='amount')"></doublebox>
+											</listcell>
+											<listcell>
+												<listbox mold="select"
+													model="@load(vm.lstInvcCustomerGridInvrtySite) " visible="@bind(each.hideSite)"
+													selectedItem="@bind(each.selectedInvcCutomerGridInvrtySiteNew)"
+													hflex="1">
+
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="${item.name}">
+															</listcell>
+														</listitem>
+													</template>
+												</listbox>
+											</listcell>
+											<listcell>
+												<listbox mold="select" model="@load(vm.lstGridCustomer)"
+													hflex="1" selectedItem="@bind(each.selectedCustomer)"
+													onSelect="@command('selectItemCustomer' , type=each)">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item.fullName)">
+															</listcell>
+														</listitem>
+													</template>
+
+												</listbox>
+											</listcell>
+											<listcell>
+												<!-- <listbox mold="select" model="@load(vm.lstGridClass)" hflex="1" 
+													selectedItem="@bind(each.selectedClass)" onSelect="@command('selectItemClass' 
+													, type=each)"> <template name="model" var="item"> <listitem style="@bind(item.sublevel 
+													eq 0 ? 'color:black;font-weight:bold;' : item.sublevel eq 1 ? 'margin-left:10px' 
+													: item.sublevel eq 2 ? 'margin-left:20px' : 'margin-left:30px')"> <listcell 
+													label="${item.name}"> </listcell> </listitem> </template> </listbox> -->
+												<combobox autodrop="true" mold="rounded"
+													model="@load(vm.lstGridClass)" selectedItem="@bind(each.selectedClass)"
+													hflex="1" onSelect="@command('selectItemClass' , type=each)">
+													<template name="model" var="item">
+														<comboitem label="${item.name}"
+															style="@bind(item.sublevel eq 0 ? 'color:black;font-weight:bold;' : item.sublevel eq 1 ? 'text-indent:30px' : item.sublevel eq 2 ? 'text-indent:60px' : item.sublevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') ">
+														</comboitem>
+													</template>
+												</combobox>
+											</listcell>
+											<listcell>
+												<listbox mold="select" model="@load(vm.lstGridFixedAssetItems)"
+													hflex="1" selectedItem="@bind(each.selectedFixedAsset)">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item.assetName)">
+															</listcell>
+														</listitem>
+													</template>
+												</listbox>
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.itemReceiptNo)" width="110px"></textbox>
+											</listcell>
+											<listcell>
+												<datebox value="@bind(each.itemReceiptDate)" format="dd/MM/yyyy"></datebox>
+											</listcell>
+
+										</listitem>
+									</template>
+								</listbox>
+							</vlayout>
+						</tabpanel>
+						<tabpanel>
+							<vlayout>
+								<label
+									value="To see Fixed Assets Items you must select a vendor name from (pay to the order of) field"></label>
+								<listbox id="lstFAItems" model="@load(vm.lstCheckFAItems)"
+									selectedItem="@bind(vm.selectedCheckFAItems)">
+									<listhead sizable="true">
+										<listheader label="SNo" width="50px"></listheader>
+										<listheader label="" width="30px"></listheader>
+										<listheader label="Fixed Asset Item" width="150px"></listheader>
+										<listheader label="Description" width="350px"></listheader>
+										<listheader label="Unit Price" width="100px"></listheader>
+										<listheader label="Qty" width="50px"></listheader>
+										<listheader label="Other Charges" width="150px"></listheader>
+										<listheader label="Net Amount" width="150px"></listheader>
+										<listheader label="Bill No" width="125px"></listheader>
+										<listheader label="Bill Date" width="135px"></listheader>
+										<listheader label="Customer" width="150px"></listheader>
+										<listheader label="Custody" width="150px"></listheader>
+									</listhead>
+
+									<template name="model" var="each">
+										<listitem>
+											<listcell>
+												<label value="@bind(each.lineNo)"></label>
+											</listcell>
+											<listcell>
+												<image src="/images/edit.png" width="20px" height="20px"
+													context="editFAITemsPopup" onClick="openContexMenu(3)" />
+											</listcell>
+											<listcell>
+												<listbox mold="select" model="@load(vm.lstVendorFAItems)"
+													selectedItem="@bind(each.selectedFixedAsset)" hflex="1"
+													onSelect="@command('selectCheckFAItems' , type=each)">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item.assetMasterDesc)">
+															</listcell>
+														</listitem>
+													</template>
+												</listbox>
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.description)" multiline="true" rows="5" readonly="false" width="340px"></textbox>
+											</listcell>
+											<listcell>
+												<doublebox value="@bind(each.unitPrice)" format="###0.00"
+													inplace="true"
+													onChange="@command('changeCheckFAItems' , type=each ,parm='price')"></doublebox>
+											</listcell>
+											<listcell>
+												<intbox value="@bind(each.quantity)"
+													onChange="@command('changeCheckFAItems' , type=each ,parm='qty')" width="35px"></intbox>
+											</listcell>
+											<listcell>
+												<doublebox value="@bind(each.otherCharges)"
+													format="###0.00" inplace="true"
+													onChange="@command('changeCheckFAItems' , type=each ,parm='charge')"></doublebox>
+											</listcell>
+											<listcell>
+												<doublebox value="@bind(each.amount)" format="###0.00"
+													inplace="true"
+													onChange="@command('changeCheckFAItems' , type=each ,parm='amount')"></doublebox>
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.billNo)" width="110px"></textbox>
+											</listcell>
+											<listcell>
+												<datebox value="@bind(each.invoiceDate)" format="dd/MM/yyyy"></datebox>
+											</listcell>
+											<listcell>
+												<listbox mold="select" model="@load(vm.lstGridCustomer)"
+													hflex="1" selectedItem="@bind(each.selectedCustomer)">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item.fullName)">
+															</listcell>
+														</listitem>
+													</template>
+
+												</listbox>
+											</listcell>
+											<listcell>
+												<listbox mold="select" model="@load(vm.lstGridCustody)"
+													hflex="1" selectedItem="@bind(each.selectedCustody)">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item.fullName)">
+															</listcell>
+														</listitem>
+													</template>
+												</listbox>
+											</listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</vlayout>
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
+				<div hflex="1" style="align:center;valign:top">
+					<grid>
+						<columns>
+							<column></column>
+						</columns>
+						<rows>
+							<row>
+								<cell align="right">
+									<hlayout>
+										<button label="E-mail"
+											onClick="@command('CustomerSendEmail',row=vm.objCash)"
+											visible="@bind(vm.canPrint)"></button>
+										<button label="Save" onClick="@command('addNewCashPayment')"
+											visible="@bind(vm.canCreate)"></button>
+										<button label="Print" onClick="@command('createPdfForPrinting')"
+											visible="@bind(vm.canPrint)" />
+										<button label="Copy" onClick="@command('copyFunctinality')"
+											visible="@bind(vm.canCreate)"></button>
+										<button label="Clear" onClick="@command('clearCashPayment')"></button>
+										<button label="Close" onClick="@command('closeCashPayment')"></button>
+									</hlayout>
+								</cell>
+							</row>
+						</rows>
+					</grid>
+				</div>
+			</vlayout>
+		</center>
+	</borderlayout>
+	</window>
+</zk>

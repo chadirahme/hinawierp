@@ -1,0 +1,488 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:w="client">
+	<window id="deliveryPopUp" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Add/Edit " border="normal" position="center,center"
+		closable="true" sizable="true" onCancel="deliveryPopUp.detach()"
+		width="1200px" height="650px">
+
+		<zscript>
+			void openContexMenu(Integer type) { if(type==1)
+			editPopupDelivery.open(lstDeliveryGrid);
+			}
+			void doDrop(DropEvent event,
+			Component droped) {
+			Component dragged =
+			event.getDragged();
+			droped.getParent().insertBefore(dragged, droped);
+			}
+		</zscript>
+
+		<borderlayout apply="org.zkoss.bind.BindComposer" id="printId"
+			viewModel="@id('vm') @init('hba.EditDelivery')">
+			<center border="none" autoscroll="true">
+				<vlayout>
+					<panel title="" collapsible="true">
+						<caption>
+							<div align="left">
+								<button hoverImage="/images/arrow-left-Green.png" src="/images/grrn-left-arrow.png"
+									onClick="@command('navigationDelivery',cmp='prev')" label="Previous"
+									width="100px" height="40px"></button>
+								<button hoverImage="/images/arrow-right-green.png" src="/images/green-right-arrow.png"
+									onClick="@command('navigationDelivery',cmp='next')" label="Next"
+									width="100px" height="40px"></button>
+								<image style="cursor: help" tooltip="isSupervisorHint"
+									src="/images/hint-icon.png"></image>
+								<popup id="isSupervisorHint" width="400px">
+									<html><![CDATA[Browsing is displaying transaction created by current user.]]></html>
+								</popup>
+								<space></space>
+								<space></space>
+								<space></space>
+								<space></space>
+								<space></space>
+								<space></space>
+								<space></space>
+								<space></space>
+								<label value="@bind(vm.labelStatus)" style="color:#0AA0AB;text-align: right;font-weight: bold;font-size:18px"></label>
+							</div>
+						</caption>
+						<panelchildren>
+							<grid
+								form="@id('fx') @load(vm.deliveryModel) @save(vm.deliveryModel, before='addNewDeliveryModel') ">
+								<columns>
+									<column width="120px"></column>
+									<column width="120px"></column>
+									<column width="120px"></column>
+									<column width="120px"></column>
+									<column width="120px"></column>
+									<column width="120px"></column>
+									<column width="120px"></column>
+									<column width="120px"></column>
+									<column width="130px"></column>
+									<column width="110px"></column>
+									<column width="120px"></column>
+
+
+								</columns>
+								<rows>
+									<row>
+
+
+										<cell>
+											<zk>
+												<popup id="mailPop" width='820px' height="300px">
+													<groupbox sclass="z-demo-config" closable="true">
+														<caption>Customer Information</caption>
+														<grid height="300px" style="border:none">
+															<columns>
+																<column width="120px"></column>
+																<column width="200px"></column>
+																<column width="100px"></column>
+																<column width="300px"></column>
+																<column width="120px"></column>
+																<column width="150px"></column>
+															</columns>
+															<rows>
+																<row>
+																	<cell>
+																		<label value="Customer Name">Customer Name</label>
+																	</cell>
+																	<cell>
+																		<label value="@bind(fx.customerName)" style="color:#008FD2;"></label>
+																	</cell>
+																	<cell>
+																		<label value="Address"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(vm.deliveryAddress)"
+																			style="color:#008FD2;"></label>
+																	</cell>
+																	<cell>
+																		<button label="Close" onClick="mailPop.close()"></button>
+																	</cell>
+																</row>
+																<row>
+																	<cell>
+																		<label value="Email"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.email)" style="color:#008FD2;"></label>
+																	</cell>
+																	<cell>
+																		<label value="Total Balance"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.totalBalance)"
+																			style="color:#008FD2;"></label>
+																	</cell>
+																</row>
+																<row>
+																	<cell>
+																		<label value="Bank Name"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.bankName)"
+																			style="color:#008FD2;"></label>
+																	</cell>
+																	<cell>
+																		<label value="Account name"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.accountName)"
+																			style="color:#008FD2;"></label>
+																	</cell>
+																</row>
+																<row>
+																	<cell>
+																		<label value="Account Number"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.accountNo)"
+																			style="color:#008FD2;"></label>
+																	</cell>
+																	<cell>
+																		<label value="Branch Name"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.branchName)"
+																			style="color:#008FD2;"></label>
+																	</cell>
+																</row>
+																<row>
+																	<cell>
+																		<label value="Phone Number"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.phone)" style="color:#008FD2;"></label>
+																	</cell>
+																	<cell>
+																		<label value="Fax Number"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.fax)" style="color:#008FD2;"></label>
+																	</cell>
+																</row>
+																<row>
+																	<cell>
+																		<label value="Print Check As"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.printChequeAs)"
+																			style="color:#008FD2;"></label>
+																	</cell>
+																	<cell>
+																		<label value="IBAN No."></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.iBANNo)" style="color:#008FD2;"></label>
+																	</cell>
+																</row>
+															</rows>
+														</grid>
+													</groupbox>
+												</popup>
+											</zk>
+										</cell>
+
+									</row>
+
+									<row>
+										<cell>
+											<label value=" delivery_Date">Delivery Date</label>
+										</cell>
+										<cell>
+											<datebox width="100px" value="@bind(vm.creationdate)" format="dd/MM/yyyy"></datebox>
+										</cell>
+										<cell>
+											<label value="delivery_sale_No">Delivery No.</label>
+										</cell>
+										<cell>
+											<textbox width="100px" value="@bind(vm.deliveryNewSaleNo)" constraint="no empty: Please enter Sale Number !!!"></textbox>
+										</cell>
+										<cell>
+											<radiogroup id="imp" selectedItem="@bind(vm.selectedRadioButtons)"></radiogroup>
+											<radio id="RemindMeOn" radiogroup="imp" value="A">
+												<attribute w:name="onClick">
+												</attribute>
+											</radio>
+											<label value="Remind Me On"></label>
+										</cell>
+										<cell>
+											<datebox width="100px" value="@bind(vm.remindMeDate)" disabled="@bind(vm.disableRemindMeOn)" format="dd/MM/yyyy"></datebox>
+										</cell>
+										<cell>
+											<radio id="RemindMe" radiogroup="imp" value="B">
+												<attribute w:name="onClick">
+												</attribute>
+											</radio>
+											<label value="Remind Me"></label>
+										</cell>
+										<cell>
+											<textbox width="40px" value="@bind(vm.remindMeNoOfDays)" disabled="@bind(vm.disableRemindMe)"></textbox>
+											<space></space>
+											<label value="Days"></label>
+										</cell>
+										<cell>
+											<radio id="DontRemindME" radiogroup="imp" value="C">
+												<attribute w:name="onClick">
+												</attribute>
+											</radio>
+											<label value="Don't Remind Me"></label>
+										</cell>
+										<cell>
+											<label value="P.O. Number"></label>
+										</cell>
+										<cell>
+											<textbox hflex="1" value="@bind(fx.pONumber)" disabled="@bind(vm.transformQ)" ></textbox>
+										</cell>
+									</row>
+									<row>
+										<cell>
+											<label value="Customer Name">Name *</label>
+											<space></space>
+											<label value="Profile"
+												style="color:blue;text-decoration:underline;cursor: hand;"
+												onClick='mailPop.open(self)'>Profile</label>
+										</cell>
+										<cell colspan="2">
+											<combobox constraint="no empty:Select An Existing 'Customer Name' !!!"
+												autodrop="true" mold="rounded" buttonVisible="true"
+												model="@load(vm.lstInvcCustomerName)" hflex="1"
+												selectedItem="@bind(vm.selectedInvcCutomerName)" disabled="@bind(vm.transformQ)">
+												<template name="model" var="option">
+													<comboitem label="${option.fullName}"
+														description="@bind(option.listType)" />
+												</template>
+											</combobox>
+										</cell>
+										<cell colspan="1">
+											<label value="Class"></label>
+										</cell>
+										<cell colspan="2">
+											<combobox autodrop="true" mold="rounded" hflex="1"
+												onSelect="@command('selectDeliveryClass')" buttonVisible="true"
+												model="@load(vm.lstInvcCustomerClass)" selectedItem="@bind(vm.selectedInvcCutomerClass)" disabled="@bind(vm.transformQ)">
+												<template name="model" var="item">
+													<comboitem label="${item.name}"
+														style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
+												</template>
+											</combobox>
+										</cell>
+										<cell>
+											<label value="Sales Rep"></label>
+										</cell>
+										<cell colspan="2">
+											<listbox hflex="1" mold="select"
+												model="@load(vm.lstInvcCustomerSalsRep)" selectedItem="@bind(vm.selectedInvcCutomerSalsRep)"
+												id="delivery_rep" disabled="@bind(vm.transformQ)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item.intials)"></listcell>
+													</listitem>
+												</template>
+											</listbox>
+										</cell>
+										<cell>
+											<label value="Send Via"></label>
+										</cell>
+										<cell colspan="1">
+											<listbox hflex="1" mold="select"
+												model="@load(vm.lstInvcCustomerSendVia)" selectedItem="@bind(vm.selectedInvcCutomerSendVia)"
+												id="delivery_SendVia" disabled="@bind(vm.transformQ)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item.name)"></listcell>
+													</listitem>
+												</template>
+											</listbox>
+										</cell>
+									</row>
+									<row>
+										<cell>
+											<label value="Address"></label>
+										</cell>
+										<cell colspan="3">
+											<textbox multiline="true" rows="5" readonly="true" hflex="1" value="@bind(vm.deliveryAddress)" style="color:#008FD2;"></textbox>
+										</cell>
+
+										<cell>
+											<label value="Memo"></label>
+										</cell>
+										<cell colspan="3">
+											<textbox hflex="1" id="delivery_Memo" multiline="true"
+												placeholder="" rows="5" value="@bind(fx.memo)" readonly="@bind(vm.transformQ)"/>
+										</cell>
+										<cell colspan="3">
+											<textbox hflex="1" multiline="true"
+												placeholder="Message displayed on bottom of delivery PDF file"
+												rows="5" value="@bind(vm.msgToBeDispalyedOnDelivery)" readonly="@bind(vm.transformQ)"/>
+										</cell>
+									</row>
+									<row>
+										<cell>
+										<button label="Quotation" onClick="@command('selectQuotation')" disabled="@bind(!vm.showQuotation)"></button>
+										</cell>
+										<cell>
+					<button label="Skip" onClick="@command('allowSkipCommand')" visible="false"></button>
+										</cell>
+										<cell>
+										</cell>
+										<cell>
+										</cell>
+										<cell>
+										</cell>
+										<cell>
+										</cell>
+										<cell>
+										</cell>
+										<cell>
+										</cell>
+										<cell>
+										</cell>
+										<cell>
+											<label value="@bind(vm.status)"	style="@bind(vm.matchFlag eq 'fales' ? 'color:red' : 'color:black')" />
+										</cell>
+										<cell>
+											
+											<!-- <button label="Custom Field" onClick="@command('openCustomField')" disabled="true"></button> -->
+										</cell>
+									</row>
+								</rows>
+							</grid>
+						</panelchildren>
+					</panel>
+					<menupopup id="editPopupDelivery">
+						<menuitem label="Insert Line" onClick="@command('insertCheckItems',row=vm.selectedGridItems)"></menuitem>
+						<menuitem label="Delete Line" onClick="@command('deleteCheckItems',row=vm.selectedGridItems)"></menuitem>
+					</menupopup>
+					<vlayout hflex="1">
+						<listbox id="lstDeliveryGrid" model="@load(vm.lstDeliveryCheckItems)" hflex="1" selectedItem="@bind(vm.selectedGridItems)" selectedItems="@bind(vm.lstSelected)" checkmark="@bind(vm.showSelectMulti)" multiple="true">
+							<listhead menupopup="auto" sizable="true">
+								<listheader label="" width="50px" visible="@bind(vm.showSelectMulti)"></listheader>
+								<listheader label="SNo" width="50px"></listheader>
+								<listheader label="Add/Delete" width="70px"></listheader>
+								<listheader label="Item" width="300px" style="background-color: #E3F2FF;"></listheader>
+								<listheader label="Description" width="330px" sort="auto('deliveryDescription')"></listheader>
+								<listheader label="Inventory Site" width="100px"></listheader>
+								<listheader label="Quantity" width="70px" sort="auto('quantity')"></listheader>
+								<!--<listheader label="Rate" width="100px" sort="auto('rate')"></listheader>
+								<listheader label="Amount" width="100px" sort="auto('Amount')"></listheader>-->
+								<listheader label="Class" width="300px"></listheader>
+							</listhead>
+							<template name="model" var="each">
+								<listitem droppable="true" draggable="true" onDrop="doDrop(event,self);" style="@bind(each.invoiceRecNo eq 0 ? '' : 'background-color: #FFCCCC;')">
+									<listcell visible="@bind(vm.showSelectMulti)">
+									</listcell>
+									<listcell>
+										<textbox value="@bind(each.lineNo)" inplace="true" width="40px"></textbox>
+									</listcell>
+
+									<listcell>
+										<image src="/images/edit.png" width="20px" height="20px" context="editPopupDelivery" onClick="openContexMenu(1)" />
+									</listcell>
+									<!-- <listcell visible="@bind(vm.showFieldsPOS)"> <listbox mold="select" 
+										model="@load(vm.barcodeValues) " onSelect="@command('selectdeliveryBCGridItems' 
+										, type=each)" selectedItem="@bind(each.barcode)" hflex="1"> <template name="model" 
+										var="item"> <listitem> <listcell label="${item}"> </listcell> </listitem> 
+										</template> </listbox> </listcell> -->
+									<listcell>
+										<combobox model="@load(vm.lstItemsForGrid)" autodrop="true" mold="rounded" buttonVisible="true" visible="@bind(!vm.posItems)"
+										 onSelect="@command('selectDeliveryGridItems' , type=each)" hflex="1" 
+										 selectedItem="@bind(each.selectedItems)">
+											<template name="model" var="item">
+												<comboitem label="${item.name}: ${item.listType}" description=" Description : ${item.salesDesc}"
+													style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
+											</template>
+										</combobox>
+										
+										<hbox visible="@bind(vm.posItems)" hflex="1">
+								<button label="Items" onClick="@command('openItemsCommands',type=each)"></button>
+								<label value="@bind(each.selectedItems.name)" hflex="1" ></label>					
+								</hbox>
+								
+								
+									</listcell>
+									<listcell>
+										<textbox multiline="true" rows="5" readonly="false" hflex="1" value="@bind(each.description)" style="color:#008FD2;" onChange="@command('changeDescription',type=each)"></textbox>
+									</listcell>
+									<listcell>
+									<!-- <combobox autodrop="false" mold="rounded" visible="@bind(each.hideSite)"
+											buttonVisible="true"											
+											model="@load(vm.lstInvcCustomerGridInvrtySite)" hflex="1"
+											selectedItem="@bind(each.selectedInvcCutomerGridInvrtySiteNew)">
+											<template name="model" var="item">
+												<comboitem label="${item.name}"
+													 />
+											</template>
+										</combobox> -->
+										 <listbox mold="select" visible="@bind(each.hideSite)"  model="@load(vm.lstInvcCustomerGridInvrtySite) " selectedItem="@bind(each.selectedInvcCutomerGridInvrtySiteNew)">
+											<template name="model" var="item">
+												<listitem>
+													<listcell label="${item.name}">
+													</listcell>
+												</listitem>
+											</template>
+										</listbox> 
+									</listcell>
+									<listcell>
+										<textbox value="@bind(each.quantity)" hflex="1" onChange="@command('changeDeliveryCheckItems',type=each ,parm='qty')" constraint="/^[0-9]+$/: Please enter a number"></textbox>
+									</listcell>
+									<!-- <listcell>
+										<doublebox value="@bind(each.rate)" hflex="1"
+											onChange="@command('changeDeliveryCheckItems' , type=each ,parm='rate')"
+											format="###,###,###.00"></doublebox>
+									</listcell>
+									<listcell>
+										<doublebox value="@bind(each.amount)" hflex="1"
+											onChange="@command('changeDeliveryCheckItems' , type=each ,parm='amount')"
+											format="###,###,###.00" readonly="false"></doublebox>
+									</listcell> -->
+									<listcell>
+										<combobox autodrop="true" mold="rounded"
+											buttonVisible="true"
+											onSelect="@command('selectDeliveryGridClass' , type=each)"
+											model="@load(vm.lstInvcCustomerGridClass)" hflex="1"
+											selectedItem="@bind(each.selectedInvcCutomerGridInvrtyClassNew)">
+											<template name="model" var="item">
+												<comboitem label="${item.name}"
+													style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
+											</template>
+										</combobox>
+									</listcell>
+								</listitem>
+							</template>
+						</listbox>
+					</vlayout>
+					<div hflex="1" style="align:right;valign:top">
+						<grid>
+							<columns>
+								<column></column>
+								<column></column>
+							</columns>
+							<rows>
+								<row>
+									<cell align="center">
+										<hlayout>
+											<label value=""></label>
+											<label value=""></label>
+										</hlayout>
+									</cell>
+									<cell align="right">
+										<hlayout>
+											<button label="E-mail" onClick="@command('CustomerSendEmail',row=vm.deliveryModel)" visible="@bind(vm.canPrint)"></button>
+											<button label="Save" onClick="@command('addNewDelivery',cmp=deliveryPopUp)" visible="@bind(vm.canCreate)" disabled="@bind(vm.transformQ || vm.statusFalg)"></button>
+											 <button label="Print" onClick="@command('createPdfForPrinting')" visible="@bind(vm.canPrint)" /> 
+											 <!-- <button label="Copy" onClick="@command('copyFunctinality')"visible="@bind(vm.canCreate)"></button> --> 
+											 <button label="Clear" onClick="@command('clearDelivery')"></button> 
+											<button label="Close" onClick="deliveryPopUp.detach()"></button>
+										</hlayout>
+									</cell>
+								</row>
+							</rows>
+						</grid>
+					</div>
+				</vlayout>
+			</center>
+		</borderlayout>
+	</window>
+</zk>

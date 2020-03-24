@@ -1,0 +1,57 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="new page title" border="normal" apply="org.zkoss.bind.BindComposer" 
+		viewModel="@id('vm') @init('home.TestViewModel')">
+
+<grid>
+<columns>
+<column width="150px"></column>
+<column width="250px"></column>
+<column width="150px"></column>
+<column></column>
+</columns>
+
+<rows>
+<row>
+<label value="Enter your email"></label>
+<textbox value="@bind(vm.emailTo)" hflex="1"></textbox>
+
+
+<button label="Test Email" onClick="@command('sendEmailCommand')"></button>
+</row>
+
+<row>
+<button label="Test Gmail" onClick="@command('sendGmailEmailCommand')"></button>
+</row>
+
+
+<row>
+<button label="Test Encrypt" onClick="@command('encryptCommand')"></button>
+</row>
+
+
+<row>
+<button label="Test Alarm" onClick="@command('testAlarm')"></button>
+</row>
+
+<row>
+<image  height="150px" width="300px" />
+  <button id="btnUpload" mold="trendy" upload="true" label="Change My Image"
+         onUpload="@command('upload')" />
+         
+<button  label="Image" onClick="@command('uploadImage')"></button>
+<button label="Save Image" onClick="@command('uploadImage')"></button>
+</row>
+<row>
+<label id="lbl"> </label>
+<button label="Hello" onClick="lbl.value=self.label" visible="false"></button> 
+</row>
+
+
+<row>
+<button label="GCM1" onClick="@command('gcmCommand')"></button> 
+</row>
+</rows>
+</grid>
+</window>
+</zk>

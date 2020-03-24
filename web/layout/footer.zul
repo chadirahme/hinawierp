@@ -1,0 +1,17 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<hlayout style="height : 40px;background:#2C6F99;width: 100%;align:center;color:white">
+	<div id="footer" >
+	  © 2014  Explorer Computer . All Rights Reserved.	  
+	</div>
+		
+		<hbox hflex="1" vflex="1" pack="center" >
+		<button  autodisable="self" zclass="link-Button"  orient="vertical" label="Home" href="/index.zul"></button>
+		<button  autodisable="self" zclass="link-Button"  orient="vertical" label="Contact Us" href="/request.zul"></button>
+		<button  autodisable="self" zclass="link-Button"  orient="vertical" label="Facebook" href="https://www.facebook.com/hinawisoftware" target="_blank"></button>
+				
+	</hbox>
+	<hbox pack="low" align="top"><label style="margin-left:1px;font-size:13px;color:white;">Please do not post real data,it is a test application</label></hbox>
+		
+	</hlayout>
+</zk>

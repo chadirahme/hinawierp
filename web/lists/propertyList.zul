@@ -1,0 +1,232 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+
+<zk>
+
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('hba.HBAViewModel',type='property')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<vlayout>
+
+					<panel collapsible="true">
+						<panelchildren>
+							<grid>
+								<columns>
+									<column width="120px"></column>
+									<column width="150px"></column>
+									<column width="100px"></column>
+									<column width="100px"></column>
+									<column width="120px"></column>
+									<column width="150px"></column>
+								</columns>
+								<rows>
+									<row>
+
+										<cell>
+											<label value="Filter By"></label>
+										</cell>
+										<cell>
+											<listbox multiple="false" width="120px" mold="select"
+												model="@load(vm.lstAllPageSize)" selectedItem="@bind(vm.selectedAllPageSize)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item)"></listcell>
+													</listitem>
+												</template>
+
+											</listbox>
+										</cell>
+									</row>
+									<!-- <row> <cell> <label value="Sort By"></label> </cell> <cell> 
+										<listbox multiple="false" width="120px" mold="select" model="@load(vm.lstAllPageSize)" 
+										selectedItem="@bind(vm.selectedAllPageSize)"> <template name="model" var="item"> 
+										<listitem> <listcell label="@load(item)"></listcell> </listitem> </template> 
+										</listbox> </cell> </row> -->
+								</rows>
+							</grid>
+						</panelchildren>
+					</panel>
+
+
+				</vlayout>
+
+				<listbox model="@bind(vm.lstProperty)" vflex="1" hflex="1"
+					selectedItem="@bind(vm.selectedProperty)" width="1300px" mold="paging"
+					pageSize="@bind(vm.selectedPageSize)" pagingPosition="both">
+					<auxhead sclass="category-center">
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.propetyName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.propetyType)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.plotNo)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.age)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.cost)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.noOfunits)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="150px" value="@bind(vm.filter.unitcost)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.landLord)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.owner)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.watchman)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.watchmanPhone)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.street)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.city)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.country)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="150px"
+								value="@bind(vm.filter.conatactMaintanace)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="150px"
+								value="@bind(vm.filter.maintananceExpences)" onChange="@command('changeFilter')" />
+						</auxheader>
+					</auxhead>
+					<listhead menupopup="auto" sizable="true">
+
+						<listheader label="Property Name" sort="auto('propetyName')"
+							width="150px" />
+						<listheader label="Property Type" sort="auto('propetyType')"
+							width="150px" />
+						<listheader label="Plot No" sort="auto('plotNo')"
+							width="150px" />
+						<listheader label="Age" sort="auto('age')" width="150px" />
+						<listheader label="Cost" sort="auto('cost')" width="150px" />
+						<listheader label="No. Of Units" sort="auto('noOfunits')"
+							width="150px" />
+						<listheader label="Unit Cost" sort="auto('unitcost')"
+							width="200px" />
+						<listheader label="Land Lord" sort="auto('landLord')"
+							width="200px" />
+						<listheader label="Owner" sort="auto('owner')" width="150px" />
+						<listheader label="Wacth Man" sort="auto('watchman')"
+							width="150px" />
+						<listheader label="WatchMan-Phone" sort="auto('watchmanPhone')"
+							width="150px" />
+						<listheader label="Street" sort="auto('street')" width="150px" />
+						<listheader label="City" sort="auto('city')" width="150px" />
+						<listheader label="Country" sort="auto('country')"
+							width="150px" />
+						<listheader label="Contract Maintanace" sort="auto('conatactMaintanace')"
+							width="200px" />
+						<listheader label="Maintanance Expence" sort="auto('maintananceExpences')"
+							width="200px" />
+
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell>
+								<label value="@bind(each.propetyName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.propetyType)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.plotNo)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.age)" />
+							</listcell>
+							<listcell>
+								<label value="${c:formatNumber(each.cost, '###,###,###.00')}" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.noOfunits)" />
+							</listcell>
+							<listcell>
+								<label value="${c:formatNumber(each.unitcost, '###,###,###.00')}" />
+
+							</listcell>
+							<listcell>
+								<label value="@bind(each.landLord)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.owner)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.watchman)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.watchmanPhone)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.street)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.city)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.country)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.conatactMaintanace)" />
+							</listcell>
+							<listcell>
+								<label
+									value="${c:formatNumber(each.maintananceExpences, '###,###,###.00')}" />
+							</listcell>
+
+
+
+						</listitem>
+					</template>
+				</listbox>
+
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

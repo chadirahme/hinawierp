@@ -1,0 +1,501 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:w="client">
+	<window id="creditInvoicePopUp" apply="org.zkoss.bind.BindComposer" mode="highlighted" title="Add/Edit Credit Invoice" border="normal"
+		position="center,center" closable="true" sizable="true" onCancel="creditInvoicePopUp.detach()" width="1300px" height="650px">
+		<zscript>
+			void openContexMenu(Integer type) { if(type==1)
+			editPopupCashInvoice.open(lstCashInvoiceGrid);
+			}
+		</zscript>
+		<borderlayout apply="org.zkoss.bind.BindComposer" style="overflow:auto"
+			id="printId" viewModel="@id('vm') @init('hba.EditCreditInvoice')">
+			<center autoscroll="true" border="none">
+				<vlayout style="overflow:auto">
+					<panel title="" collapsible="true">
+						<caption>
+							<div align="left">
+								<button hoverImage="/images/arrow-left-Green.png" src="/images/grrn-left-arrow.png" onClick="@command('navigationCreditInvoice',cmp='prev')" label="Previous" width="100px" height="50px"></button>
+								<button hoverImage="/images/arrow-right-green.png" onClick="@command('navigationCreditInvoice',cmp='next')" width="100px" height="50px" label="Next" src="/images/green-right-arrow.png"></button>
+								<image style="cursor: help" tooltip="isSupervisorHint" src="/images/hint-icon.png"></image>
+								<popup id="isSupervisorHint" width="400px">
+									<html><![CDATA[Browsing is displaying transaction created by current user.]]></html>
+								</popup>
+								<space></space>
+								<space></space>
+								<space></space>
+								<space></space>
+								<label value="@bind(vm.labelStatus)" style="color:#0AA0AB;text-align: right;font-weight: bold;font-size:18px"></label>
+							</div>
+						</caption>
+						<panelchildren>
+							<grid
+								form="@id('fx') @load(vm.objCashInvoice) @save(vm.objCashInvoice, before='addNewCashInvoice') ">
+								<columns>
+									<column width="120px"></column>
+									<column width="150px"></column>
+									<column width="120px"></column>
+									<column width="130px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+								</columns>
+								<rows>
+									<row>
+
+
+										<cell>
+											<zk>
+												<popup id="mailPop" width='820px' height="300px">
+													<groupbox sclass="z-demo-config" closable="true">
+														<caption>Customer Information</caption>
+														<grid height="300px" style="border:none">
+															<columns>
+																<column width="120px"></column>
+																<column width="200px"></column>
+																<column width="100px"></column>
+																<column width="300px"></column>
+																<column width="120px"></column>
+																<column width="150px"></column>
+															</columns>
+															<rows>
+																<row>
+																	<cell>
+																		<label value="Customer Name">Customer Name</label>
+																	</cell>
+																	<cell>
+																		<label value="@bind(fx.name)" style="color:#008FD2;"></label>
+																	</cell>
+																	<cell>
+																		<label value="Address"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(vm.invoiceNewBillToAddress)"
+																			style="color:#008FD2;"></label>
+																	</cell>
+																	<cell>
+																		<button label="Close" onClick="mailPop.close()"></button>
+																	</cell>
+																</row>
+																<row>
+																	<cell>
+																		<label value="Email"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.email)" style="color:#008FD2;"></label>
+																	</cell>
+																	<cell>
+																		<label value="Total Balance"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.totalBalance)"
+																			style="color:#008FD2;"></label>
+																	</cell>
+																</row>
+																<row>
+																	<cell>
+																		<label value="Bank Name"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.bankName)"
+																			style="color:#008FD2;"></label>
+																	</cell>
+																	<cell>
+																		<label value="Account name"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.accountName)"
+																			style="color:#008FD2;"></label>
+																	</cell>
+																</row>
+																<row>
+																	<cell>
+																		<label value="Account Number"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.accountNo)"
+																			style="color:#008FD2;"></label>
+																	</cell>
+																	<cell>
+																		<label value="Branch Name"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.branchName)"
+																			style="color:#008FD2;"></label>
+																	</cell>
+																</row>
+																<row>
+																	<cell>
+																		<label value="Phone Number"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.phone)" style="color:#008FD2;"></label>
+																	</cell>
+																	<cell>
+																		<label value="Fax Number"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.fax)" style="color:#008FD2;"></label>
+																	</cell>
+																</row>
+																<row>
+																	<cell>
+																		<label value="Print Check As"></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.printChequeAs)"
+																			style="color:#008FD2;"></label>
+																	</cell>
+																	<cell>
+																		<label value="IBAN No."></label>
+																	</cell>
+																	<cell>
+																		<label hflex="1" value="@bind(fx.iBANNo)" style="color:#008FD2;"></label>
+																	</cell>
+																</row>
+															</rows>
+														</grid>
+													</groupbox>
+												</popup>
+											</zk>
+										</cell>
+
+									</row>
+									<!-- <row> <cell colspan="7"> <ckeditor id="ed" width="540px" filebrowserImageBrowseUrl="" 
+										filebrowserFlashBrowseUrl="" customConfigurationsPath=""> <attribute name="onChange"><![CDATA[ 
+										ta.value = self.value; Clients.evalJavaScript("jq('$cntDiv').html('"+ ed.value.replaceAll("\n", 
+										"") +"')"); ]]></attribute> <attribute name="value"> <label>heelo</label> 
+										</attribute> </ckeditor> </cell> </row> -->
+									<row>
+										<cell>
+											<!-- <label value="Customer Name">Date</label> -->
+
+											<label value=" Invoice_Date">Invoice Date</label>
+										</cell>
+										<cell>
+											<datebox width="120px" value="@bind(vm.creationdate)" format="dd/MM/yyyy"></datebox>
+										</cell>
+										<cell>
+											<label value="Due Date :"></label>
+										</cell>
+										<cell>	
+											<datebox width="120px" value="@bind(vm.dueDate)" format="dd/MM/yyyy"></datebox>
+										</cell>
+										<cell>
+											<label value="Invoice_sale_No">Invoice No.</label>
+										</cell>
+										<cell>
+											<textbox width="110px" value="@bind(vm.invoiceNewSaleNo)" constraint="no empty: Please enter Sale Number !!!"></textbox>
+										</cell>
+										<cell colspan="1">
+											<label value="Customer Balance"></label>
+										</cell>
+										<cell>
+											<doublebox value="@bind(fx.invoiceProfileNumber)" readonly="true" format="###,###,###.00"></doublebox>
+											
+										</cell>
+										<cell>
+											<button label="Refresh" onClick="@command('refreshCustomerBalance')"></button>
+											<image style="cursor: help" tooltip="isSupervisorHint1"	src="/images/hint-icon.png"></image>
+											<popup id="isSupervisorHint1" width="200px">
+												<html><![CDATA[Refresh Customer Balance.]]></html>
+											</popup>
+										</cell>
+									</row>
+									<row>
+										<cell>
+											<label value="Customer Name">Name *</label>
+											<space></space>
+											<label value="Profile" style="color:blue;text-decoration:underline;cursor: hand;" onClick='mailPop.open(self)'>Profile</label>
+										</cell>
+										<cell colspan="2">
+
+
+											<combobox constraint="no empty:Select An Existing 'Customer Name' !!!" autodrop="true" mold="rounded" buttonVisible="true"
+												model="@load(vm.lstInvcCustomerName)" hflex="1" selectedItem="@bind(vm.selectedInvcCutomerName)" disabled="@bind(vm.selectD)">
+												<template name="model" var="option">
+													<comboitem label="${option.fullName}: ${option.isActive}"
+														description="@bind(option.listType)" />
+												</template>
+
+											</combobox>
+										</cell>
+										<cell colspan="1">
+											<label value="Class"></label>
+										</cell>
+										<cell colspan="2">
+											<combobox autodrop="true" mold="rounded" hflex="1" buttonVisible="true" model="@load(vm.lstInvcCustomerClass)" 
+													  onSelect="@command('selectCashInvoiceClass')" selectedItem="@bind(vm.selectedInvcCutomerClass)">
+												<template name="model" var="item">
+													<comboitem label="${item.name}"
+														style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
+												</template>
+											</combobox>
+										</cell>
+										<cell valign="center">
+											<vlayout>
+
+												<label value="Accounts *"></label>
+											</vlayout>
+										</cell>
+										<cell colspan="2" valign="center">
+											<vlayout>
+												<combobox autodrop="true" mold="rounded" hflex="1"
+													buttonVisible="true" model="@load(vm.ltnCreditinvcAccount)"
+													selectedItem="@bind(vm.selectedCreditinvAcount)">
+													<template name="model" var="item">
+														<comboitem label="${item.accountName}" />
+													</template>
+
+												</combobox>
+											</vlayout>
+										</cell>
+									</row>
+									<row>
+										<cell>
+											<label value="Address"></label>
+										</cell>
+										<cell colspan="2">
+											<textbox multiline="true" rows="5" 	hflex="1" value="@bind(vm.invoiceNewBillToAddress)" readonly="true" style="color:#008FD2;"></textbox>
+										</cell>
+										<cell>
+											<label value="Memo"></label>
+										</cell>
+										<cell colspan="2">
+											<textbox multiline="true" rows="5" hflex="1" value="@bind(fx.invoiceMemo)" id="invoice_Memo"  placeholder=""   />
+										</cell>
+										<cell colspan="2">
+											<textbox  multiline="true" rows="5" hflex="1" value="@bind(vm.msgToBeDispalyedOnInvoice)" placeholder="Message displayed on bottom of invoice PDF file"   />
+										</cell>
+										<cell align="right">
+											
+											<!-- <button label="Delivery" onClick="@command('selectDelivery')" disabled="@bind(!vm.showDelivery)" ></button>
+											<button label="Quotation" onClick="@command('addNewCashInvoice',cmp=cashInvoicePopUp)" disabled="true" ></button>
+										<button label="Skip" onClick="@command('allowSkipCommand')" visible="false"></button>
+										 -->
+										</cell>
+										
+									</row>
+									<row>
+							
+										<cell colspan="1">
+											<label value="Terms "></label>
+										</cell>
+										<cell colspan="1">
+											<listbox mold="select" model="@load(vm.lstCreditInvoiceTerms)" id="invoice_method" selectedItem="@bind(vm.selectedCreditInvoiceTerms)" width="135px">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item.name)"></listcell>
+													</listitem>
+												</template>
+											</listbox>
+										</cell>
+										<cell>
+											<label value="Sales Rep"></label>
+										</cell>
+										<cell colspan="1">
+											<listbox hflex="1" mold="select" model="@load(vm.lstInvcCustomerSalsRep)" selectedItem="@bind(vm.selectedInvcCutomerSalsRep)" id="invoice_rep">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item.intials)"></listcell>
+													</listitem>
+												</template>
+											</listbox>
+										</cell>
+										<cell>
+											<label value="Send Via"></label>
+										</cell>
+										<cell colspan="1">
+											<listbox hflex="1" mold="select" model="@load(vm.lstInvcCustomerSendVia)" selectedItem="@bind(vm.selectedInvcCutomerSendVia)" id="invoice_SendVia">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item.name)"></listcell>
+													</listitem>
+												</template>
+											</listbox>
+										</cell>
+										<cell>
+											<label value="P.O No."></label>
+											<textbox readonly="false" hflex="1" value="@bind(fx.poNumber)" style="color:#008FD2;"></textbox>
+										</cell>
+										<cell>
+											<label value="Amount"></label>
+											<doublebox hflex="1" value="@bind(vm.toatlAmount)" style="color:green;margin:0;padding:0;" readonly="false" format="###,###,###.00"></doublebox>
+										</cell>
+									</row>
+									<row>
+									<cell align="right" colspan="4">
+											<button label="Delivery" onClick="@command('selectDelivery')" disabled="@bind(!vm.showDelivery)" ></button>
+											<button label="Quotation" onClick="@command('addNewCashInvoice',cmp=cashInvoicePopUp)" disabled="true" ></button>
+										<button label="Skip" onClick="@command('allowSkipCommand')" visible="false"></button>
+										</cell>
+									</row>
+								</rows>
+							</grid>
+						</panelchildren>
+					</panel>
+					<menupopup id="editPopupCashInvoice">
+						<menuitem label="Insert Line" onClick="@command('insertCheckItems',row=vm.selectedGridItems)"></menuitem>
+						<menuitem label="Delete Line" onClick="@command('deleteCheckItems',row=vm.selectedGridItems)"></menuitem>
+					</menupopup>
+					<vlayout style="overflow:auto" hflex="1">
+						<listbox id="lstCashInvoiceGrid" model="@load(vm.lstCashInvoiceCheckItems)"	hflex="1" selectedItem="@bind(vm.selectedGridItems)">
+							<listhead menupopup="auto">
+								<listheader label="SNo" width="40px"></listheader>
+								<listheader label="Add/Delete" width="70px"></listheader>
+								<listheader label="Barcode" width="120px" sort="auto('invoiceAmmount')" visible="@bind(vm.showFieldsPOS)"></listheader>
+								<listheader label="Item" width="200px"	style="background-color: #E3F2FF;"></listheader>
+								<listheader label="Description" width="350px" sort="auto('invoiceDescription')"></listheader>
+								<listheader label="Inventory Site" width="100px"></listheader>
+								<listheader label="Qty" width="50px" sort="auto('invoiceQty')"></listheader>
+								<listheader label="Rate" width="100px" sort="auto('invoiceRate')"></listheader>
+								<listheader label="Class" width="120px"></listheader>
+								<listheader label="Amount" width="90px" sort="auto('invoiceAmmount')"></listheader>
+							</listhead>
+							<template name="model" var="each">
+								<listitem>
+									<listcell>
+										<label value="@bind(each.lineNo)"></label>
+									</listcell>
+
+									<listcell>
+										<image src="/images/edit.png" width="20px" height="20px" context="editPopupCashInvoice" onClick="openContexMenu(1)" />
+									</listcell>
+									<listcell visible="@bind(vm.showFieldsPOS)">
+										<listbox mold="select" model="@load(vm.barcodeValues)" onSelect="@command('selectInvoiceBCGridItems' , type=each)" selectedItem="@bind(each.barcode)" hflex="1">
+											<template name="model" var="item">
+												<listitem>
+													<listcell label="${item}">
+													</listcell>
+												</listitem>
+											</template>
+										</listbox>
+									</listcell>
+									<listcell>
+									
+								
+										<combobox autodrop="true" mold="rounded" buttonVisible="true" onSelect="@command('selectInvoiceGridItems' , type=each)"
+											model="@load(vm.lstCashInvoiceGridItem)" hflex="1" selectedItem="@bind(each.selectedItems)" disabled="@bind(vm.selectD)"
+											visible="@bind(!vm.posItems)">
+											
+											<template name="model" var="item">
+												<comboitem label="${item.name}: ${item.listType}"
+													description=" Description : ${item.salesDesc}"
+													style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
+											</template>
+										</combobox>
+										
+								<hbox visible="@bind(vm.posItems)" hflex="1">
+								<button label="Items" onClick="@command('openItemsCommands',type=each)"></button>
+								<label value="@bind(each.selectedItems.fullName)" hflex="1" ></label>
+					
+								</hbox>
+									</listcell>
+									<listcell>
+										<textbox multiline="true" rows="5" readonly="false" hflex="1" value="@bind(each.invoiceDescription)" style="color:#008FD2;"></textbox>
+									</listcell>
+									<listcell>
+										<listbox mold="select" visible="@bind(each.hideSite)" model="@load(vm.lstInvcCustomerGridInvrtySite) "
+											selectedItem="@bind(each.selectedInvcCutomerGridInvrtySiteNew)" hflex="1">
+											<template name="model" var="item">
+												<listitem>
+													<listcell label="${item.name}">
+													</listcell>
+												</listitem>
+											</template>
+										</listbox>
+									</listcell>
+									<listcell>
+										<textbox value="@bind(each.invoiceQty)" hflex="1" onChange="@command('changeCashInvoiceCheckItems' , type=each ,parm='qty')" constraint="/^[0-9]+$/: Please enter a number"></textbox>
+									</listcell>
+									<listcell>
+										<doublebox value="@bind(each.invoiceRate)" hflex="1" onChange="@command('changeCashInvoiceCheckItems' , type=each ,parm='rate')" format="###,###,###.00"></doublebox>
+									</listcell>
+									<listcell>
+										<combobox autodrop="true" mold="rounded" buttonVisible="true" onSelect="@command('selectCashInvoiceGridClass' , type=each)"
+											model="@load(vm.lstInvcCustomerGridClass)" hflex="1" selectedItem="@bind(each.selectedInvcCutomerGridInvrtyClassNew)">
+											<template name="model" var="item">
+												<comboitem label="${item.name}"
+													style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
+											</template>
+										</combobox>
+									</listcell>
+									<listcell>
+										<doublebox value="@bind(each.invoiceAmmount)" hflex="1"
+											onChange="@command('changeCashInvoiceCheckItems' , type=each ,parm='amount')"
+											format="###,###,###.00" readonly="false"></doublebox>
+									</listcell>
+								</listitem>
+							</template>
+						</listbox>
+					</vlayout>
+					<div hflex="1" visible="@bind(vm.showFieldsPOS)">
+						<grid>
+							<columns>
+								<column width="120px"></column>
+								<column width="150px"></column>
+								<column width="100px"></column>
+								<column width="100px"></column>
+							</columns>
+							<rows>
+								<row>
+									<cell align="left">
+										<label value="">Total Amount</label>
+									</cell>
+									<cell>
+										<doublebox hflex="1" value="@bind(vm.toatlAmount)" readonly="true" format="###,###,###.00"></doublebox>
+									</cell>
+								</row>
+								<row>
+									<cell align="left">
+										<label value="">Amount Received</label>
+									</cell>
+									<cell>
+										<doublebox hflex="1" value="@bind(vm.amountPiad)" onChange="@command('amountPiadChange')" format="###,###,###.00"></doublebox>
+									</cell>
+								</row>
+								<row>
+									<cell>
+										<label value="">Balance/Ex-Change</label>
+									</cell>
+									<cell>
+										<doublebox hflex="1" value="@bind(vm.balance)" format="###,###,###.00"></doublebox>
+									</cell>
+								</row>
+							</rows>
+						</grid>
+					</div>
+					<div hflex="1" style="align:right;valign:top">
+						<grid>
+							<columns>
+								<column></column>
+								<column></column>
+							</columns>
+							<rows>
+								<row>
+									<cell align="left">
+										<hlayout>
+											<label value=""></label>
+											<label value=""></label>
+										</hlayout>
+									</cell>
+									<cell align="right">
+										<hlayout>
+											<button label="E-mail" onClick="@command('CustomerSendEmail',row=vm.objCashInvoice)" visible="@bind(vm.canPrint)"></button>
+											<button label="Save" onClick="@command('addNewCashInvoice',cmp=creditInvoicePopUp)" visible="@bind(vm.canCreate)" disabled="@bind(vm.transformD)"></button>
+											<button label="Print" onClick="@command('createPdfForPrinting')" visible="@bind(vm.canPrint)" />
+											<button label="Copy" onClick="@command('copyFunctinality')" visible="@bind(vm.canCreate)"></button>
+										<!-- 	<button label="Clear" onClick="@command('clearCashInvoice')"></button> -->
+											<button label="Close" onClick="creditInvoicePopUp.detach()"></button>
+										</hlayout>
+									</cell>
+								</row>
+							</rows>
+						</grid>
+					</div>
+				</vlayout>
+			</center>
+		</borderlayout>
+	</window>
+</zk>

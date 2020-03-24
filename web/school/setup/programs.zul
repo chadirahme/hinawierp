@@ -1,0 +1,58 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<vlayout apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('school.SchoolViewModel' , type='program' )" >
+	 
+	 <label value="Programs Setup" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	 <button label="Add New Program" onClick="@command('addNewProgramCommand')"></button>
+	 
+	 <listbox id="demoGrid" height="600px"
+           model="@load(vm.lstPrograms) @template(each.editingStatus ? 'editable' : 'noneditable')">
+          <listhead sizable="true">
+             <listheader label="English Program Name" sort="auto('enprogramname')" />
+              <listheader label="Arabic Program Name" sort="auto('arprogramname')" />
+             <listheader />
+           
+            </listhead>
+           <template name="editable">
+                <listitem>
+                    <listcell>
+                        <textbox cols="60" style="text-transform:uppercase;"
+                            value="@load(each.enprogramname) @save(each.enprogramname, before='saveProgramCommand')" />
+                 </listcell>
+                   <listcell>
+                        <textbox style="text-transform:uppercase;"
+                         value="@load(each.arprogramname) @save(each.arprogramname, before='saveProgramCommand')" />
+                   </listcell>
+                   <listcell>
+                        <div>
+                         <button image="/images/success.gif"
+                             onClick="@command('saveProgramCommand', row=each)" />
+                           <button image="/images/cross.png"
+                              onClick="@command('changeProgramEditableStatus', row=each )" />
+                     </div>
+                    </listcell>
+               </listitem>
+           </template>
+           <template name="noneditable">
+             <listitem>
+                    <listcell>
+                        <label value="@load(each.enprogramname)" />
+                   </listcell>
+                   <listcell>
+                        <label value="@load(each.arprogramname)" />
+                  </listcell>
+                   <listcell>
+                        <button image="/images/rowedit.png"
+                         onClick="@command('changeProgramEditableStatus', row=each )" />
+                 </listcell>
+                 
+               </listitem>
+           </template>
+       </listbox>
+       
+	 
+	 
+	 </vlayout>
+</zk>

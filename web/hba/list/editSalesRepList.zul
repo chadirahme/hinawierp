@@ -1,0 +1,126 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+<?page id="popMain" title="new page title" contentType="text/html;charset=UTF-8" ?>
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+
+	<window id="salesRepListModalDialog" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Edit Bank Info" border="normal" position="center,center"
+		closable="true" viewModel="@id('vm')  @init('hba.EditSalesRepViewModel')"
+		sizable="true" onCancel="salesRepListModalDialog.detach()" width="500px"
+		height="400px">
+		<grid id="grid_id"
+			form="@id('fx') @load(vm.selectedSalesRep)  @save(vm.selectedSalesRep, before='updateSalesRepList')"
+			hflex="1" vflex="1">
+			<columns>
+				<column width="150px"></column>
+				<column width="100px"></column>
+				<column width="200px"></column>
+				<column width="0px"></column>
+			</columns>
+			<rows>
+				<row>
+					<cell>Sales Rep Name *</cell>
+					<cell colspan="2">
+						<combobox model="@load(vm.lstSalesRepName)" selectedItem="@bind(vm.selectedSalesRepName)"
+							hflex="1" autodrop="true" mold="rounded">
+
+							<template name="model" var="item">
+								<comboitem label="${item.name}"
+									 />
+							</template>
+
+						</combobox>
+					</cell>
+				</row>
+				<row>
+					<cell>Intials</cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.intials)" hflex="1" maxlength="5" />
+					</cell>
+
+				</row>
+				<row>
+					<cell>Sales Rep Type</cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.salesRepType)" hflex="1"
+							readonly="true" />
+					</cell>
+				</row>
+				<row>
+					<cell>
+						<checkbox checked="@bind(vm.useCommistion)"></checkbox>
+						Use Commission
+					</cell>
+				</row>
+				<row>
+					<cell></cell>
+					<cell colspan="1">
+						<checkbox checked="@bind(vm.fixedCommistion)" id="fixedCheckBox">
+						<!-- <attribute w:name="onClick">
+														this.$f('amountCheckBox').checked(false);
+														this.$f('varientcheckBox').checked(false);
+													</attribute> -->
+													</checkbox>
+						Fixed
+					</cell>
+					<cell>
+						<textbox value="@bind(fx.commissionPercent)" width="40px"
+							/>
+						<space></space>
+						%
+					</cell>
+				</row>
+				<row>
+					<cell></cell>
+					<cell colspan="1">
+						<checkbox checked="@bind(vm.variantCommistion)" id="varientcheckBox">
+						<!-- <attribute w:name="onClick">
+														this.$f('amountCheckBox').checked(false);
+														this.$f('fixedCheckBox').checked(false);
+													</attribute> -->
+													</checkbox>
+						Variant
+					</cell>
+					<cell>
+						<listbox mold="select" model="@load(vm.lstAllVariant) " width="40px"
+							selectedItem="@bind(vm.selectedVariant)">
+
+							<template name="model" var="item">
+								<listitem>
+									<listcell label="@load(item)"></listcell>
+								</listitem>
+							</template>
+						</listbox>
+					</cell>
+				</row>
+				<row>
+					<cell></cell>
+					<cell colspan="1">
+						<checkbox checked="@bind(vm.amountCommistion)" id="amountCheckBox"></checkbox>
+						Amount
+					</cell>
+				</row>
+				<row>
+					<cell>InActive</cell>
+					<cell colspan="1">
+						<checkbox checked="@bind(vm.salerepStatus)"></checkbox>
+					</cell>
+				</row>
+				<row>
+					<cell></cell>
+				</row>
+				<row>
+					<cell colspan="4">
+						<hbox pack="center" hflex="1">
+							<button label="Save"
+								onClick="@command('updateSalesRepList',cmp=salesRepListModalDialog)"
+								visible="@bind(vm.canSave)"></button>
+							<button label="Close" onClick="salesRepListModalDialog.detach()"></button>
+						</hbox>
+					</cell>
+				</row>
+			</rows>
+		</grid>
+
+	</window>
+</zk>

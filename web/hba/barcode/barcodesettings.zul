@@ -1,0 +1,88 @@
+<?page title="Barcode Settings" contentType="text/html;charset=UTF-8"?>
+
+<zk xmlns:w="client">
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		style="overflow:auto" id="printId"
+		viewModel="@id('vm') @init('hba.EditBarcodeViewModel')">
+		<center autoscroll="true" border="none">
+			<vlayout style="overflow:auto">
+
+				<grid
+					form="@id('fx') @load(vm.selectedBrcdSetting) @save(vm.selectedBrcdSetting, before='saveBarcodeSettings')">
+
+					<columns>
+						<column width="150px"></column>
+						<column width="150px"></column>
+						<column width="180px"></column>
+					</columns>
+
+					<rows>
+						<row>
+							<cell>
+								Barcode Type *
+								<space></space>
+							</cell>
+
+							<cell colspan="2">
+								<listbox hflex="1" mold="select" model="@load(vm.fillBarcodeType)" selectedItem="@bind(vm.selectedType)">
+									<template name="model" var="brcdType">
+										<listitem>
+											<listcell label="@load(brcdType)">
+											</listcell>
+										</listitem>
+									</template>
+								</listbox>
+								<space></space><label tooltiptext="When generating a barcode, The barcode will be generated to this Type">?</label>
+							</cell>
+						</row>
+
+						<row>
+							<cell>
+								Barcode Counter *
+								<space></space>
+							</cell>
+							<cell colspan="2">
+								<textbox
+									value="@bind(vm.selectedBarcodeCounter)" hflex="1" maxlength="13" onBlur="@command('ValidateBarcodeCounter',cmp=ItemModalDialog)"/>
+								<space></space><label tooltiptext="Counter Used to generate a barcode">?</label>
+							</cell>
+						</row>
+
+						<!--row>
+							<cell>
+								Default Printer
+								<space></space>
+							</cell>
+							<cell colspan="2">
+								<textbox
+									value="@bind(fx.barcodeDefaultPrinter)" hflex="1" maxlength="100" />
+							</cell>
+						</row-->
+
+						<row>
+							<cell></cell>
+							<cell colspan="2">
+								<checkbox label="" checked="@bind(fx.barcodeConvertBool)"  hflex="1"  /> Expand Barcode While Definition
+								<space width="100px"></space><label tooltiptext="While defining a barcode, it will be expanded by adding zeroes">?</label>
+							</cell>
+						</row>
+
+						<row>
+							<cell colspan="3">
+								<hbox pack="center" hflex="1">
+									<button label="Save"
+										onClick="@command('saveBarcodeSettings')">
+									</button>
+									<button label="Close"
+										onClick="@command('CloseBarcodeSettings')">
+									</button>
+								</hbox>
+							</cell>
+						</row>
+					</rows>
+				</grid>
+			</vlayout>
+		</center>
+	</borderlayout>
+
+</zk>

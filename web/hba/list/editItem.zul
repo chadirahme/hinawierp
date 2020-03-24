@@ -1,0 +1,285 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="ItemModalDialog" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Add/Edit Customer" border="normal" position="center,center"
+		closable="true" viewModel="@id('vm')  @init('hba.EditItemViewModel')"
+		sizable="true" onCancel="ItemModalDialog.detach()" width="1050px"
+		height="550px">
+		
+		<grid
+			form="@id('fx') @load(vm.selectedItem) @save(vm.selectedItem, before='updateItem')">
+			<columns>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="180px"></column>
+				<column width="50px"></column>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="150px"></column>
+			</columns>
+
+			<rows>
+				<row>
+					<cell>
+						Item Type *
+						<space></space>
+					</cell>
+					<cell colspan="2">
+						<listbox hflex="1" mold="select" model="@load(vm.fillItemType)"
+							selectedItem="@bind(vm.selectedItemType)">
+							<template name="model" var="item">
+								<listitem>
+									<listcell label="@load(item)"></listcell>
+								</listitem>
+							</template>
+						</listbox>
+					</cell>
+
+					<cell></cell>
+					<cell>Barcode</cell>
+					<cell>
+						<textbox hflex="1" multiline="false"
+							value="@bind(vm.selectedBarcode)" style="color:#008FD2;" onBlur="@command('ValidateBarcode',cmp=ItemModalDialog)" onChange="@command('changeBarcode',cmp=ItemModalDialog)" onChanging="@command('changingBarcode',cmp=ItemModalDialog)"></textbox>
+					</cell>
+					<cell>
+						<button label="Generate" onClick="@command('GenerateBarcode',cmp=ItemModalDialog)" visible="@bind(vm.canSave)" disabled="@bind(vm.genBarcDisable)" tooltiptext="Click to Generate a Barcode (EAN13,EAN8,UPCA,UPCE)"></button>
+						<space></space>
+						<label value="@bind(vm.selectedBarcodeType)"></label>
+					</cell>
+						
+				</row>
+				<row>
+					<cell sclass="">Item Name/Number *</cell>
+
+					<cell colspan="2">
+						<textbox value="@bind(fx.name)" hflex="1" maxlength="31" />
+					</cell>
+					
+					<cell></cell>		
+					<cell>Predefined Type</cell>
+					<cell colspan="2">
+						<combobox autodrop="true" mold="rounded" buttonVisible="true"
+							model="@load(vm.fillPredefinedClass)" hflex="1" readonly="true"
+							selectedItem="@bind(fx.selectedPredefinedClass)">
+							<template name="model" var="option">
+								<comboitem label="${option.name}"
+
+									style="@bind(option.subLevel eq 0 ? 'color:black;font-weight:bold;' : option.subLevel eq 1 ? 'text-indent:30px;' : option.subLevel eq 2 ? 'text-indent:60px' : option.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px')" />
+							</template>
+
+						</combobox>
+					</cell>
+
+				</row>
+
+				<row>
+
+					<cell>
+						Sub Of
+					</cell>
+					<cell colspan="2">
+						<checkbox label="" onCheck="@command('doChecked')"
+							checked="@bind(vm.selectedCheckBox)" width="15px" />
+						<space></space>
+						
+						<!-- <listbox hflex="1" mold="select" model="@load(vm.fillsubItemOfinventroy)"
+							selectedItem="@bind(fx.selectedsubItemOfinventroy)">
+							<template name="model" var="item">
+								<listitem>
+									<listcell label="@load(item.name)"></listcell>
+								</listitem>
+							</template>
+						</listbox> -->
+						
+						<combobox autodrop="true" mold="rounded" buttonVisible="true" visible="@bind(!vm.posItems)"
+							hflex="1" readonly="true" model="@load(vm.fillsubItemOfinventroy)"
+							disabled="@bind(vm.disableSubOf)" selectedItem="@bind(fx.selectedsubItemOfinventroy)">
+							<template name="model" var="option">
+								<comboitem label="${option.name}"
+
+									style="@bind(option.subLevel eq 0 ? 'color:black;font-weight:bold;' : option.subLevel eq 1 ? 'text-indent:30px;' : option.subLevel eq 2 ? 'text-indent:60px' : option.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px')" />
+							</template>
+						</combobox>
+						
+					<hbox visible="@bind(vm.posItems)" hflex="1">
+					<button label="Items" onClick="@command('openItemsCommands',type=each)" disabled="@bind(vm.disableSubOf)"></button>
+					<label value="@bind(fx.selectedsubItemOfinventroy.name)" hflex="1" ></label>
+					
+						</hbox>
+						
+					</cell>
+					
+					<cell></cell>
+					
+					<cell sclass="">InActive</cell>
+
+					<cell colspan="2">
+						<checkbox checked="@bind(vm.activeItems)"></checkbox>
+					</cell>
+
+				</row>
+
+				<row visible="@bind(vm.typeInventoryDisable)">
+
+					<cell>
+						Unit Type *
+					</cell>
+					<cell>
+						<listbox hflex="1" mold="select" model="@load(vm.fillUnitType)"
+							selectedItem="@bind(fx.selectedItemUnitType)">
+							<template name="model" var="item">
+								<listitem>
+									<listcell label="@load(item.salesDesc)"></listcell>
+								</listitem>
+							</template>
+						</listbox>
+					</cell>
+					<cell colspan="2">
+						Estimated Time
+						<space></space>
+						<textbox value="@bind(fx.minHours)" hflex="1" />
+					</cell>
+					<cell>
+					</cell>
+					<cell colspan="2">
+						<vbox>
+							<hbox>
+								<checkbox label="" checked="@bind(fx.editDescriptionInJB)"
+									width="15px" />
+								Allow to Edit description in job card
+							</hbox>
+							<hbox>
+								<checkbox label="" checked="@bind(fx.allowInCashInvoice)"
+									width="15px" />
+								Allow to change price in invoice
+							</hbox>
+						</vbox>
+					</cell>
+
+
+				</row>
+
+				<row>
+					<cell>Description On Purchase Transactions</cell>
+					<cell colspan="2">
+						<textbox hflex="1" multiline="true" rows="5"
+							value="@bind(fx.purchaseDesc)" style="color:#008FD2;"></textbox>
+					</cell>
+					<cell></cell>
+					<cell>Description On sales Transactions</cell>
+					<cell colspan="2">
+						<textbox hflex="1" multiline="true" rows="5"
+							value="@bind(fx.salesDesc)" style="color:#008FD2;"></textbox>
+					</cell>
+
+				</row>
+				<row>
+					<cell>Cost</cell>
+					<cell colspan="1">
+						<doublebox value="@bind(fx.purchaseCost)" hflex="1"
+							format="###,###,###.00" />
+					</cell>
+					<cell></cell>
+					<cell></cell>
+					<cell>Sales Price</cell>
+					<cell colspan="1">
+						<doublebox value="@bind(fx.salesPrice)" hflex="1"
+							format="###,###,###.00" />
+					</cell>
+
+				</row>
+
+				<row>
+					<cell>
+						<label visible="@bind(vm.typeInventoryDisable)">Expense Account*</label>
+						<label visible="@bind(!vm.typeServiceDisable)">COGS Account*</label>
+					</cell>
+					<cell colspan="2">
+						<combobox autodrop="true" mold="rounded" buttonVisible="true"
+							hflex="1" readonly="true" model="@load(vm.fillExpense)" visible="@bind(vm.typeInventoryDisable)"
+							selectedItem="@bind(fx.selectedFillExpense)">
+							<template name="model" var="option">
+								<comboitem label="${option.name}"
+
+									style="@bind(option.subLevel eq 0 ? 'color:black;font-weight:bold;' : option.subLevel eq 1 ? 'text-indent:30px;' : option.subLevel eq 2 ? 'text-indent:60px' : option.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px')" />
+							</template>
+
+						</combobox>
+
+						<combobox autodrop="true" mold="rounded" buttonVisible="true"
+							hflex="1" readonly="true" model="@load(vm.fillCogsAccount)"
+							visible="@bind(!vm.typeServiceDisable)" selectedItem="@bind(fx.selectedCogsAccount)">
+							<template name="model" var="option">
+								<comboitem label="${option.name}"
+
+									style="@bind(option.subLevel eq 0 ? 'color:black;font-weight:bold;' : option.subLevel eq 1 ? 'text-indent:30px;' : option.subLevel eq 2 ? 'text-indent:60px' : option.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px')" />
+							</template>
+
+						</combobox>
+					</cell>
+					<cell></cell>
+					<cell>Income Account*</cell>
+					<cell colspan="2">
+
+						<combobox autodrop="true" mold="rounded" buttonVisible="true"
+							hflex="1" readonly="true" model="@load(vm.fillIncomeAccount)"
+							selectedItem="@bind(fx.selectedIncomeAccount)">
+							<template name="model" var="option">
+								<comboitem label="${option.name}"
+
+									style="@bind(option.subLevel eq 0 ? 'color:black;font-weight:bold;' : option.subLevel eq 1 ? 'text-indent:30px;' : option.subLevel eq 2 ? 'text-indent:60px' : option.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px')" />
+							</template>
+
+						</combobox>
+					</cell>
+
+				</row>
+				<row>
+					<cell>Description Arabic</cell>
+					<cell colspan="6">
+						<textbox hflex="1" multiline="true" rows="2"
+							value="@bind(fx.descArabic)" style="color:#008FD2;"></textbox>
+					</cell>
+				</row>
+				<row visible="@bind(!vm.typeServiceDisable)">
+					<cell>Asset Account*</cell>
+					<cell colspan="2">
+						<combobox autodrop="true" mold="rounded" buttonVisible="true"
+							hflex="1" readonly="true" model="@load(vm.fillAssetAcount)"
+							selectedItem="@bind(fx.selectedAssetAcount)">
+							<template name="model" var="option">
+								<comboitem label="${option.name}"
+
+									style="@bind(option.subLevel eq 0 ? 'color:black;font-weight:bold;' : option.subLevel eq 1 ? 'text-indent:30px;' : option.subLevel eq 2 ? 'text-indent:60px' : option.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px')" />
+							</template>
+
+						</combobox>
+					</cell>
+					<cell></cell>
+					<cell>Re-Order Point </cell>
+					<doublebox value="@bind(fx.reOrderPoint)" hflex="1"
+							format="###,###,###.00" />
+
+				</row>
+
+				<row>
+
+
+				</row>
+
+				<row>
+					<cell colspan="8">
+						<hbox pack="center" hflex="1">
+							<button label="Save" onClick="@command('updateItem',cmp=ItemModalDialog)"
+								visible="@bind(vm.canSave)"></button>
+							<button label="Close" onClick="ItemModalDialog.detach()"></button>
+						</hbox>
+					</cell>
+				</row>
+
+			</rows>
+
+		</grid>
+
+	</window>
+</zk>

@@ -1,0 +1,51 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="Modules To Sell" border="normal">
+
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('admin.HomeViewModel')">
+
+
+<hbox>
+<label value="Company"></label>
+<listbox multiple="false" width="150px" mold="select" model="@load(vm.companyUserList)" selectedItem="@bind(vm.selectedCompany)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.companyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			
+			<button label="Save" onClick="@command('saveCompanyFileCommand')"></button>
+			<space width="100px"></space>
+			<checkbox label="Check All" checked="@bind(vm.checkAllFile)"></checkbox>
+			</hbox>
+
+ <listbox model="@bind(vm.lstMainMenu)" width="520px" height="400px" emptyMessage="No data found"
+			multiple="true" >
+			
+						<listhead sizable="true">					
+						<listheader label="Title" width="150px" sort="auto('title')" />
+						<listheader label="Arabic Title" width="150px" sort="auto('artitle')" />
+						<listheader label="Access"/>
+						</listhead>
+						<template name="model">
+						<listitem>	
+											
+						      <listcell>
+								<label value="@bind(each.title)"/>
+							</listcell>	
+							  <listcell>
+								<label value="@bind(each.artitle)"/>
+							</listcell>	
+							<listcell><checkbox checked="@bind(each.canView)"></checkbox></listcell>					
+							</listitem>
+							</template>
+						
+			</listbox>
+
+
+</vlayout>
+</window>
+</zk>

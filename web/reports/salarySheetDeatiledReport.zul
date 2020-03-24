@@ -1,0 +1,130 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/css/style.css"?>
+<?link rel="stylesheet" type="text/css" href="/css/hstyle.css"?>
+
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+	<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('reports.SalarySheetDetailedViewModel')"
+		vflex="1">
+
+		<label value="Salary Sheet Detailed Report"
+			style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+
+
+		<grid>
+			<columns>
+				<column width="100px"></column>
+				<column width="180px"></column>
+				<column width="100px"></column>
+				<column width="180px"></column>
+				<column width="100px"></column>
+				<column width="250px"></column>
+			</columns>
+			<rows>
+
+				<row>
+					<label value="Company"></label>
+					<listbox multiple="false" hflex="1" mold="select"
+						model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+						<template name="model" var="item">
+							<listitem>
+								<listcell label="@load(item.enCompanyName)"></listcell>
+							</listitem>
+						</template>
+					</listbox>
+
+					<label value="Employee"></label>
+					<listbox multiple="false" hflex="1" mold="select"
+						model="@load(vm.lstCompEmployees)" selectedItem="@bind(vm.selectedCompEmployee)">
+						<template name="model" var="item">
+							<listitem>
+								<listcell label="@load(item.fullName)"></listcell>
+							</listitem>
+						</template>
+					</listbox>
+
+				</row>
+
+				<row>
+					<cell colspan="4">
+						<hbox>
+							<label value="Select Period"></label>
+							<listbox multiple="false" mold="select" model="@load(vm.lstToMonths)"
+								selectedIndex="@bind(vm.selectedToMonth)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+
+							<listbox multiple="false" mold="select" model="@load(vm.lstToYears)"
+								selectedItem="@bind(vm.selectedToYear)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+							<space></space>
+							<space></space>
+							<label value=" Salary Status"></label>
+							<listbox hflex="1" mold="select" model="@load(vm.lstSattus)"
+								selectedItem="@bind(vm.selectedStatus)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+
+							<button label="Search" id="btn1" onLongOp="@command('searchCommand')">
+								<attribute w:name="onClick">
+									this.$f('lstHistory').setHflex("1");
+									this.$f('lstHistory').setHflex("1");
+								</attribute>
+
+							</button>
+						</hbox>
+					</cell>
+
+					<cell colspan="2">
+						<hbox>
+
+
+							<button label="Filter" onClick="@command('filterCommand')"></button>
+
+							<button label="Clear" onClick="@command('clearCommand')"></button>
+
+							<!-- <button label="PDF" onClick="@command('exportCommand',ref=lstHistory)"></button> -->
+
+							<button label="Export To Excel" onClick="@command('exportToExcel',ref=lstHistory)"></button>
+
+						</hbox>
+					</cell>
+
+				</row>
+			</rows>
+		</grid>
+
+		<listbox id="lstHistory" model="@bind(vm.gridDataAll)" hflex="1"
+			width="820px" vflex="1" emptyMessage="No data found">
+			<listhead menupopup="auto" sizable="true" children="@load(vm.columns)">
+				<template name="children" var="item">
+					<listheader align="center" width="200px" label="@load(item)" />
+				</template>
+			</listhead>
+			<template name="model" var="line">
+				<listitem children="@bind(line)">
+					<template name="children" var="cell">
+						<listcell label="@load(cell)">
+						</listcell>
+					</template>
+				</listitem>
+			</template>
+		</listbox>
+
+	</vlayout>
+</zk>

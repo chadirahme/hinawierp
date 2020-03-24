@@ -1,0 +1,173 @@
+<?page title="Cutomer Feed Back" contentType="text/html;charset=UTF-8"?>
+<?page title="Hinawi Online" contentType="text/html;charset=UTF-8"?>
+
+
+<zk>
+	<script src="/scripts/myScript.js" defer="true" />
+	<style>
+
+		.H1 {
+		font-family:Arial, Helvetica, sans-serif;
+		color:#2c6f99;
+		font-size:16px;
+		font-weight:bold;
+		margin:0 0 11px 0;
+		padding:10px;
+		float:left;
+		width:526px;
+		padding-right:20px;
+		padding-top:6px;
+		}
+
+		.H2
+		{
+		font-size:16px;
+		font-weight:bold;
+		}
+
+		.MyRowHeight tr.z-row td.z-row-inner
+		{
+		height:50px;
+		}
+
+		.z-checkbox-cnt
+		{
+		margin-left:5px;
+		}
+	</style>
+
+
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('home.NotesForEachModule' , type='hritem')"
+		validationMessages="@id('vmsgs')">
+		<center autoscroll="true" border="none">
+			<vlayout>
+				<grid width="100%">
+					<columns>
+						<column align="left" width="250px" />
+						<column width="100%" />
+					</columns>
+					<rows>
+						<row height="40px">
+							<cell>
+								Add New E-Mail Templates :
+							</cell>
+							<cell>
+								<textbox value="@bind(vm.emailTemplateName)" maxlength="100"
+									readonly="false" width="200px" />
+								<space></space>
+								<button label="Save" visible="@bind(vm.companyRole.canAdd)"
+									onClick="@command('saveNewEmailTemplate', row=vm.emailTemplateName)"
+									autodisable="self"></button>
+							</cell>
+						</row>
+						<row height="40px">
+							<cell>
+								Select Existing E-Mail Templates :
+								<label style="color:red" value="*"></label>
+								<image style="cursor: help" tooltip="NotesForModuleTooltip"
+									src="/images/hint-icon.png"></image>
+							</cell>
+							<cell>
+								<listbox mold="select" model="@load(vm.lstService)"
+									width="200px" selectedItem="@bind(vm.selectedService)">
+									<template name="model" var="item">
+										<listitem>
+											<listcell label="@load(item.enDescription)"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+
+								<space></space>
+								<space></space>
+								<label value="Last Modified Date :"></label>
+								<label value="@bind(vm.modifeldDateStr)" zclass="H2"></label>
+
+							</cell>
+							<popup id="NotesForModuleTooltip" width="500px">
+								<html><![CDATA[Add More Details by  navigating to General List->E-mail Templates]]></html>
+							</popup>
+						</row>
+						<row height="40px">
+							<cell>
+								E-Mail Templates History:
+							</cell>
+							<cell>
+								<listbox mold="select" model="@load(vm.listNotesForEachModuleHistory)"
+									width="200px" selectedItem="@bind(vm.selectedNotesForEachModuleHistory)">
+									<template name="model" var="item">
+										<listitem>
+											<listcell label="@load(item.serviceName)"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</cell>
+						</row>
+						<row>
+							<cell colspan="1" align="right">
+								
+									<label value="English Body" width="500px"></label>
+	
+							</cell>
+							<cell colspan="1" align="center">
+														
+									<label value="Arabic Body"></label>
+
+					
+							</cell>
+						</row>
+						<row>
+							<cell colspan="2" align="left">
+								<hbox>
+
+									<ckeditor value="@bind(vm.memoEn)" height="450px" width="500px"
+										toolbar="Basic" />
+
+									<ckeditor value="@bind(vm.memoAr)" height="450px" width="500px"
+										toolbar="Basic" />
+
+								</hbox>
+							</cell>
+						</row>
+						<row>
+							<cell colspan="2">
+								<vbox id="uploadWindowNotes">
+									<listbox model="@bind(vm.lstAtt)" emptyMessage="No data found"
+										selectedItem="@bind(vm.selectedAttchemnets)" mold="paging">
+
+										<listhead menupopup="auto" sizable="true">
+											<listheader label="Delete" width="50px" />
+											<listheader label="Attachments" />
+										</listhead>
+										<template name="model">
+											<listitem>
+												<listcell>
+													<button image="/images/cross.png"
+														onClick="@command('deleteFromAttchamentList', row=each)" />
+												</listcell>
+												<listcell onDoubleClick="@command('download', row=each)">
+													<label value="@bind(each.filename)" />
+												</listcell>
+											</listitem>
+										</template>
+									</listbox>
+									<button label="Choose File" upload="true"
+										onUpload="@command('uploadFile',attId=4)"></button>
+								</vbox>
+							</cell>
+						</row>
+					</rows>
+				</grid>
+				<div align="center">
+					<hlayout>
+						<button onClick="@command('saveCustomerFeedbackSend')"
+							label="Save"  visible="@bind(vm.companyRole.canAdd)" />
+						<button label="Close" onClick=""></button>
+					</hlayout>
+				</div>
+			</vlayout>
+		</center>
+
+	</borderlayout>
+
+</zk>

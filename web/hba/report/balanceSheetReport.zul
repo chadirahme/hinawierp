@@ -1,0 +1,128 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('hba.BalanceSheetReport')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<label value="Balance Sheet Report"
+					style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+				<grid>
+					<columns>
+						<column width="200px"></column>
+						<column width="200px"></column>
+						<column width="220px"></column>
+						<column width="200px"></column>
+					</columns>
+					<rows>
+						<row>
+							<cell>
+								<button id="btn1" label="View" width="100px"
+									onClick="@command('searchCommand')"></button>
+							</cell>
+							<cell>
+								<button id="btn2" label="Reset" width="100px"
+									onClick="@command('resetCustomerSummaryReport')"></button>
+							</cell>
+							<cell>
+								<button label="Export To Excel"
+									onClick="@command('exportToExcel',ref=balanceSheetReport)"></button>
+							</cell>
+							<!-- <cell>
+								<button label="Excel Detailed"
+									onClick="@command('exportToExcelDeatiled',ref=customerDeatiledReport)"></button>
+							</cell> -->
+						</row>
+						<row>
+						 <cell>
+								<label value=""></label>
+							</cell>
+							<cell>
+								<checkbox checked="@bind(vm.hideArabic)" width="15px"
+									visible="true" label="Hide arabic column" />
+							</cell> 
+
+							<cell>
+							<checkbox checked="@bind(vm.hideZero)" width="15px"
+									visible="true" label="Hide accounts with value zero"/>								
+								
+							</cell>
+						</row>
+
+						<!-- <row> <cell> <label value="Date Range :"></label> </cell> <cell> 
+							<hbox> <label value="From"></label> <datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy"></datebox> 
+							</hbox> </cell> <cell> <hbox> <label value="To"></label> <datebox value="@bind(vm.toDate)" 
+							format="dd/MM/yyyy"></datebox> </hbox> </cell> </row> -->
+					</rows>
+				</grid>
+				<listbox model="@load(vm.customerSummaryReport)" vflex="1"
+					id="balanceSheetReport" emptyMessage="No data found" hflex="1"
+					width="920px">
+					<auxhead sclass="category-center">
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="150px"
+								value="@bind(vm.filter.actName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="150px"
+								value="@bind(vm.filter.description)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="150px" value="@bind(vm.filter.amount)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<!-- <auxheader colspan="1"> <image src="../images/funnel.png" /> <textbox 
+							instant="true" width="150px" value="@bind(vm.filter.period)" onChange="@command('changeFilter')" 
+							/> </auxheader> -->
+					</auxhead>
+
+					<listhead menupopup="auto" sizable="true">
+						<listheader label="Account Name " sort="auto('actName')"
+							width="350px" />
+						<listheader label="Account Name Arabic" sort="auto('description')" visible="@bind(!vm.hideArabic)"
+							width="200px" />
+						<listheader label="Amount" sort="auto('amount')" align="right"
+							width="200px" />
+					</listhead>
+					<template name="model">
+						<listitem style="@bind(each.istotal eq 1 ? 'background:#CCF5EB;' : each.istotalSummary eq 1 ? 'background:#CCF5EB;' : each.istotal eq 2 ? 'margin-left:60px' : each.istotal eq 3 ? 'margin-left:90px' : 'margin-left:120px')">
+							<listcell>
+								<label value="@bind(each.actName)" 
+								style="@bind(each.subLevel eq 0 ? 'color:black;font-weight:bold;' : each.subLevel eq 1 ? 'margin-left:30px' : each.subLevel eq 2 ? 'margin-left:60px' : each.subLevel eq 3 ? 'margin-left:90px' : 'margin-left:120px')"
+								/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.description)" />
+							</listcell>
+							<listcell>
+								<label value="${c:formatNumber(each.amount, '###,###,###.00')}"
+									style="@bind(each.amount ge 0 ? 'color:black;font-weight:bold;' : 'color:red;margin-left:0px') " />
+							</listcell>
+
+						</listitem>
+					</template>
+
+				</listbox>
+				<hbox align="right">
+					<space></space>
+					<space></space>
+					<label value="Total Customers
+					: "
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<label value="@load(vm.totalNoOfCustomer)"
+						style="color:#2c6f99;text-align: right;font-weight: 
+					bold;"></label>
+					<space></space> <label value="Total Amount : " style="color:#2c6f99;text-align: 
+						right;font-weight: bold;"></label> 
+						<doublebox  value="@bind(vm.totalAmount)" width="200px"
+												style="color:green;margin:0;padding:0;" readonly="true" 
+												format="###,###,###.00"></doublebox><space></space> 
+				</hbox>
+
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

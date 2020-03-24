@@ -1,0 +1,181 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:w="client">
+	<window id="changeStatusQuotationPopUp" apply="org.zkoss.bind.BindComposer" mode="highlighted" title="Quotation Change Status" border="normal" position="center,center"
+		closable="true" sizable="true" onCancel="changeStatusQuotationPopUp.detach()"
+		width="30%" height="65%">
+		<borderlayout apply="org.zkoss.bind.BindComposer" id="printId" viewModel="@id('vm') @init('hba.ChangeStatusQuotation')">
+			<center border="none" autoscroll="true">
+				<vlayout>
+					<panel title="" >
+						<panelchildren>
+							<grid form="@id('fx') @load(vm.model) @save(vm.model, before='updateStatus') ">
+								<columns>
+									<column width="100px"></column>
+									<column width="400px"></column>
+									<column width="10px"></column>
+								</columns>
+								<rows>
+									<row>		
+										<cell>
+											<label value="">Ref No.</label>
+										</cell>
+										<cell>
+											<textbox width="225px" value="@bind(vm.quotationKey)"></textbox>
+										</cell>
+									</row>
+									<row>		
+										<cell>
+											<label value="">Name</label>
+										</cell>
+										<cell>
+											<textbox width="225px" value="@bind(vm.name)"></textbox>
+										</cell>
+									</row>
+									<row>		
+										<cell>
+											<label value="">Quotation Date</label>
+										</cell>
+										<cell>
+											<textbox width="225px" value="@bind(fx.quotationDate)"></textbox>
+										</cell>
+									</row>
+									<row>		
+										<cell>
+											<label value="">Last Status Date</label>
+										</cell>
+										<cell>
+											<textbox width="225px" value="@bind(fx.lastChangeDate)"></textbox>
+										</cell>
+									</row>
+									<row>		
+										<cell>
+											<label value="">Status </label>
+										</cell>
+										<cell>
+											<textbox width="225px" value="@bind(fx.status)" readonly="true"></textbox>
+										</cell>
+									</row>
+									<row>		
+										<cell>
+											<label value="">Amount </label>
+										</cell>
+										<cell>
+											<textbox width="225px" value="@bind(fx.amount)"></textbox>
+										</cell>
+									</row>
+									<row>		
+										<cell>
+											<label value="">New Status </label>
+										</cell>
+										<cell>
+											<radiogroup id="imp" selectedItem="@bind(vm.newStatus)"></radiogroup>
+											<radio id="Approve" radiogroup="imp" value="A">
+												<attribute w:name="onClick">
+												</attribute>
+											</radio>
+											<label value="Approve"></label>
+										</cell>
+									</row>
+									<row>		
+										<cell>
+											
+										</cell>
+										<cell>
+											<radio id="Recject" radiogroup="imp" value="J">
+												<attribute w:name="onClick">
+												</attribute>
+											</radio>
+											<label value="Recject"></label>
+										</cell>
+									</row>
+									<row>		
+										<cell>
+											
+										</cell>
+										<cell>
+											<radio id="Hold" radiogroup="imp" value="H">
+												<attribute w:name="onClick">
+												</attribute>
+											</radio>
+											<label value="Hold"></label>
+										</cell>
+									</row>
+									<row>		
+										<cell>
+											
+										</cell>
+										<cell>
+											<radio id="Revise" radiogroup="imp" value="R">
+												<attribute w:name="onClick">
+												</attribute>
+											</radio>
+											<label value="Revise"></label>
+										</cell>
+									</row>
+									<row>		
+										<cell>
+											
+										</cell>
+										<cell>
+											<radio id="Close" radiogroup="imp" value="T">
+												<attribute w:name="onClick">
+												</attribute>
+											</radio>
+											<label value="Close"></label>
+										</cell>
+									</row>
+									<row>		
+										<cell>
+											
+										</cell>
+										<cell>
+											<radio id="Other" radiogroup="imp" value="O">
+												<attribute w:name="onClick">
+												</attribute>
+											</radio>
+											<label value="Other "></label>
+											<textbox width="225px" value="@bind(vm.other)"></textbox>
+										</cell>
+									</row>
+									<row>		
+										<cell>
+											<label value="">Date </label>
+										</cell>
+										<cell>
+											<datebox width="100px" value="@bind(vm.changeDate)" format="dd/MM/yyyy"></datebox>											
+										</cell>
+									</row>
+									<row>		
+										<cell>
+											<label value="">Note </label>
+										</cell>
+										<cell>
+											<textbox multiline="true" rows="4" readonly="false"	hflex="1" value="@bind(fx.note)"></textbox>											
+										</cell>
+									</row>
+								</rows>
+							</grid>
+						</panelchildren>
+					</panel>
+					<div hflex="1" style="align:right;valign:top">
+						<grid>
+							<columns>
+								<column></column>
+							</columns>
+							<rows>
+								<row>
+									<cell align="center">
+										<hlayout>
+											<button label="Ok" onClick="@command('changeStatus',cmp=changeStatusQuotationPopUp)"></button>
+											<button label="Close" onClick="changeStatusQuotationPopUp.detach()"></button>
+										</hlayout>
+									</cell>
+								</row>
+							</rows>
+						</grid>
+					</div>
+				</vlayout>
+			</center>
+		</borderlayout>
+	</window>
+</zk>

@@ -1,0 +1,214 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+<?page id="popMain" title="new page title" contentType="text/html;charset=UTF-8" ?>
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+
+
+	<window id="workGroupListModalDialog" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Edit Sponsor Info" border="normal" position="center,center"
+		closable="true" viewModel="@id('vm')  @init('hr.EditWorkGroupViewModel')"
+		sizable="true" onCancel="workGroupListModalDialog.detach()" width="900px"
+		height="680px">
+		<zscript>
+			void openContexMenu(Integer type) { if(type==1)
+			editPopupWorkGroup.open(lstSponsorListEditGrid);
+			if(type==2)
+			editPopupWorkGroupHeadder.open(lstSponsorListEditGrid);
+			}
+		</zscript>
+		<vlayout>
+		<grid id="grid_id"
+			form="@id('fx') @load(vm.selectedWorkGroup)  @save(vm.selectedWorkGroup, before='updateWorkGroupList')">
+			<columns>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="50px"></column>
+				<column width="150px"></column>
+				<column width="300px"></column>
+			</columns>
+			<rows>
+				<row>
+					<cell>Team Name *</cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.groupName)" maxlength="31" hflex="1" />
+					</cell>
+				</row>
+				<row>
+
+					<cell>Team Name-Arabic</cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.groupNameAR)" hflex="1" />
+					</cell>
+					<cell>Team Status INActive
+					</cell>
+					<cell>
+						<checkbox checked="@bind(fx.isActive)"></checkbox>
+					</cell>
+				</row>
+				<row>
+					<cell>Company Name</cell>
+					<cell colspan="2">
+						<textbox value="@bind(vm.selectedCompanyName)" maxlength="31"
+							hflex="1" readonly="true" />
+					</cell>
+				</row>
+
+				<row>
+					<cell>
+						<label value="Assign Supervisor To Team"></label>
+					</cell>
+					<cell colspan="2">
+						<combobox autodrop="true" mold="rounded" buttonVisible="true"
+							model="@load(vm.lstSupervisor)" hflex="1"
+							selectedItem="@bind(vm.selectedSupervisor)" onSelect="@command('CheckSupervisorStatus',cmp=workGroupListModalDialog)">
+							<template name="model" var="item">
+								<comboitem label="${item.fullName}" />
+							</template>
+
+						</combobox>
+					</cell>
+					
+						<cell colspan="2">
+						<label value="Is Super-Supervisor"></label>
+						
+						<space></space>
+							<checkbox checked="@bind(fx.wetherSupersupervisor)"></checkbox>
+							<space></space>
+							<space></space>
+					</cell>
+					
+					</row>
+					<row>
+					<cell>
+						<button label="Add Employees" onClick="@command('findEmployeeCommand')"></button>
+					</cell>
+					<cell colspan="2">
+						<label value="Employee status"></label>
+						
+						<space></space>
+							<listbox hflex="1" mold="select" model="@load(vm.lstSattus)" width="50px"
+								selectedItem="@bind(vm.selectedStatus)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+							<space></space>
+							<space></space>
+					</cell>
+					
+				
+					
+				</row>
+			</rows>
+		</grid>
+		<menupopup id="editPopupWorkGroup">
+			<!-- <menuitem label="Add New Employee" onClick="@command('insertEmployeeForm')"></menuitem> -->
+			<menuitem label="Remove Employee"
+				onClick="@command('deleteEmployee',row=vm.selectedEmployee)"></menuitem>
+		</menupopup>
+		<menupopup id="editPopupWorkGroupHeadder">
+		<!-- 	<menuitem label="Add New Employee" onClick="@command('insertEmployeeForm')"></menuitem> -->
+		</menupopup>
+		<listbox model="@bind(vm.lstEmployees)" selectedItem="@bind(vm.selectedEmployee)"
+			id="lstSponsorListEditGrid" height="400px">
+			<auxhead sclass="category-center">
+				<auxheader colspan="1">
+				</auxheader>
+				<auxheader colspan="1">
+				</auxheader>
+				<auxheader colspan="1">
+					<image src="/images/funnel.png" />
+					<textbox instant="true" width="60px"
+						value="@bind(vm.employeeFilter.employeeNo)" onChange="@command('changeFilterEdit')" />
+				</auxheader>
+
+				<auxheader colspan="1">
+					<image src="/images/funnel.png" />
+					<textbox instant="true" width="100px"
+						value="@bind(vm.employeeFilter.fullName)" onChange="@command('changeFilterEdit')" />
+				</auxheader>
+				<auxheader colspan="1">
+					<image src="/images/funnel.png" />
+					<textbox instant="true" width="100px"
+						value="@bind(vm.employeeFilter.department)" onChange="@command('changeFilterEdit')" />
+				</auxheader>
+				<auxheader colspan="1">
+					<image src="/images/funnel.png" />
+					<textbox instant="true" width="100px"
+						value="@bind(vm.employeeFilter.position)" onChange="@command('changeFilterEdit')" />
+				</auxheader>
+				<auxheader colspan="1">
+					<image src="/images/funnel.png" />
+					<textbox instant="true" width="100px"
+						value="@bind(vm.employeeFilter.status)" onChange="@command('changeFilterEdit')" />
+				</auxheader>
+
+			</auxhead>
+
+			<listhead>
+				<listheader label="SNo" width="50px"></listheader>
+				<listheader width="60px" align="center">
+					<image src="/images/edit.png" width="20px" height="20px"
+						context="editPopupWorkGroupHeadder"/>
+				</listheader>
+				<listheader label="Employee No." width="110px"
+					sort="auto('employeeNo')" />
+				<listheader label="Name" sort="auto('fullName')" />
+				<listheader label="Department" sort="auto('department')" />
+				<listheader label="Position" sort="auto('position')" />
+				<listheader label="Status" sort="auto('status')" />
+
+			</listhead>
+			<template name="model">
+				<listitem>
+					<listcell>
+						<label value="@bind(each.lineNo)"></label>
+					</listcell>
+					<listcell>
+						<image src="/images/edit.png" width="20px" height="20px"
+							context="editPopupWorkGroup" onClick="openContexMenu(1)" />
+					</listcell>
+					<listcell>
+						<label value="@bind(each.employeeNo)" />
+					</listcell>
+					<listcell>
+						<label value="@bind(each.fullName)" />
+					</listcell>
+					<listcell>
+						<label value="@bind(each.department)" />
+					</listcell>
+					<listcell>
+						<label value="@bind(each.position)" />
+					</listcell>
+					<listcell>
+						<label value="@bind(each.status)" />
+					</listcell>
+				</listitem>
+			</template>
+		</listbox>
+<hbox align="right"><space></space><space></space>
+				<label value="Total Employees: "
+					style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+				<label value="@load(vm.footer)"
+					style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<space></space><space></space><space></space><space></space><space></space><space></space><space></space><space></space>
+					
+					<label value="Selected Supervisor Status : "
+					style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<label value="@load(vm.supervisorStatus)"
+					style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+
+			</hbox>
+			<hbox></hbox>
+			<hbox></hbox>
+		<hbox pack="center" width="800px">
+			<button label="Save"
+				onClick="@command('updateWorkGroupList',cmp=workGroupListModalDialog)"
+				visible="@bind(vm.canSave)"></button>
+			<button label="Close" onClick="workGroupListModalDialog.detach()"></button>
+		</hbox>
+</vlayout>
+	</window>
+</zk>

@@ -1,0 +1,468 @@
+<?page title="Hinawi Software- Services" contentType="text/html;charset=UTF-8"?>
+<zk:zk xmlns="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:zk="http://www.zkoss.org/2005/zul">
+	
+	<zk:zscript><![CDATA[
+	void showme(int x)
+	{
+		lbl1.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px");
+		lbl2.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px");
+		lbl3.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px");
+		lbl4.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px");
+		lbl5.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px");
+		lbl6.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px");
+		lbl7.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px");
+		
+		v0.setVisible(false);	
+		v1.setVisible(false);	
+		v2.setVisible(false);
+		v3.setVisible(false);
+		v4.setVisible(false);
+		v5.setVisible(false);
+		v6.setVisible(false);
+		v7.setVisible(false);
+		
+	if(x==1)
+	{
+	v1.setVisible(true);	
+	
+	lbl1.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6;font-size:14px");
+	}
+	if(x==2)
+	{
+		
+		v2.setVisible(true);
+		lbl2.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6;font-size:14px");
+		
+	}
+	if(x==3)
+	{	
+		v3.setVisible(true);
+		lbl3.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6;font-size:14px");		
+	}
+	
+	if(x==4)
+	{
+		
+		v4.setVisible(true);
+		lbl4.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6;font-size:14px");
+	}
+	
+	if(x==5)
+	{
+	
+		v5.setVisible(true);
+		lbl5.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6;font-size:14px");
+	}
+	if(x==6)
+	{
+	
+		v6.setVisible(true);
+		lbl6.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6;font-size:14px");
+	}
+	if(x==7)
+	{
+	
+		v7.setVisible(true);
+		lbl7.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6;font-size:14px");
+	}
+	
+	}
+]]></zk:zscript>
+
+	<zk:borderlayout hflex="1" style="background:none" >
+ <zk:west width="180px" maxsize="250" margins="1,105,1,1" border="none">
+  
+  <zk:vlayout>
+
+ 
+
+
+
+<div class="leftMenu">
+	
+<h:ul> 
+		<h:li style='background:none'>
+		<zk:label id="lbl1" value="Training and Support" onClick="showme(1)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px"></zk:label>			
+		</h:li>
+		<h:li style='background:none'>		
+			
+		<zk:label id="lbl2" value="Consulting and Analysis" onClick="showme(2)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px"></zk:label>
+		</h:li>
+		
+		<h:li style='background:none'>		
+			
+		<zk:label id="lbl3" value="Importing Data" onClick="showme(3)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px"></zk:label>
+		</h:li>
+		
+		<h:li style='background:none'>		
+			
+		<zk:label id="lbl4" value="Special Programming" onClick="showme(4)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px"></zk:label>
+		</h:li>
+		
+		<h:li style='background:none'>		
+			
+		<zk:label id="lbl5" value="Accounting Services" onClick="showme(5)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px"></zk:label>
+		</h:li>
+		
+		<h:li style='background:none'>		
+			
+		<zk:label id="lbl6" value="Converting of Data" onClick="showme(6)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px"></zk:label>
+		</h:li>
+		
+		<h:li style='background:none'>		
+			
+		<zk:label id="lbl7" value="Updating Data" onClick="showme(7)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px"></zk:label>
+		</h:li>
+		
+	</h:ul>
+	  
+</div>
+
+ </zk:vlayout>
+      </zk:west>
+      
+<zk:center margins="1,15,1,1" border="none" hflex="1" autoscroll="true">
+<zk:vlayout>
+<zk:vbox id="v0" visible="true">
+<html>
+<body>
+<div class="">
+<div class="">
+<img src="images/services.png" style="width:700px;height:300px"></img>
+<br/><br/>
+<h1>Introduction:</h1>
+<br/><br/>
+<html>
+<body>
+<p style="font-size:14px;">We provide additional services aside the Programming which includes:</p>
+<ul style="font-size:14px;">
+<li>•	 Training on ERP and QuickBooks, Support, Consulting, Importing of Data in Excel,Updation etc. </li>
+<li>•	 We value customer satisfaction.</li>
+</ul>
+
+</body>
+</html>
+</div>
+</div>
+</body>
+</html>
+</zk:vbox>
+
+<zk:vbox id="v1" visible="false">
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>Training and Support</h1>
+<br/><br/>
+<html>
+<body>
+<ul>
+<li>•	We provide professional training on QuickBooks Accounting Software and on our Locally made products.</li>
+<li>•	We will help the users build Chart of Accounts according to their business activity (such as Factories, Trading, Services, Contracting and so on)</li>
+<li>•	We do training at customer's office and training will be based on the actual request by the customer. </li>
+<li>•	Our normal training is for One (1) month period, providing training to all the users of the system.</li>
+<li>•	Our training is conducted in an open forum manner, where the users can ask questions freely and the trainer will conduct a survey of how well the trainee understood the system. </li>
+<li>•	Trainees are given an assigned job after each training session.   </li>
+<li>•	Our professional staff can easily guide users how to read and understand the results of the software in Professional way.</li>
+<li>•	Our training is not about browsing the system; it is about teaching the user to operate the system to its deepest features.<br/></li>
+
+</ul>
+</body>
+</html>  
+
+</div>
+</div>
+</body>
+</html>
+
+</zk:vbox>
+
+
+<zk:vbox id="v2" visible="false">
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>Consulting and Analysis</h1>
+<br/><br/>
+<html>
+<body>
+<ul>
+<li>•	With our long experience in accounting, Explorer Computer provides consultation on accounting systems and procedures.</li>
+<li> •	We don’t only study the accounting impact on the company, but we also study other areas, which directly or indirectly, affect the accounting cycle of the company’s transactions.</li> 
+<li>•	We study past transactions, accountant’s and management’s requirements; and based on these points, among others, <br/>
+we provide better solutions to improve the quality of work of the accountant, maximize the use of the accounting system being used and provide the readers, 
+from the accountant to management, useful and productive reports that are beneficial for their future decisions. <br/> <br/>
+</li>
+<li>
+Our Consulting and Analysis services include the following:
+</li>
+</ul>
+
+<ul><li>•	Defining best practices and processes</li>
+<li>•	Developing a software architecture for the proposed solution</li>	
+<li>•	Deciding the software development life cycle model</li>
+<li>•	Understanding, interpreting and predicting customer/user behavior</li>
+<li>•	Recommending the best suited technology platform to deploy</li></ul>
+</body>
+</html>  
+
+</div>
+</div>
+</body>
+</html>
+
+</zk:vbox>
+
+<zk:vbox id="v3" visible="false">
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>Importing of Data to QuickBooks Accounting Software </h1>
+<br/><br/>
+<html>
+<body>
+
+<ul>
+	<li>•	Data importing By Lists (common way of import)</li>
+  <li> •	We can import lists from Excel like Customers List, Vendor Lists, and Employee List together with other details information. These lists can be imported to QuickBooks Accounting Software and to Hinawi products.</li> 
+<li>•	Also, we can import Inventory List by Quantity, Cost Price, Selling Price and other details information to QuickBooks Accounting Software.</li>
+<li>•	Data importing from a number of Programs to QuickBooks Accounting Software</li>
+<li>•	The report must show: Transaction date, number, type, name, memo, debit and credit amount, account number and name.</li>
+<li>•	QuickBooks will create the financial reports automatically based on the data imported.</li>
+
+</ul>
+
+
+</body>
+</html>  
+
+</div>
+</div>
+</body>
+</html>
+
+</zk:vbox>
+
+
+<zk:vbox id="v4" visible="false">
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>Special Programming</h1>
+<br/><br/>
+<html>
+<body>
+
+<ul>
+<li>
+•	Our company accepts special programming requests. We offer solutions for various levels of complexity to any platform, using the latest technologies and tools.
+</li>
+</ul>
+
+
+</body>
+</html>  
+
+</div>
+</div>
+</body>
+</html>
+
+</zk:vbox>
+
+<zk:vbox id="v5" visible="false">
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>Accounting Services</h1>
+<br/><br/>
+<html>
+<body>
+
+<ul>
+<li>
+•	Using combined experience in both accounting and software, Explorer Computer provides accounting services to companies.
+</li>
+<li>
+•	Services include bookkeeping, updating accounts, do internal audit, closing preparations for external audit and more that will expedite the works of an accountant and prepare financial reports fast.
+</li>
+
+<li>
+•	QuickBooks Accounting Software is being used in updating the accounts and preparation of reports. We follow the standard accounting work procedures based on International Accounting Standards. 
+</li>
+<li>
+•	Work can be done either at client’s office or at our office.
+
+</li>
+</ul>
+
+
+</body>
+</html>  
+
+</div>
+</div>
+</body>
+</html>
+
+</zk:vbox>
+
+<zk:vbox id="v6" visible="false">
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>Converting of Data</h1>
+<br/><br/>
+<html>
+<body>
+
+<ul>
+<li>
+Converting data can be done for all types and edition of  QuickBooks using Microsoft Excel and Microsoft Access in Two (2) ways: 
+</li>
+
+<li>
+ 1. By Journal Voucher with Inventory
+</li>
+<li>2. Converting all data by all type of transaction ( except Inventory) </li>
+</ul>
+
+
+</body>
+</html>  
+
+</div>
+</div>
+</body>
+</html>
+
+</zk:vbox>
+
+
+<zk:vbox id="v7" visible="false">
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>Updating Customers data from previous months or years</h1>
+<br/><br/>
+<html>
+<body>
+
+<ul>
+<li>•	In this option we can help the company to re-enter all transactions or pending transactions from previous months or years.</li>
+<li>•	This job can be done at our office or at the customer’s office using QuickBooks Accounting Software. </li>
+<li>•	At the end of the job, we will provide the company standard financial reports with analysis. </li>
+<li>•	One of the major components of the report is the Trial balance, Profit and Loss, and Balance Sheet. </li></ul>
+
+<ul>
+<li>
+
+If you have any questions — please contact us, and qualified Explorer Computer specialists will be glad to assist you.
+</li>
+</ul>
+
+
+</body>
+</html>  
+
+</div>
+</div>
+</body>
+</html>
+
+</zk:vbox>
+
+
+<zk:vbox id="v55" visible="false">
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>Other Services</h1>
+<br/><br/>
+<html>
+<body>
+<h2>Special Programming</h2>
+<ul>
+<li>
+•	Our company accepts special programming requests. We offer solutions for various levels of complexity to any platform, using the latest technologies and tools.
+</li>
+</ul>
+
+<h2 id="accounting">Accounting Services</h2>
+<ul>
+<li>
+•	Using combined experience in both accounting and software, Explorer Computer provides accounting services to companies.
+</li>
+<li>
+•	Services include bookkeeping, updating accounts, do internal audit, closing preparations for external audit and more that will expedite the works of an accountant and prepare financial reports fast.
+</li>
+
+<li>
+•	QuickBooks Accounting Software is being used in updating the accounts and preparation of reports. We follow the standard accounting work procedures based on International Accounting Standards. 
+</li>
+<li>
+•	Work can be done either at client’s office or at our office.
+
+</li>
+</ul>
+
+<h2>Converting of Data </h2>
+<ul>
+<li>
+Converting data can be done for all types and edition of  QuickBooks using Microsoft Excel and Microsoft Access in Two (2) ways: 
+</li>
+
+<li>
+ 1. By Journal Voucher with Inventory
+</li>
+<li>2. Converting all data by all type of transaction ( except Inventory) </li>
+</ul>
+
+
+<h2>Updating Customers data from previous months or years  </h2>
+<ul>
+<li>•	In this option we can help the company to re-enter all transactions or pending transactions from previous months or years.</li>
+<li>•	This job can be done at our office or at the customer’s office using QuickBooks Accounting Software. </li>
+<li>•	At the end of the job, we will provide the company standard financial reports with analysis. </li>
+<li>•	One of the major components of the report is the Trial balance, Profit and Loss, and Balance Sheet. </li></ul>
+
+<ul>
+<li>
+
+If you have any questions — please contact us, and qualified Explorer Computer specialists will be glad to assist you.
+</li>
+</ul>
+</body>
+</html>  
+
+</div>
+</div>
+</body>
+</html>
+
+</zk:vbox>
+
+</zk:vlayout>
+</zk:center>
+      
+      
+      
+      
+     <zk:east title="Contacts" size="18%"  margins="1,1,45,1" border="none">
+		<zk:include src="rightmenu.zul"></zk:include>
+</zk:east>
+      
+      </zk:borderlayout>
+      
+
+</zk:zk>

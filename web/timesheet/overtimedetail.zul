@@ -1,0 +1,76 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<zscript>
+void openContexMenu()
+ { 
+	editCheckITemsPopup.open(gridOverTime);
+  }
+</zscript>
+
+<vlayout vflex="1">
+
+ 		 <menupopup id="editCheckITemsPopup">
+       	 <menuitem label="Insert Line" onClick="@command('insertOTDetailRow',row=vm.selectedCheckItems)"></menuitem>
+       	 <menuitem label="Delete Line" onClick="@command('deleteCheckItems',row=vm.selectedCheckItems)"></menuitem>
+       	 </menupopup>
+
+					<label value="${arg.type}"></label>
+
+					<grid model="@bind(vm.lstOverTimeDetails)" id="gridOverTime">
+						<columns>
+						<column label="Day" width="120px"></column>
+						<column label="" width="30px"></column>
+						<column label="Rate"></column>
+						<column label="Hours"></column>
+						<column label="Auto Fill" width="100px"></column>
+						<column label="Calculate" width="100px"></column>
+						<column label="Salary Item" width="220px"></column>
+						</columns>
+						
+						<template name="model">
+						<row>
+						  <listbox mold="select" model="@bind(vm.lstDayType)" selectedItem="@bind(each.dayType)">		                  
+		                <template name="model" var="item">
+						<listitem >
+						<listcell label="@bind(item)" ></listcell>
+						</listitem>
+						</template>
+		                  </listbox>	  
+		                  
+		                   <image src="/images/edit.png" width="20px" height="20px" context="editCheckITemsPopup" onClick="openContexMenu()"/>
+						
+						<doublebox value="@load(each.otRate)"></doublebox>
+						<doublebox value="@load(each.otHours)"></doublebox>
+						
+						  <listbox mold="select" model="@bind(vm.lstAutoFill)" selectedItem="@bind(each.autoFill)">		                  
+		                <template name="model" var="item">
+						<listitem >
+						<listcell label="@bind(item)" ></listcell>
+						</listitem>
+						</template>
+		                  </listbox>	
+		                  						
+						  <listbox mold="select" model="@bind(vm.lstAutoCalculate)" selectedItem="@bind(each.calculate)">		                  
+		                <template name="model" var="item">
+						<listitem >
+						<listcell label="@bind(item)" ></listcell>
+						</listitem>
+						</template>
+		                  </listbox>	
+		                  			
+		                 <listbox mold="select" model="@bind(vm.lstSalaryItemsHRValues)" selectedItem="@bind(each.hrSalaryItem)">		                  
+		                <template name="model" var="item">
+						<listitem >
+						<listcell label="@bind(item.enDescription)" ></listcell>
+						</listitem>
+						</template>
+		                  </listbox>	
+		                  									
+						</row>
+						</template>
+						
+						</grid>
+						
+					
+					</vlayout>
+</zk>

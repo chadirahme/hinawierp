@@ -1,0 +1,123 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('company.ReminderEmailsViewModel',type='emails')">
+
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1">
+			
+			<groupbox mold="3d">
+					<caption>
+					<label style="color:white" value="Reminders Emails"></label>
+					</caption>
+					
+					<grid>
+						<columns>
+							<column width="150px"></column>
+							<column></column>
+							<column width="150px"></column>
+							<column></column>
+						</columns>
+						
+						<rows>
+
+							<row>
+								<label value="Reminder Type"></label>
+								<cell colspan="2">
+								<listbox mold="select" model="@load(vm.listReminderTypes)"
+									width="300px" selectedItem="@bind(vm.selectedReminderTypes)">
+									<template name="model" var="item">
+										<listitem>
+											<listcell label="@load(item.remindername)"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+								</cell>
+							</row>
+							
+							<row>
+								<cell colspan="2">
+									<hlayout>
+										<label value="Send Date :" />
+										<datebox width="100px"
+											value="@bind(vm.fromDate)" format="dd/MM/yyyy" />
+										<space></space>
+										<space></space>
+									
+										<label value="To Date"></label>
+										<datebox width="100px"
+											value="@bind(vm.toDate)" format="dd/MM/yyyy" />
+
+
+									</hlayout>
+								</cell>
+								<cell>
+								<button label="Search" onClick="@command('searchCommand')"></button>
+								</cell>
+								<cell>
+								<label value="@bind(vm.totalEmails)"></label>
+								</cell>
+							</row>
+							
+							</rows>
+						
+						</grid>
+					
+					</groupbox>
+					
+					<listbox model="@bind(vm.lstEmails)" vflex="1" hflex="1"
+					width="900px" mold="paging" height="400px"
+					emptyMessage="No data found">
+					<listhead menupopup="auto" sizable="true">
+					
+						<listheader label="Customer Name" sort="auto('customerName')"
+							width="200px" />
+							
+							<listheader label="Email" sort="auto('email')"
+							width="200px" />
+							
+							<listheader label="Subject" sort="auto('emailsubject')"
+							width="200px" />
+						
+							<listheader label="Body" sort="auto('emailbody')"
+							width="250px" />
+							
+						<listheader label="Send Date" sort="auto('sendDate')"
+							width="200px" />
+							
+							
+							</listhead>
+							
+							<template name="model">
+						<listitem >
+						<listcell onDoubleClick="@command('viewTask', row=each)" >
+								<label value="@bind(each.customerName)"  />
+							</listcell>
+							
+							<listcell>
+							<label value="@bind(each.email)"></label>
+							</listcell>
+							<listcell>
+							<label value="@bind(each.emailsubject)"></label>
+							</listcell>
+							<listcell>
+							<label value="@bind(c:cat(c:substring(each.emailbody,0,30),'....'))"></label>
+							</listcell>
+							<listcell>
+							<label value="@bind(each.sendDate)"></label>
+							</listcell>
+							
+							</listitem>
+							
+							</template>
+					
+					</listbox>
+					
+					
+			</vlayout>
+			</center>
+			</borderlayout>
+			
+			
+</zk>

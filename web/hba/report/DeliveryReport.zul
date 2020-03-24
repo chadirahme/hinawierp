@@ -1,0 +1,186 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<vlayout apply="org.zkoss.bind.BindComposer" vflex="1" hflex="1"
+		viewModel="@id('vm') @init('hba.DeliveryReport')">
+
+	<borderlayout vflex="1" hflex="1">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<label value="Delivery"
+					style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+				<grid>
+					<columns>
+						<column width="200px"></column>
+						<column width="200px"></column>
+						<column width="200px"></column>
+						<column width="200px"></column>
+						<column width="200px"></column>
+					</columns>
+					<rows>
+						<row>
+							<cell>
+								<button id="btn1" label="View" width="100px"
+									visible="@bind(vm.companyRole.canView)" onClick="@command('searchCommand')"></button>
+							</cell>
+							<cell>
+								<button label="Reset" onClick="@command('resetDeliveryReport')"
+									width="100px"></button>
+							</cell>
+							<cell>
+								<button label="Excel Summary" onClick="@command('exportToExcel')"></button>
+							</cell>
+							<cell>
+								<button label="Void Delivery" onClick="@command('voidDelivery')"></button>
+							</cell>
+							<cell>
+								<hbox>
+									<button label="Create New Delivery" onClick="@command('createDelivery')"></button>
+									<checkbox label="POS" checked="@bind(vm.posItems)"></checkbox>
+								</hbox>
+							</cell>
+
+						</row>
+						<row>
+							<cell>
+								<label value="Date Range :"></label>
+							</cell>
+							<cell>
+								<hbox>
+									<label value="From"></label>
+									<datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy"></datebox>
+								</hbox>
+							</cell>
+							<cell>
+								<hbox>
+									<label value="To"></label>
+									<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy"></datebox>
+								</hbox>
+							</cell>
+							
+							<cell>
+							 <button label="Hide For Printing" onClick="printDialog.doModal()"></button>							
+							 </cell>
+
+
+						</row>
+					</rows>
+				</grid>
+
+
+				<listbox model="@load(vm.deliveryModelReport)" vflex="1"
+					id="customerSummaryReport" emptyMessage="No data found" hflex="1"
+					width="920px">
+					<auxhead sclass="category-center">
+						<auxheader colspan="1" label="" width="50px">
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.deliveryDate)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.customerName)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value="@bind(vm.filter.userName)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value="@bind(vm.filter.statusDesc)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+					</auxhead>
+
+					<listhead menupopup="auto" sizable="true">
+						<listheader label="Activities" width="110px" />
+						<listheader label="Delivery Date" sort="auto('deliveryDateStr')"
+							width="120px" />
+						<listheader label="Customer Name" sort="auto('customerName')"
+							width="200px" />
+						<listheader label="Created by" sort="auto('userName')"
+							width="200px" />
+					
+					<listheader label="Status" sort="auto('userName')"
+							width="200px" />
+							<listheader label="Transfer from Quotation" sort="auto('transformQ')"
+							width="200px" />
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell>
+								<menubar sclass="logoutbanner">
+									<menu label="Activities" image="/images/dropMenuLogo.png">
+										<menupopup>
+											<menuitem label="Edit" image="/images/rowedit.png"
+												onClick="@command('editDelivery', row=each)"></menuitem>
+											<menuitem label="View" image="/images/view.png"
+												onClick="@command('viewDelivery', row=each)"></menuitem>
+											<menuitem label="Print" image="/images/print.png"
+												onClick="@command('printDelivery', row=each)"></menuitem>
+											<!-- <menuitem label="E-mail" image="/images/email.gif" onClick="@command('CustomerSendEmail',row=each)"></menuitem> -->
+											<menuitem label="Void" image="/images/change.gif"
+												onClick="@command('voidDeliveryCommand', row=each)"></menuitem>
+												
+										<menuitem label="Cash Invoice" image="/images/po.png"
+												onClick="@command('CashInvoiceCommand', row=each)"></menuitem>
+												<menuitem label="Credit Invoice" image="/images/po.png"
+												onClick="@command('CreditInvoiceCommand', row=each)"></menuitem>
+												
+												
+														
+										</menupopup>
+									</menu>
+								</menubar>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.deliveryDateStr)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.customerName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.userName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.statusDesc)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.transformQ)" />
+							</listcell>
+						</listitem>
+					</template>
+				</listbox>
+			</vlayout>
+		</center>
+	</borderlayout>
+	
+	<window id="printDialog" position="center" width="300px" height="300px"  title="Hide Fields For Printing" visible="false">
+	<grid>
+	<columns>
+	<column></column>
+	
+	</columns>
+	
+	<rows>
+	
+	<row>
+	<checkbox label="Hide Quantity" checked="@bind(vm.objPrint.hideQuantity)"></checkbox>
+	</row>
+		
+	<row>
+	<hbox hflex="1" pack="center">
+	<button label="OK" onClick="printDialog.setVisible(false)"></button>
+	</hbox>
+	</row>
+	</rows>
+	</grid>			
+	</window>
+	</vlayout>
+</zk>

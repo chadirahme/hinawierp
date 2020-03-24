@@ -1,0 +1,277 @@
+<?page title="Hinawi Online" contentType="text/html;charset=UTF-8"?>
+<zk:zk xmlns="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:zk="http://www.zkoss.org/2005/zul">
+<zk:zscript><![CDATA[
+void showme(int x)
+{
+	
+	if(x==0)
+	{
+		//lbl0.setStyle("cursor:pointer;color:green;text-decoration:none;background:#C6C6C6;font-size:14px;text-align:center;");
+	   v1.setVisible(false);
+	   v0.setVisible(true);
+	}	
+	
+}
+                
+                     
+]]></zk:zscript>
+             
+<html>
+<head>
+			<link rel="shortcut icon" href="images/favicon.ico" />
+			<meta property="og:title" content="Example page" />
+			<meta property="og:image" content="http://hinawi2.dyndns.org:8181/sata/images/favicon.ico" />
+			<meta property="og:url" content="http://hinawi2.dyndns.org:8181/sata/" />
+	
+		</head>
+</html>
+<zk:borderlayout hflex="1" style="background:none" >
+ <!-- <zk:west width="170px" maxsize="250" margins="1,105,1,1" border="none">
+  
+  <zk:vlayout>
+  
+ 	<br/>
+ 	<zk:label onClick="showme(0)" style="cursor:pointer;color:#2c6f99;text-decoration:underline;background:none;font-weight:bold;font-size:14px;">Why Explorer Computer</zk:label>
+ 
+
+  <br/>
+  <a href="http://hinawi2.dyndns.org:8181/sata/documents/AboutExplorerComputer.pdf" target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;">About Company (PDF)</a>
+ 
+  </zk:vlayout>
+  
+  </zk:west> -->
+  
+  <zk:center margins="1,105,1,1" border="none" hflex="1" autoscroll="true">
+<zk:vlayout>
+
+<zk:vbox id="v1">
+<!--<zk:include src="slider.zul"></zk:include>-->
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+
+<html>
+<body>
+<table border="0" style="width:900px">
+<tr>
+<td style="width:100%">
+
+<h1><div style="font-size:14px;text-decoration:underline;font-weight:bold;">Introduction</div></h1>
+<br/>
+<p >
+Explorer Computer LLC, a business known to be one of the best in the Region when it comes to Software Development.<br/><br/>
+ Explorer Computer was established in year 1998 
+and is based in Abu Dhabi, United Arab Emirates. With over 15 years of experience in the industry, 
+we bring consumers Hinawi Software. <br/><br/>
+We also provide our consumers with QuickBooks, which is the number one,
+ rated small business accounting software. <br/><br/>
+ Hinawi software and QuickBooks are a package deal together not only will consumers be able to manage small businesses 
+ but also conglomerates with different types of industries.  
+</p>
+
+
+<h1><div style="font-size:14px;text-decoration:underline;font-weight:bold;">Software</div></h1>
+<br/>
+
+
+<p style="font-size:14px;font-weight:bold;"> 1.	Hinawi Business Management (Hinawi ERP) Ver.1:</p>
+<ul>
+<li>•	(Hinawi ERP) is Desktop Version.</li>
+<li>•	Built to meet the user’s requirements the way he expected.</li>
+<li>•	Integrated modules in one software.</li>
+<li>•	Fully integrated with QuickBooks Accounting.</li>
+<li>•	It covers all missing Forms or modules in QuickBooks.</li>
+<li>•	Modules are: Accounting, CRM, HR  &amp; Payroll, Timesheet, WPS, Fixed Assets, Real Estate, and Garage Workshop. </li>
+
+</ul>
+
+
+<p style="font-size:14px;font-weight:bold;">2.	Hinawi Web application:</p>
+<ul>
+<li>•	Integrated with (Hinawi ERP) desktop application.</li>
+<li>•	Can run stand alone.</li>
+<li>•	Online integrated modules.</li>
+<li>•	Beta Version.</li>
+</ul>
+
+<p style="font-size:14px;font-weight:bold;">3.	QuickBooks Accounting Software (Ready Made)</p>
+<ul>
+<li>•	We are Certified Pro Advisors of QuickBooks since 1998. </li>
+<li>•	We provided training and support in different countries in MENA.</li>
+</ul>
+
+
+<h1><div style="font-size:14px;text-decoration:underline;font-weight:bold;">Why Explorer Computer ?</div></h1>
+<br/>
+<ul>
+<li>•	Our main objective in the business is customer satisfaction. </li>
+<li> •	We believe we are the first Certified Pro Advisors, consultants and authorized distributors of QuickBooks Accounting Software in MENA.</li>
+<li> •	 We have over 15 years of experience in serving the market.</li>
+<li> • Based on long experience in the market, we built our company software to fit the requirements of companies and meet their expectations.</li>
+<li> •	Strong experience in integration software with QuickBooks.</li>
+<li> •	Our company is well known among top Auditing Firms in UAE.</li>
+<li> •	We have provided Hinawi Software to companies in all industries that operate in the private and public sector.</li>
+</ul>
+
+<!-- <h1><div style="font-size:14px;text-decoration:underline;font-weight:bold;">Services, Training and Support</div></h1>
+<br/>
+<ul>
+<li> • 	We provide professional training and support on Hinawi and QuickBooks Accounting.</li>
+<li> We do training at customers’ office or in our office as agreement. Training is based on the customer daily activities on real documents.</li>
+<li> After finishing the training session, trainees are given with assignment base on the training to perform themselves for better understanding and clarifications.</li>
+<li> •	We help customers by importing there data for quick start using the software’s.</li>
+<li>•	We can import data from other programs by exporting all transaction from the program to Excel then imported as Journal Voucher.</li>
+<li> •	Special Programming.</li>
+<li> •	Converting data from different versions of QuickBooks to USA version.</li>
+<li>•	Consulting and evaluating software’s.</li>
+
+</ul>
+
+
+<h1><div style="font-size:14px;text-decoration:underline;font-weight:bold;">Accounting Services and Data updating:</div></h1>
+<br/>
+<div>Using combined experience in both accounting and software, Explorer Computer provides accounting services to companies either at client’s office or at our office:</div>
+
+<br/>
+
+<ul>
+<li>•	Bookkeeping, Updating Accounts and Internal audit.</li>
+<li>•	Assistance in preparations for external audit.</li>
+<li>•	Assistance to expedite the works of an accountant and prepare financial reports faster.</li>
+<li>•	Following the International Accounting Standards.</li>
+<li>•	Helping companies to re-enter all transactions or pending transactions from previous months or years for better presentation and reporting using Hinawi 
+or QuickBooks Accounting. At the end of the job, we provide to the company 
+standard financial reports with analysis like: Trial Balance, Profit  &amp; Loss, 
+Balance Sheet, Customer  &amp; Vendor Balance Details, General Ledger and others.
+</li>
+<li></li>
+<li></li>
+</ul> -->
+
+
+<br/>
+<br/>
+</td>
+</tr>
+</table>
+
+</body>
+</html>  
+
+</div>
+</div>
+</body>
+</html>
+
+</zk:vbox>
+
+
+
+
+<zk:vbox id="v0" visible="false">
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>Why Explorer Computer</h1>
+<br/>
+<html>
+<body>
+
+<br/>
+<ul>
+<li>•	Our main objective in the business is customer satisfaction. </li>
+<li> •	We believe we are the first Certified Pro Advisors, consultants and authorized distributors of QuickBooks Accounting Software in MENA.</li>
+<li> •	 We have over 15 years of experience in serving the market.</li>
+<li> • Based on long experience in the market, we built our company software’s to fit the requirements of companies and it’s built the way they expected.</li>
+<li> •	Strong experience in integration software’s with QuickBooks.</li>
+<li> •	Our company is well known among top Auditing Firms in UAE.</li>
+<li> •	We provide our software’s and services to different types of business activities and to Private and semi governments companies.</li>
+</ul>
+
+</body>
+</html>
+</div>
+</div>
+</body>
+</html>
+
+
+
+
+</zk:vbox>
+
+</zk:vlayout>
+</zk:center>
+
+
+	<zk:east title="Contacts" size="18%"  margins="1,1,45,1" border="none">
+	<zk:include src="rightmenu.zul"></zk:include>
+		
+</zk:east>
+  </zk:borderlayout>
+
+	<!-- <html>
+		<head>
+			<meta property="og:title" content="Example page" />
+			<meta property="og:image" content="http://hinawionline.com/images/ExplorerLogo.jpg" />
+			<meta property="og:url" content="http://hinawionline.com/" />
+
+			<script type="text/javascript"
+				src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-52d7ebf25b7bbe87"></script>
+			<script type="text/javascript">
+				addthis.layers({
+				'theme' : 'light',
+				'share' : {
+				'position' : 'right',
+				'numPreferredServices' : 5
+				},
+				'follow' : {
+				'services' : [
+				{'service': 'facebook', 'id': 'hinawisoftware'},
+				{'service': 'twitter', 'id': 'hinawisoftware'},
+				{'service':
+				'linkedin', 'id': 'hatem-hinnawi/23/99/90a'},
+				{'service':
+				'google_follow', 'id': 'u/0/s/hatem%20hinawi'}
+				]
+				},
+				'whatsnext' : {},
+				'recommended' : {
+				'title': 'Hinawi Software '
+				}
+
+				});
+			</script>
+
+
+
+
+			<style>
+
+				div {
+				text-align: justify;
+				text-justify: inter-word;
+				}
+
+				#floater {
+				height:150px;
+				width: 150px;
+				position: fixed;
+				bottom:
+				25px;
+				right: 70px;
+				}
+
+			</style>
+		</head>
+		
+		
+		
+
+	</html> -->
+
+</zk:zk>

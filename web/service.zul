@@ -1,0 +1,68 @@
+<?page title="Hinawi Software" contentType="text/html;charset=UTF-8"?>
+
+<?link rel="stylesheet" type="text/css" href="/css/menuStyle.css"?>
+<?link rel="stylesheet" type="text/css" href="/css/hstyle.css"?>
+
+<zk>
+		
+ <zscript>
+    <![CDATA[
+            void changeMe(String src)
+            {
+            	incCenter.setSrc(src);
+            }
+    ]]>
+  </zscript>
+
+<borderlayout apply="org.zkoss.bind.BindComposer" id="mainlayout2"
+	viewModel="@id('vm') @init('layout.Pagecomposer')">
+	
+	<north  height="90px">
+	<include src="layout/header.zul"></include>
+	</north>
+            <west title="Products &amp; Services" size="180px" vflex="1" hflex="1" maxsize="250" splittable="true" collapsible="true">
+    <vlayout>
+   
+    
+    
+               <grid hflex="1" vflex="1" sclass="sidebar" >
+	<columns>		
+		<column/>
+	</columns>
+	<rows>
+		<row>		
+		<vlayout>
+		
+				
+		<a href="">				
+					  <label value="Products"  
+					  style="color:blue;text-decoration:underline;cursor: hand;" onClick='changeMe("products.zul")'/> 
+					  </a>
+					  	<a href="">	
+					  <label value="Services"  
+					  style="color:blue;text-decoration:underline;cursor: hand;" onClick='changeMe("services.zul")'/> 
+					  </a>
+					  
+					
+					  
+					
+					  				
+		
+		</vlayout>
+		</row>
+			
+	</rows>
+</grid>
+          </vlayout>     
+               
+            </west>
+           
+<center autoscroll="true">
+<include id="incCenter" self="@define(content)" src="products.zul">
+
+
+</include>
+</center>
+</borderlayout>
+
+</zk>

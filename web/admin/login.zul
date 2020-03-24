@@ -1,0 +1,96 @@
+<?page title="Hinawi Software" contentType="text/html;charset=UTF-8"?>
+<window onOK="@command('loginClicked')" border="none"
+apply="org.zkoss.bind.BindComposer"
+  	viewModel="@id('vm') @init('admin.AdminViewModel')">
+<zk>
+
+	<hbox height="50px"></hbox>
+	<hbox  align="center" pack="center" spacing="20px" width="800px">
+	<vbox width="190px"></vbox>
+	
+	<grid width="800px" >
+	
+	<rows>
+	<row>
+	<cell colspan="2" style="background:#2C6F99;margin:20px">
+	<label value="Hinawi Software" style="font-size:18px;font-weight:bold;line-height:32px;color:white;text-decoration:none;text-align:center"></label>
+	</cell>
+	</row>
+	
+	<row>
+	<cell hflex="1" valign="top">
+	<vlayout>
+	<label style="color:rgb(44, 111, 153);font-size: 16px;font-weight: bold;">
+	Welcome to Hinawi Software Solutions!
+	</label>
+	<div style="color: rgb(66, 66, 66);font-size: 80%;">
+		Hinawi Software provides great solutions for all business software needs in the MENA region. 
+		Please note this is trial version, don't put real data. Thank you for your time.
+		</div>
+	</vlayout>
+	
+	</cell>
+	<cell hflex="2">
+	<grid>
+	<columns>
+        <column  hflex="1"/>
+        <column hflex="2"/>
+    </columns>
+    
+		<rows>
+		
+		<row>
+		<cell colspan="2">
+		<label value="Sign In" style="font-size:18px;font-weight:bold;line-height:32px;text-decoration:none;text-align:center"></label>
+		
+		</cell>
+		</row>
+		
+		<row>
+		<cell>
+		User Name
+		</cell>
+		<cell>
+		<textbox hflex="1" value="@bind(vm.objLoginModel.username)"></textbox>
+		</cell>
+		</row>
+		
+		<row>
+		<cell>
+		Password
+		</cell>
+		<cell>		
+		<textbox type="password" hflex="1" value="@bind(vm.objLoginModel.userpwd)"></textbox>
+		</cell>
+		</row>
+		
+		
+			
+		<row>
+		<cell>		
+		</cell>
+		<cell align="right">
+		<button label="Submit" onClick="@command('loginClicked')"   style="background:rgb(44, 111, 153);color:white;font-weight:bold"></button>
+		
+		</cell>
+		</row>
+		
+		<row>		
+		<cell colspan="2">
+		<label value="@bind(vm.message)" style="color:red"></label>
+		
+		</cell>
+		</row>
+		
+		</rows>
+	</grid>
+	
+	
+	</cell>
+	</row>
+	</rows>
+	</grid>
+	
+	</hbox>
+</zk>
+</window>

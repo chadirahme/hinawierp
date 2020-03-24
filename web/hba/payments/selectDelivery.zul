@@ -1,0 +1,90 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="selectDeliveryPopUp" apply="org.zkoss.bind.BindComposer" mode="highlighted" title="select Stock Delivery" border="normal"
+		position="center,center" closable="true" sizable="true" onCancel="selectDeliveryPopUp.detach()" width="40%" height="50%">
+
+		<borderlayout apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('hba.SelectDelivery')">
+			<center autoscroll="true" border="none">
+				<vlayout hflex="1" vflex="1">
+					<listbox model="@load(vm.deliveryModel)" vflex="1" id="deliveryModelReport" emptyMessage="No data found" hflex="1"
+						width="920px" selectedItems="@bind(vm.selectedDelivery)" checkmark="true" multiple="true">
+						<auxhead sclass="category-center">
+							<auxheader colspan="1" label="" width="50px">
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="80px" value="@bind(vm.filter.refNumber)" onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<!-- <image src="/images/funnel.png" />
+								<textbox instant="true" width="80px" value="@bind(vm.filter.deliveryDateStr)" onChange="@command('changeFilter')" /> -->
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="80px" value="@bind(vm.filter.memo)" onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="80px" value="@bind(vm.filter.itemName)" onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<!-- <image src="/images/funnel.png" />
+								<textbox instant="true" width="80px" value="@bind(vm.filter.itemName)" onChange="@command('changeFilter')" /> -->
+							</auxheader>
+						</auxhead>
+						<listhead menupopup="auto" sizable="true">
+							<listheader label="" width="50px" />
+							<listheader label="Ref. No" sort="auto('refNumber')" width="120px" />
+							<listheader label="Date" sort="auto('txnDateStr')" width="120px" />
+							<listheader label="Memo" sort="auto('memo')" width="150px" />
+							<listheader label="Item Name" sort="auto('itemName')" width="120px" />
+							<listheader label="Quantity" sort="auto('quantity')" width="120px" />
+						</listhead>
+						<template name="model">
+							<listitem style="@bind(each.level eq 'S' ? '' : 'background-color: #529FDE;')">
+								<listcell>
+								</listcell>
+								<listcell>
+									<label value="@bind(each.refNumber)" visible="@bind(!each.show)"/>
+								</listcell>
+								<listcell>
+									<label value="@bind(each.txnDateStr)" visible="@bind(!each.show)"/>
+								</listcell>
+								<listcell>
+									<label value="@bind(each.memo)" visible="@bind(each.show)"/>
+								</listcell>				
+								<listcell>
+									<label value="@bind(each.itemName)" visible="@bind(each.show)"/>
+								</listcell>
+								<listcell>
+									<label value="@bind(each.quantity)" visible="@bind(each.show)"/>
+								</listcell>
+							</listitem>
+						</template>
+					</listbox>
+					<div>
+						<grid>
+							<columns>
+								<column></column>
+								<column></column>
+							</columns>
+							<rows>
+								<row>
+									<cell align="right">
+										<button label="Select" onClick="@command('selectDelivery',cmp=selectDeliveryPopUp)"></button>
+										<button label="Close" onClick="selectDeliveryPopUp.detach()"></button>
+									</cell>
+								</row>
+							</rows>
+						</grid>
+					</div>
+				</vlayout>
+			</center>
+		</borderlayout>
+	</window>
+</zk>
+
+
+

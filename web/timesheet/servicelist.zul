@@ -1,0 +1,106 @@
+<zk>
+
+<borderlayout>
+	
+<center autoscroll="true" >
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('timesheet.ServiceListViewModel')" vflex="1" style="@bind(vm.language eq 'ar' ? 'direction: rtl;' : '')">
+	 
+	
+	 
+	 <label value="${labels.ts.servicelist.title}" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	 
+	 <grid>
+			<columns>		
+			<column  width="150px"></column>
+			<column  width="180px"></column>
+			<column  width="100px"></column>
+			<column  width="120px"></column>
+			<column  width="120px"></column>
+			<column  width="180px"></column>
+			<column  width="180px"></column>							
+			</columns>
+			<rows>
+			
+			<row>
+			<label value=""></label>
+		
+			<cell colspan="2">
+			<button label="${labels.ts.servicelist.AddNew}"  onClick="@command('addNewCommand')" visible="@bind(vm.companyRole.canAdd)"></button>	
+			</cell>
+			</row>
+			
+			
+			</rows>
+			
+			</grid>
+			
+			
+			<grid vflex="1"  emptyMessage="There is no data"
+        	model="@load(vm.lstPositions) @template(each.editingStatus ? 'editable' : 'noneditable')" >
+        				<auxhead sclass="category-center">						
+					
+					<auxheader colspan="2"></auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="160px" 
+								value="@bind(vm.filter.name)" onChange="@command('changeFilter')"/>
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="160px" 
+								value="@bind(vm.filter.arname)" onChange="@command('changeFilter')"/>
+						</auxheader>												
+						
+						</auxhead>
+						
+        	<columns sizable="true" >
+        	       <column label="${labels.ts.projectlist.edit}" width="150px" align="@bind(vm.language eq 'ar' ? 'right' : 'left' )" visible="@bind(vm.companyRole.canModify)"></column>   
+        	      <column label="${labels.ts.projectlist.delete}" width="100px" align="@bind(vm.language eq 'ar' ? 'right' : 'left' )" visible="@bind(vm.companyRole.canDelete)"></column>    	        	  
+        	      <column  label="${labels.ts.projectlist.enName}" width="200px" sort="auto(enDescription)" align="@bind(vm.language eq 'ar' ? 'right' : 'left' )"/>
+        	      <column  label="${labels.ts.projectlist.arName}" width="200px" sort="auto(arDescription)" align="@bind(vm.language eq 'ar' ? 'right' : 'left' )"/>        	      
+        	      	         
+        	</columns>
+        	<template name="editable">
+        	
+        	<row>   
+        	 <div>
+                        <button
+                            label="${labels.ts.projectlist.save}"
+                            onClick="@command('confirm', row=each)" />
+                        <button
+                           label="${labels.ts.projectlist.cancel}"
+                            onClick="@command('changeEditableStatus', row=each)" />
+                    </div> 
+                    <div></div>    	
+        	<textbox value="@load(each.enDescription) @save(each.enDescription, before='confirm')" constraint="no empty : *" hflex="1" ></textbox>        
+        	<textbox value="@load(each.arDescription) @save(each.arDescription, before='confirm')" hflex="1"></textbox>        
+        	
+        	</row>
+        	</template>
+        	
+        	<template name="noneditable">
+        	<row>  
+        	<button
+                        image="/images/rowedit.png"
+                        onClick="@command('changeEditableStatus', row=each)" />
+                        <button
+                        image="/images/cross.png"
+                        onClick="@command('deleteCommand', row=each)" disabled="false" />      	
+        	<label value="@bind(each.enDescription)"></label>
+        	<label value="@bind(each.arDescription)"></label>             
+        	
+        	</row>
+        	
+        	  
+        	  </template>
+        	
+        	</grid>
+					
+			
+			</vlayout>
+			</center>
+			</borderlayout>
+			
+			</zk>

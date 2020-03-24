@@ -1,0 +1,303 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<vlayout apply="org.zkoss.bind.BindComposer" vflex="1" hflex="1"
+		viewModel="@id('vm') @init('hba.BillReportViewModel')">
+
+	<borderlayout vflex="1" hflex="1">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<label value="Bill Report"
+					style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+				<grid>
+					<columns>
+						<column width="200px"></column>
+						<column width="200px"></column>
+						<column width="200px"></column>
+						<column width="200px"></column>
+					</columns>
+					<rows>
+						<row>
+							<cell>
+								<button id="btn1" label="View" width="100px"
+									visible="@bind(vm.companyRole.canView)" onClick="@command('searchCommand')"></button>
+							</cell>
+							<cell>
+								<button id="btn2" label="Reset" width="100px"
+									onClick="@command('resetCashInvoiceReport')"></button>
+							</cell>
+							<!-- <cell> <button label="PDF Summary" visible="@bind(vm.companyRole.canExport)" 
+								onClick="@command('exportCommand',ref=customerSummaryReport)"></button> </cell> -->
+							<cell>
+								<button label="Export To Excel" visible="@bind(vm.companyRole.canExport)"
+									></button>
+									<!-- <onClick="@command('exportToExcel',ref=billreportId)"> -->
+							</cell>
+							<cell>
+								<button label="Create New Bill" onClick="@command('createBill')"
+									visible="@bind(vm.companyRole.canAdd)"></button>
+							</cell>
+
+						</row>
+						
+						 <row> <cell> <label value="Date Range :"></label> </cell> <cell> 
+							<hbox> <label value="From"></label> <datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy"></datebox> 
+							</hbox> </cell> <cell> <hbox> <label value="To"></label> <datebox value="@bind(vm.toDate)" 
+							format="dd/MM/yyyy"></datebox> </hbox> </cell> 
+							
+							<cell>
+							 <button label="Hide For Printing" onClick="printDialog.doModal()"></button>							
+							 </cell>
+							</row> 
+						
+					</rows>
+				</grid>
+				<listbox id="billreportId" model="@load(vm.billreport)"
+					hflex="1" width="620px" vflex="1" emptyMessage="No data found">
+					<auxhead sclass="category-center">
+						<auxheader colspan="1">
+							<!-- <button label="+/-" onClick="@command('colseGroup')"></button> -->
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="60px" value="@bind(vm.filter.billNo)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.txnDate)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.dueDate)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.vendor)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.mainMemo)" onChange="@command('changeFilter')" />
+						</auxheader>
+							<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.accountName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.accountNUmber)" onChange="@command('changeFilter')" />
+						</auxheader>	
+						<!-- <auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.itemName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.description)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.quantity)" onChange="@command('changeFilter')" />
+						</auxheader> -->
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.status)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<!-- <auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="40px" value="@bind(vm.filter.customer)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="40px" value="@bind(vm.filter.className)" onChange="@command('changeFilter')" />
+						</auxheader> -->
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.amount)" onChange="@command('changeFilter')" />
+						</auxheader>
+					</auxhead>
+					<listhead menupopup="auto" sizable="true">
+						<listheader label=" " width="110px" />
+						<listheader label="Bill No. " sort="auto('billNo')" width="100px" />
+						<listheader label="Bill Date" sort="auto('txnDate')" width="120px" />
+						<listheader label="Due Date" sort="auto('dueDate')" width="100px" />
+						<listheader label="Vendor" sort="auto('vendor')" width="250px" />
+						<listheader label="Memo" sort="auto('mainMemo')" width="250px" />
+						<listheader label="Account Name" sort="auto('accountName')" width="250px" />
+						<listheader label="Account No." sort="auto('accountNUmber')" width="120px" />
+						<!-- <listheader label="Item" sort="auto('itemName')" width="150px" />
+						<listheader label="Description" sort="auto('description')" width="150px" />
+						<listheader label="Qty" sort="auto('quantity')" width="80px" /> -->
+						<listheader label="Status" sort="auto('status')" width="120px" />
+						<!-- <listheader label="Customer job" sort="auto('customer')" width="120px" />
+						<listheader label="Class" sort="auto('className')" width="120px" /> -->
+						<listheader label="Amount" sort="auto('amount')" width="100px" />
+
+					</listhead>
+					<template name="model">
+						<listitem>
+						<listcell>
+								<menubar sclass="logoutbanner">
+									<menu label="Activities" image="/images/dropMenuLogo.png">
+										<menupopup>
+											<menuitem label="Edit" image="/images/rowedit.png" onClick="@command('editBill', row=each)"></menuitem>
+											<menuitem label="View" image="/images/view.png" onClick="@command('viewBill', row=each)"></menuitem>
+											<menuitem label="Print" image="/images/print.png" onClick="@command('printInvoice', row=each)"></menuitem><!-- 
+											<menuitem label="E-mail" image="/images/email.gif" onClick="@command('CustomerSendEmail',row=each)"></menuitem>	 -->
+											</menupopup>
+									</menu>
+								</menubar>
+							</listcell>						
+							<listcell>
+								<label value="@bind(each.billNo)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.txnDate)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.dueDate)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.vendor)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.mainMemo)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.accountName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.accountNUmber)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.status)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.amount)" />
+							</listcell>
+
+						</listitem>
+					</template>
+					<!-- <template name="model:group">
+						<group>
+							<cell>
+								<button label="Edit" onClick="@command('editBill',row=each)"
+									visible="@bind(vm.companyRole.canModify)" />
+								<button label="View" onClick="@command('viewBill', row=each)"
+									visible="@bind(vm.companyRole.canView)" />
+								<button label="Print" onClick="@command('printInvoice', row=each)"
+									visible="@bind(vm.companyRole.canPrint)" />
+								<label value=" Bill No. : "></label>
+								<label value="@load(each[0])"></label>
+								<label value=" | Bill Date : "></label>
+								<label value="@load(each[1])"></label>
+								<label value=" | Due Date : "></label>
+								<label value="@load(each[2])"></label>
+								<label value=" | Vendor Name : "></label>
+								<label value="@load(each[3])"></label>
+								<label value=" | Total Amount : "></label>
+								<label value="@load(each[7])"></label>
+							</cell>
+						</group>
+					</template>
+					<template name="model">
+						<row
+							style="@bind(each.customer eq 'Cash' ? 'background:#CCF5EB;' : 'background:#CCF5EB;')">
+							<label value="" />
+							<label value="@bind(each.billNo)" />
+							<label value="@bind(each.txnDate)" />
+							<label value="@bind(each.dueDate)" />
+							<label value="@bind(each.vendor)" />
+							<label value="@bind(each.mainMemo)" />
+							<label value="@bind(each.accountName)" />
+							<label value="@bind(each.accountNUmber)" />
+							<label value="@bind(each.itemName)" />
+							<label value="@bind(each.description)" />
+							<label value="@bind(each.quantity)" />
+							<label value="@bind(each.status)" />
+							<label value="@bind(each.customer)" />
+							<label value="@bind(each.className)" />
+							<label value="@bind(each.amount)" />
+							<label value="${c:formatNumber(each.amount, '###,###,###.00')}" />
+						</row>
+
+					</template> -->
+					<template name="model:groupfoot">
+						<groupfoot style="font-weight:bold;background:#D6E0FF">
+							<cell colspan="13" style="text-align: right; padding-right: 15px">
+								<label value="Total Amount : "></label>
+								<label value="@load(each[1])"></label>
+
+							</cell>
+						</groupfoot>
+					</template>
+
+
+				</listbox>
+				<!-- <hbox align="right">
+					<label value="Total Quotation
+					: "
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<label value="@load(vm.totalNoOfInvoice)"
+						style="color:#2c6f99;text-align: right;font-weight: 
+					bold;"></label>
+					<space></space>
+					<space></space>
+					<label value="Total Customers
+					: "
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<label value="@load(vm.totalNoOfCustomer)"
+						style="color:#2c6f99;text-align: right;font-weight: 
+					bold;"></label>
+					<space></space>
+					<label value="Total Amount
+					: "
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<label
+						value="@load(vm.totalAmount) @converter('formatedNumber', format='###,###,###.00')"
+						style="color:#2c6f99;text-align: right;font-weight: 
+					bold;"></label>
+					<space></space>
+					
+				</hbox> -->
+
+			</vlayout>
+		</center>
+	</borderlayout>
+	
+	<window id="printDialog" position="center" width="300px" height="300px"  title="Hide Fields For Printing" visible="false">
+	<grid>
+	<columns>
+	<column></column>
+	
+	</columns>
+	
+	<rows>
+	<row>
+	<checkbox label="Hide Item" checked="@bind(vm.objPrint.hideSrNo)"></checkbox>
+	</row>
+	<row>
+	<checkbox label="Hide Quantity" checked="@bind(vm.objPrint.hideQuantity)"></checkbox>
+	</row>
+	<row>
+	<checkbox label="Hide Cost" checked="@bind(vm.objPrint.hideRate)"></checkbox>
+	</row>
+	<row>
+	<checkbox label="Hide Total" checked="@bind(vm.objPrint.hideAmount)"></checkbox>
+	</row>
+	<row>
+	<checkbox label="Hide Word Amount" checked="@bind(vm.objPrint.hideWordAmount)"></checkbox>
+	</row>
+	
+	<row>
+	<hbox hflex="1" pack="center">
+	<button label="OK" onClick="printDialog.setVisible(false)"></button>
+	</hbox>
+	</row>
+	</rows>
+	</grid>			
+	</window>
+	
+	
+	</vlayout>
+	
+</zk>

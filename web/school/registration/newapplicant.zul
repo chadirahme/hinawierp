@@ -1,0 +1,220 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<vlayout apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('school.RegistrationViewModel' , type='newapplicant' )"  validationMessages="@id('vmsgs')">
+	
+	
+	 <grid id="formdiv" form="@id('fx') @load(vm.objApplicant) @save(vm.objApplicant, before='saveApplicantCommand') @validator(vm.todoValidator)">
+	 <columns>
+	 <column width="100px"></column>
+	 <column width="200px"></column>
+	 <column width="100px"></column>
+	 <column width="200px"></column>
+	  <column width="100px"></column>
+	 <column width="200px"></column>
+	 </columns>
+	 
+	 <rows>
+	 <row>
+	 <label value="School"></label>
+	 <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstSchool)" selectedItem="@bind(vm.selectedSchool)">
+	<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item.enschoolname)"></listcell>
+					</listitem>
+				</template>
+
+	</listbox>
+	
+	 <label value="Program"></label>
+	 <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstPrograms)" selectedItem="@bind(vm.selectedProgram)">
+	<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item.enprogramname)"></listcell>
+					</listitem>
+				</template>
+
+	</listbox>
+	
+	<label value="Grade"></label>
+	 <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstGrades)" selectedItem="@bind(vm.selectedGrade)">
+	<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item.enGradeName)"></listcell>
+					</listitem>
+				</template>
+
+	</listbox>
+	 </row>
+	 
+	 <row>
+	 <cell colspan="6">
+	 <label value="English Name As In Passport"></label>
+	 </cell>
+	 </row>
+	 
+	 <row>
+	 <cell colspan="2">
+	 <textbox placeholder="First Name" hflex="1" value="@bind(fx.enFirstName)" ></textbox>
+	 </cell>
+	 <cell colspan="2">
+	  <textbox placeholder="Middle Name" hflex="1" value="@bind(fx.enMiddleName)"></textbox>
+	  </cell>
+	  <cell colspan="2">
+	   <textbox placeholder="Last Name" hflex="1" value="@bind(fx.enLastName)"></textbox>
+	   </cell>
+	 </row>
+	 
+	  <row>
+	 <cell colspan="6">
+	 <label value="Arabic Name As In Passport"></label>
+	 </cell>
+	 </row>
+	 
+	 <row>
+	 <cell colspan="2">
+	 <textbox placeholder="الاسم الاخير" hflex="1" value="@bind(fx.arLastName)"></textbox>
+	 </cell>
+	 <cell colspan="2">
+	  <textbox placeholder="الاسم المتوسط" hflex="1" value="@bind(fx.arMiddleName)"></textbox>
+	  </cell>
+	  <cell colspan="2">
+	   <textbox placeholder="الاسم الاول" hflex="1" value="@bind(fx.arFirstName)"></textbox>
+	   </cell>
+	 </row>
+	 
+	 
+	 
+	 <row>
+	 <label value="Student Native"></label>
+	 <cell>
+	 <radiogroup hflex="1" selectedItem="@bind(vm.selectedNative)">
+			<radio label="Arab" value="1"></radio>
+			<radio label="Non Arab" value="2"></radio>			
+			</radiogroup>
+	 </cell>
+	 
+	 <label value="Gender"></label>
+	 <cell>
+	 <radiogroup hflex="1" selectedItem="@bind(vm.selectedGender)">
+			<radio label="Male" value="1"></radio>
+			<radio label="Female" value="2"></radio>			
+			</radiogroup>
+	 </cell>
+	 
+	 </row>
+	 
+	 <row>
+	 <label value="Father Mobile"></label>
+	 <textbox hflex="1" value="@bind(fx.fatherMobile)"></textbox>
+	 
+	  <label value="Father Email" ></label>
+	 <textbox hflex="1" value="@bind(fx.fatherEmail)" constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address"></textbox>
+	 
+	 </row>
+	 
+	 <row>
+	 <label value="Mother Mobile"></label>
+	 <textbox hflex="1" value="@bind(fx.motherMobile)"></textbox>
+	 
+	  <label value="Mother Email"></label>
+	 <textbox hflex="1" value="@bind(fx.motherEmail)" constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address"></textbox>
+	 
+	 </row>
+	 
+	 <row>
+	 <label value="DOB"></label>
+	 <cell colspan="2">
+	 <hbox>
+	 
+	 <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstDays)" selectedItem="@bind(vm.selectedDay)">
+	<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+
+	</listbox>
+	
+	<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstMonths)" selectedItem="@bind(vm.selectedMonth)">
+	<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+
+	</listbox>
+	
+	<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstYears)" selectedItem="@bind(vm.selectedYear)">
+	<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+
+	</listbox>
+	 </hbox>
+	 </cell>
+	 </row>
+	 
+	 <row>
+	 <label value="Country Of Birth"></label>
+	 <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstCountryofBirth)" selectedItem="@bind(vm.selectedCountryofBirth)">
+	<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item.enDescription)"></listcell>
+					</listitem>
+				</template>
+
+	</listbox>
+	
+	<label value="Nationality"></label>
+	 <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstNationality)" selectedItem="@bind(vm.selectedNationality)">
+	<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item.enDescription)"></listcell>
+					</listitem>
+				</template>
+
+	</listbox>
+	 
+	 </row>
+	 
+	 
+	 <row>
+	  <label value="Religion"></label>
+	 <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstReligion)" selectedItem="@bind(vm.selectedReligion)">
+	<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item.enDescription)"></listcell>
+					</listitem>
+				</template>
+
+	</listbox>
+	 </row>
+	 
+	 <row>
+	 <cell colspan="6" align="center">
+	 <button label="Save" onClick="@command('saveApplicantCommand')"></button>
+	 </cell>
+	 </row>
+	 
+	 <row>
+	  <cell colspan="6" align="left">
+	 <label value="@bind(vmsgs['lastnameContentError'])" style="color: red;" />
+	 
+	 <grid id="msggrid" model="@bind(vmsgs.texts[formdiv])" visible="@bind(not empty vmsgs.texts[formdiv])">
+    <template name="model" var="msg">
+        <row>
+            <label value="@bind(msg)" style="color: red;" />
+        </row>
+    </template>
+	</grid>
+	 </cell>
+	 </row>
+	 </rows>
+	 </grid>
+	 
+	</vlayout>
+</zk>

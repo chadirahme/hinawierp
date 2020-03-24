@@ -1,0 +1,712 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="customerModalDialog" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Add/Edit Customer" border="normal" position="center,center"
+		closable="true" sizable="true" onCancel="customerModalDialog.detach()"
+		width="1250px" height="550px">
+		<zscript>
+			void openContexMenu(Integer type) {
+			if(type==1)
+			editPopupCustomerContact.open(lstCustomerContactGrid);
+			}
+		</zscript>
+		<borderlayout apply="org.zkoss.bind.BindComposer" style="overflow:auto"
+			viewModel="@id('vm')  @init('hba.EditCustomerViewModel')">
+			<center autoscroll="true" border="none">
+				<vlayout style="overflow:auto">
+
+					<menupopup id="editPopupCustomerContact">
+						<menuitem label="Insert Line"
+							onClick="@command('insertCheckItems',row=vm.contact)"></menuitem>
+						<menuitem label="Delete Line"
+							onClick="@command('deleteCheckItems',row=vm.contact)"></menuitem>
+					</menupopup>
+
+					<tabbox width="100%"
+						form="@id('fx') @load(vm.selectedCustomer) @save(vm.selectedCustomer, before='updateCustomer')">
+						<tabs id="tabs">
+							<tab label="Customer" />
+							<tab label="Contact Information" />
+							<tab label="Additional Information" />
+							<tab label="Tenant" />
+							<tab label="Activities" />
+							<tab label="Status History" />
+							<tab label="Notes" />
+							<tab label="Attachments" />
+						</tabs>
+						<tabpanels>
+							<tabpanel>
+								<hbox id="uploadWindow2">
+									<grid>
+										<columns>
+											<column width="150px"></column>
+											<column width="188px"></column>
+											<column width="125px"></column>
+											<column width="188px"></column>
+											<column width="238px"></column>
+										</columns>
+										<rows>
+											<row>
+												<cell sclass="">English Name *:</cell>
+												<cell colspan="2">
+													<textbox value="@bind(fx.name)" maxlength="31"
+														hflex="1" />
+												</cell>
+												<cell>
+													<label>InActive :</label>
+												</cell>
+												<cell colspan="2">
+													<checkbox checked="@bind(vm.activeCustomer)"></checkbox>
+												</cell>
+
+											</row>
+
+											<row>
+												<cell sclass="">Arabic Name :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(fx.arName)" hflex="1" />
+												</cell>
+												<cell>
+													<label>Priority</label>
+												</cell>
+												<cell colspan="2">
+													<checkbox checked="@bind(vm.priority)"></checkbox>
+												</cell>
+											</row>
+
+											<row>
+												<cell sclass="">Print Cheque As :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(fx.printChequeAs)" maxlength="31"
+														hflex="1" />
+												</cell>
+												<cell sclass="">Country :</cell>
+
+												<cell colspan="2">
+													<listbox mold="select" model="@load(vm.countries)"
+														width="100%" selectedItem="@bind(vm.selectedCountry)">
+														<template name="model" var="country">
+															<listitem>
+																<listcell label="@load(country.enDescription)"></listcell>
+															</listitem>
+														</template>
+													</listbox>
+
+												</cell>
+											</row>
+											<row>
+												<!-- <cell sclass="">Company :</cell> <cell colspan="2"> <textbox 
+													value="@bind(fx.companyName)" hflex="1" /> </cell> -->
+												<cell>Sub Of</cell>
+												<cell colspan="2">
+													<checkbox id="l1" label="" onCheck="@command('doChecked')"
+														checked="@bind(vm.selectedCheckBox)" width="15px" />
+													<space></space>
+													<combobox autodrop="true" mold="rounded" hflex="1"
+														buttonVisible="true" model="@load(fx.subOfdropDown)"
+														readonly="true" id="comboSubOf" disabled="@bind(vm.disableSubOf)"
+														selectedItem="@bind(fx.selectedSubOf)">
+														<template name="model" var="option">
+															<comboitem label="${option.name}"
+
+																style="@bind(option.sublevel eq 0 ? 'color:black;font-weight:bold;' : option.sublevel eq 1 ? 'text-indent:30px;' : option.sublevel eq 2 ? 'text-indent:60px' : option.sublevel eq 3 ? 'text-indent:90px' : 'text-indent:120px')" />
+														</template>
+
+													</combobox>
+												</cell>
+												<cell sclass="">City :</cell>
+
+												<cell colspan="2">
+													<listbox mold="select" model="@load(vm.cities)"
+														width="100%" selectedItem="@bind(vm.selectedCity)">
+														<template name="model" var="city">
+															<listitem>
+																<listcell label="@load(city.enDescription)"></listcell>
+															</listitem>
+														</template>
+													</listbox>
+												</cell>
+
+											</row>
+
+											<row>
+												<cell sclass="">Contact :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(vm.contactName)" hflex="1" onChange="@command('contactChangeName',cmp=vm.contactName)"/>
+												</cell>
+
+												<cell sclass="">Street :</cell>
+
+												<cell colspan="2">
+													<listbox mold="select" model="@load(vm.streets)"
+														width="100%" selectedItem="@bind(vm.selectedStreet)">
+														<template name="model" var="street">
+															<listitem>
+																<listcell label="@load(street.enDescription)"></listcell>
+															</listitem>
+														</template>
+													</listbox>
+												</cell>
+											</row>
+											<row>
+												<cell sclass="">Phone :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(vm.contactPhone)" hflex="1" onChange="@command('contactChangePhone',cmp=vm.contactPhone)"/>
+												</cell>
+												<cell sclass="">Zip Code :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.zipCode)" hflex="1" />
+												</cell>
+
+											</row>
+											<row>
+												<cell sclass="">Altr. Phone :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(vm.contactMobile)" hflex="1" onChange="@command('contactChangeAPhone',cmp=vm.contactMobile)"/>
+												</cell>
+												<cell sclass="">P.O. Box :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.pobox)" hflex="1" />
+												</cell>
+
+											</row>
+											<row>
+												<cell sclass="">Fax :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(vm.contactFax)" hflex="1" onChange="@command('contactChangeFax',cmp=vm.contactFax)"/>
+												</cell>
+												<cell sclass="">Altr. Contact :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.altcontact)" hflex="1" />
+												</cell>
+
+											</row>
+											<row>
+
+												<cell sclass="">Email :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(vm.contactEmail)" hflex="1" onChange="@command('contactChangeemail',cmp=vm.contactEmail)" constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address"/>
+												</cell>
+												<cell sclass="">Mobile :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.mobile)" hflex="1" />
+												</cell>
+
+											</row>
+
+											<row>
+
+												<cell sclass="">Skype ID :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.skypeId)" hflex="1" />
+												</cell>
+												<cell sclass="">E-mail CC :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.cC)" hflex="1" />
+												</cell>
+
+
+											</row>
+
+											<row>
+
+
+												<cell sclass="">Website :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.website)" hflex="1" />
+												</cell>
+												
+												<cell sclass="" visible="@bind(vm.compSetting.useVat eq 'Y')">TRN Nos:</cell>
+
+												<cell colspan="2" visible="@bind(vm.compSetting.useVat eq 'Y')" >
+													<textbox value="@bind(fx.vatRegNo)" hflex="1" />
+												</cell>
+												
+												
+
+											</row>
+											<row>
+												<cell sclass="">Current Status</cell>
+												<cell colspan="5">
+													<textbox value="@bind(fx.statusDescription)" hflex="1" />
+												</cell>
+											</row>
+
+
+										</rows>
+
+									</grid>
+									<vbox id="uploadWindow1">
+										<window border="normal" width="130px" height="120Px"
+											id="uploadWindow" title="Upload An Image">
+											 
+											<image id="image">
+												<custom-attributes
+													org.zkoss.zul.image.preload="true" />
+											</image>
+										</window>
+
+										<button label="Choose Image" upload="true"
+											onUpload="@command('uploadFile',attId=4)"></button>
+										<hbox>
+											<label value="File Name" />
+											:
+											<label value="@bind(vm.attFile4)" />
+										</hbox>
+										<button label="Click To See Image" onClick="@command('loadImage')"></button>
+
+									</vbox>
+								</hbox>
+							</tabpanel>
+							<tabpanel>
+								<listbox model="@load(vm.contacts)" vflex="1"
+									id="lstCustomerContactGrid" hflex="1" mold="paging"
+									selectedItem="@bind(vm.contact)">
+									<listhead menupopup="auto">
+										<listheader label="Add/Delete" width="70px"></listheader>
+										<listheader label="Contact Person"></listheader>
+										<listheader label="Position"></listheader>
+										<listheader label="Phone"></listheader>
+										<listheader label="Mobile"></listheader>
+										<listheader label="Fax"></listheader>
+										<listheader label="Email"></listheader>
+										<listheader label="Default" visible="false"></listheader>
+
+									</listhead>
+									<template name="model" var="each">
+										<listitem>
+											<listcell>
+												<image src="/images/edit.png" width="20px" height="20px"
+													context="editPopupCustomerContact" onClick="openContexMenu(1)" />
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.name)" onChange="@command('customerChangeName',cmp=each)"/>
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.position)"/>
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.phone)" onChange="@command('customerChangePhone',cmp=each)"/>
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.mobile)" onChange="@command('customerChangeMobile',cmp=each)"/>
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.fax)" onChange="@command('customerChangeFax',cmp=each)"/>
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.email)" onChange="@command('customerChangeEmail',cmp=each)"/>
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.defaultFlag)" onChange="@command('customerChangeEmail',cmp=each)" visible="false"/>
+											</listcell>
+
+										</listitem>
+									</template>
+								</listbox>
+							</tabpanel>
+							<tabpanel>
+								<hbox id="Additional">
+									<grid>
+										<columns>
+											<column width="150px"></column>
+											<column width="188px"></column>
+											<column width="125px"></column>
+											<column width="188px"></column>
+											<column width="238px"></column>
+										</columns>
+										<rows>
+											<row>
+												<cell sclass="">Company Type :</cell>
+												<cell colspan="2">
+													<listbox mold="select" model="@load(vm.companyTypes)"
+														width="100%" selectedItem="@bind(vm.selectedCompanyType)">
+														<template name="model" var="type">
+															<listitem>
+																<listcell label="@load(type.enDescription)"></listcell>
+															</listitem>
+														</template>
+													</listbox>
+												</cell>
+												<cell sclass="">Payment Terms :</cell>
+												<cell colspan="2">
+													<listbox mold="select" model="@load(vm.paymentMethods)"
+														width="100%" selectedItem="@bind(vm.selectedPaymentMethod)">
+														<template name="model" var="payment">
+															<listitem>
+																<listcell label="@load(payment.name)"></listcell>
+															</listitem>
+														</template>
+													</listbox>
+												</cell>
+											</row>
+											<row>
+												<cell sclass="">Company Size :</cell>
+												<cell colspan="2">
+													<listbox mold="select" model="@load(vm.companySize)"
+														width="100%" selectedItem="@bind(vm.selectedCompanySize)">
+														<template name="model" var="size">
+															<listitem>
+																<listcell label="@load(size.enDescription)"></listcell>
+															</listitem>
+														</template>
+													</listbox>
+												</cell>
+												<cell sclass="">Credit Limit :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(fx.creditLimit)" hflex="1" />
+												</cell>
+											</row>
+											<row>
+												<cell sclass="">Current Software :</cell>
+												<cell colspan="2">
+													<listbox mold="select" model="@load(vm.currentSoftwares)"
+														width="100%" selectedItem="@bind(vm.selectedCurrentSoftwares)">
+														<template name="model" var="software">
+															<listitem>
+																<listcell label="@load(software.enDescription)"></listcell>
+															</listitem>
+														</template>
+													</listbox>
+												</cell>
+												<cell sclass="">Sales Rep. :</cell>
+												<cell colspan="2">
+													<listbox mold="select" model="@load(vm.salesRep)"
+														width="100%" selectedItem="@bind(vm.selectedsalesRep)">
+														<template name="model" var="salesRep">
+															<listitem>
+																<listcell label="@load(salesRep.fullName)"></listcell>
+															</listitem>
+														</template>
+													</listbox>
+												</cell>
+											</row>
+											<row>
+												<cell sclass="">No. Of Users :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(fx.userNos)" hflex="1" />
+												</cell>
+												<cell sclass="">Owner Name :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(fx.ownerName)" hflex="1" />
+												</cell>
+											</row>
+											<row>
+												<cell sclass="">No. Of Employees :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(fx.empNos)" hflex="1" />
+												</cell>
+												<cell sclass="">Manager Name :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(fx.manageerName)" hflex="1" />
+												</cell>
+											</row>
+											<row>
+												<cell sclass="">Last Trial Balance :</cell>
+												<cell colspan="2">
+													<datebox width="120px" value="@bind(fx.lastTrialBalance) "
+														format="dd/MM/yyyy" hflex="1"></datebox>
+
+												</cell>
+												<cell sclass="">Auditor Name :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(fx.auditorName)" hflex="1" />
+												</cell>
+											</row>
+											<row>
+												<cell sclass="">Working Hours :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(fx.workingHours)" hflex="1" />
+												</cell>
+												<cell sclass="">Accountant Name :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(fx.accountantName)" hflex="1" />
+												</cell>
+											</row>
+											<row>
+
+												<cell sclass="">How Did You Know About Us :</cell>
+
+												<cell colspan="2">
+													<listbox mold="select" model="@load(vm.howDid)"
+														width="100%" selectedItem="@bind(vm.selectedHowDid)">
+														<template name="model" var="howDid">
+															<listitem>
+																<listcell label="@load(howDid.enDescription)"></listcell>
+															</listitem>
+														</template>
+													</listbox>
+												</cell>
+												
+
+											</row>
+										</rows>
+									</grid>
+								</hbox>
+							</tabpanel>
+							<tabpanel>
+								<hbox>
+									<grid>
+										<columns>
+											<column width="150px"></column>
+											<column width="188px"></column>
+											<column width="125px"></column>
+											<column width="188px"></column>
+											<column width="238px"></column>
+										</columns>
+										<rows>
+											<row>
+												<cell sclass="">Trade License No. :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(vm.tradeLicenseNo)" hflex="1" />
+												</cell>
+												<cell sclass="">Trade License Expiry :</cell>
+												<cell colspan="2">
+													<datebox width="120px" value="@bind(vm.tradeLicenseExpiry) "
+														format="dd/MM/yyyy" hflex="1"></datebox>
+												</cell>
+											</row>
+											<row>
+												<cell sclass="">Nationality :</cell>
+												<cell colspan="2">
+													<listbox mold="select" model="@load(vm.nationality)"
+														width="100%" selectedItem="@bind(vm.selectedNationality)">
+														<template name="model" var="nat">
+															<listitem>
+																<listcell label="@load(nat.enDescription)"></listcell>
+															</listitem>
+														</template>
+													</listbox>
+												</cell>
+												<cell sclass="">Place Of Issue :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(vm.placeOfIssue)" hflex="1" />
+												</cell>
+											</row>
+											<row>
+												<cell sclass="">Passport No. :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(vm.passportNo)" hflex="1" />
+												</cell>
+												<cell sclass="">Passport Expiry Date :</cell>
+												<cell colspan="2">
+													<datebox width="120px" value="@bind(vm.passportExpiry) "
+														format="dd/MM/yyyy" hflex="1"></datebox>
+												</cell>
+											</row>
+											<row>
+												<cell sclass="">Residence Visa No. :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(vm.residenceVisaNo)" hflex="1" />
+												</cell>
+												<cell sclass="">Residence Visa Expiry :</cell>
+												<cell colspan="2">
+													<datebox width="120px" value="@bind(vm.residenceExpiry) "
+														format="dd/MM/yyyy" hflex="1"></datebox>
+												</cell>
+											</row>
+											<row>
+												<cell sclass="">Sponser's Name :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(vm.sponserName)" hflex="1" />
+												</cell>
+												<cell sclass="">Employment Designation :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(vm.employmentDesignation)"
+														hflex="1" />
+												</cell>
+											</row>
+											<row>
+												<cell sclass="">Salary Income :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(vm.salaryIncome)" hflex="1" />
+												</cell>
+											</row>
+
+										</rows>
+									</grid>
+								</hbox>
+							</tabpanel>
+							<tabpanel>
+								<listbox model="@load(vm.activities)" vflex="1" hflex="1"
+									mold="paging">
+									<listhead>
+										<listheader label="View" width="60px" />
+										<listheader label="SNo." width="60px"></listheader>
+										<listheader label="Type" width="120px"></listheader>
+										<listheader label="Ref. Number"></listheader>
+										<listheader label="Date"></listheader>
+										<listheader label="Amount"></listheader>
+										<listheader label="Status"></listheader>
+										<listheader label="Memo"></listheader>
+										<listheader label="User"></listheader>
+									</listhead>
+									<template name="model" var="each">
+										<listitem>
+											<listcell>
+												<button label="View"
+													onClick="@command('viewCustomerActivity', row=each)" />
+											</listcell>
+											<listcell>
+												<label value="@bind(each.sno)" />
+											</listcell>
+											<listcell>
+												<label value="@bind(each.type)" />
+											</listcell>
+											<listcell>
+												<label value="@bind(each.refNumber)" />
+											</listcell>
+											<listcell>
+												<label value="@bind(each.date)" />
+											</listcell>
+											<listcell>
+												<label value="@bind(each.amount)" />
+											</listcell>
+											<listcell>
+												<label value="@bind(each.status)" />
+											</listcell>
+											<listcell>
+												<label value="@bind(each.memo)" />
+											</listcell>
+											<listcell>
+												<label value="@bind(each.user)" />
+											</listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</tabpanel>
+						
+						<tabpanel>
+						<listbox model="@load(vm.statusHistory)" vflex="1" height="500px"
+									mold="paging">
+									<listhead>
+										<listheader label="Date" width="80px" />
+										<listheader label="Status" width="260px"></listheader>
+										<listheader label="Status Description" width="520px"></listheader>
+										<listheader label="Created From" width="220px"></listheader>										
+										<listheader label="User" width="120px"></listheader>
+									</listhead>
+									<template name="model" var="each">
+										<listitem>											
+											<listcell>
+												<label value="@bind(each.date)" />
+											</listcell>
+											<listcell>
+												<label value="@bind(each.status)" />
+											</listcell>
+											<listcell>
+												<label value="@bind(each.statusDesc)" />
+											</listcell>
+											<listcell>
+												<label value="@bind(each.createdFrom)" />
+											</listcell>											
+											<listcell>
+												<label value="@bind(each.user)" />
+											</listcell>
+										</listitem>
+									</template>
+								</listbox>
+						
+						</tabpanel>
+						
+							<tabpanel>
+								<hbox id="note">
+									<grid
+										form="@id('fx') @load(vm.selectedCustomer) @save(vm.selectedCustomer, before='updateCustomer')">
+										<columns>
+											<column width="100%"></column>
+										</columns>
+										<rows>
+											<row>
+
+												<cell sclass="">
+													<textbox multiline="true" rows="12" readonly="false"
+														hflex="1" value="@bind(fx.note)" style="color:#008FD2;"></textbox>
+												</cell>
+											</row>
+										</rows>
+									</grid>
+								</hbox>
+							</tabpanel>
+							
+							<tabpanel>
+								<hbox id="attach">									
+									<vbox id="attachWindow">
+									<listbox model="@bind(vm.lstDocAtt)" 
+										emptyMessage="No data found" selectedItem="@bind(vm.selectedAttchemnets)"
+										mold="paging">
+
+										<listhead menupopup="auto" sizable="true">
+											<listheader label="Delete" width="50px" />
+											<listheader label="Attachments" />
+											<listheader label="View" />
+										</listhead>
+										<template name="model">
+											<listitem>
+												<listcell>
+													<button image="/images/cross.png"
+														onClick="@command('deleteFromAttchamentList', row=each)" />
+												</listcell>
+												<listcell onDoubleClick="@command('downloadAttachment', row=each)">
+													<label value="@bind(each.filename)" />
+												</listcell>
+												<listcell>
+												<button image="/images/view.png"
+														onClick="@command('downloadAttachment', row=each)" />
+														</listcell>
+											</listitem>
+										</template>
+									</listbox>
+									<button label="Choose File" upload="true,maxsize=-1"
+										onUpload="@command('uploadAttachFile',attId=1)"></button>
+								</vbox>
+									
+								</hbox>
+							</tabpanel>
+																				
+						</tabpanels>
+					</tabbox>
+
+					<grid>
+						<columns>
+							<column width="450px"></column>
+						</columns>
+
+						<rows>
+
+							<row>
+
+								<cell colspan="3">
+									<hbox pack="center" hflex="1">
+										<button label="Save"
+											onClick="@command('updateCustomer',cmp=customerModalDialog,type=1)"
+											visible="@bind(vm.canSave)"></button>
+											<button label="Save Status"
+											onClick="@command('updateCustomer',cmp=customerModalDialog,type=2)"
+											visible="@bind(!vm.companyRole.canModify)"></button>
+										<button label="Close" onClick="customerModalDialog.detach()"></button>
+									</hbox>
+								</cell>
+							</row>
+						</rows>
+					</grid>
+
+
+				</vlayout>
+			</center>
+		</borderlayout>
+
+	</window>
+</zk>

@@ -1,0 +1,120 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+
+	<borderlayout id="mainlayout2">
+
+		<center autoscroll="true">
+			<vlayout
+				apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+				viewModel="@id('vm') @init('hba.BarcodeGenViewModel')" style="overflow:auto" >
+
+				<grid height="550px"
+					emptyMessage="There is no data found for this criteria"
+					model="@load(vm.lstItems)">
+					<auxhead sclass="category-center">
+						<auxheader colspan="1">
+							<checkbox onCheck="@command('chkAll',cmp=ItemModalDialog)" value="@bind(vm.chkAll)"></checkbox>
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.name)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.description)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.type)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.salesPrice)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.isactive)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.barcode)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+
+						</auxheader>
+					</auxhead>
+
+					<columns sizable="true">
+						
+						<column label="" width="50px" style="chk"/>
+						<column label="Item Name" width="230px" />
+						<column label="Description" hflex="1"
+							sort="auto(purchaseDesc)" />
+						<column label="Item Type" width="150px"
+							sort="auto(itemType)" />
+						<column label="Selling Price" width="100px"
+							sort="auto(salesPrice)" align="right" />
+						<column label="Active" width="60px"
+							sort="auto(isActive)" />
+						<column label="Barcode" width="200px"
+							sort="auto(barcode)" />
+					</columns>
+
+
+					<template name="model">
+						<row>
+							<checkbox
+								checked="@bind(each.checkedItem)">
+							</checkbox>
+							<label value="@bind(each.name)"></label>
+							<label value="@bind(each.purchaseDesc)"></label>
+							<label value="@bind(each.itemType)" />
+							<label value="@bind(each.salesPrice)"></label>
+							<label value="@bind(each.isActive)"></label>
+							<label value="@bind(each.barcode)"></label>
+						</row>
+
+					</template>
+				</grid>
+
+				<grid>
+					<rows>
+					<row>
+						<cell>
+							<hbox pack="start" hflex="1">
+								Overwrite Existing Barcodes : 
+								<checkbox
+									checked="@bind(vm.overwrite)">
+								</checkbox>							
+							</hbox>
+						</cell>
+						<cell>
+							<hbox pack="right" hflex="1">
+								<button label="Generate Barcode"  onClick="@command('generateBarcode')">
+								</button>
+								<button label="Close" onClick="@command('CloseBarcodeGeneration')">
+								</button>
+							</hbox>
+						</cell>
+					</row>
+					
+					</rows>
+				</grid>
+			</vlayout>
+		</center>
+	</borderlayout>
+
+</zk>

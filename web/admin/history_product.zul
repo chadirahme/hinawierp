@@ -1,0 +1,42 @@
+<?page title="history_product" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window apply="org.zkoss.bind.BindComposer" mode="highlighted" title="Details" border="normal" position="center,center" closable="true"
+		viewModel="@id('vm')  @init('home.HistoryProductViewModel',quotId=arg.quotId)" width="800px" height="400px">
+
+		<hbox pack="center">
+			<listbox sizedByContent="true" id="lstProductHist"
+				height="350px" width="100%" model="@bind(vm.lstHistProductModel)"
+				emptyMessage="No items match your search">
+				<listhead sizable="true">
+					<listheader align="center"
+						label="Product Type"/>
+					<listheader align="center" 
+					 label="Description" />
+					<listheader align="center"
+						label="Number of Liscence" />
+					<listheader align="center"
+						label="Memo" />
+				</listhead>
+				<template name="model" var="histProductModel">
+					<listitem>
+						<listcell label="@bind(histProductModel.producttype)"
+							>
+						</listcell>
+						<listcell
+							label="@bind(histProductModel.description)"
+							>
+						</listcell>
+						<listcell
+							label="@bind(histProductModel.noofliscence)"
+							>
+						</listcell>
+						<listcell label="@bind(histProductModel.memo)"
+							>
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+
+		</hbox>
+	</window>
+</zk>

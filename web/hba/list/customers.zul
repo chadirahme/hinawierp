@@ -1,0 +1,218 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:w="client">
+
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('hba.CustomerViewModel',type='customer')">
+
+		<center autoscroll="true" border="none">
+
+			<vlayout hflex="1" vflex="1">
+				<hlayout>
+					<panel collapsible="true">
+						<panelchildren>
+							<grid>
+								<columns>
+									<column width="120px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+								</columns>
+								<rows>
+									<row>
+
+										<cell>
+											<label value="No. of Records"></label>
+										</cell>
+										<cell>
+											<listbox multiple="false" width="120px" mold="select"
+												model="@load(vm.lstAllPageSize)" selectedItem="@bind(vm.selectedAllPageSize)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item)"></listcell>
+													</listitem>
+												</template>
+
+
+											</listbox>
+										</cell>
+										<cell>
+											<label value="Customer Status"></label>
+										</cell>
+										<cell>
+											<listbox multiple="false" width="100px" mold="select"
+												model="@load(vm.lstStatus)" selectedItem="@bind(vm.selectedStatus)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item)"></listcell>
+													</listitem>
+												</template>
+											</listbox>
+										</cell>
+										<cell>
+											<button label="Add New Customer" onClick="@command('addCustomerCommand')" visible="@bind(vm.companyRole.canAdd)"
+												></button>
+										</cell>
+										<cell>
+											<button label="Reset" onClick="@command('resetCustomer')"
+												visible="true"></button>
+										</cell>
+									</row>
+									<!-- <row> <cell> <label value="Sort By"></label> </cell> <cell> 
+										<listbox multiple="false" width="120px" mold="select" model="@load(vm.lstAllPageSize)" 
+										selectedItem="@bind(vm.selectedAllPageSize)"> <template name="model" var="item"> 
+										<listitem> <listcell label="@load(item)"></listcell> </listitem> </template> 
+										</listbox> </cell> </row> -->
+								</rows>
+							</grid>
+						</panelchildren>
+					</panel>
+
+
+				</hlayout>
+				<listbox model="@bind(vm.lstCustomers)" vflex="1" hflex="1"
+					id="customersGrid" selectedItem="@bind(vm.selectedCustomer)" width="900px"
+					mold="paging" pageSize="@bind(vm.selectedPageSize)">
+
+					<auxhead sclass="category-center">
+						<auxheader colspan="1" label="" width="50px">
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true"  hflex="1" value="@bind(vm.filter.name)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true"  hflex="1" value="@bind(vm.filter.contact)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+
+						 <auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true"  hflex="1" value="@bind(vm.filter.arname)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true"  hflex="1" value="@bind(vm.filter.phone)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true"  hflex="1" value="@bind(vm.filter.mobile)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true"  hflex="1" value="@bind(vm.filter.email)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true"  hflex="1" value="@bind(vm.filter.isActive)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true"  hflex="1" value="@bind(vm.filter.note)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+					</auxhead>
+					<listhead menupopup="auto" sizable="true">
+						<listheader label="Activities" width="110px" />
+						<listheader label="Name" sort="auto('name')" width="285px"  />
+						<listheader label="Contact" sort="auto('contact')" width="250px" />
+						 <listheader label="Arabic Name" sort="auto('arName')" width="215px" />
+						<listheader label="Phone" sort="auto('phone')" width="130px" />
+						<listheader label="Mobile" sort="auto('altphone')" width="120px" />
+						<listheader label="Email" sort="auto('email')" width="150px" />
+						
+						<listheader label="Status" sort="auto('isactive')" width="100px"  />
+						<listheader label="Note" sort="auto('note')" width="400px"  />
+						<listheader label="Created Time" sort="auto('createdDate')" width="400px"  />
+
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell onDoubleClick="@command('viewCustomerCommand', row=each)">
+								<menubar sclass="logoutbanner">
+									<menu label="Activities" image="/images/dropMenuLogo.png">
+										<menupopup>
+											<menuitem label="Edit Customer" image="/images/rowedit.png" visible="@bind(vm.companyRole.canModify)"
+												onClick="@command('editCustomerCommand',row=vm.selectedCustomer)"></menuitem>
+											<menuitem label="Send E-mail" image="/images/email.gif"
+												onClick="@command('CustomerSendEmail',row=vm.selectedCustomer)"></menuitem>
+											<menuitem label="New Task" image="/images/task.png"
+												onClick="@command('addTask',row=vm.selectedCustomer)"></menuitem>
+											<menuitem label="New Quotation" image="/images/q.png"
+												onClick="@command('AddQuotation',row=vm.selectedCustomer)"></menuitem>
+											<menuitem label="New Receipt Voucher" image="/images/receipt.png"
+												onClick="@command('CashChequeReceiptVoucher',row=vm.selectedCustomer)"></menuitem>
+											<menuitem label="New Cash Invoice" image="/images/cash.png"
+												onClick="@command('AddCashInvoice',row=vm.selectedCustomer)"></menuitem>
+											<menuitem label="New Credit Invoice" image="/images/credit.png"
+												onClick="@command('AddCreditInvoice',row=vm.selectedCustomer)"></menuitem>
+											<menuseparator></menuseparator>
+										</menupopup>
+									</menu>
+								</menubar>
+
+
+							</listcell>
+
+							<listcell onDoubleClick="@command('viewCustomerCommand', row=each)">
+								<label value="@bind(each.name)"
+									style="@bind(each.sublevel eq 0 ? 'color:black;font-weight:bold;' : 'color:green;margin-left:20px') " />
+							</listcell>
+						<listcell onDoubleClick="@command('viewCustomerCommand', row=each)">
+								<label value="@bind(each.contact)" />
+							</listcell>
+
+							 <listcell onDoubleClick="@command('viewCustomerCommand', row=each)">
+								<label value="@bind(each.arName)" />
+							</listcell> 
+							<listcell onDoubleClick="@command('viewCustomerCommand', row=each)">
+								<label value="@bind(each.phone)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewCustomerCommand', row=each)">
+								<label value="@bind(each.altphone)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewCustomerCommand', row=each)">
+								<label value="@bind(each.email)" />
+							</listcell>
+							
+							<listcell onDoubleClick="@command('viewCustomerCommand', row=each)">
+								<label value="@bind(each.isactive)"
+									style="@bind(each.isactive eq 'Active' ? 'color:black;font-weight:bold;' : 'color:red;margin-left:0px') " />
+							</listcell>
+							
+							<listcell onDoubleClick="@command('viewCustomerCommand', row=each)">
+								<label value="@bind(each.note)"
+									style="@bind(each.isactive eq 'Active' ? 'color:black;font-weight:bold;' : 'color:red;margin-left:0px') " />
+							</listcell>
+						<listcell onDoubleClick="@command('viewCustomerCommand', row=each)">
+								<label value="@bind(each.createdDate)"
+									style="@bind(each.isactive eq 'Active' ? 'color:black;font-weight:bold;' : 'color:red;margin-left:0px') " />
+							</listcell>
+
+
+						</listitem>
+					</template>
+				</listbox>
+				<hlayout hflex="1" style="text-align: right">
+					<label value="@load(vm.footer)"
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<space></space>
+					<space></space>
+					<space></space>
+					<space></space>
+				</hlayout>
+
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

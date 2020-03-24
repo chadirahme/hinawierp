@@ -1,0 +1,42 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="Arrange Menu" border="normal" width="460px" closable="true" position="center,center"
+action="show: slideDown;hide: slideUp"
+apply="org.zkoss.bind.BindComposer"
+     viewModel="@id('vm') @init('layout.MenuViewModel')">
+
+
+<vlayout>
+
+<label value="Drage menu to change order"></label>
+<listbox  model="@bind(vm.lstArrangeMenu)" >  
+ <listhead>
+        <listheader label="Order" align="center" />        
+        <listheader label="Title" align="center" />
+    </listhead>
+    
+        <template name="model" var="item" status="s">
+             <listitem draggable="true" droppable="true" onDrop="@command('moveExample', item=event.dragged.attributes.item, base=item)" >    
+             	<listcell label="@bind(s.index)"/>            
+                <listcell label="@bind(item.title)"/>
+            </listitem>
+        </template>
+</listbox>
+
+
+<button label="Submit" onClick="@command('saveArrangeMenu')"   style="background:rgb(44, 111, 153);color:white;font-weight:bold;align:center"></button>
+</vlayout>
+
+ <zscript><![CDATA[
+        void move(Component dragged) {
+            if (self instanceof Listitem) {
+            	
+                self.parent.insertBefore(dragged, self);
+            } else {
+                self.appendChild(dragged);
+            }
+        }
+    ]]></zscript>
+    
+    </window>
+</zk>

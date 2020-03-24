@@ -1,0 +1,154 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('timesheet.ReportsViewModel')" vflex="1"
+	 xmlns:w="http://www.zkoss.org/2005/zk/client">
+
+		<label value="Mobile Attendance Reports"
+			style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+
+		<grid>
+			<columns>
+				<column width="100px"></column>
+				<column width="180px"></column>
+				<column width="100px"></column>
+				<column width="180px"></column>
+				<column width="100px"></column>
+				<column width="250px"></column>
+			</columns>
+			<rows>
+
+				<row>							
+					<label value="Users"></label>
+					<listbox multiple="false" hflex="1" mold="select"
+						model="@load(vm.lstUsers)" selectedItem="@bind(vm.selectedUsers)">
+						<template name="model" var="item">
+							<listitem>
+								<listcell label="@load(item.fullName)"></listcell>
+							</listitem>
+						</template>
+					</listbox>
+					<button label="Search" id="btn1" onLongOp="@command('getMobileAttendanceCommand')"
+								visible="@bind(vm.companyRole.canView)"></button>
+				</row>
+				
+			</rows>
+		</grid>
+		
+		
+		<listbox id="lstHistory" model="@bind(vm.lstEmployeeHistory)"
+						hflex="1" width="620px" vflex="1" emptyMessage="No data found">
+						
+						<listhead  sizable="true">							
+							<listheader label="Name" sort="auto('enFullName')"
+								width="200px" />
+					
+						<listheader width="120px" label="Customer Type" />	
+		<listheader width="120px" label="Customer Name" />	
+					<listheader width="120px" label="Reason" />	
+		<listheader width="120px" label="Result" />	
+	
+		
+		
+							<listheader width="150px" label="Check In Time" sort="auto('fromTime')" />
+							<listheader width="150px" label="Check In Note" sort="auto('fromTime')" />
+							<listheader width="120px" label="Check In Location" />
+							
+							<listheader width="150px" label="Check Out Time" sort="auto('toTime')" />
+							<listheader width="150px" label="Check Out Note" sort="auto('fromTime')" />
+							<listheader width="120px" label="Check Out Location" />											
+		
+		
+	
+						</listhead>
+						<template name="model">
+							<listitem>								
+								<listcell>
+									<label value="@bind(each.enFullName)">
+									</label>
+								</listcell>
+								
+								<listcell>
+									<label value="@bind(each.customerType)">
+									</label>
+								</listcell>
+								<listcell>
+									<label value="@bind(each.customerName)">
+									</label>
+								</listcell>
+								<listcell>
+									<label value="@bind(each.reason)">
+									</label>
+								</listcell>
+								<listcell>
+									<label value="@bind(each.result)">
+									</label>
+								</listcell>
+								
+															
+								<listcell>
+									<label value="@bind(each.fromTime)">
+									</label>
+								</listcell>
+								<listcell>
+									<label value="@bind(each.checkinNote)">
+									</label>
+								</listcell>
+								
+								<listcell>
+								<button 
+                        label="Open Map" w:onClick="createPopUp(this)" 
+                        popup="@bind(c:cat3(each.checkinLatitude ,',' ,each.checkinLongitude) )"
+                         />
+                         
+                         
+								</listcell>
+								<listcell>
+									<label value="@bind(each.toTime)">
+									</label>
+								</listcell>
+								<listcell>
+									<label value="@bind(each.checkoutNote)">
+									</label>
+								</listcell>
+								
+								<listcell>
+								
+								<button disabled="@bind(each.checkoutLatitude eq 0)"
+                        label="Open Map" w:onClick="createPopUp(this)" 
+                        popup="@bind(c:cat3(each.checkoutLatitude ,',' ,each.checkoutLongitude) )"
+                         />
+                         
+                         
+								<!-- <button visible="@bind(vm.companyRole.canModify)" href="@bind(each.checkinLatitude)"
+                      label="Open Map" xmlns:w="http://www.zkoss.org/2005/zk/client"
+ 						w:onClick="createPopUp(this);"
+                        /> -->
+                        
+                        
+								</listcell>								
+							</listitem>
+						</template>
+					</listbox>
+
+
+<script type="text/javascript">
+    function createPopUp(lat)
+    {
+    	//console.log(lat);
+    	//alert(lat._popup);
+    	url="map.html?"+'lon='+lat._popup;
+        var w = 600;
+        var h = 500;
+        var left = (screen.width/2)-(w/2);
+        var top = (screen.height/2)-(h/2);
+        window.open(url,'name','scrollbars=yes,width='+w+', height='+h+', top='+top+', left='+left);
+    }
+</script>
+
+	</vlayout>
+	
+	
+	
+</zk>

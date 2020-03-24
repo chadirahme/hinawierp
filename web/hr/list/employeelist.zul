@@ -1,0 +1,259 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('hr.HRViewModel')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<grid>
+					<columns>
+						<column width="100px"></column>
+						<column width="190px"></column>
+						<column width="130px"></column>
+						<column width="100px"></column>
+						<column width="100px"></column>
+						<column width="150px"></column>
+						<column width="150px"></column>
+						<column></column>
+					</columns>
+					<rows>
+						<row>
+							<label value="Company"></label>
+							<listbox multiple="false" hflex="1" mold="select"
+								model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item.enCompanyName)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+
+							<label value="Employee Status"></label>
+
+							<listbox multiple="false" hflex="1" mold="select"
+								model="@load(vm.lstStatus)" selectedItem="@bind(vm.selectedStatus)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+
+							<label value="No. of Records"></label>
+							<listbox multiple="false" width="120px" mold="select"
+								model="@load(vm.lstAllPageSize)" selectedItem="@bind(vm.selectedAllPageSize)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+
+							</listbox>
+							
+							<button label="Add New Employee" onClick="@command('addEmployeeCommand')"  visible="@bind(vm.companyRole.canAdd)"></button>
+							
+							<button label="Reset" onClick="@command('resetEmployee')" 	visible="true"></button>
+											
+						</row>
+
+						<row>
+
+						</row>
+					</rows>
+				</grid>
+
+
+
+				<listbox model="@bind(vm.lstEmployees)" vflex="1" hflex="1"
+					selectedItem="@bind(vm.selectedEmployee)" mold="paging"
+					pageSize="@bind(vm.selectedPageSize)">
+
+					<auxhead sclass="category-center">
+						<auxheader colspan="1" label="" width="50px">
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.employeeNo)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.fullName)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.position)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.department)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.country)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.gender)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.maritalStatus)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.projectName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.groupName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" width="100px"
+								value="@bind(vm.employeeFilter.supervisorName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" width="100px"
+								value="@bind(vm.employeeFilter.supervisorName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" width="100px"
+								value="@bind(vm.employeeFilter.super_supervisorName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						 <auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" width="100px"
+								value="@bind(vm.employeeFilter.employeeStatus)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+						<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" width="100px"
+								value="@bind(vm.employeeFilter.statusDescription)" onChange="@command('changeFilter')" />
+							</auxheader> 
+						
+					</auxhead>
+					<listhead menupopup="auto" sizable="true">
+						<listheader label="Edit" width="60px" visible="@bind(vm.companyRole.canModify)"/>
+						<listheader label="Employee No." width="100px"
+							sort="auto('employeeNo')" />
+						<listheader label="Name" width="250px" sort="auto('fullName')" />
+
+						<listheader label="Position" width="150px" sort="auto('position')" />
+						<listheader label="Department" width="150px" sort="auto('department')" />
+						<listheader label="Nationality" width="150px" sort="auto('country')" />
+						<listheader label="Sex" width="100px" sort="auto('gender')" />
+						<listheader label="Marital Status" width="150px"
+							sort="auto('maritalStatus')" />
+							<listheader label="Project/Location" width="150px" sort="auto('projectName')" />
+						<listheader label="Team Name" width="100px"
+							sort="auto('workGroupName')" />
+						<listheader label="Supervisor" sort="auto('supervisorName')" width="150px"/>
+						<listheader label="Super-Supervisor" sort="auto('super_supervisorName')" width="150px"/>
+						 <listheader label="Status" sort="auto('status')" width="150px" />
+						<listheader label="Status Description 1" sort="auto('employeeStatus')" width="150px" />
+						<listheader label="Status Description 2" sort="auto('statusDescription')" width="150px" /> 
+						
+						
+						
+					</listhead>
+					<template name="model">
+						<listitem forward="onDoubleClick=onDoubleClicked">
+							<listcell>
+								<button image="/images/rowedit.png" onClick="@command('editEmployeeCommand', row=each)" visible="@bind(vm.companyRole.canModify)"/>
+							</listcell>
+
+							<listcell onDoubleClick="@command('viewEmployeeCommand', row=each)">
+								<label value="@bind(each.employeeNo)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewEmployeeCommand', row=each)">
+								<label value="@bind(each.fullName)" />
+							</listcell>
+
+							<listcell onDoubleClick="@command('viewEmployeeCommand', row=each)">
+								<label value="@bind(each.position)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewEmployeeCommand', row=each)">
+								<label value="@bind(each.department)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewEmployeeCommand', row=each)">
+								<label value="@bind(each.country)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewEmployeeCommand', row=each)">
+								<label value="@bind(each.gender)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewEmployeeCommand', row=each)">
+								<label value="@bind(each.maritalStatus)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewEmployeeCommand', row=each)">
+								<label value="@bind(each.projectName)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewEmployeeCommand', row=each)">
+								<label value="@bind(each.workGroupName)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewEmployeeCommand', row=each)">
+								<label value="@bind(each.supervisorName)" />
+							</listcell>
+								<listcell onDoubleClick="@command('viewEmployeeCommand', row=each)">
+								<label value="@bind(each.super_supervisorName)" />
+							</listcell>
+							 <listcell onDoubleClick="@command('viewEmployeeCommand', row=each)">
+								<label value="@bind(each.status)"  style="@bind(each.status eq 'Active' ? 'color:black;font-weight:bold;' : 'color:red;margin-left:0px') "/>
+							</listcell>
+							<listcell onDoubleClick="@command('viewEmployeeCommand', row=each)">
+								<label value="@bind(each.employeeStatus)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewEmployeeCommand', row=each)">
+								<label value="@bind(each.statusDescription)" />
+							</listcell>
+							
+							
+						</listitem>
+					</template>
+				</listbox>
+
+				<hlayout hflex="1" style="text-align: right">
+					<label value="@load(vm.footer)"
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+				</hlayout>
+
+			</vlayout>
+		</center>
+
+		<!-- <east width="350px" title="Details" visible="@bind(not empty vm.selectedEmployee)" 
+			collapsible="true" splittable="true" minsize="300" autoscroll="true"> <vlayout 
+			form="@id('fx') @load(vm.selectedEmployee) @save(vm.selectedEmployee, before='updateEmployee')"> 
+			<grid hflex="1" width="350px"> <columns> <column align="right" hflex="min"/> 
+			<column/> </columns> <rows> <row> <cell sclass="row-title">Employee No :</cell> 
+			<hlayout> <textbox value="@bind(fx.employeeNo)" readonly="true"/> </hlayout> 
+			</row> <row> <cell sclass="row-title">Name :</cell> <hlayout> <textbox value="@bind(fx.fullName)"/> 
+			</hlayout> </row> <row> <cell sclass="row-title">Arabic Name :</cell> <hlayout> 
+			<textbox value="@bind(fx.arabicName)"/> </hlayout> </row> <row> <cell sclass="row-title">Department 
+			:</cell> <hlayout> <textbox value="@bind(fx.department)"/> </hlayout> </row> 
+			<row> <cell sclass="row-title">Arabic Department :</cell> <hlayout> <textbox 
+			value="@bind(fx.arabicDepartment)"/> </hlayout> </row> <row> <cell sclass="row-title">Position 
+			:</cell> <textbox value="@bind(fx.position)"/> </row> <row> <cell sclass="row-title">Arabic 
+			Position :</cell> <textbox value="@bind(fx.arabicPosition)"/> </row> <row> 
+			<cell sclass="row-title">Nationality :</cell> <hlayout> <textbox value="@bind(fx.country)"/> 
+			</hlayout> </row> <row> <cell sclass="row-title">DateOfBirth :</cell> <hlayout> 
+			<datebox value="@bind(fx.dateOfBirth)" format="dd-MMM-yyyy"/> </hlayout> 
+			</row> <row> <cell sclass="row-title">Age :</cell> <hlayout> <textbox value="@bind(fx.age)" 
+			readonly="true"/> </hlayout> </row> <row> <cell colspan="2"> <button label="Update" 
+			visible="@bind(vm.adminUser)" onClick="@command('updateEmployee')"></button> 
+			</cell> </row> </rows> </grid> </vlayout> </east> -->
+
+	</borderlayout>
+</zk>

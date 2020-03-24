@@ -1,0 +1,193 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('hba.GarageViewModel')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+			
+			
+			<listbox model="@bind(vm.lstJobs)" vflex="1" hflex="1"  
+			selectedItem="@bind(vm.selectedJob)" width="900px" mold="paging"  pageSize="15" pagingPosition="both">
+			
+			<auxhead>
+			<auxheader label="Job Card Status List" colspan="18" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;" align="center"/>
+			</auxhead>
+			
+			 <auxhead sclass="category-center">
+            <auxheader colspan="1">       
+                   <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1" 
+                    value="@bind(vm.filter.jobCardNO)" onChange="@command('changeFilter')" />    
+            </auxheader>
+            
+             <auxheader colspan="1">       
+               <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1" 
+                    value="@bind(vm.filter.txnDate)" onChange="@command('changeFilter')" />                       
+            </auxheader>
+            
+              <auxheader colspan="1">       
+               <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1" 
+                    value="@bind(vm.filter.txnTime)" onChange="@command('changeFilter')" />                       
+            </auxheader>
+            
+            
+             <auxheader colspan="1">
+                  <image src="/images/funnel.png" />
+                <textbox instant="true" width="100px" 
+                    value="@bind(vm.filter.name)" onChange="@command('changeFilter')" />
+            </auxheader>
+            
+               <auxheader colspan="1">       
+               <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1" 
+                    value="@bind(vm.filter.recieveDate)" onChange="@command('changeFilter')" />                       
+             </auxheader>
+              
+              <auxheader colspan="1">
+                  <image src="/images/funnel.png" />
+                <textbox instant="true" width="100px" 
+                    value="@bind(vm.filter.arname)" onChange="@command('changeFilter')" />
+            </auxheader>
+             <auxheader colspan="1">
+                  <image src="/images/funnel.png" />
+                <textbox instant="true" width="100px" 
+                    value="@bind(vm.filter.fullName)" onChange="@command('changeFilter')" />
+            </auxheader>
+             <auxheader colspan="1">
+                  <image src="/images/funnel.png" />
+                <textbox instant="true" width="100px" 
+                    value="@bind(vm.filter.companyName)" onChange="@command('changeFilter')" />
+            </auxheader>
+             <auxheader colspan="1">
+                  <image src="/images/funnel.png" />
+                <textbox instant="true" width="100px" 
+                    value="@bind(vm.filter.billCountry)" onChange="@command('changeFilter')" />
+            </auxheader>
+            <auxheader colspan="1">       
+               <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1" 
+                    value="@bind(vm.filter.workStartDate)" onChange="@command('changeFilter')" />                       
+             </auxheader>
+               <auxheader colspan="1">       
+               <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1" 
+                    value="@bind(vm.filter.workEndDate)" onChange="@command('changeFilter')" />                       
+             </auxheader>
+               <auxheader colspan="1">       
+               <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1" 
+                    value="@bind(vm.filter.odometer)" onChange="@command('changeFilter')" />                       
+             </auxheader>
+               <auxheader colspan="1">       
+               <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1" 
+                    value="@bind(vm.filter.routeNo)" onChange="@command('changeFilter')" />                       
+             </auxheader>
+              
+                       
+             <auxheader colspan="1">
+                  <image src="/images/funnel.png" />
+                <textbox instant="true" width="100px" 
+                    value="@bind(vm.filter.status)" onChange="@command('changeFilter')" />
+            </auxheader>
+              <auxheader colspan="1">       
+               <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1" 
+                    value="@bind(vm.filter.brand)" onChange="@command('changeFilter')" />                       
+             </auxheader>
+               <auxheader colspan="1">       
+               <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1" 
+                    value="@bind(vm.filter.jobType)" onChange="@command('changeFilter')" />                       
+             </auxheader>
+              <auxheader colspan="1">       
+               <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1" 
+                    value="@bind(vm.filter.note)" onChange="@command('changeFilter')" />                       
+             </auxheader>
+            </auxhead>
+			<listhead sizable="true" menupopup="auto">
+					
+						<listheader label="Job Card No." width="100px" sort="auto('refNo')"/>
+						<listheader label="Created  Date" width="90px" sort="auto('txnDate')"/>
+						<listheader label="Created Time" width="90px" sort="auto('txnTime')"/>
+						<listheader label="Staff Advisor" width="150px" sort="auto('saName')"/>
+						<listheader label="Received Date" width="100px" sort="auto('workStart')"/>
+						<listheader label="Chasis No." width="100px" sort="auto('chasisNo')"/>
+						<listheader label="Reg No." width="100px" sort="auto('regNo')"/>
+						<listheader label="Engine No." width="100px" sort="auto('engineNo')"/>
+						<listheader label="Customer Name" width="150px" sort="auto('fullName')"/>
+						<listheader label="Work Start" width="100px" sort="auto('workStart')"/>
+						<listheader label="Work End" width="100px" sort="auto('workEnd')"/>
+						<listheader label="Odometer" width="100px" sort="auto('odometer')"/>
+						<listheader label="Route No." width="100px" sort="auto('routNo')"/>
+						<listheader label="Job Status" width="100px" sort="auto('status')"/>
+						<listheader label="Brand" width="100px" sort="auto('brand')"/>
+						<listheader label="Type" width="100px" sort="auto('series')"/>
+						<listheader label="Note" width="100px" sort="auto('notes')"/>																
+					</listhead>
+					
+					<template name="model">
+						<listitem>														
+							<listcell>
+								<label value="@bind(each.refNo)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.txnDate) @converter('formatedDate', format='dd/MM/yyyy')"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.txnTime) @converter('formatedDate', format='HH:mm a')"/>								
+							</listcell>
+								<listcell>
+								<label value="@bind(each.saName)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.workStart)  @converter('formatedDate', format='dd/MM/yyyy')"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.chasisNo)"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.regNo)"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.engineNo)"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.fullName)"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.workStart) @converter('formatedDate', format='dd/MM/yyyy')"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.workEnd) @converter('formatedDate', format='dd/MM/yyyy')"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.odometer)"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.routNo)"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.status)"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.brand)"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.series)"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.notes)"/>
+							</listcell>
+						</listitem>
+					</template>
+			</listbox>
+			</vlayout>
+			</center>
+			</borderlayout>
+			
+</zk>

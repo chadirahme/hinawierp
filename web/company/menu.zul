@@ -1,0 +1,176 @@
+<zk>
+<scrollview hflex="1" vflex="1">
+	<vlayout  apply="org.zkoss.bind.BindComposer" 
+		viewModel="@id('vm') @init('company.UsersViewModel',type='menu')">
+
+				<hbox>
+					<label value="Select Role"></label>
+					<listbox model="@bind(vm.lstCompanyRoles)" multiple="false"
+						width="200px" mold="select" selectedItem="@bind(vm.selectedCompanyRole)">
+						<template name="model" var="item">
+							<listitem>
+								<listcell label="@load(item.rolename)"></listcell>
+							</listitem>
+						</template>
+					</listbox>
+					<button label="Save" onClick="@command('saveUserMenuCommand')"
+						visible="false"></button>
+					<button label="View" onClick="@command('viewMenuCommand')"
+						visible="false"></button>
+						
+						<popup id="trasaction" width="400px">
+											<html><![CDATA[Allows To See Each other trasaction made by users.]]></html>
+										</popup>
+											<popup id="activeStatus" width="400px">
+											<html><![CDATA[Allows User To Only Active Status.]]></html>
+										</popup>
+											<popup id="inactiveStatus" width="400px">
+											<html><![CDATA[Allows User To Only In-Active Status.]]></html>
+										</popup>
+
+					<!-- <checkbox label="Check All View" checked="@bind(vm.checkAllView)"></checkbox> 
+						<checkbox label="Check All Modify" checked="@bind(vm.checkAllModify)"></checkbox> 
+						<checkbox label="Check All Delete" checked="@bind(vm.checkAllDelete)"></checkbox> -->
+				</hbox>
+
+				<hlayout>
+					<listbox model="@bind(vm.lstCompanyFileMainMenu)" width="200px"
+						height="700px" emptyMessage="No data found" multiple="true">
+
+						<listhead sizable="true">
+							<listheader label="Menu" width="180px" sort="auto('title')" />
+						</listhead>
+						<template name="model">
+							<listitem>
+
+								<listcell>
+									<a>
+										<label value="@bind(each.title)"
+											onClick="@command('getCompanySubMenu',pagename=each)"
+											style="color:blue;text-decoration:underline;cursor: hand;font-size: 14px;"></label>
+									</a>
+								</listcell>
+							</listitem>
+						</template>
+
+					</listbox>
+
+			<scrollview hflex="1" vflex="1">
+					<grid model="@bind(vm.lstSubMenuGroup)" height="700px" width="18000px">
+						<template name="model:group">
+							<group label="@load(each[0])"/>
+						</template>
+
+						<template name="model">
+							<row>
+								<grid model="@bind(each.children)" width="1600px">
+									<columns>
+										<column label="Title" width="220px"></column>
+										<column width="100px">
+											<checkbox label="Add/Create" style="font-weight:bold;"
+												checked="@bind(each.canAdd)"
+												onCheck="@command('checkAllAddCommand',row=each,chk=self.checked,type='add')"></checkbox>
+										</column>
+										<column width="100px">
+											<checkbox label="Edit/Modify" style="font-weight:bold;"
+												checked="@bind(each.canModify)"
+												onCheck="@command('checkAllAddCommand',row=each,chk=self.checked,type='edit')"></checkbox>
+										</column>
+										<column width="100px">
+											<checkbox label="View" style="font-weight:bold;"
+												checked="@bind(each.canView)"
+												onCheck="@command('checkAllAddCommand',row=each,chk=self.checked,type='view')"></checkbox>
+										</column>
+										<column width="100px">
+											<checkbox label="Delete" style="font-weight:bold;"
+												checked="@bind(each.canDelete)"
+												onCheck="@command('checkAllAddCommand',row=each,chk=self.checked,type='delete')"></checkbox>
+										</column>
+										<column width="100px">
+											<checkbox label="Export" style="font-weight:bold;"
+												checked="@bind(each.canExport)"
+												onCheck="@command('checkAllAddCommand',row=each,chk=self.checked,type='export')"></checkbox>
+										</column>
+										<column width="100px">
+											<checkbox label="Print" style="font-weight:bold;"
+												checked="@bind(each.canPrint)"
+												onCheck="@command('checkAllAddCommand',row=each,chk=self.checked,type='print')"></checkbox>
+										</column>
+										<column width="150px">
+											<checkbox label="Trasactions" style="font-weight:bold;"
+												checked="@bind(each.canAllowToSeeAccountingTrasaction)" visible="@bind(vm.onlyAccountingAccess)"
+												onCheck="@command('checkAllAddCommand',row=each,chk=self.checked,type='otherTrasction')"></checkbox><space></space><image style="cursor: help" tooltip="trasaction"
+											src="/images/hint-icon.png"  visible="@bind(vm.onlyAccountingAccess)"></image>
+										</column>
+										<column width="150px">
+											<checkbox label="Activate Status" style="font-weight:bold;"
+												checked="@bind(each.allowToActive)" visible="@bind(vm.onlyAccountingAccess)"
+												onCheck="@command('checkAllAddCommand',row=each,chk=self.checked,type='allowActive')"></checkbox><space></space><image style="cursor: help" tooltip="activeStatus"
+											src="/images/hint-icon.png"  visible="@bind(vm.onlyAccountingAccess)"></image>
+										</column>
+										<column width="180px">
+											<checkbox label="In-Active Status" style="font-weight:bold;"
+												checked="@bind(each.allowToInActive)" visible="@bind(vm.onlyAccountingAccess)"
+												onCheck="@command('checkAllAddCommand',row=each,chk=self.checked,type='allowInActive')"></checkbox>
+												<space></space><image style="cursor: help" tooltip="inactiveStatus"
+											src="/images/hint-icon.png"  visible="@bind(vm.onlyAccountingAccess)"></image>
+										</column>
+										
+										<column width="100px">
+											<checkbox label="Approve" style="font-weight:bold;"
+												checked="@bind(each.canApprove)" visible="@bind(vm.onlyAccountingAccess)"
+												onCheck="@command('checkAllAddCommand',row=each,chk=self.checked,type='approve')"></checkbox>
+												
+										</column>
+										
+										<column width="120px">
+											<checkbox label="Change Status" style="font-weight:bold;"
+												checked="@bind(each.canChangeStatus)" visible="@bind(vm.onlyAccountingAccess)"
+												onCheck="@command('checkAllAddCommand',row=each,chk=self.checked,type='changeStatus')"></checkbox>
+												
+										</column>
+										
+										<column width="100px">
+											<checkbox label="Convert" style="font-weight:bold;"
+												checked="@bind(each.canConvert)" visible="@bind(vm.onlyAccountingAccess)"
+												onCheck="@command('checkAllAddCommand',row=each,chk=self.checked,type='convert')"></checkbox>
+												
+										</column>
+										
+										
+									</columns>
+									<template name="model" var="item">
+										<row>
+											<label value="@load(item.title)"></label>
+											<checkbox checked="@bind(item.canAdd)"></checkbox>
+											<checkbox checked="@bind(item.canModify)"></checkbox>
+											<checkbox checked="@bind(item.canView)"></checkbox>
+											<checkbox checked="@bind(item.canDelete)"></checkbox>
+											<checkbox checked="@bind(item.canExport)"></checkbox>
+											<checkbox checked="@bind(item.canPrint)"></checkbox>
+											<checkbox checked="@bind(item.canAllowToSeeAccountingTrasaction)" visible="@bind(vm.onlyAccountingAccess)"></checkbox>
+											<checkbox checked="@bind(item.allowToActive)" visible="@bind(vm.onlyAccountingAccess)"></checkbox>
+											<checkbox checked="@bind(item.allowToInActive)" visible="@bind(vm.onlyAccountingAccess)"></checkbox>
+											<checkbox checked="@bind(item.canApprove)" visible="@bind(vm.onlyAccountingAccess)"></checkbox>
+											<checkbox checked="@bind(item.canChangeStatus)" visible="@bind(vm.onlyAccountingAccess)"></checkbox>
+											<checkbox checked="@bind(item.canConvert)" visible="@bind(vm.onlyAccountingAccess)"></checkbox>
+										</row>
+									</template>
+								</grid>
+							</row>
+						</template>
+
+					</grid>
+
+</scrollview>
+
+				</hlayout>
+				<hbox pack="center" hflex="1">
+
+					<button label="Save" onClick="@command('saveUserMenuCommand')"></button>
+				</hbox>
+
+			</vlayout>
+			</scrollview>
+		
+</zk>

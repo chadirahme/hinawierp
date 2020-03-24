@@ -1,0 +1,155 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('realestate.RealEstateViewModel' ,type='vacant')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+			<hlayout>
+ 	<label value="No. of Records"></label>
+ 	<listbox multiple="false" width="120px" mold="select" model="@load(vm.lstAllPageSize)" selectedItem="@bind(vm.selectedAllPageSize)">
+		<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+
+</listbox>
+ 	</hlayout>
+	
+			<listbox model="@bind(vm.lstVacant)" vflex="1" hflex="1" selectedItem="@bind(vm.selectedVacant)" width="900px"  mold="paging" pageSize="@bind(vm.selectedPageSize)" pagingPosition="top">
+			 <auxhead sclass="category-center">
+            <auxheader colspan="1">
+                  <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1" width="100px"
+                    value="@bind(vm.filter.flatName)" onChange="@command('changeVacantFilter')" />
+            </auxheader>
+            <auxheader colspan="1">
+                 <image src="/images/funnel.png" />
+                <textbox instant="true"  hflex="1" width="100px"
+                    value="@bind(vm.filter.buildingName)" onChange="@command('changeVacantFilter')"/>
+            </auxheader>
+            <auxheader colspan="1">
+               <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1" width="100px"
+                    value="@bind(vm.filter.status)" onChange="@command('changeVacantFilter')"/>
+            </auxheader>
+          <auxheader colspan="1">
+               <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1" width="100px"
+                    value="@bind(vm.filter.description)" onChange="@command('changeVacantFilter')"/>
+            </auxheader>
+            <auxheader colspan="1">
+               <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1" width="100px"
+                    value="@bind(vm.filter.type)" onChange="@command('changeVacantFilter')"/>
+            </auxheader>    
+           </auxhead>
+           
+					<listhead draggable="true" menupopup="auto" sizable="true">
+					
+						<listheader label="Flat Name" width="100px"  draggable="head" droppable="head" sort="auto('flatName')"/>
+						<listheader label="Building Name" width="200px" draggable="head" droppable="head" sort="auto('buildingName')"/>
+						<listheader label="Status" width="150px" sort="auto('status')"/>
+						<listheader label="Flat Description" width="150px" sort="auto('flatDesc')"/>
+						<listheader label="Flat Type"  sort="auto('flatTypeDesc')" width="150px"/>						
+												
+					</listhead>
+					<template name="model">
+						<listitem>														
+							<listcell>
+								<label value="@bind(each.flatName)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.buildingName)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.status)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.flatDesc)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.flatTypeDesc)"/>
+							</listcell>								
+							
+						</listitem>
+					</template>
+				</listbox>
+				
+			</vlayout>
+			</center>
+			
+			
+			<!-- <east width="330px"  visible="@bind(not empty vm.selectedVacant)"  border="none" collapsible="false" splittable="true" minsize="300" autoscroll="true">
+			<vlayout 
+				form="@id('fx') @load(vm.selectedVacant)">
+				
+				<grid hflex="1">
+					<columns>
+						<column align="right" hflex="min"/>
+						<column/>
+					</columns>
+					<rows>
+					<row>
+							<cell sclass="row-title">Flat Name :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.flatName)" readonly="true"/>							
+							</hlayout>
+						</row>
+						<row>
+							<cell sclass="row-title">Building Name :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.buildingName)" readonly="true"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Status :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.status)"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Flat Description :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.flatDesc)"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Flat Type :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.flatTypeDesc)"/>							
+							</hlayout>
+						</row>																						
+						
+						<row>
+							<cell sclass="row-title">Size :</cell>
+							<hlayout>
+							<textbox  value="@bind(fx.sizeTypeDesc)"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Purpose :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.purposeDesc)"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Floor :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.floorDesc)"/>							
+							</hlayout>
+						</row>
+						
+						</rows>
+						</grid>
+						</vlayout>
+						</east> -->
+						
+			</borderlayout>
+</zk>

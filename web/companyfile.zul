@@ -1,0 +1,8 @@
+<?page title="Hinawi Software" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/css/style.css"?>
+<?link rel="stylesheet" type="text/css" href="/css/hstyle.css"?>
+
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout/companytemplate.zul"?>
+<zk>
+	<include self="@define(content)" src="contentdemo.zul"/>
+</zk>

@@ -1,0 +1,250 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+	<zscript>
+		void openContexMenu(Integer type) { if(type==1)
+		editPopupJournalVoucher.open(lstJournalVoucherGrid);
+		}
+	</zscript>
+	<style>
+		<!-- .z-datebox-disd, .z-datebox-focus .z-datebox-disd { opacity: 1; filter: 
+			alpha(opacity=100); } .z-datebox-text-disd { background-color: #FFFFFF; color: 
+			#000000 !important; } -->
+	</style>
+
+	<borderlayout apply="org.zkoss.bind.BindComposer" style="overflow:auto"
+		id="printId" viewModel="@id('vm') @init('hba.JournalVoucherViewModel')">
+		<center autoscroll="true" border="none">
+			<vlayout style="overflow:auto">
+				<panel title="" collapsible="true">
+					<caption>
+						<div align="left">
+							<hbox pack="stretch" style="align:right;valign:top">
+								<div align="left">
+									<button hoverImage="/images/arrow-left-Green.png"
+										onClick="@command('navigationJournalVoucher',cmp='prev')"
+										label="Previous" width="100px" src="/images/grrn-left-arrow.png"
+										height="50px"></button>
+									<button hoverImage="/images/arrow-right-green.png"
+										onClick="@command('navigationJournalVoucher',cmp='next')"
+										label="Next" width="100px" src="/images/green-right-arrow.png"
+										height="50px"></button>
+									<image style="cursor: help" tooltip="isSupervisorHint"
+										src="/images/hint-icon.png"></image>
+									<popup id="isSupervisorHint" width="400px">
+										<html><![CDATA[Browsing is displaying transaction created by current user.]]></html>
+									</popup>
+								</div>
+								<div width="150px"></div>
+								<div>
+									<label value="@bind(vm.labelStatus)"
+										style="color:#0AA0AB;text-align: right;font-weight: bold;font-size:18px"></label>
+								</div>
+
+							</hbox>
+						</div>
+					</caption>
+					<panelchildren>
+						<grid
+							form="@id('fx') @load(vm.journalVoucher) @save(vm.journalVoucher, before='addNewJournalVoucher') ">
+							<columns>
+								<column width="100px"></column>
+								<column width="150px"></column>
+								<column width="170px"></column>
+								<column width="130px"></column>
+								<column width="170px"></column>
+								<column width="170px"></column>
+								<column width="150px"></column>
+							</columns>
+							<rows>
+								<row>
+									<cell>
+										<label value=" JournalVoucher_Date">Date*</label>
+									</cell>
+									<cell>
+										<datebox width="120px" value="@bind(fx.txnDate)"
+											format="dd/MM/yyyy"></datebox>
+									</cell>
+									<cell>
+										<label value="JV_No">No.*</label>
+
+										<textbox width="120px" value="@bind(fx.txnNumber)"
+											constraint="no empty: Please enter Sale Number !!!"></textbox>
+											<button label="ADD New JV" onClick="window.open('dashboard.html')"></button>
+									</cell>
+								</row>
+								<row>
+									<cell>
+										<label value="Memo"></label>
+									</cell>
+									<cell colspan="3">
+										<textbox hflex="1" id="JV_Memo" multiline="true"
+											placeholder="" rows="2" value="@bind(fx.notes)" />
+									</cell>
+								</row>
+
+								<row>
+
+									<cell colspan="3">
+										<label value="@bind(vm.lblTotalDebit)" style="@bind(vm.matchFlag eq 'fales' ? 'color:red' : 'color:green')" />
+									</cell>
+								</row>
+
+								<row>
+
+									<cell colspan="3">
+										<label value="@bind(vm.lblTotalCredit)" style="@bind(vm.matchFlag eq 'fales' ? 'color:red' : 'color:green')"/>
+									</cell>
+								</row>
+
+							</rows>
+
+						</grid>
+					</panelchildren>
+				</panel>
+
+				<menupopup id="editPopupJournalVoucher">
+					<menuitem label="Insert Line" onClick="@command('insertCheckItems')"></menuitem>
+					<menuitem label="Delete Line" onClick="@command('deleteCheckItems')"></menuitem>
+				</menupopup>
+
+				<vlayout style="overflow:auto" hflex="1">
+					<listbox id="lstJournalVoucherGrid" model="@load(vm.lstJournalVoucherCheckItems)"
+						hflex="1" selectedItem="@bind(vm.selectedGridItems)">
+						<!--" -->
+						<listhead menupopup="auto" sizable="true">
+							<listheader label="SNo" width="40px"></listheader>
+							<listheader label="Add/Delete" width="70px"></listheader>
+							<!-- <listheader label="Account Type" width="120px"></listheader> -->
+							<listheader label="Account Name" width="300px"></listheader>
+							<listheader label="Debit" width="100px"></listheader>
+							<listheader label="Credit" width="100px"></listheader>
+							<listheader label="Memo" width="150px"></listheader>
+							<listheader label="Entity Type" width="150px"></listheader>
+							<listheader label="Name" width="300px"></listheader>
+							<listheader label="Billable" width="100px"></listheader>
+							<listheader label="Class" width="250px"></listheader>
+						</listhead>
+						<template name="model" var="each">
+							<listitem>
+
+								<listcell>
+									<label value="@bind(each.line_no)"></label>
+								</listcell>
+
+								<listcell>
+									<image src="/images/edit.png" width="20px" height="20px"
+										context="editPopupJournalVoucher" onClick="openContexMenu(1)" />
+								</listcell>
+
+								<!-- <listcell> <listbox mold="select" model="@load(vm.lstAccountType)" 
+									hflex="1" selectedItem="@bind(each.selectedAccountType)" > <template name="model" 
+									var="item"> <listitem> <listcell label="@load(item.name)"> </listcell> </listitem> 
+									</template> </listbox> </listcell> -->
+
+								<listcell>
+									<combobox autodrop="true" mold="rounded"
+										model="@load(vm.lstAccounts) " selectedItem="@bind(each.selectedAccount)"
+										hflex="1" onSelect="@command('selectAccount' , type=each)">
+										<template name="model" var="itemx">
+											<comboitem label="${itemx.accountName} : ${itemx.accountType}"
+												style="@bind(itemx.subLevel eq 0 ? 'color:black;font-weight:bold;' : itemx.subLevel eq 1 ? 'text-indent:30px' : itemx.subLevel eq 2 ? 'text-indent:60px' : itemx.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') ">
+											</comboitem>
+										</template>
+									</combobox>
+								</listcell>
+
+								<listcell>
+									<textbox value="@bind(each.debit)" hflex="1"
+										onChange="@command('selectDebit' , type=each)"></textbox>
+								</listcell>
+
+								<listcell>
+									<textbox value="@bind(each.credit)" hflex="1"
+										onChange="@command('selectCredit' , type=each)"></textbox>
+								</listcell>
+
+								<listcell>
+									<textbox value="@bind(each.memo)" hflex="1"></textbox>
+								</listcell>
+
+								<listcell>
+									<listbox mold="select" model="@load(vm.lstEntityType)"
+										hflex="1" selectedItem="@bind(each.entityRef_Type)" onSelect="@command('selectEntity' , type=each)">
+										<template name="model" var="item">
+											<listitem>
+												<listcell label="@load(item)">
+												</listcell>
+											</listitem>
+										</template>
+									</listbox>
+								</listcell>
+
+								<listcell>
+									<listbox mold="select" model="@load(each.lstName)"
+										hflex="1" selectedItem="@bind(each.selectedName)">
+										<template name="model" var="item">
+											<listitem>
+												<listcell label="@load(item.name)">
+												</listcell>
+											</listitem>
+										</template>
+									</listbox>
+								</listcell>
+
+								<listcell>
+									<checkbox checked="@bind(each.billableChked)" visible="@bind(each.showBillable)"></checkbox>
+								</listcell>
+								<listcell>
+									<combobox autodrop="true" mold="rounded"
+										model="@load(vm.lstGridClass)" selectedItem="@bind(each.selectedClass)"
+										hflex="1">
+										<template name="model" var="item">
+											<comboitem label="${item.name}"
+												style="@bind(item.sublevel eq 0 ? 'color:black;font-weight:bold;' : item.sublevel eq 1 ? 'text-indent:30px' : item.sublevel eq 2 ? 'text-indent:60px' : item.sublevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') ">
+											</comboitem>
+										</template>
+									</combobox>
+								</listcell>
+
+
+							</listitem>
+						</template>
+					</listbox>
+				</vlayout>
+				<div hflex="1" style="align:right;valign:top">
+					<grid>
+						<columns>
+							<column></column>
+							<column></column>
+						</columns>
+						<rows>
+							<row>
+								<cell align="center">
+									<hlayout>
+										<!-- <a href="" style="color:blue;text-decoration:underline;" onClick="@command('goToRelatedReport')">Go 
+											To Receipt Voucher Report List</a> <label value=""></label> <label value=""></label> -->
+
+									</hlayout>
+								</cell>
+
+								<cell align="right">
+									<hlayout>
+										<button label="E-mail"
+											onClick="@command('CustomerSendEmail',row=vm.journalVoucher)"
+											visible="@bind(vm.canPrint)"></button>
+										<button label="Save" onClick="@command('addNewJournalVoucher')"
+											visible="@bind(vm.canCreate)"></button>
+										<button label="Print" onClick="@command('createPdfForPrinting')"
+											visible="@bind(vm.canPrint)" />
+										<button label="Close" onClick="@command('closeJV')"></button>
+									</hlayout>
+								</cell>
+							</row>
+						</rows>
+					</grid>
+				</div>
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

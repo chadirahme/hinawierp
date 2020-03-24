@@ -1,0 +1,166 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+<zk>
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('payroll.SalaryDetailViewModel',compKey=arg.compKey,month=arg.month,year=arg.year,empkeys=arg.empkeys)" vflex="1">
+
+			<listbox  model="@bind(vm.lstEmployeeDraftSalary)"  checkmark="true" multiple="true" selectedItems="@bind(vm.selectedEntities)"
+						 vflex="1" emptyMessage="No data found">
+						<listhead menupopup="auto" sizable="true">
+							<listheader width="50px" />
+							<listheader label="Sr.No." width="50px" sort="auto('srNO')" />
+							<listheader label="Employee No." width="100px" sort="auto('empNo')" />
+							<listheader label="Name" sort="auto('enFullName')" width="200px" />
+							<listheader width="200px" label="Department" sort="auto('department')" />	
+							<listheader label="Position" sort="auto('position')" width="150px" />
+							<listheader label="Joining Date" sort="auto('employeementDate')" width="100px" />
+							<listheader width="100px" label="Total Salary"></listheader>
+							<listheader width="100px" label="Basic Salary"></listheader>
+							<listheader width="100px" label="Allowances"></listheader>	
+													
+							<listheader width="50px" label="Days" sort="auto('totalDays')" />
+							<listheader width="100px" label="Tot. Work Units" sort="auto('totalWorkingUnits')" />						
+							
+							
+								<listheader forEach="${vm.columnUnitList}" label="${each}" width="100px"></listheader> 
+							<listheader forEach="${vm.columnAmountList}" label="${each}" width="100px"></listheader> 
+												
+							<listheader width="100px" label="Total O.T"></listheader>
+							<listheader width="100px" label="Sub Total"></listheader>
+							
+							<listheader width="100px" label="Loan"></listheader>
+							<listheader width="100px" label="Addition"></listheader>
+							<listheader width="100px" label="Deduction"></listheader>
+							
+							<listheader width="100px" label="Actual Salary"></listheader>
+							<listheader width="100px" label="Net. Pay"></listheader>
+							<listheader width="100px" label="Paid Amount"></listheader>
+							<listheader width="100px" label="Balance"></listheader>
+							
+							<listheader width="100px" label="Remarks"></listheader>
+						</listhead>
+						
+							<template name="model" var="r">
+							<listitem style="@bind(r.salaryStatus eq 'A' ? 'background:#B5F0CD;' : '')" disabled="@bind(r.salaryStatus eq 'A' )">
+							<listcell>							
+							</listcell>
+							<listcell label="@bind(r.srNO)"/>
+								<listcell label="@bind(r.empNo)">
+									
+								</listcell>
+								<listcell label="@bind(r.enFullName)">									
+								</listcell>
+									<listcell label="@bind(r.department)">									
+								</listcell>
+								<listcell label="@bind(r.position)">									
+								</listcell>
+								<listcell label="@bind(r.employeementDate) @converter('formatedDate', format='dd-MM-yyyy')" >									
+								</listcell>
+								
+								<listcell label="@bind(r.totalSalary)"></listcell>
+								<listcell label="@bind(r.basicSalary)"></listcell>
+								<listcell label="@bind(r.totalAllowance)"></listcell>
+								
+								
+								<listcell label="@bind(r.totalDays)">									
+								</listcell>
+								
+								<listcell label="@bind(r.totalWorkingUnits)  @converter('formatedNumber', format='###,###,###.00')">									
+								</listcell>
+								
+								 <listcell forEach="${vm.columnUnitList}" label="${r.otArrayUnits[forEachStatus.index]}" ></listcell> 
+								 <listcell forEach="${vm.columnAmountList}" label="${r.otArrayAmount[forEachStatus.index]}" ></listcell> 
+								  
+								
+								<listcell label="@bind(r.otAmount)"></listcell>
+								<listcell label="@bind(r.subTotal)"></listcell>
+								<listcell label="@bind(r.loans)"></listcell>
+								<listcell label="@bind(r.additions)"></listcell>
+								<listcell label="@bind(r.deductions)"></listcell>
+								<listcell label="@bind(r.actualSalary) @converter('formatedNumber', format='###,###,###.00')"></listcell>																						
+								<listcell label="@bind(r.netToPay) @converter('formatedNumber', format='###,###,###.00')"></listcell>
+								<listcell label="@bind(r.paidAmount)"></listcell>
+								<listcell label="@bind(r.balance)"></listcell>
+								<listcell label="@bind(r.remarks)"></listcell>
+							</listitem>
+						</template>
+						
+						 <listfoot >
+                		<listfooter span="3"><label value="Totals :"/></listfooter>
+                		
+                		<listfooter><label value=""/></listfooter>
+                		<listfooter><label value=""/></listfooter>
+                		<listfooter><label value=""/></listfooter>
+                		<listfooter><label value=""/></listfooter>
+                		<listfooter><label value="@bind(vm.totalSalary) @converter('formatedNumber', format='###,###,###.00')"/></listfooter>
+                		<listfooter><label value="@bind(vm.totalBasicSalary) @converter('formatedNumber', format='###,###,###.00')"/></listfooter>
+                		<listfooter><label value="@bind(vm.totalAllowances) @converter('formatedNumber', format='###,###,###.00')"/></listfooter>
+                		<listfooter><label value=""/></listfooter>
+                		<listfooter><label value=""/></listfooter>
+                		<listfooter forEach="${vm.columnUnitList}"><label   value=""/></listfooter>
+                		<listfooter forEach="${vm.columnAmountList}"><label  value=""/></listfooter>
+                		
+                		<listfooter><label value="@bind(vm.totalOTAmount) @converter('formatedNumber', format='###,###,###.00')"/></listfooter>
+                		<listfooter><label value="@bind(vm.totalSubTotal) @converter('formatedNumber', format='###,###,###.00')"/></listfooter>
+                		<listfooter><label value="@bind(vm.totalLoans) @converter('formatedNumber', format='###,###,###.00')" /></listfooter>
+                		<listfooter><label value="@bind(vm.totalAdditions) @converter('formatedNumber', format='###,###,###.00')"/></listfooter>
+                		<listfooter><label value="@bind(vm.totalDeductions) @converter('formatedNumber', format='###,###,###.00')"/></listfooter>
+                		<listfooter><label value="@bind(vm.totalActualSalary) @converter('formatedNumber', format='###,###,###.00')"/></listfooter>
+                		<listfooter><label value="@bind(vm.totalNetPay) @converter('formatedNumber', format='###,###,###.00')"/></listfooter>
+                		<listfooter><label value="@bind(vm.totalPaidAmount) @converter('formatedNumber', format='###,###,###.00')"/></listfooter>
+                		<listfooter><label value="@bind(vm.totalBalance) @converter('formatedNumber', format='###,###,###.00')"/></listfooter>
+                		
+            			</listfoot>
+            
+						</listbox>
+						
+						<window mode="overlapped"  title="Missing Entries / Not Approved" width="800px" height="300px" border="normal" closable="true" position="center"
+						visible="@bind(vm.missingListHasData)">
+						<vlayout vflex="1">
+						<listbox  model="@bind(vm.lstMissedEmployeeDraftSalary)" 
+						 vflex="1" emptyMessage="No data found">
+						<listhead menupopup="auto" sizable="true">
+							<listheader label="Sr.No." width="50px" sort="auto('srNO')" />
+							<listheader label="Employee No." width="100px" sort="auto('empNo')" />
+							<listheader label="Name" sort="auto('enFullName')" width="200px" />
+							
+							<listheader width="150px" label="Timesheet Entered" sort="auto('totalDays')" />
+							<listheader width="150px" label="Timesheet Not Entered" sort="auto('totalPresentDays')" />						
+						  <listheader width="100px" label="Remarks"></listheader>													
+						</listhead>
+						
+							<template name="model" var="r">
+							<listitem>
+							<listcell label="@bind(r.srNO)"/>
+								<listcell label="@bind(r.empNo)">
+									
+								</listcell>
+								<listcell label="@bind(r.enFullName)">									
+								</listcell>
+				
+								<listcell label="@bind(r.totalDays)">									
+								</listcell>
+								
+								<listcell label="@bind(r.missingDays)">									
+								</listcell>
+								<listcell label="@bind(r.remarks)"></listcell>							
+							</listitem>
+						</template>
+						
+						</listbox>
+						
+						<hbox pack="center" hflex="1">
+						<button label="Approve Timesheet" onClick="@command('approvedCommand')"></button>
+						<button label="Refresh" onClick="@command('refreshCommand')"></button>
+						</hbox>
+						</vlayout>
+						</window>
+						
+						<hbox pack="center" hflex="1">
+						<button label="Save" onClick="@command('saveCommand')"></button>
+						<button label="Clear" onClick="@command('clearCommand')"></button>
+						</hbox>
+</vlayout>
+</zk>

@@ -1,0 +1,78 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window id="contactEmailDialog" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Add Contact Emails" border="normal"
+		position="center,center" closable="true" sizable="true"
+		onCancel="contactEmailDialog.detach()" width="50%" height="55%">
+		
+		<borderlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm') @init('crm.ContactEmailViewModel',type='list') ">
+		<center autoscroll="true" border="none">
+		
+		<vlayout hflex="1" >
+		<grid>
+								<columns>
+									<column width="150px"></column>
+									<column width="300px"></column>									
+									<column hflex="1"></column>									
+								</columns>
+								
+								<rows>
+								
+								 <row>
+	  <label value="Emails Group" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	  <listbox mold="select" model="@load(vm.bulkGroups)"
+											hflex="1" selectedItem="@bind(vm.selectBulkGroup)">
+											<template name="model" var="item">
+												<listitem>
+													<listcell label="@load(item)"></listcell>
+												</listitem>
+											</template>
+										</listbox> 
+	  
+	  </row>
+	  
+	   <row>
+	  <label value="Industry Group" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	  <listbox mold="select" model="@load(vm.industryGroups)"
+											hflex="1" selectedItem="@bind(vm.selectedIndustryGroup)">
+											<template name="model" var="item">
+												<listitem>
+													<listcell label="@load(item)"></listcell>
+												</listitem>
+											</template>
+										</listbox> 
+	  
+	  </row>
+	  
+	  <row>
+	   <label value="Contacts Emails " style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	   <cell colspan="2">
+	  <textbox value="@bind(vm.bulkmEails)" rows="6" hflex="1"></textbox>
+	  </cell>
+	  </row>
+	  
+	   <row>
+	  <cell colspan="3">
+	  <hbox pack="center" hflex="1">
+	  <button label="Save Bulk Emails" onClick="@command('saveBulkEmailsCommand')"></button>
+	  
+	  <button label="Close" onClick="contactEmailDialog.detach()"></button>
+	  
+	  </hbox>
+	  </cell>
+	  </row>
+	  
+
+								</rows>
+								</grid>
+								
+		
+		
+		</vlayout>
+		
+		</center>
+		
+		</borderlayout>
+		</window>
+</zk>

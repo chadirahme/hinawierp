@@ -1,0 +1,59 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<window id="customerModalDialog"  border="normal" title="Customer Info"  width="500px" height="250px" closable="true" sizable="true"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('crm.IncomingEmailViewModel' , type='unknownEmail')"
+		onCancel="customerModalDialog.detach()">
+		
+		<grid>
+		<columns>
+		<column width="100px"></column>
+		<column></column>
+		</columns>
+		
+		<rows>
+		<row>
+		<label value="Email"></label>
+		<label value="@bind(vm.selectedEmail.fromEmail)"></label>
+		</row>
+		
+		<row>
+		<label value="Customer"></label>
+		<listbox multiple="false" hflex="1" mold="select"
+				model="@load(vm.lstCustomers)" selectedItem="@bind(vm.selectedCustomer)">
+				<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item.fullName)"></listcell>
+					</listitem>
+				</template>
+
+
+				</listbox>
+		</row>
+		
+		<row>
+		<label value="Company"></label>
+		<label value="@bind(vm.selectedCustomer.companyName)"></label>
+		</row>
+		
+		<row>
+		<label value="Phone"></label>
+		<label value="@bind(vm.selectedCustomer.phone)"></label>
+		</row>
+		
+		<row>
+		<cell colspan="2">
+		<hbox hflex="1" pack="center">
+		<button label="Save" onClick="@command('saveCusomerEmailCommand')"></button>
+		
+		<button label="Close" onClick="customerModalDialog.detach()"></button>
+		</hbox>
+		</cell>
+		</row>
+		</rows>
+		</grid>
+		
+
+</window>
+</zk>

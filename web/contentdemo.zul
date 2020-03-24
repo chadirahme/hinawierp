@@ -1,0 +1,39 @@
+<?page title="Hinawi Online" contentType="text/html;charset=UTF-8"?>
+
+<zk>
+<scrollview orient="vertical">
+<html >
+ <table style="font-size: 14px;color:#424242;margin-left:15px;font-weight:bold;" width="90%">
+        <tr>
+        <td align="center">
+        <h1>Welcome to Hinawi Software Solutions!</h1>
+                     
+      	<br/><br/> 
+      
+       	Dear valued customers and Visitors,<br/><br/>
+        Welcome to our first Web based version of Hinawi Softwares. <br/><br/>
+        
+        This is the first step in our project of Hinawi Web based.
+         We would like to thank all our valued customers for their support after we have successfully done our desktop version of Hinawi Softwares, 
+          <br/><br/>
+         thus, your continued support is important to achieve our main target 'Hinawi Online'! 
+         <br/><br/>
+         For our new visitors, this is a trial version of Online Softwares and is under construction, hopefully it will be completed soon.
+         <br/><br/>
+         Concerning your comments and opinions, kindly send an email to <a href="mailto:hinawi@eim.ae">hinawi@eim.ae</a>. Your comments is the secret of our Success.
+         <br/><br/>
+         Thank you for your time and stay tuned!
+         <br/><br/>
+		Explorer Computer Team.
+	
+         <br/><br/><br/>
+         
+        
+
+        </td>
+        </tr>
+        </table>
+  </html>
+  
+  </scrollview>
+</zk>

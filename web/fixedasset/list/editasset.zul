@@ -1,0 +1,155 @@
+<?page title="new page title 12312" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window id="modalDialog" apply="org.zkoss.bind.BindComposer" mode="highlighted" title="Add/Edit Asset" border="normal" position="center,center" closable="true"
+viewModel="@id('vm')  @init('fixedasset.EditFixedAssetViewModel')"  sizable="true"
+onCancel="modalDialog.detach()"
+ width="680px" height="600px">
+
+<grid form="@id('fx') @load(vm.selectedFixedAsset) @save(vm.selectedFixedAsset, before='saveCommand') @validator(vm.todoValidator)">
+<columns>
+<column width="130px"></column>
+<column width="250px"></column>
+<column width="120px"></column>
+</columns>
+
+<rows>
+							<row>
+							<cell sclass="row-title">Asset Code *:</cell>
+							
+							<textbox value="@bind(fx.assetCode)"  hflex="1"/>							
+							
+						</row>
+						
+							<row>
+							<cell sclass="row-title">Name *:</cell>
+							
+							<textbox value="@bind(fx.assetName)" hflex="1"/>							
+							
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Description :</cell>
+							
+							<textbox value="@bind(fx.assetMasterDesc)" hflex="1"/>							
+							
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Used :</cell>
+							<listbox multiple="false" mold="select" selectedItem="@bind(fx.used)" >			
+							<listitem label="Used" value="Used"></listitem>
+							<listitem label="New" value="New"></listitem>
+							</listbox>
+			
+													
+							
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Unit *:</cell>
+							<listbox mold="select" hflex="1"
+							model="@load(vm.lstUnit)"
+							selectedItem="@bind(vm.selectedUnit)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Category *:</cell>
+							<listbox mold="select" hflex="1"
+							model="@load(vm.lstCategory)"
+							selectedItem="@bind(vm.selectedCategory)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Country :</cell>
+							<listbox mold="select" hflex="1"
+							model="@load(vm.lstCountry)"
+							selectedItem="@bind(vm.selectedCountry)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+						</row>
+						
+							<row>
+							<cell sclass="row-title">City :</cell>
+							<listbox mold="select" hflex="1"
+							model="@load(vm.lstCity)"
+							selectedItem="@bind(vm.selectedCity)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Department :</cell>
+							<listbox mold="select" hflex="1"
+							model="@load(vm.lstDepartment)"
+							selectedItem="@bind(vm.selectedDepartment)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Section :</cell>
+							<listbox mold="select" hflex="1"
+							model="@load(vm.lstSection)"
+							selectedItem="@bind(vm.selectedSection)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Account * :</cell>
+							<listbox mold="select" hflex="1"
+							model="@load(vm.lstAccounts)"
+							selectedItem="@bind(vm.selectedAccount)">
+						<template name="model">
+							<listitem label="@load(each.accountName)" />
+						</template>
+					  </listbox>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Open Balance :</cell>
+							<hlayout>
+							<doublebox value="@bind(fx.assetOpenBalance)"/>							
+							</hlayout>
+						</row>
+						
+					<row>
+							<cell sclass="row-title">Open Balance Date :</cell>
+							<hlayout>
+						<!-- 	<datebox  value="@bind(fx.assetOpenBalDate)" format="dd-MMM-yyyy"/>	 -->						
+							</hlayout>
+						</row>
+						
+
+<row>
+<cell colspan="3">
+<hbox pack="center" hflex="1">
+<button label="Save" onClick="@command('saveCommand')" visible="@bind(vm.canSave)"></button>
+<button label="Close" onClick="modalDialog.detach()" ></button>
+</hbox>
+</cell>
+</row>
+
+</rows>
+
+</grid>
+
+
+</window>
+</zk>

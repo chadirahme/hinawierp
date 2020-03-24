@@ -1,0 +1,23 @@
+<window id="pdfwindow1" width="80%" height="80%" title="PDF-Viewer" border="normal" mode="modal" 
+		closable="true" maximizable="true"  onClose="close()">
+<div>
+    <portallayout id="portalLayout" maximizedMode="whole">
+        <portalchildren style="padding: 5px" width="50%">
+            <panel id="wiki" height="300px" title="Cash INvoice Setting" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+                <panelchildren>
+                    <iframe width="100%" height="100%"
+                        src="http://www.gmodules.com/ig/ifr?url=http://www.therandomhomepage.com/google/gadgets/randomwiki/RandomWikiModule.xml&amp;up_moduletitle=Random%20Wikipedia%20Article&amp;up_language=en&amp;synd=open&amp;w=320&amp;h=350&amp;title=__UP_moduletitle__&amp;lang=en&amp;country=ALL&amp;border=%23ffffff|3px%2C1px+solid+%23999999&amp;source=http%3A%2F%2Fwww.gmodules.com%2Fig%2Fcreator%3Fsynd%3Dopen%26url%3Dhttp%253A%2F%2Fwww.therandomhomepage.com%2Fgoogle%2Fgadgets%2Frandomwiki%2FRandomWikiModule.xml%26pt%3D%2526context%253Dd%2526type%253Dgadgets%2526synd%253Dig%2526lang%253Den%2526.lang%253Den%2526country%253Dau%2526.country%253Dau%2526start%253D0%2526num%253D1%2526target%253Dx5%2526objs%253D0KPR%252CyN%26sn%3Dx5%26lang%3Den" />
+                </panelchildren>
+            </panel>
+       </portalchildren>
+        <portalchildren style="padding: 5px" width="50%">
+            <panel id="trio" height="400px" title="Trio" border="normal" collapsible="true" closable="true" maximizable="true" style="margin-bottom:10px">
+                <panelchildren>
+                    <iframe width="100%" height="100%"
+                        src="http://ig.gmodules.com/gadgets/ifr?url=http://www.labpixies.com/campaigns/trio/trio.xml&amp;nocache=0&amp;lang=en&amp;country=us&amp;.lang=en&amp;.country=us&amp;synd=ig&amp;mid=35&amp;ifpctok=7430207052966295609&amp;parent=http://www.google.com&amp;extern_js=/extern_js/f/CgJlbhICdXMrMBI4ACwrMBM4ACw/v3vgcgA0x8g.js" />
+                </panelchildren>
+            </panel>
+        </portalchildren>
+    </portallayout>
+</div>
+</window>

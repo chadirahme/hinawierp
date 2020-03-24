@@ -1,0 +1,119 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<vlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm')
+	 @init('admin.TodoListViewModel') " validationMessages="@id('vmsgs')">
+
+	<listbox id="box" multiple="true" rows="6" model="@bind(vm.lstTasks)"
+		selectedItem="@bind(vm.selectedTask)">
+		<listhead>
+		<listheader label="Creation Date" sort="auto(creationdate)" />
+			<listheader label="Employee" sort="auto(employeeName)" />
+			<listheader label="Task" sort="auto(description)" />
+			<listheader label="Status" sort="auto(status)" />
+			<listheader label="Priority"
+				sort="auto(priority)" />
+			<listheader label="Start Date"  />
+			<listheader label="Close Date"  />
+		</listhead>
+		<template name="model" var="event">
+			<listitem value="@load(event)">
+			<listcell label="@load(event.creationDate)" />
+				<listcell label="@load(event.employeeName)" />
+				<listcell label="@load(event.description)" />
+				<listcell label="@load(event.status)" />
+				<listcell label="@load(event.priority)" />
+				<listcell label="@load(event.openDate)" />
+				<listcell label="@load(event.closeDate)" />
+			</listitem>
+		</template>
+		</listbox>
+	
+	<groupbox id="mygrp"
+		form="@id('event') @load(vm.selectedTask) @save(vm.selectedTask, before='updateTask') @validator(vm.todoValidator)">
+		<caption label="Task" />
+		<grid>
+		<columns>
+		<column width="100px"></column>
+		<column width="120px"></column>
+		<column></column>
+		</columns>
+		<rows>
+		<row>
+		Employee:
+		<listbox mold="select" hflex="1"
+							model="@load(vm.lstEmployees)"
+							selectedItem="@bind(event.employee)">
+						<template name="model">
+							<listitem label="@load(each.fullName)" />
+						</template>
+					  </listbox>
+		</row>
+		<row>
+		Priority:				
+		<listbox mold="select" hflex="1"
+							model="@load(vm.priorityList)"
+							selectedItem="@bind(event.priority)">
+						<template name="model">
+							<listitem label="@load(each)" />
+						</template>
+					  </listbox>
+		</row>
+		
+		<row>
+		Status:		
+		<listbox mold="select" hflex="1"
+							model="@load(vm.statusList)"
+							selectedItem="@bind(event.status)">
+						<template name="model">
+							<listitem label="@load(each)" />
+						</template>
+					  </listbox>
+		</row>
+		<row>
+		Task:
+		<cell colspan="2">
+		 <textbox hflex="1" multiline="true" rows="4" value="@bind(event.description)" />
+		 </cell>
+		</row>
+		
+		<row visible="@bind(event.status eq 'Inprogress')">
+		Start Date:
+		<datebox hflex="1" value="@bind(event.openDate)" format="dd-MM-yyyy" />
+		</row>
+		<row visible="@bind(event.status eq 'Done')">
+		Close Date:
+		<datebox hflex="1" value="@bind(event.closeDate)" format="dd-MM-yyyy"/>
+		</row>
+
+<row>
+<cell colspan="3" align="center">
+<button id="add" label="Add New Task" onClick="@command('addTask')" />
+		<button id="update" label="Save" onClick="@command('updateTask')"
+			disabled="@load(empty vm.selectedTask)" />
+		<button id="delete" label="Delete" onClick="@command('deleteTask')"
+			disabled="@load(empty vm.selectedTask)" />
+</cell>
+</row>
+
+<row>
+<cell colspan="3" align="left">
+	<vlayout>
+			<label style="color:red" value="@load(vmsgs['name'])" />
+			<label style="color:red" value="@load(vmsgs['description'])" />	
+			<label style="color:red" value="@load(vmsgs['date'])" />		
+		</vlayout>
+</cell>
+</row>
+		</rows>
+		</grid>
+
+		
+		
+
+	
+	</groupbox>
+	
+	
+</vlayout>
+</zk>

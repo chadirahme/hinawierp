@@ -1,0 +1,106 @@
+<?page title="Hinawi Software - Time Sheet" contentType="text/html;charset=UTF-8"?>
+
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout/demotemplate.zul"?>
+<?link rel="stylesheet" type="text/css" href="/css/style.css"?>
+<zk>
+
+
+	
+<vlayout hflex="1" vflex="1" self="@define(content)" style="${sessionScope.Authentication.language eq 'English' ? 'direction: rtl;' : '' }">
+
+	<borderlayout apply="org.zkoss.bind.BindComposer" id="hbaSideBar" vflex="1" hflex="1" 
+	viewModel="@id('vm') @init('layout.Pagecomposer')">
+		
+
+         <west if="${sessionScope.Authentication.language eq 'Arabic' }" title="@bind(vm.language eq 'en' ? 'Timesheet' : 'كرت الدوام' )"  splittable="true" collapsible="true" autoscroll="true" size="200px" >
+
+                 <vlayout>                   
+                              
+              <vlayout  children="@bind(vm.lsttimesheetMenu) @template(empty each.children?'children':'menu')">
+   			 <template name="children">
+       		 <groupbox >
+       		<a href="">
+                <label value="@bind(vm.language eq 'en' ? each.title : each.artitle)" style="color:blue;text-decoration:underline;cursor: hand;" 
+                onClick='@command("menuClicked", pagename=each)'/>
+                </a>
+       		 </groupbox>
+    		</template>
+    		
+    		 <template name="menu">
+       		 <groupbox  closable="true" mold="3d"  open="@load(each.title eq 'Activities')">
+       		 <caption label="@bind(vm.language eq 'en' ? each.title : each.artitle)"></caption>
+       		        		        						
+		 		<grid  model="@bind(each.children)">
+               <columns>
+               <column ></column>
+               </columns>
+                <template name="model">
+            	
+            	<row>            
+               	<a href="" >
+                <label value="@bind(vm.language eq 'en' ? each.title : each.artitle)" sclass="@bind(each.sclassName)"  
+                onClick='@command("menuClicked", pagename=each , label=self , menuType="Timesheet")'/>
+                 </a>          
+                </row>
+                
+                </template>
+               </grid>
+       		 
+       		 
+       		 </groupbox>
+    		
+    		</template>
+    		
+			</vlayout>
+		</vlayout>
+            </west>
+            
+            <east if="${sessionScope.Authentication.language eq 'English' }" title="@bind(vm.language eq 'en' ? 'Timesheet' : 'كرت الدوام' )"  splittable="true" collapsible="true" autoscroll="true" size="200px" >
+           
+                 <vlayout>                   
+                              
+              <vlayout  children="@bind(vm.lsttimesheetMenu) @template(empty each.children?'children':'menu')">
+   			 <template name="children">
+       		 <groupbox >
+       		<a href="">
+                <label value="@bind(vm.language eq 'en' ? each.title : each.artitle)" style="color:blue;text-decoration:underline;cursor: hand;" 
+                onClick='@command("menuClicked", pagename=each)'/>
+                </a>
+       		 </groupbox>
+    		</template>
+    		
+    		 <template name="menu">
+       		 <groupbox  closable="true" mold="3d" sclass="arsidebar" open="@load(each.title eq 'Lists')">
+       		 <caption label="@bind(vm.language eq 'en' ? each.title : each.artitle)"></caption>
+       		        		        						
+		 		<grid  model="@bind(each.children)">
+               <columns>
+               <column ></column>
+               </columns>
+                <template name="model">
+            	
+            	<row>            
+               	<a href="" >
+                <label value="@bind(vm.language eq 'en' ? each.title : each.artitle)" sclass="@bind(each.sclassName)"  
+                onClick='@command("menuClicked", pagename=each , label=self , menuType="Timesheet")'/>
+                 </a>          
+                </row>
+                
+                </template>
+               </grid>
+       		 
+       		 
+       		 </groupbox>
+    		
+    		</template>
+    		
+			</vlayout>
+		</vlayout>
+            </east>
+
+		<center autoscroll="true" hflex="1" style="background-image: url('../images/backgroundlogo2.jpg');background-repeat:no-repeat;background-position: center; ">
+
+</center>
+</borderlayout>
+</vlayout>
+</zk>

@@ -1,0 +1,226 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('fixedasset.FixedAssetViewModel')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+			
+				<hlayout>
+ 	<label value="No. of Records"></label>
+ 	<listbox multiple="false" width="120px" mold="select" model="@load(vm.lstAllPageSize)" selectedItem="@bind(vm.selectedAllPageSize)">
+		<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+
+</listbox>
+
+<button label="Add New Asset" onClick="@command('addCommand')" visible="true"></button>
+ 	</hlayout>
+ 				
+			<listbox model="@bind(vm.lstFixedAsset)" vflex="1" selectedItem="@bind(vm.selectedFixedAsset)" hflex="1" pageSize="@bind(vm.selectedPageSize)" mold="paging" pagingPosition="top">
+			<auxhead>
+			<auxheader colspan="6" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;" align="center"/>
+			</auxhead>
+			<auxhead sclass="category-center">
+			<auxheader colspan="1" label="Edit" width="50px">             
+            </auxheader>
+            
+            <auxheader colspan="1">
+                <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1"
+                    value="@bind(vm.filter.assetName)" onChange="@command('changeFilter')" />
+            </auxheader>
+            <auxheader colspan="1">
+                <image src="/images/funnel.png" />
+                <textbox instant="true"  hflex="1"
+                    value="@bind(vm.filter.masterDesc)" onChange="@command('changeFilter')"/>
+            </auxheader>
+            <auxheader colspan="1">
+                <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1"
+                    value="@bind(vm.filter.unit)" onChange="@command('changeFilter')"/>
+            </auxheader>
+            <auxheader colspan="1">
+                <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1"
+                    value="@bind(vm.filter.used)" onChange="@command('changeFilter')"/>
+            </auxheader>
+             <auxheader colspan="1">
+                <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1"
+                    value="@bind(vm.filter.category)" onChange="@command('changeFilter')"/>
+            </auxheader>
+           
+        </auxhead>
+					<listhead menupopup="auto" sizable="true">
+						<listheader label="Edit" width="60px" />
+						<listheader label="Asset Name" sort="auto('assetName')"/>
+						<listheader label="Master Description" sort="auto('assetMasterDesc')"/>
+						<listheader label="Unit" sort="auto('unitDesc')"/>
+						<listheader label="Used" sort="auto('used')"/>
+						<listheader label="Category" sort="auto('categoryDesc')"/>						
+												
+					</listhead>
+					<template name="model">
+						<listitem>	
+						<listcell>
+							<button
+                        image="/images/rowedit.png"
+                        onClick="@command('editCommand', row=each)" />					
+							</listcell>
+																				
+							<listcell onDoubleClick="@command('viewCommand', row=each)">
+								<label value="@bind(each.assetName)"/>
+							</listcell>
+								<listcell onDoubleClick="@command('viewCommand', row=each)">
+								<label value="@bind(each.assetMasterDesc)"/>
+							</listcell>
+								<listcell onDoubleClick="@command('viewCommand', row=each)">
+								<label value="@bind(each.unitDesc)"/>
+							</listcell>
+								<listcell onDoubleClick="@command('viewCommand', row=each)">
+								<label value="@bind(each.used)"/>
+							</listcell>
+								<listcell onDoubleClick="@command('viewCommand', row=each)">
+								<label value="@bind(each.categoryDesc)"/>
+							</listcell>
+								
+							
+							
+						</listitem>
+					</template>
+					 
+				</listbox>
+				
+				<hlayout hflex="1" style="text-align: right">
+				<label value="@load(vm.footer)" style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+				</hlayout>
+				
+				
+			</vlayout>
+			</center>
+			
+			
+			<!-- <east width="330px"  visible="@bind(not empty vm.selectedFixedAsset)"  border="none" collapsible="false" splittable="true" minsize="300" autoscroll="true">
+			<vlayout 
+				form="@id('fx') @load(vm.selectedFixedAsset)">
+				
+				<grid hflex="1">
+					<columns>
+						<column align="right" hflex="min"/>
+						<column/>
+					</columns>
+					<rows>
+					<row>
+							<cell sclass="row-title">Asset ID :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.assetid)" readonly="true"/>							
+							</hlayout>
+						</row>
+						<row>
+							<cell sclass="row-title">Asset Code :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.assetCode)" readonly="true"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Name :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.assetName)"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Master Description :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.assetMasterDesc)"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Used :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.used)"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Unit :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.unitDesc)"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Category :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.categoryDesc)"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Country :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.countryDesc)"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">City :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.cityDesc)"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Department :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.departmentDesc)"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Section :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.sectionDesc)"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Account Name :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.accountsName)"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Class Name :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.className)"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Open Balance :</cell>
+							<hlayout>
+							<textbox value="@bind(fx.assetOpenBalance)"/>							
+							</hlayout>
+						</row>
+						
+						<row>
+							<cell sclass="row-title">Open Balance Date :</cell>
+							<hlayout>
+							<datebox  value="@bind(fx.assetOpenBalDate)" format="dd-MMM-yyyy"/>							
+							</hlayout>
+						</row>
+						</rows>
+						</grid>
+						</vlayout>
+						</east> -->
+						
+			</borderlayout>
+</zk>

@@ -1,0 +1,628 @@
+<?page title="Hinawi Software- Services" contentType="text/html;charset=UTF-8"?>
+<zk:zk xmlns="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:zk="http://www.zkoss.org/2005/zul">
+	
+	<zk:zscript><![CDATA[
+	void showme(int x)
+	{
+		lbl1.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px");	
+		lbl2.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px");	
+		lbl3.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px");	
+		lbl4.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px");	
+		lbl5.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px");	
+		lbl6.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px");	
+		v1.setVisible(false);	
+		v2.setVisible(false);	
+		v3.setVisible(false);	
+		v0.setVisible(false);
+		v4.setVisible(false);
+		v5.setVisible(false);
+		v6.setVisible(false);
+		
+	if(x==1)
+	{
+	v1.setVisible(true);		
+	lbl1.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6;font-size:14px");
+	}
+	if(x==2)
+	{
+	v2.setVisible(true);		
+	lbl2.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6;font-size:14px");
+	}
+	if(x==3)
+	{
+	v3.setVisible(true);		
+	lbl3.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6;font-size:14px");
+	}
+	if(x==4)
+	{
+	v4.setVisible(true);		
+	lbl4.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6;font-size:14px");
+	}
+	if(x==5)
+	{
+	v5.setVisible(true);		
+	lbl5.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6;font-size:14px");
+	}
+	if(x==6)
+	{
+	v6.setVisible(true);		
+	lbl6.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6;font-size:14px");
+	}
+	}
+]]></zk:zscript>
+
+	<zk:borderlayout hflex="1" style="background:none" >
+ 	<zk:west width="180px" maxsize="250" margins="1,105,1,1" border="none">
+  
+  	<zk:vlayout>
+
+ 
+
+
+
+<div class="leftMenu">
+	
+<h:ul> 
+		<h:li style='background:none'>
+		<zk:label id="lbl1" value="QuickBooks Pro" onClick="showme(1)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px"></zk:label>			
+		</h:li>
+		<h:li style='background:none'>
+		<zk:label id="lbl2" value="QuickBooks Premier" onClick="showme(2)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px"></zk:label>			
+		</h:li>
+		<h:li style='background:none'>
+		<zk:label id="lbl3" value="QuickBooks Enterprise" onClick="showme(3)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px"></zk:label>			
+		</h:li>
+		<h:li style='background:none;text-align:left'>
+		<zk:label id="lbl4" value="Why QuickBooks users need Hinawi ERP" onClick="showme(4)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px"></zk:label>			
+		</h:li>
+		<h:li style='background:none;text-align:left'>
+		<zk:label id="lbl5" value="QuickBooks Version Comparison" onClick="showme(5)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px"></zk:label>			
+		</h:li>
+		<h:li style='background:none'>					
+		<zk:label id="lbl6" value="Information Center" onClick="showme(6)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-size:14px"></zk:label>
+		</h:li>
+		
+	</h:ul>
+	  
+</div>
+
+ </zk:vlayout>
+      </zk:west>
+      
+<zk:center margins="1,15,1,1" border="none" hflex="1" autoscroll="true">
+<zk:vlayout>
+
+<zk:vbox id="v0" visible="true">
+<html>
+<body>
+<div class="">
+<div class="">
+<img src="images/QuickbooksLogo.jpg" style="width:700px;height:300px"></img>
+<br/><br/>
+<h1>Introduction:</h1>
+<br/>
+<p style="font-size:14px;">
+
+QuickBooks helps you keep track of the money coming in and out of your business, 
+all in one easy-to-use place.<br/><br/> So you always know where you stand, and you’re always ready for tax time.
+</p>
+
+<h1>Features:</h1>
+<br/>
+<html>
+<body>
+<ul style="font-size:14px;">
+<li>•	 QuickBooks is world wide used Accounting software. It is user friendly.</li>
+<li>•	 It is a ready made software which is running in the market over 25 years.</li>
+<li>•	It has different version: Pro, Premier, Enterprise.</li>
+<li>•	There are different country versions: USA, Canadian, Australian etc.</li>
+</ul>
+
+</body>
+</html>
+</div>
+</div>
+</body>
+</html>
+</zk:vbox>
+
+<zk:vbox id="v1" visible="false">
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>QuickBooks Pro</h1>
+<br/>
+
+<h2>Create invoices and track sales</h2>
+<p style="font-size:14px;">Easily create invoices and sales receipts to keep track of who owes you money, what they bought, and when they paid you.</p>
+
+<h2>Stay on top of your expenses</h2>
+<p style="font-size:14px;">Enter and pay bills from vendors, and download your bank and credit card transactions directly into QuickBooks.</p>
+
+<h2>Gain insights into your business</h2>
+<p style="font-size:14px;">Drill down to see the details behind the numbers, and export your reports and all of your QuickBooks formatting to Excel.</p>
+</div>
+</div>
+</body>
+</html>
+</zk:vbox>
+
+<zk:vbox id="v2" visible="false">
+
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>QuickBooks Premier</h1>
+<br/>
+
+<h2>Easily manage inventory items</h2>
+<p style="font-size:14px;">Quickly locate items and complete inventory related tasks all in one place using the Inventory Center in QuickBooks.</p>
+
+<h2>Track your balance sheet by class</h2>
+<p style="font-size:14px;">Use this built-in, easy-to-access report to track financial data separately by location, department, or profit center.</p>
+
+<h2>Bill clients progressively by job phase</h2>
+<p style="font-size:14px;">Track and bill clients by time &amp; material, job phase, or percentage completion, whatever works best for your unique business.</p>
+</div>
+</div>
+</body>
+</html>
+
+</zk:vbox>
+
+<zk:vbox id="v3" visible="false">
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>QuickBooks Enterprise</h1>
+<br/>
+<p>QuickBooks Enterprise specifically for businesses managing more complexity.</p>
+<p>It's the most flexible version of QuickBooks, packed with additional features and extra flexibility your small business needs in accounting software.</p>
+<p>It adapts to the way you run your business, scaling from 1 to 30 users with everything you need to manage your users and data in a way that works for you. </p>
+<p>Plus 14 predefined user roles to help you set up new users fast.
+ With the ability to add up to one million names, you'll be able to track hundreds of thousands of customers, vendors, and items.</p>
+
+<p>You can choose the QuickBooks Enterprise subscription that works for you :</p>
+<h1 style="text-decoration:underline">Silver subscription </h1>
+<br/>
+<p>Provides a great way to get started with QuickBooks Enterprise. It includes the QuickBooks Enterprise software + Full Service Plan + Advanced Reporting.</p>
+
+<h1 style="text-decoration:underline">Gold subscription</h1>
+<br/>
+<p>Includes all of the functionality of the Silver Edition + QuickBooks Enhanced Payroll5 so that you can easily pay employees, pay and file taxes.</p>
+
+<h1 style="text-decoration:underline">Platinum subscription </h1>
+<br/>
+<p>Includes all of the functionality of the Gold Edition + Advanced Inventory and Advanced Pricing to help you manage complex inventory and pricing processes.</p>
+
+
+<br/>
+<h1>QuickBooks Enterprise Solutions Features:</h1>
+<br/><br/>
+<html>
+<body>
+
+<h2 id="training">Job Costing</h2>
+<ul>
+<li> Track expenses by job. Filter reports by job status and run Work-in-Progress and Committed Costs reports.</li>
+</ul>
+<h2>Assemblies</h2>
+ <ul>
+ <li>Build all subassemblies automatically with a final build, instead of entering them individual.  </li> 
+ <li>Track items using the Where-Used report.</li> 
+ </ul>
+ 
+<h2>Track Hundreds of Thousands of Parts or Service Items</h2>
+ <ul>
+ <li>Give your business room to grow with the capacity to add and track hundreds of thousands of inventory, non-inventory, or service items.  </li> 
+ <li>That’s more than six times the capacity of any other QuickBooks product.</li> 
+ </ul>
+ 
+ <h2>Create Bills of Materials to Track Costs and Components</h2>
+ <ul>
+ <li>Create Bills of Materials ("BOMs") or "kits" to track the costs and inventory with the Build Assemblies feature and track assembled products more accurately.   </li> 
+ <li>Include both material and non-material costs - such as labor and overhead — and see how many finished goods you can build based on your current inventory. </li> 
+ <li>As you build finished goods, Enterprise Solutions automatically deducts component items from your inventory and alerts you when it’s time to re-order, or when there aren’t enough components for an assembly.</li>
+ </ul>
+ 
+ <h2>Advanced Inventory (Annual Charges):</h2>
+ <h2> •	Track Your Inventory Data in One Place</h2>
+ <ul>
+ <li>Advanced Inventory is built right inside Enterprise Solutions with the same user interface, so you don't have to install, learn and use separate software. </li>
+ <li>Your inventory data is tracked automatically from your QuickBooks invoices, sales orders and purchase orders.</li> 
+ </ul>
+ 
+ <h2>•	Know the Value and Quantity of Inventory in Multiple Locations</h2>
+ <ul>
+ <li>For each location, you can see how many items are on hand, on sales order, on purchase order, and your reorder point...
+ and QuickBooks will automatically calculate which items you need to restock.</li>
+ </ul>
+ 
+ <h2>•	Transfer Inventory from One Location to Another</h2>
+ <ul>
+ <li>If one location is running low on inventory, you can transfer stock from another location to meet demand without delay.</li>
+</ul>
+ 
+ <h2>Know Your Inventory Stock Status</h2>
+ <ul>
+ <li>With the built-in inventory stock status report you can check your inventory needs instantly and reorder as needed. </li>
+ <li>See quantities on-hand, on sales order and on purchase order for each item. 
+ Set reorder points based on inventory levels and get automatic alerts to help you keep up with demand.</li>
+ </ul>
+ 
+ <h2>Improved Auto Purchase Order (PO)</h2>
+ <ul>
+ <li>No more worrying about minimum or maximum stock levels. Just specify the inventory quantities you want to reorder, and QuickBooks automatically puts those quantities into POs. </li>
+ 
+ </ul>
+ 
+ <h2>Income Tracker</h2>
+ <ul>
+ <li>Get an end to end view of all income related transactions all in one place with the new Income Tracker. </li>
+ <li>Get real time data; no reports to run or data to gather. Take immediate action on transactions to get paid. </li>
+ <li>Batch print or email transactions directly from the Income Tracker list and filter by transaction or customer.</li>
+ </ul>
+ 
+  <h2>Advanced Pricing Core (Extra Charges)</h2>
+ <ul>
+ <li>Create thousands of advanced price rules based on any combination of customers, items, vendors, and more. </li>
+ <li>Manage these rules with great flexibility, and change which rules apply at transaction time.</li>
+ </ul>
+ 
+ 
+  <h2>Excel Integration Refresh</h2>
+ <ul>
+ <li>Save formatting and save time. Now when you export your QuickBooks reports to Excel, simply refresh your previously saved worksheet and your formats will be applied to the new report. </li>
+ <li>QuickBooks remembers your Excel formats so you can work seamlessly.</li>
+ </ul>
+ 
+  <h2>Track Hundreds of Thousands of Customers</h2>
+ <ul>
+ <li>Give your business room to grow with the capacity to add and track hundreds of thousands of customers, vendors and employees. </li>
+ <li>That’s more than six times the capacity of any other QuickBooks product.</li>
+ </ul>
+ 
+  <h2>Email Enhancements</h2>
+ <ul>
+ <li>Include multiple attachments in QuickBooks transaction emails. </li>
+ <li>See previous conversations in the email history list, and use customizable, auto-populating email templates for reliable communication.</li>
+ </ul>
+ 
+  <h2>Users</h2>
+ <ul>
+ <li>
+Up to 30 users (Premier up to 5 users and Pro up to 3 users)
+ </li>
+ </ul>
+ 
+  <h2>Level of Access</h2>
+ <ul>
+ <li>115 Level of Access</li>
+ </ul>
+ 
+ 
+ 
+</body>
+</html>  
+
+</div>
+</div>
+</body>
+</html>
+
+</zk:vbox>
+
+<zk:vbox id="v4" visible="false">
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>Why QuickBooks users needs Hinawi ERP</h1>
+<br/><br/>
+<html>
+<body>
+
+<h2>Extra features from Hinawi Software that not available in QuickBooks, directly or indirectly.</h2>
+<br/>
+<!-- <h2>The bellow features are fully integrated with QuickBooks for all versions : </h2> -->
+ <ul>
+
+ <li>•   Fully integrated with QuickBooks for all versions.</li>
+ <li>•   Cover missing feature in QuickBooks.</li>
+ <li>•   Real Estate Management Module.</li>
+ <li>•   Advanced Fixed Assets Module.</li>
+ <li>•   Complete Bilingual Language, Arabic and English.</li>
+ <li>•   Calculate Commission for sales Rep.</li>
+ <li>•   Post multiple Receivables and Payables in one JV entry.</li>
+ <li>•   Create Receipt Voucher (RV) from all kind of names.</li>
+ <li>•   Adding 3 new types in Chart of Accounts (Cash, PDC &amp; CUC).</li>
+ <li>•   Create 3 ways in posting to QuickBooks. Real Time, Batches and Mix of two.</li>
+ <li>•   Control Post Dated Cheques Received &amp; Issued with auto revise entry.</li>
+ <li>•   Receive multiple cheques at one Receipt Voucher (RV).</li>
+ <li>•   Option to Not allow to post to main Account.</li>
+ <li>•   Option not to sell if there is not enough Quantity.</li>
+ <li>•   Option not to change selling price.</li>
+ <li>•   Allocate expenses to Fixed Assets.</li>
+ <li>•   Photos of all kind of names.</li>
+ <li>•   Design and templates with Printing for all activity forms (Cheques, Payments, Collections, JV, SIV, SRV, Transfer
+ 		 &#160; &#160; &#160; &#160; &#160; &#160; &#160; Inventory, Inventory Adjustments, Enter Bill &amp; more)</li>
+ <li>•   Complete Module of HR, Time Sheet, Payroll, WPS and Taxes.</li>
+ 
+ 
+ </ul>
+ 
+  <h2>Inventory:</h2>
+ <ul>
+ <li>•   Calculate Landed Cost of Inventory Items. (Adding Shipping charges, customs, transportation and Other expenses).</li>
+ <li>•   Multiple Inventory Adjustment entry in one form.</li>
+ <li>•   Movement and None Movement Inventory Items.</li>
+ <li>•   Advanced Physical Inventory Worksheet.</li>
+ <li>•   New look of Inventory Valuation Detail.</li>
+ <li>•   And more</li>
+ 
+ </ul>
+ 
+ 
+  <h2>Reports:</h2>
+ <ul>
+ <li>•   Advanced Trial Balance (Beginning Balance, total movements and Ending Balance).</li>
+ <li>•   Financial Ratio's: Profitability, Activity &amp; Liquidity .</li>
+ <li>•   Cashier Reports (Collections &amp; Payments).</li>
+ <li>•   Advanced Audit Trail (Filter By user, activity form and total entries by each).</li>
+ <li>•   Partial paid Invoices and Bills.</li>
+ <li>•   Depreciation by Project.</li>
+ <li>•   Can customize your required reports from QuickBooks data.</li>
+ <li>•   Reports in QuickBooks is seen from HBA.</li>
+ <li>•   And more</li>
+ 
+ </ul>
+
+
+</body>
+</html>  
+
+</div>
+</div>
+</body>
+</html>
+
+</zk:vbox>
+
+
+<zk:vbox id="v5" visible="false">
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>QuickBooks Version Comparison : </h1>
+<br/><br/>
+
+<zk:grid>
+<zk:columns >
+<zk:column width="40%" label="Description" style="font-weight:bold;font-size:14px"></zk:column>
+<zk:column align="center" label="Pro" style="font-weight:bold;font-size:14px"></zk:column>
+<zk:column align="center" label="Premier" style="font-weight:bold;font-size:14px"></zk:column>
+<zk:column align="center" label="Enterprise" style="font-weight:bold;font-size:14px"></zk:column>
+</zk:columns>
+
+<zk:rows>
+<zk:row>
+<div>Batch Invoicing</div>
+<div>YES</div>
+<div>YES</div>
+<div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Multiple Vendor Ship To Address</div>
+<div>YES</div>
+<div>YES</div>
+<div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Bank Reconciliation undo previous reconciles</div><div>YES</div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Multiple Currency</div><div>YES</div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Company Snapshot</div><div>YES</div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Customer Snapshot</div><div>YES</div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Condense Data File</div><div>YES</div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Audit trail tracks transactions</div><div>YES</div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Price Levels</div><div>YES</div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Progress Invoicing</div><div>YES</div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Transaction History Panel</div><div>YES</div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Create Accountant’s Copy</div><div>YES</div><div>YES</div><div>YES</div>
+</zk:row>
+
+
+<zk:row>
+<div>Industry Specific Reporting </div><div></div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div> Inventory Assembly Item (BOM)</div><div></div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Unit of Measure </div><div></div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Reverse Journal Entry </div><div></div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div> Balance Sheet by Class</div><div></div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Bank Reconciliation list of previous reconciles </div><div></div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div> Purchase/Sales Order from Estimate</div><div></div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Sales Orders </div><div></div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div> Forecast sales and eYespenses</div><div></div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Current Availability </div><div></div><div>YES</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div> Current Availability Window</div><div></div><div>limit</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Sales Order Fulfillment Worksheet </div><div></div><div>limit</div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div> Billing Rate Level</div><div></div><div>limit</div><div>limit</div>
+</zk:row>
+
+<zk:row>
+<div> Change Orders (Estimates)</div><div></div><div>limit</div><div>limit</div>
+</zk:row>
+
+<zk:row>
+<div>Multi Instance (multiple files open) </div><div></div><div></div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Variable builds of Assembly </div><div></div><div></div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div> Custom Reports with ODBC</div><div></div><div></div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Restrict user access to specific reports, banks, accounts, lists </div><div></div><div></div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div> Combine reports from multiple companies</div><div></div><div></div><div>YES</div>
+</zk:row>
+
+
+<zk:row>
+<div>Adjust inventory, delete list items, change sales taYes rates in multi user mode</div><div></div><div></div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Multiple locations (Advanced Inventory) </div><div></div><div></div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Advanced Pricing </div><div></div><div></div><div>YES</div>
+</zk:row>
+
+<zk:row>
+<div>Enhanced Payroll and Taxes (USA) </div><div></div><div></div><div>YES</div>
+</zk:row>
+
+
+</zk:rows>
+
+</zk:grid> 
+
+<br/><br/>
+
+<p style="color:green;font-size:14px;font-weight:bold">QuickBooks Enterprise subscription :</p>
+<h1 style="text-decoration:underline">Silver subscription </h1>
+<br/>
+<p>Provides a great way to get started with QuickBooks Enterprise. It includes the QuickBooks Enterprise software + Full Service Plan + Advanced Reporting.</p>
+
+<h1 style="text-decoration:underline">Gold subscription</h1>
+<br/>
+<p>Includes all of the functionality of the Silver Edition + QuickBooks Enhanced Payroll5 so that you can easily pay employees, pay and file taxes.</p>
+
+<h1 style="text-decoration:underline">Platinum subscription </h1>
+<br/>
+<p>Includes all of the functionality of the Gold Edition + Advanced Inventory and Advanced Pricing to help you manage complex inventory and pricing processes.</p>
+
+
+</div>
+</div>
+</body>
+</html>
+
+</zk:vbox>
+
+
+<zk:vbox id="v6" visible="false">
+<zk:grid style="background: white;" >
+<zk:columns>
+<zk:column></zk:column>
+<zk:column></zk:column>
+</zk:columns>
+
+<zk:rows>
+
+<zk:row style="background: white; ">
+
+<zk:cell>
+<zk:vlayout>
+
+ <a href="http://hinawi2.dyndns.org:8181/sata/documents/System requirements for the latest QuickBooks Accounting Software.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">System requirements for the latest QuickBooks - PDF</a>
+  
+</zk:vlayout>
+</zk:cell>
+</zk:row>
+</zk:rows>
+</zk:grid>
+</zk:vbox>
+
+</zk:vlayout>
+</zk:center>
+      
+      
+      
+      
+     <zk:east title="Contacts" size="18%"  margins="1,1,45,1" border="none">
+		<zk:include src="rightmenu.zul"></zk:include>
+</zk:east>
+      
+      </zk:borderlayout>
+      
+
+</zk:zk>

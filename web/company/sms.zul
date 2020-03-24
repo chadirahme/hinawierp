@@ -1,0 +1,88 @@
+<?page title="Hinawi Software" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<window 
+id="smsWindow" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Send SMS" border="normal" position="top,center"
+		closable="true" 
+		sizable="true" onCancel="smsWindow.detach()" 
+  	    viewModel="@id('vm') @init('company.SMSViewModel')">
+
+	<hbox  align="center" pack="center" spacing="20px" width="600px">
+	<grid width="500px" >
+	
+	<rows>
+	<row>
+	<cell colspan="1" style="background:#2C6F99;margin:20px">
+	<label value="SMS" style="font-size:18px;font-weight:bold;line-height:32px;color:white;text-decoration:none;text-align:center"></label>
+	</cell>
+	</row>
+	
+	<row>
+
+	<cell hflex="2">
+	<grid>
+	<columns>
+        <column  hflex="1"/>
+        <column hflex="2"/>
+    </columns>
+    
+		<rows>
+						
+		<row>
+		<cell>
+		Sender
+		</cell>
+		<cell>
+		<textbox hflex="1" value="@bind(vm.sender)"></textbox>
+		</cell>
+		</row>
+		
+		<row>
+		<cell>
+		TO
+		</cell>
+		<cell>
+		<textbox hflex="1" value="@bind(vm.to)"></textbox>
+		</cell>
+		</row>
+		
+		<row>
+		<cell>
+		Message
+		</cell>
+		<cell>
+		<textbox hflex="1"  type="text" rows="5" cols="10"
+		 value="@bind(vm.message)"></textbox>
+		</cell>
+		</row>
+			
+		
+		<row>
+		<cell>		
+		</cell>
+		<cell align="center">
+		<button label="Submit" onClick="@command('sendSMSCommand')"   style="background:rgb(44, 111, 153);color:white;font-weight:bold"></button>
+		<button label="Cancel" onClick="smsWindow.detach()"  style="background:rgb(44, 111, 153);color:white;font-weight:bold"></button>
+		</cell>
+		</row>
+		
+		<row>		
+		<cell colspan="2">
+		<label value="@bind(vm.result)" style="color:red"></label>
+		
+		</cell>
+		</row>
+		
+		</rows>
+	</grid>
+	
+	
+	</cell>
+	</row>
+	</rows>
+	</grid>
+	
+	</hbox>
+	</window>
+</zk>

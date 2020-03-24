@@ -1,0 +1,190 @@
+<zk>
+
+<borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('company.UsersViewModel',type='users')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+			<button label="ADD New User" onClick="@command('addNewUserCommand')"></button>
+			<listbox model="@bind(vm.lstUsers)" selectedItem="@bind(vm.selectedUser)"  vflex="1">
+					<listhead>
+											
+						<listheader label="User Name" sort="auto('username')"/>	
+						<listheader label="Employee Name" sort="auto('firstname')"/>
+						<listheader label="Admin" sort="auto('adminuser')" visible="false"/>
+						<listheader label="Supervisor" sort="auto('supervisor')"/>
+						<listheader label="Role" sort="auto('roleName')"/>							
+						<listheader label="Is Active" hflex="min"/>
+					</listhead>
+					<template name="model">
+						<listitem>		
+						<listcell>
+								<label value="@bind(each.username)"/>
+							</listcell>					
+							<listcell>
+								<label value="@bind(each.firstname)"/>
+							</listcell>						
+							
+							<listcell>
+								<label value="@bind(each.adminuser eq 1 ? 'Admin' : '')"/>
+							</listcell>	
+								<listcell>
+								<label value="@bind(each.supervisor gt 0 ? 'Yes' : 'No')"/>
+							</listcell>		
+								<listcell>
+								<label value="@bind(each.roleName)"/>
+							</listcell>				
+							<listcell>
+								<button onClick="@command('deleteUser',todo=each)" 
+								image="@bind(each.isactive? '/images/success.gif' : '/images/delete-small.gif')" width="36px" visible="@bind(each.adminuser ne '1')"/>
+							</listcell>
+							
+						</listitem>
+					</template>
+				</listbox>
+			<label value="@bind(vm.maxUsersAllowed)"></label>
+			</vlayout>
+			
+			</center>
+			
+			<east width="400px"   visible="@bind(not empty vm.selectedUser)"  border="none" collapsible="false" splittable="true" minsize="300" autoscroll="true">
+			<vlayout 
+				form="@id('fx') @load(vm.selectedUser) @save(vm.selectedUser, before='updateUser')">
+				
+				<grid hflex="1">
+					<columns>
+						<column align="right" hflex="min"/>
+						<column/>
+					</columns>
+					<rows>
+					<row>
+					<cell sclass="row-title">Click Here to UnCheck</cell><cell>
+					<button onClick="@command('unCheck')" label="Click" disabled="@bind(fx.adminuser eq '1')"/>
+					</cell>
+					</row>
+					<row>
+					<cell sclass="row-title">Is User Supervisor :</cell>
+					<cell>
+					<hbox>
+					<checkbox checked="@bind(vm.supervisorUser)" disabled="@bind(fx.adminuser eq '1')"></checkbox>
+					<listbox  disabled="@bind(fx.adminuser eq '1')" multiple="false" width="150px" mold="select" model="@load(vm.lstSuperVisors)" 
+					selectedItem="@bind(vm.selectedSuperVisor)">
+					<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.fullName)"></listcell>
+					</listitem>
+					</template>
+					</listbox>
+					 <separator orient="vertical" spacing="3px" />
+					<image style="cursor: help" tooltip="isSupervisorHint"  src="/images/hint-icon.png"></image>
+					</hbox>
+					 <popup id="isSupervisorHint" width="400px">
+       			 	<html><![CDATA[If user Is Supervisor then he will see only the employee belong to his group !! ]]></html>        				
+   					 </popup>
+					</cell>
+					</row>
+					
+					<row>
+					<cell sclass="row-title">Is User Employee :</cell>
+					<cell>
+					<hbox>
+					<checkbox checked="@bind(vm.employeeUser)" disabled="@bind(fx.adminuser eq '1')"></checkbox>
+					<listbox  disabled="@bind(fx.adminuser eq '1')" multiple="false" width="150px" mold="select" model="@load(vm.lstEmployees)" 
+					selectedItem="@bind(vm.selectedEmployee)">
+					<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.fullName)"></listcell>
+					</listitem>
+					</template>
+					</listbox>
+					 <separator orient="vertical" spacing="3px" />
+					<image style="cursor: help" tooltip="isEmployeeHint"  src="/images/hint-icon.png"></image>
+					</hbox>
+					
+					 <popup id="isEmployeeHint" width="400px">
+       			 	<html><![CDATA[If user Is Employee then he will see only his data !! ]]></html>        				
+   					 </popup>
+    
+					</cell>
+					</row>
+					
+					
+						<row>
+							<cell sclass="row-title">* Employee Name :</cell>
+						
+							<textbox value="@bind(fx.firstname)"  constraint="no empty" disabled="@bind(fx.adminuser eq '1')"/>							
+					
+						</row>					
+						<row>
+							<cell sclass="row-title">* User Name :</cell>
+							<textbox value="@bind(fx.username)" hflex="1" constraint="no empty" disabled="@bind(fx.adminuser eq '1')"/>
+						</row>
+						<row>
+							<cell sclass="row-title">* Password :</cell>
+							<textbox value="@bind(fx.userpwd)" hflex="1" constraint="no empty: *"/>
+						</row>
+						<row>
+							<cell sclass="row-title">* Role :</cell>
+							<listbox model="@bind(vm.lstCompanyRoles)" multiple="false" hflex="1" mold="select" selectedItem="@bind(vm.selectedCompanyRole)" disabled="@bind(fx.adminuser eq '1')">
+								<template name="model" var="item">
+								<listitem>
+								<listcell label="@load(item.rolename)"></listcell>
+								</listitem>
+							</template>
+							</listbox>
+						</row>
+						<row>
+							<cell sclass="row-title">* Email :</cell>
+							<textbox value="@bind(fx.useremail)" constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address (example@example.com)" hflex="1" />
+						</row>
+						<row>
+							<cell sclass="row-title">Email Password :</cell>
+							<textbox value="@bind(fx.userEmailPassword)"  hflex="1" />
+						</row>
+						<row>
+							<cell sclass="row-title">Email Host :</cell>
+							<textbox value="@bind(fx.emailhost)"  hflex="1" />
+						</row>
+						<row>
+							<cell sclass="row-title">Mobile :</cell>
+							<textbox value="@bind(fx.usermobile)" hflex="1" />
+						</row>
+						<row>
+						<cell colspan="2" align="center">
+					<listbox model="@bind(vm.lstCompanies)" width="220px" height="150px" emptyMessage="No data found" multiple="true">
+			
+						<listhead sizable="true">					
+						<listheader label="Company" width="150px" sort="auto('title')" />
+						<listheader label="Access"/>
+						</listhead>
+						<template name="model">
+						<listitem>	
+											
+						      <listcell>
+								<label value="@bind(each.enCompanyName)"/>
+							</listcell>	
+							
+							<listcell><checkbox checked="@bind(each.canView)"></checkbox></listcell>					
+							</listitem>
+							</template>
+						
+					</listbox>
+					</cell>
+						</row>
+						
+							
+					</rows>
+				</grid>
+				<hlayout>
+					<button onClick="@command('updateUser')" label="Update"/>
+					<button onClick="@command('reloadUser')" label="Reload"/>
+				</hlayout>
+				
+				<label value="@bind(vmsgs['lastnameContentError'])" style="color: red;" />
+				
+			</vlayout>
+			
+			
+			</east>
+			
+			</borderlayout>
+</zk>

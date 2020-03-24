@@ -1,0 +1,139 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+ <borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('hr.VacancyListViewModel')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+			<grid>
+			<columns>
+			<column width="250px"></column>
+			<column width="250px"></column>
+			<column width="250px"></column>
+			<column width="100px"></column>
+			<column></column>
+			</columns>
+			<rows>
+			<row>
+			<cell>
+			<label value="Company"></label><space></space>
+			<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enCompanyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>	
+			</cell>
+			<cell>
+			<label value="No. of Records"></label><space></space>
+ 			<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstAllPageSize)" selectedItem="@bind(vm.selectedAllPageSize)">
+		<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+
+	</listbox>
+	</cell>
+	
+			<button label="Reset" visible="true" width="50px"
+												onClick="@command('resetVacany')" id="vacancyReset">
+											</button>
+			</row>
+			</rows>
+			</grid>
+			
+			
+	
+			<listbox model="@bind(vm.lstVacancies)" vflex="1" hflex="1" selectedItem="@bind(vm.selectedVacacies)" width="920px" mold="paging"  pageSize="@bind(vm.selectedPageSize)">
+			 <auxhead sclass="category-center">
+			  <auxheader colspan="1">
+                  <image src="/images/funnel.png" />
+                <textbox instant="true" width="60px" 
+                    value="@bind(vm.employeeFilter.companyName)" onChange="@command('changeFilter')" />
+            </auxheader>
+            
+            <auxheader colspan="1">
+                  <image src="/images/funnel.png" />
+                <textbox instant="true" width="100px" 
+                    value="@bind(vm.employeeFilter.position)" onChange="@command('changeFilter')" />
+            </auxheader>
+            <auxheader colspan="1">
+                 <image src="/images/funnel.png" />
+                <textbox instant="true"  width="100px"
+                    value="@bind(vm.employeeFilter.department)" onChange="@command('changeFilter')"/>
+            </auxheader>
+            <auxheader colspan="1">
+               <image src="/images/funnel.png" />
+                <textbox instant="true" width="100px"
+                    value="@bind(vm.employeeFilter.empAllowed)" onChange="@command('changeFilter')"/>
+            </auxheader>
+             <auxheader colspan="1">
+               <image src="/images/funnel.png" />
+                <textbox instant="true" width="100px"
+                    value="@bind(vm.employeeFilter.available)" onChange="@command('changeFilter')"/>
+            </auxheader>
+              <auxheader colspan="1">
+               <image src="/images/funnel.png" />
+                <textbox instant="true" width="100px"
+                    value="@bind(vm.employeeFilter.vacancies)" onChange="@command('changeFilter')"/>
+            </auxheader>
+            <auxheader colspan="1">
+               <image src="/images/funnel.png" />
+                <textbox instant="true" width="100px"
+                    value="@bind(vm.employeeFilter.cvs)" onChange="@command('changeFilter')"/>
+            </auxheader>
+           </auxhead>
+        
+						<listhead menupopup="auto" sizable="true">
+						<listheader label="Company" width="110px"  sort="auto('companyName')"/>
+						<listheader label="Position" sort="auto('position')" />
+						<listheader label="Department" sort="auto('department')"/>
+						<listheader label="Max.Allowed" sort="auto('empAllowed')" />
+						<listheader label="Available" sort="auto('available')" />
+						<listheader label="Vacancies" sort="auto('vacancies')" />		
+						<listheader label="CV's" sort="auto('cvs')" />					
+												
+					</listhead>
+					<template name="model">
+						<listitem >
+						<listcell >
+								<label value="@bind(each.companyName)"/>
+							</listcell>														
+							<listcell >
+								<label value="@bind(each.position)"/>
+							</listcell>
+								<listcell >
+								<label value="@bind(each.department)"/>
+							</listcell>
+								<listcell >
+								<label value="@bind(each.empAllowed)"/>
+							</listcell>
+								<listcell >
+								<label value="@bind(each.available)"/>
+							</listcell>
+								<listcell >
+								<label value="@bind(each.vacancies)"/>
+							</listcell>		
+								<listcell >
+								<label value="@bind(each.cvs)"/>
+							</listcell>							
+							
+						</listitem>
+					</template>
+				</listbox>
+				
+			 <hlayout hflex="1" style="text-align: right">
+				<label value="@load(vm.footer)" style="color:#2c6f99;text-align: right;font-weight: bold;"></label><space></space>
+				<label value="@load(vm.footer1)" style="color:#2c6f99;text-align: right;font-weight: bold;"></label><space></space>
+				<label value="@load(vm.footer2)" style="color:#2c6f99;text-align: right;font-weight: bold;"></label><space></space>
+				<label value="@load(vm.footer3)" style="color:#2c6f99;text-align: right;font-weight: bold;"></label><space></space>
+				<label value="@load(vm.footer4)" style="color:#2c6f99;text-align: right;font-weight: bold;"></label><space></space>
+				<label value="@load(vm.footer5)" style="color:#2c6f99;text-align: right;font-weight: bold;"></label><space></space>
+				<label value="@load(vm.footer6)" style="color:#2c6f99;text-align: right;font-weight: bold;"></label><space></space>
+				</hlayout>
+				
+			</vlayout>
+			</center>
+</borderlayout>
+</zk>

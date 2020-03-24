@@ -1,0 +1,440 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('hba.VendorListViewModel' , type='vendor')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<vlayout>
+					<style>
+						.z-center-body {
+						overflow-x: auto !important;
+						}
+						.inputs {
+						font-weight: 800; }
+
+						.modified { color: green; }
+					</style>
+					<div xmlns:w="client" xmlns:zk="zk" xmlns:ca="client/attribute">
+						<imagemap id="myImage" w:onBind="" />
+						<attribute w:name="onBind">
+							this.$f('canPreviewtemperoryList').hide();
+							this.$f('updateImportedList').hide();
+							this.$f('firstRow').hide();
+							this.$f('secondRow').hide();
+							this.$f('thirdRow').hide();
+							this.$f('fouthRow').hide();
+							this.$f('MappingButton').hide();
+							<!-- this.$f('ReMappingButton').hide(); -->
+							this.$f('canPreviewFinalList1').show();
+							this.$f('canPreviewFinalList1').setVflex("1");
+							this.$f('headerColNo').setReadonly(true);
+							this.$f('dataColNo').setReadonly(true);
+
+
+
+						</attribute>
+
+					</div>
+
+					<panel collapsible="true" hflex="1" sizable="false" id="panelll"
+						border="true">
+						<panelchildren>
+							<grid>
+								<columns>
+									<column width="300px"></column>
+									<column width="250px"></column>
+									<column width="200px"></column>
+									<column width="270px"></column>
+									<column width="0px"></column>
+									<column width="0px"></column>
+								</columns>
+								<rows>
+									<row>
+
+										<cell>
+											<label value="No. Of Records"></label>
+											<space></space>
+											<listbox multiple="false" width="120px" mold="select"
+												model="@load(vm.lstAllPageSize)" selectedItem="@bind(vm.selectedAllPageSize)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item)"></listcell>
+													</listitem>
+												</template>
+												<attribute w:name="onClick">
+													this.$f('canPreviewFinalList1').setVflex("1");
+												</attribute>
+
+											</listbox>
+
+
+										</cell>
+										<cell>
+											<label value="Vendor Status"></label>
+											<space></space>
+											<listbox multiple="false" width="100px" mold="select"
+												model="@load(vm.lstStatus)" selectedItem="@bind(vm.selectedStatus)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item)"></listcell>
+													</listitem>
+												</template>
+												<attribute w:name="onClick">
+													this.$f('canPreviewFinalList1').setVflex("1");
+												</attribute>
+											</listbox>
+
+
+										</cell>
+										<cell>
+
+											<label value="Import"></label>
+											<radiogroup id="imp" selectedItem="@bind(vm.importIsSelected)">
+												<space></space>
+												<space></space>
+												<label value="Yes"></label>
+												<radio id="importing" radiogroup="imp" value="A">
+													<attribute w:name="onClick">
+														this.$f('firstRow').show();
+														this.$f('secondRow').show();
+														this.$f('thirdRow').show();
+														this.$f('fouthRow').show();
+														this.$f('canPreviewFinalList1').hide();
+														this.$f('canPreviewtemperoryList').show();
+														<!-- this.$f('canPreviewFinalList1').setVflex("1"); -->
+													</attribute>
+												</radio>
+												<space></space>
+												<space></space>
+												<label value="No"></label>
+												<radio id="notimporting" radiogroup="imp" value="B">
+													<attribute w:name="onClick">
+														this.$f('firstRow').hide();
+														this.$f('secondRow').hide();
+														this.$f('thirdRow').hide();
+														this.$f('fouthRow').hide();
+														this.$f('canPreviewFinalList1').show();
+														this.$f('canPreviewtemperoryList').hide();
+														this.$f('updateImportedList').hide();
+														this.$f('MappingButton').hide();
+														this.$f('messageLab').setValue("");
+														<!-- this.$f('ReMappingButton').hide(); -->
+													</attribute>
+												</radio>
+											</radiogroup>
+										</cell>
+										<cell>
+											<button label="Add New Vendor" onClick="@command('addVendorCommand')" visible="@bind(vm.companyRole.canAdd)"
+											></button>
+											<space></space>
+											<space></space>
+											<button label="Reset" visible="true" width="50px"
+												onClick="@command('resetVendor')" id="vendorReset">
+											</button>
+
+
+										</cell>
+
+									</row>
+									<row>
+
+									</row>
+									<row id="firstRow">
+										<cell>
+											<radiogroup id="sv1" selectedItem="@bind(vm.importComapnyStandard)">
+												<radio id="CompanyStandard" label="Import Company Standard Excel"
+													radiogroup="sv1" selected="true" value="A">
+													<attribute w:name="onCheck">
+														this.$f('dowloadBtton').show();
+														this.$f('secondRow').show();
+														this.$f('headerColNo').setReadonly(true);
+														this.$f('dataColNo').setReadonly(true);
+													</attribute>
+												</radio>
+											</radiogroup>
+										</cell>
+										<cell>
+											<radio id="AnyStanderd" label="Import Any excel"
+												radiogroup="sv1" value="B">
+												<attribute w:name="onCheck">
+													this.$f('dowloadBtton').hide();
+													this.$f('secondRow').show();
+													this.$f('headerColNo').setReadonly(false);
+													this.$f('dataColNo').setReadonly(false);
+												</attribute>
+											</radio>
+										</cell>
+										<cell>
+											<button label="Download Standard" id="dowloadBtton">
+												<attribute name="onClick"><![CDATA[
+       	 	Filedownload.save("/download/Vendor_List_Sample.xls", null);
+  		  ]]></attribute>
+											</button>
+										</cell>
+										<cell>
+											<label value="Header Row No."></label>
+											<space></space>
+											<intbox width="20px" value="@bind(vm.rowHeadderNo)"
+												sclass="inputs" onChange="" id="headerColNo" />
+										<space></space>
+											<space></space>
+											<label value="Data Row No."></label>
+											<space></space>
+											<intbox width="20px" value="@bind(vm.rowDataNo)"
+												sclass="inputs" onChange="" id="dataColNo" />
+										</cell>
+
+									</row>
+									<row id="secondRow">
+
+									</row>
+
+									<row id="thirdRow">
+										<cell><label value="Browse Excel File in xls format(Max size 100 MB)"></label></cell>
+										<cell><button label="Choose Excel to Upload" upload="true,maxsize=10000000"
+											onUpload="@command('uploadFile')">
+										</button>
+										</cell>
+										<cell>
+											<label value="Preview Data"></label>
+											<space></space>
+											<button label="View" onClick="@command('previewDataFile')"
+												disabled="@bind(!vm.canPreview)">
+												<attribute w:name="onClick">
+													this.$f('MappingButton').show();
+													<!-- this.$f('ReMappingButton').hide(); -->
+												</attribute>
+											</button>
+										</cell>
+										<label value="@bind(vm.attFile)" style="color:green" />
+									</row>
+
+									<row id="fouthRow">
+										
+										<cell>
+
+										</cell>
+									</row>
+									<row>
+
+									</row>
+									<row>
+
+									</row>
+								</rows>
+							</grid>
+							<label value="@bind(vm.message)" style="color:red" id="messageLab"></label>
+
+						</panelchildren>
+					</panel>
+				</vlayout>
+
+				<listbox model="@load(vm.browsedGriddata)" vflex="1" hflex="1"
+					mold="paging" pagingPosition="both" id="canPreviewtemperoryList"
+					emptyMessage="No result found">
+
+					<auxhead children="@load(vm.headers1)">
+						<template name="children" var="item1">
+							<auxheader align="center" id="${i}" width="100px">
+								<listbox multiple="false" mold="select" id="" width="100px"
+									model="@load(item1.dropdowns)" selectedItem="@bind(item1.selectedStatus)">
+									<template name="model" var="item">
+										<listitem>
+											<listcell label="@load(item)"></listcell>
+										</listitem>
+									</template>
+
+								</listbox>
+							</auxheader>
+						</template>
+
+					</auxhead>
+
+
+					<listhead children="@load(vm.headers)"
+						onAfterRender="gridCount.setValue(self.getColumnIndex())">
+						<template name="children" var="item">
+							<listheader align="center" width="150px">
+								<label value="@load(item)" style="white-space: normal;"
+									multiline="true" />
+							</listheader>
+						</template>
+					</listhead>
+
+					<template name="model" var="line">
+						<listitem children="@bind(line)">
+							<template name="children" var="cell">
+								<listcell>
+									<textbox value="@bind(cell.name)" sclass="inputs"
+										inplace="true">
+										<attribute w:name="onChange">
+											$(this).addClass('modified');
+
+										</attribute>
+
+									</textbox>
+								</listcell>
+							</template>
+						</listitem>
+					</template>
+				</listbox>
+				<button label="Do/Re-Do Mapping" visible="true"
+					onClick="@command('updateGrid')" disabled="@bind(!vm.canPreviewMapping)"
+					id="MappingButton">
+					<attribute w:name="onClick">
+						this.$f('updateImportedList').show();
+						<!-- this.$f('ReMappingButton').show(); -->
+					</attribute>
+				</button>
+
+				<listbox id="canPreviewFinalList1" model="@bind(vm.lstVendors)"
+					vflex="1" hflex="1" selectedItem="@bind(vm.selectedVendor)" width="900px"
+					mold="paging" pageSize="@bind(vm.selectedPageSize)" >
+					<!-- <auxhead>
+						<auxheader label="Vendor List" colspan="7"
+							style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"
+							align="left" />
+					</auxhead> -->
+					<auxhead sclass="category-center">
+						<auxheader colspan="1" label="" width="50px">
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.name)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.arname)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.phone)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.fax)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.email)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.contact)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.accountNumber)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.accountName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.bankName)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.branchName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.ibanumber)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.isactive)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+					</auxhead>
+					<listhead menupopup="auto" sizable="true">
+						<listheader label="Edit" width="60px" />
+						<listheader label="Name" sort="auto('name')" width="150px"/>
+						<listheader label="Arabic Name" sort="auto('arName')" width="150px" />
+						<listheader label="Phone" sort="auto('phone')" width="150px"/>
+						<listheader label="Fax" sort="auto('fax')" width="150px"/>
+						<listheader label="Email" sort="auto('email')" width="150px"/>
+						<listheader label="Contact" sort="auto('contact')" width="150px"/>
+						<listheader label="Bank Account Number" sort="auto('accountNumber')"
+							width="150px" />
+						<listheader label="Bank Account Name" sort="auto('accountName')"
+							width="150px" />
+						<listheader label="Bank Name" sort="auto('bankName')"
+							width="150px" />
+						<listheader label="Branch Name" sort="auto('branchName')"
+							width="150px" />
+						<listheader label="IBAN No." sort="auto('ibanNo')"
+							width="150px" />
+						<listheader label="Status" sort="auto('isActive')"
+							width="150px" />
+
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell>
+								<button image="/images/rowedit.png" onClick="@command('editVendorCommand', row=each)" />
+							</listcell>
+
+							<listcell onDoubleClick="@command('viewVendorCommand', row=each)">
+								<label value="@bind(each.name)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewVendorCommand', row=each)">
+								<label value="@bind(each.arName)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewVendorCommand', row=each)">
+								<label value="@bind(each.phone)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewVendorCommand', row=each)">
+								<label value="@bind(each.fax)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewVendorCommand', row=each)">
+								<label value="@bind(each.email)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewVendorCommand', row=each)">
+								<label value="@bind(each.contact)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.accountNumber)" onClick="@command('viewVendorCommand', row=each)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.accountName)" onClick="@command('viewVendorCommand', row=each)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.bankName)" onClick="@command('viewVendorCommand', row=each)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.branchName)" onClick="@command('viewVendorCommand', row=each)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.ibanNo)" onClick="@command('viewVendorCommand', row=each)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.isActive)" onClick="@command('viewVendorCommand', row=each)"  style="@bind(each.isActive eq 'Active' ? 'color:black;font-weight:bold;' : 'color:red;margin-left:0px') "/>
+							</listcell>
+							
+
+
+
+						</listitem>
+					</template>
+				</listbox>
+				<button label="Save" disabled="@bind(!vm.canSave)"
+					onClick="@command('updateotherNameList')" id="updateImportedList"></button>
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

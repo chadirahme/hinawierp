@@ -1,0 +1,259 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+
+<zk>
+
+	<borderlayout id="mainlayout2">
+
+		<center autoscroll="true">
+			<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+				viewModel="@id('vm')
+	 @init('timesheet.AssignEmployeeToShift')"
+				vflex="1">
+
+
+
+				<label value="Assign Employees to Shift"
+					style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+
+				<grid>
+					<columns>
+						<column width="100px"></column>
+						<column width="200px"></column>
+						<column width="300px"></column>
+						<column width="100px"></column>
+					</columns>
+					<rows>
+
+						<row>
+							<label value="Company"></label>
+							<listbox multiple="false" hflex="1" mold="select"
+								model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item.enCompanyName)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+							<cell>
+								<!-- <button label="Filter" onClick="@command('filterCommand')"></button> -->
+								
+							
+							</cell>
+						</row>
+						<row>
+						<cell colspan="4">
+						<hbox >
+									<label value="Between"></label>
+									<datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy"></datebox>
+									<label value="And"></label>
+									<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy"></datebox>
+								  
+								  	<label value="Dispaly By"></label>
+								  	<radiogroup id="rbnType" selectedItem="@bind(vm.selectedViewType)" onCheck="@command('selectViewTypeCommand')">
+								  	<radio label="Employee" value="1" radiogroup="rbnType" ></radio>
+								  	<radio label="Position" value="2" radiogroup="rbnType"></radio>
+								  	</radiogroup>
+								    <button label="Go" onClick="@command('viewCommand')" visible="@bind(vm.companyRole.canView)"></button>
+										
+									<button label="Add Employee" onClick="@command('addEmployeeCommand')"></button>
+								</hbox>
+								</cell>
+						</row>
+					</rows>
+				</grid>
+				
+				<!-- <hlayout children="@bind(vm.lstShiftMaster)">
+				<template name="children" var="x">
+				<label value="@load(x.shiftCode)"></label>
+				</template>
+				</hlayout>	 -->
+				
+				<grid  model="@bind(vm.shiftGroup)" vflex="1" visible="@bind(vm.selectedViewType eq '1')">
+				<columns sizable="true" children="@bind(vm.lstShiftMaster)" >
+				<template name="children" var="y">			
+				<column label="@load(y.shiftCode)" if="${y.recNo eq 0}" width="130px"></column>
+				<column  if="${y.recNo gt 0}" width="100px">
+				<checkbox label="@load(y.shiftCode)" checked="@bind(y.shiftHeaderChecked)"  value="${y.shiftKey}" onCheck="@command('checkAllShiftCommand',shift=self.value,checkedValue=self.checked)"></checkbox>
+				</column>
+				</template>
+				</columns>
+				
+				<template name="model:group">        
+                <group >
+	            <cell>
+	              <label value="@load(each[2])" ></label>           
+	            </cell>
+	            </group>         
+        		</template>
+				
+				<template name="model" var="r">
+           		<row>  
+          		 	<label value="@load(r.employeeNo)"></label>
+          		 	<label value="@load(r.englishName)"></label>
+          		 		
+          		 		<cell forEach="${vm.lstShiftMaster}" if="${each.recNo gt 0}" width="100px">
+					  	<checkbox checked="${r.employeeAssignShift[forEachStatus.index]}" value="${each.shiftKey}" if="${each.recNo gt 0}"
+					  	onCheck="@command('changeShiftCommand',row=r,shift=self.value)" disabled="@load(r.oldShift)"></checkbox>					  							
+							</cell>
+							
+          		 		<!-- <cell children="@bind(vm.lstShiftMaster)">
+          		 		<template name="children" var="z">
+						<checkbox label="@load(z.shiftCode)" if="${z.recNo gt 0}"></checkbox>
+						</template>
+								  							
+						</cell> -->
+          		 	
+          		 	<label value="@bind(r.shiftFromDate)" />
+          		 	<label value="@bind(r.shiftToDate)" />
+          		 	
+          			 </row>
+				</template>
+				
+				  <template name="model:groupfoot">
+            		<groupfoot visible="true">
+                	<cell colspan="8" style="text-align: right; padding-right: 15px">
+                    <label value="@load(each[0])" style="font-weight:bold;" />
+                </cell>                               
+           	 </groupfoot>
+             </template>
+             
+				</grid>
+		
+		
+				<!-- <grid model="@bind(vm.shiftGroup)" vflex="1" visible="@bind(vm.selectedViewType eq '1')">
+				<columns sizable="true" >
+				<column label="Employee No." width="110px" sort="auto('employeeNo')" />
+				<column label="Name" sort="auto('englishName')" width="150px" />
+				
+				<column children="@bind(vm.lstShiftMaster)" width="100px" >
+				<template name="children">
+				<checkbox label="@load(each.shiftCode)"></checkbox>
+											
+				</template>
+				</column>
+				
+				<column label="From" width="150px"></column>
+				<column label="To" ></column>
+				</columns>
+				
+				<template name="model:group">        
+                <group >
+	            <cell>
+	              <label value="@load(each[2])" ></label>           
+	            </cell>
+	            </group>         
+        		</template>
+				
+				 <template name="model" var="r">
+            		<row>  
+           		 	<label value="@load(r.employeeNo)"></label>
+           		 	<label value="@load(r.englishName)"></label>
+           		 		
+           		 		<cell children="@bind(vm.lstShiftMaster)">
+           		 		<template name="children">
+						<checkbox ></checkbox>
+						</template>
+									  							
+						</cell>
+           		 	
+           		 	<label value="@bind(r.shiftFromDate)" />
+           		 	<label value="@bind(r.shiftToDate)" />
+           		 	
+           		 </row>
+				</template>
+				
+				   <template name="model:groupfoot">
+            		<groupfoot visible="true">
+                	<cell colspan="8" style="text-align: right; padding-right: 15px">
+                    <label value="@load(each[0])" style="font-weight:bold;" />
+                </cell>                               
+           	 </groupfoot>
+             </template>
+        
+		   	</grid> -->
+				
+				<listbox model="@load(vm.lstEmployee)" vflex="1" hflex="1" width="920px" visible="@bind(vm.selectedViewType eq '2')"  emptyMessage="There is no record found">
+						<listhead  sizable="true" children="@bind(vm.lstShiftMaster)" >
+						<template name="children" var="y">			
+					<listheader label="@load(y.shiftCode)" if="${y.recNo eq 0}" width="130px"></listheader>
+					<listheader  if="${y.recNo gt 0}" width="100px">
+				<checkbox label="@load(y.shiftCode)" value="${y.shiftKey}" checked="@bind(y.shiftHeaderChecked)" onCheck="@command('checkAllShiftCommand',shift=self.value,checkedValue=self.checked)"></checkbox>
+				</listheader>
+				</template>
+						</listhead>
+					
+						<template name="model" var="r">
+						<listitem>
+						<listcell>
+								<label value="@bind(r.position)" />
+							</listcell>		
+																									
+						<listcell forEach="${vm.lstShiftMaster}" if="${each.recNo gt 0}" >
+					  	<checkbox checked="${r.employeeAssignShift[forEachStatus.index]}" value="${each.shiftKey}" disabled="@load(r.oldShift)"
+					  	onCheck="@command('changeShiftCommand',row=r,shift=self.value)"></checkbox>					  
+							
+							</listcell>
+							 
+								<listcell>
+								<label value="@bind(r.shiftFromDate)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(r.shiftToDate)" />
+							</listcell>
+							 
+							</listitem>
+							</template>
+					</listbox>
+				
+					<!-- <listbox model="@load(vm.shiftGroup)" vflex="1" hflex="1" width="920px">
+						<listhead  menupopup="auto" sizable="true">
+						<listheader label="Position" width="150px" sort="auto('employeeNo')" />
+						<listheader label="Employee No." width="110px" sort="auto('employeeNo')" />
+						<listheader label="Name" sort="auto('fullName')" width="150px" />
+						<listheader forEach="${vm.lstShiftMaster}" label="${each.shiftCode}" width="100px"></listheader> 
+						
+						<listheader label="From"></listheader>
+						<listheader label="To"></listheader>
+						</listhead>
+					
+						<template name="model" var="r">
+						<listitem>
+						<listcell>
+								<label value="@bind(r.position)" />
+							</listcell>						
+							<listcell>
+								<label value="@bind(r.employeeNo)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(r.englishName)" />
+							</listcell>
+							
+						<listcell forEach="${vm.lstShiftMaster}">
+					  	<checkbox checked="${r.employeeAssignShift[forEachStatus.index]}" value="${each.shiftKey}" 
+					  	onCheck="@command('changeShiftCommand',row=r,shift=self.value)"></checkbox>					  
+							
+							</listcell>
+							 
+								<listcell>
+								<label value="@bind(r.shiftFromDate)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(r.shiftToDate)" />
+							</listcell>
+							 
+							</listitem>
+							</template>
+					</listbox> -->
+				
+				<hbox pack="center" hflex="1">
+					 <button label="Save"
+						onClick="@command('saveAssignedEmployeeToShiftCommand')" visible="@bind(vm.companyRole.canAdd)"></button>
+						
+						<button label="Clear"  onClick="@command('clearCommand')"></button>
+						
+						
+				</hbox>
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

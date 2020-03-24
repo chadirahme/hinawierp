@@ -1,0 +1,170 @@
+<?page title="Hinawi Online-Contact Us" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<html>
+		<body onload="setActiveMenu()"></body>
+
+		<script type="text/javascript">
+
+			function setActiveMenu()
+			{
+			document.getElementById("nav1").setAttribute("class", "");
+			document.getElementById("nav2").setAttribute("class", "");
+			document.getElementById("nav3").setAttribute("class", "");
+			document.getElementById("nav4").setAttribute("class", "");
+
+			document.getElementById("nav6").setAttribute("class", "active");
+			}
+		</script>
+	</html>
+	<div style="padding-left:45px;margin-left:0px;">
+		<grid width="90%">
+			<columns>
+				<column align="left" width="100px" />
+				<column />
+				<column />
+			</columns>
+			<rows>
+				<row>
+					<cell colspan="3">
+						<label value=" Explorer Computer LLC"
+							style="font-family:Arial, Helvetica, sans-serif;color:#2c6f99;font-size:16px;font-weight:bold;"></label>
+					</cell>
+				</row>
+
+				<row>
+					<cell colspan="3">Sheikh. Zayed Street, Corner Sheikh. Zayed 2nd Street
+						(Electra), Mashreq Bank Building
+						Mezzanine Floor, Flat No. 4.
+					</cell>
+				</row>
+
+				<row>
+					<cell colspan="3">P.O. Box 29006, Abu Dhabi, United Arab Emirates.
+					</cell>
+				</row>
+
+				<row>
+					<cell colspan="3">Saturdays to Wednesdays 8:30 a.m. to 6:00 p.m.
+						(GMT + 4)</cell>
+				</row>
+				<row>
+					<cell colspan="3">Thursdays 8:30 a.m. to 2:00 p.m. (GMT + 4)
+					</cell>
+				</row>
+
+				<row>
+
+					<cell colspan="2"></cell>
+					<cell rowspan="7" align="center">
+						<iframe width="520px" height="250px" scrolling="no"
+							src="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Al+Mansoor+Tower+-+Al+Markaziyah+-+Abu+Dhabi+-+United+Arab+Emirates&amp;aq=0&amp;oq=al+mansoor+tower+&amp;sll=37.0625,-95.677068&amp;sspn=43.443045,107.138672&amp;ie=UTF8&amp;hq=&amp;hnear=Al+Mansoor+Tower+-+Al+Markaziyah+-+Abu+Dhabi+-+United+Arab+Emirates&amp;t=m&amp;ll=24.494256,54.374063&amp;spn=0.006834,0.00912&amp;z=16&amp;iwloc=A&amp;output=embed"></iframe>
+
+
+						<a target="_blank"
+							href="http://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Al+Mansoor+Tower+-+Al+Markaziyah+-+Abu+Dhabi+-+United+Arab+Emirates&amp;aq=0&amp;oq=al+mansoor+tower+&amp;sll=37.0625,-95.677068&amp;sspn=43.443045,107.138672&amp;ie=UTF8&amp;hq=&amp;hnear=Al+Mansoor+Tower+-+Al+Markaziyah+-+Abu+Dhabi+-+United+Arab+Emirates&amp;t=m&amp;ll=24.494256,54.374063&amp;spn=0.006834,0.00912&amp;z=16&amp;iwloc=A"
+							style="color:#0000FF;text-align:left">View Explorer Computer on a Larger Map</a>
+
+
+					</cell>
+				</row>
+
+
+				<row>
+					<cell>
+						<label value="Phone:" style="color:#424242;font-weight:bold;"></label>
+					</cell>
+					<cell>
+						<vlayout>
+							<label value="+971 2 671 42 42"></label>
+							<label value="+971 50 622 80 24"></label>
+						</vlayout>
+					</cell>
+					<cell></cell>
+				</row>
+				<!-- <row>
+					<cell>
+						<label value="Libya:" style="color:#424242;font-weight:bold;"></label>
+					</cell>
+					<cell>
+						<vlayout>
+							<label value="+218 91 7 	23 23 20"></label>
+							<label value="+218 92 54 30 54 7"></label>
+						</vlayout>
+					</cell>
+					<cell></cell>
+				</row> -->
+				<row>
+					<cell>
+						<label value="Fax:" style="color:#424242;font-weight:bold;"></label>
+					</cell>
+					<cell>+971 2 671 13 11</cell>
+					<cell></cell>
+				</row>
+				<row>
+					<cell>
+						<label value="E-mail:" style="color:#424242;font-weight:bold;"></label>
+					</cell>
+					<cell>
+						<a href="mailto:hinawi@eim.ae">hinawi@eim.ae</a>
+					</cell>
+					<cell></cell>
+				</row>
+				<row>
+					<cell>
+						<label value="Skype ID:" style="color:#424242;font-weight:bold;"></label>
+					</cell>
+					<cell>hinawisoftware</cell>
+					<cell></cell>
+				</row>
+
+				<row>
+					<cell>
+						<label value="Facebook:" style="color:#424242;font-weight:bold;"></label>
+					</cell>
+					<cell>
+						<a href="https://www.facebook.com/hinawisoftware" target="blank">hinawisoftware
+						</a>
+					</cell>
+				</row>
+
+
+				<row>
+					<cell>
+						<label value="Coordinates: " style="color:#424242;font-weight:bold;"></label>
+					</cell>
+					<cell>
+						<label value="24°29'39.82'N 54°22'26.88'E"></label>
+					</cell>
+					<cell></cell>
+				</row>
+
+
+			</rows>
+		</grid>
+	</div>
+
+
+	<div style="padding-left:45px;margin-left:0px;">
+		<grid width="90%">
+			<columns>
+				<column align="left" width="100px" />
+				<column />
+				<column />
+			</columns>
+			<rows>
+				<row>
+					<cell colspan="3" align="center">
+
+						<a href="http://hinawi2.dyndns.org:8181/sata/index.zul">
+							<label value="Back "
+								style="color:#2c6f99;font-weight:bold;font-size:16px;"></label>
+						</a>
+					</cell>
+				</row>
+			</rows>
+		</grid>
+	</div>
+
+
+
+</zk>

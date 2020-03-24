@@ -1,0 +1,27 @@
+<borderlayout id="mainlayout2">
+	<north size="10%">
+		<include src="/layout/topnav.zul"></include>
+	</north>
+
+	<center >
+	<window title="new page title" border="normal" apply="org.zkoss.bind.BindComposer"
+     viewModel="@id('vm') @init('employee.EmployeeViewModel')">
+		New Content Here!
+
+<button label="add" onClick="@command('addEmployee')"></button>
+
+<button label="get" onClick="@command('selectEmployee')"></button>
+
+
+<button label="role" onClick="@command('selectRole')"></button>
+
+
+</window>
+	
+	</center>
+
+	<south size="5%">
+		<include src="/layout/footer.zul"></include>
+	</south>
+</borderlayout>
+

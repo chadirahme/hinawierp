@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	Created by ZK Studio
+-->
+
+<zk>
+    <device-config>
+        <device-type>ajax</device-type>
+        <!-- <timeout-uri>/timeout.zul</timeout-uri> --><!-- An empty URL can cause the browser to reload the same URL -->
+        <timeout-uri></timeout-uri>
+    </device-config>
+    <library-property>
+        <name>org.zkoss.zul.progressbox.position</name>
+        <value>center,center</value>
+
+        <!--<name>org.zkoss.theme.preferred</name>-->
+        <!--<value>sapphire</value> &lt;!&ndash; or silvertail, atlantic, deepsea, gardensalad etc. &ndash;&gt;-->
+
+    </library-property>
+
+    <system-config>
+        <label-location>/WEB-INF/labels/lists.properties</label-location>
+        <label-location>/WEB-INF/labels/timesheet.properties</label-location>
+
+    </system-config>
+
+
+</zk>

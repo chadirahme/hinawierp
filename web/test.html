@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link  href="/beta/assets/css/select2.css" rel="stylesheet"/>
+</head>
+<body>
+
+<select id="e1" style="width: 200px">
+       
+    </select>
+
+
+
+</body>
+
+ <script src="/beta/assets/js/jquery-1.10.2.js" type="text/javascript"></script>
+ <script src="/beta/assets/js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="/beta/assets/js/select2.js" type="text/javascript"></script>
+ 
+
+<script type="text/javascript">
+    	$(document).ready(function()
+    	{
+    	
+    	// alert('load');
+    
+
+$("#e2").select2({
+    placeholder: "Select a State",
+    allowClear: true
+});
+		
+	$("#e1").select2({
+	placeholder: "Select a State",
+		 allowClear: true,
+    tags: true,
+    multiple: true,
+    tokenSeparators: [',', ' '],
+    minimumInputLength: 2,
+    minimumResultsForSearch: 10,
+    ajax: {
+        url: 'http://localhost:8080/beta/rest/HRServices/getUserTaskList',
+        dataType: "json",
+        type: "GET",
+        data: function (params) {
+
+            var queryParameters = {
+                term: params.term
+            }
+            return queryParameters;
+        },
+        processResults: function (data) {
+            return {
+                results: $.map(data, function (item) {
+                    return {
+                        text: item.statusName,
+                        id: item.statusName
+                    }
+                })
+            };
+        }
+    }
+});
+	
+ 
+ 
+ 
+ 
+    	});
+    	</script>	
+	
+
+
+</html>

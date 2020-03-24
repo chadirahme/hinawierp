@@ -1,0 +1,114 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('hr.ImportEmployeeViewModel')" vflex="1">
+	 
+	 <label value="Import Employees" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	 
+	 <grid>
+			<columns>
+			<column width="150px"></column>
+			<column width="250px"></column>
+			<column ></column>			
+			
+			</columns>
+			<rows>
+			<row>
+			<label value="Company"></label>
+			<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enCompanyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>	
+			
+				<button label="Download Standard File">
+   			 <attribute name="onClick"><![CDATA[
+       	 	Filedownload.save("/download/sample.xls", null);
+  		  ]]></attribute>
+		</button>
+						
+			</row>
+			
+			<row>
+			<label value="Upload the filled Standard (Max size 1 MB)"></label>				
+            <button label="Upload" upload="true,maxsize=1000" onUpload="@command('uploadFile')" ></button>          
+             <label value="@bind(vm.attFile)"/>             
+			</row>				
+			
+			<row>
+			<label value="Preview Data"></label>
+			<button label="View" onClick="@command('previewDataFile')" disabled="@bind(!vm.canPreview)"></button>  
+			<label value="@bind(vm.message)" style="color:red"></label>
+			</row>
+					
+			</rows>
+			
+			</grid>
+			
+		<listbox model="@bind(vm.lstEmployeeData)" vflex="1" hflex="1">
+			<listhead menupopup="auto">
+						<listheader label="Employee No." width="110px" sort="auto('employeeNo')" />
+						<listheader label="Name" sort="auto('fullName')"/>
+						<listheader label="Arabic Name" sort="auto('arabicName')"/>						
+						<listheader label="Department" sort="auto('enDepartmentName')"/>
+						<listheader label="Position" sort="auto('enPositionName')"/>						
+						<listheader label="Join Date" sort="auto('joinDate')" />						
+						<listheader label="Sex" sort="auto('sex')" />
+						<listheader label="Nationality" sort="auto('nationality')" />
+						<listheader label="DOB" sort="auto('dob')" />
+						<listheader label="Religion" sort="auto('enReligion')" />
+						<listheader label="Marital" sort="auto('maritalStatus')" />
+												
+					</listhead>
+					<template name="model">
+						<listitem>
+						<listcell>
+								<label value="@bind(each.employeeNo)"/>
+							</listcell>														
+							<listcell>
+								<label value="@bind(each.fullName)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.arabicName)"/>
+							</listcell>
+							
+								<listcell>
+								<label value="@bind(each.enDepartmentName)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.enPositionName)"/>
+							</listcell>
+							
+								<listcell>
+								<label value="@bind(each.joinDate)"/>
+							</listcell>		
+							
+							<listcell>
+								<label value="@bind(each.sex)"/>
+							</listcell>								
+							
+							<listcell>
+								<label value="@bind(each.nationality)"/>
+							</listcell>		
+							<listcell>
+								<label value="@bind(each.dob)"/>
+							</listcell>		
+							<listcell>
+								<label value="@bind(each.enReligion)"/>
+							</listcell>	
+							<listcell>
+								<label value="@bind(each.maritalStatus)"/>
+							</listcell>			
+						</listitem>
+					</template>
+					
+		</listbox>
+	 <hbox align="center" pack="center" hflex="1">
+	  <button  id="btn1" label="Save" onLongOp="@command('saveFile')" disabled="@bind(!vm.canSave)"></button>  
+	  </hbox>
+	 </vlayout>
+</zk>

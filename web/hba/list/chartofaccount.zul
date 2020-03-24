@@ -1,0 +1,416 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+   
+<?page title="Chart of Account" contentType="text/html;charset=UTF-8"?>
+
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('hba.ChartofAccountViewModel')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<style>
+					.z-center-body {
+					overflow-x: auto !important;
+					}
+					.inputs {
+					font-weight: 800; }
+
+					.modified { color: green; }
+				</style>
+				<div xmlns:w="client" xmlns:zk="zk" xmlns:ca="client/attribute">
+					<imagemap id="myImage" w:onBind="" />
+					<attribute w:name="onBind">
+						this.$f('canPreviewtemperoryList').hide();
+						this.$f('updateImportedList').hide();
+						this.$f('firstRow').hide();
+						this.$f('secondRow').hide();
+						this.$f('thirdRow').hide();
+						this.$f('fouthRow').hide();
+						this.$f('MappingButton').hide();
+						this.$f('colspanheadderId').hide();
+						this.$f('canPreviewFinalList1').show();
+						this.$f('canPreviewFinalList1').setVflex("1");
+						this.$f('headerColNo').setReadonly(true);
+						this.$f('dataColNo').setReadonly(true);
+					</attribute>
+
+				</div>
+				<panel title="" collapsible="true" hflex="1" border="true"
+					id="chartofaccount_Panel_id" sizable="false">
+					<attribute w:name="onOpen">
+					</attribute>
+
+					<!--  <caption> <div sclass="z-toolbar" style="padding:0"> <toolbar align="end" 
+						style="float:right; border-style: none;"> <label value="Grid Adjustment"></label> 
+						<button label="+" onClick="" id="4353"> <attribute w:name="onClick"> this.$f('canPreviewtemperoryList').setVflex("max"); 
+						</attribute> </button> <button label="-" onClick="" id="1231"> <attribute 
+						w:name="onClick"> this.$f('canPreviewtemperoryList').setVflex("1"); </attribute> 
+						</button> </toolbar> </div> </caption>  -->
+					<panelchildren>
+						<grid>
+							<columns>
+								<column width="300px"></column>
+								<column width="220px"></column>
+								<column width="280px"></column>
+								<column width="220px"></column>
+								<column width="0px"></column>
+								<column width="0px"></column>
+							</columns>
+							<rows>
+								<row>
+
+									<cell>
+										<label value="No. Of Record"></label>
+										<space></space>
+										<listbox multiple="false" width="120px" mold="select"
+											model="@load(vm.lstAllPageSize)" selectedItem="@bind(vm.selectedAllPageSize)">
+											<template name="model" var="item">
+												<listitem>
+													<listcell label="@load(item)"></listcell>
+												</listitem>
+											</template>
+											<attribute w:name="onClick">
+											</attribute>
+
+										</listbox>
+
+									</cell>
+									
+									<cell>
+											<label value="Account Status"></label>
+											<space></space>
+											<listbox multiple="false" width="100px" mold="select"
+												model="@load(vm.lstStatus)" selectedItem="@bind(vm.selectedStatus)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item)"></listcell>
+													</listitem>
+												</template>
+												 <attribute w:name="onClick">
+												<!-- this.$f('canPreviewFinalList1').setVflex("1"); -->
+												</attribute>
+											</listbox>
+										</cell>
+										 <!-- <cell>
+											<label value="Sort By"></label>
+											<space></space>
+											<listbox multiple="false" width="100px" mold="select"
+												id="selectboxx" model="@load(vm.lstSortBy)" selectedItem="@bind(vm.selectedSortBy)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item)"></listcell>
+													</listitem>
+												</template>
+												 <attribute w:name="onClick">
+												this.$f('canPreviewFinalList1').setVflex("1");
+												</attribute>
+
+											</listbox>
+
+										</cell>  -->
+												<cell>
+
+										<label value="Import"></label>
+										<radiogroup id="imp" selectedItem="@bind(vm.importIsSelected)">
+											<space></space>
+											<space></space>
+											<label value="Yes"></label>
+											<radio id="importing" radiogroup="imp" value="A">
+												<attribute w:name="onClick">
+													this.$f('firstRow').show();
+													this.$f('secondRow').show();
+													this.$f('thirdRow').show();
+													this.$f('fouthRow').show();
+													this.$f('canPreviewFinalList1').hide();
+													this.$f('canPreviewtemperoryList').show();
+												</attribute>
+											</radio>
+											<space></space>
+											<space></space>
+											<label value="No"></label>
+											<radio id="notimporting" radiogroup="imp" value="B">
+												<attribute w:name="onClick">
+													this.$f('firstRow').hide();
+													this.$f('secondRow').hide();
+													this.$f('thirdRow').hide();
+													this.$f('fouthRow').hide();
+													this.$f('canPreviewFinalList1').show();
+													this.$f('canPreviewtemperoryList').hide();
+													this.$f('updateImportedList').hide();
+													this.$f('MappingButton').hide();
+													this.$f('messageLab').setValue("");
+												</attribute>
+											</radio>
+										</radiogroup>
+									</cell>
+									
+									
+									<cell>
+									
+									<space></space>
+									<button label="Add Account" width="120px" visible="@bind(vm.companyRole.canAdd)"
+	onClick="@command('addChartOfAccountCommand')" id="addChartOfAccount">
+	<attribute w:name="onClick">
+
+	</attribute>
+</button>
+											<space></space>
+											<button label="Reset" visible="true" width="50px"
+												onClick="@command('resetChartOfAccount')" id="chartOFaccountReset">
+											</button>
+									</cell>
+								</row>
+								<row>
+								
+								</row>
+								<row id="firstRow">
+									<cell>
+										<radiogroup id="sv1" selectedItem="@bind(vm.importComapnyStandard)">
+											<radio id="CompanyStandard" label="Import Company Standard Excel"
+												radiogroup="sv1" selected="true" value="A">
+												<attribute w:name="onCheck">
+													this.$f('dowloadBtton').show();
+													this.$f('secondRow').show();
+													this.$f('headerColNo').setDisabled(true);
+													this.$f('dataColNo').setDisabled(true);
+												</attribute>
+											</radio>
+										</radiogroup>
+									</cell>
+									<!-- <cell> <radio id="AnyStanderd" label="Import Any excel" radiogroup="sv1" 
+										value="B"> <attribute w:name="onCheck"> this.$f('dowloadBtton').hide(); this.$f('secondRow').show(); 
+										this.$f('headerColNo').setDisabled(false); this.$f('dataColNo').setDisabled(false); 
+										</attribute> </radio> </cell> -->
+									<cell>
+										<button label="Download Standard" id="dowloadBtton">
+											<attribute name="onClick"><![CDATA[
+       	 	Filedownload.save("/download/Chart_Of_Accounts_Sample.xls", null);
+  		  ]]></attribute>
+										</button>
+									</cell>
+									<cell>
+										<label value="Header Row No."></label>
+										<space></space>
+										<intbox width="20px" value="@bind(vm.rowHeadderNo)"
+											sclass="inputs" onChange="" id="headerColNo" />
+											<space></space><space></space>
+										<label value="Data Row No."></label>
+										<space></space>
+										<intbox width="20px" value="@bind(vm.rowDataNo)"
+											sclass="inputs" onChange="" id="dataColNo" />
+									</cell>
+
+
+								</row>
+								<row id="secondRow">
+									
+								</row>
+
+								<row id="thirdRow">
+									<label value="Browse Excel File in xls format(Max size 100 MB)"></label>
+									<button label="Choose Excel to Upload" upload="true,maxsize=10000000"
+										onUpload="@command('uploadFile')">
+									</button>
+									<cell>
+										<label value="Preview Data"></label>
+										<space></space>
+										<button label="View" onClick="@command('previewDataFile')"
+											disabled="@bind(!vm.canPreview)">
+											<attribute w:name="onClick">
+												this.$f('MappingButton').show();
+												this.$f('colspanheadderId').show();
+												<!-- this.$f('ReMappingButton').hide(); -->
+											</attribute>
+										</button>
+									</cell>
+									<label value="@bind(vm.attFile)" style="color:green" />
+								</row>
+
+								<row id="fouthRow">
+									
+									<cell>
+
+									</cell>
+								</row>
+								<row>
+
+								</row>
+								<row>
+
+								</row>
+							</rows>
+						</grid>
+						<label value="@bind(vm.message)" style="color:red" id="messageLab"></label>
+
+					</panelchildren>
+				</panel>
+
+
+				<listbox model="@load(vm.browsedGriddata)" vflex="1" hflex="1"
+					multiple="true" height="500px" mold="paging" pagingPosition="both"
+					id="canPreviewtemperoryList" emptyMessage="No result found">
+
+
+					<auxhead children="@load(vm.headers1)">
+						<template name="children" var="item1">
+							<auxheader align="center" id="${i}" width="100px">
+								<listbox multiple="false" mold="select" id="" width="100px"
+									model="@load(item1.dropdowns)" selectedItem="@bind(item1.selectedStatus)">
+									<template name="model" var="item">
+										<listitem>
+											<listcell label="@load(item)"></listcell>
+										</listitem>
+									</template>
+
+								</listbox>
+							</auxheader>
+						</template>
+
+					</auxhead>
+					<auxhead id="colspanheadderId">
+						<auxheader align="center" width="100px">-</auxheader>
+						<auxheader align="center" width="150px" colspan="2">
+							<label>Main</label>
+						</auxheader>
+						<auxheader align="center" width="150px">
+							<label>-</label>
+						</auxheader>
+						<auxheader align="center" width="150px" colspan="2">
+							<label>Level-1</label>
+						</auxheader>
+						<auxheader align="center" width="150px" colspan="2">
+							<label>Level-2</label>
+						</auxheader>
+						<auxheader align="center" width="150px" colspan="2">
+							<label>Level-3</label>
+						</auxheader>
+						<auxheader align="center" width="150px" colspan="2">
+							<label>Level-4</label>
+						</auxheader>
+					</auxhead>
+
+
+					<listhead children="@load(vm.headers)" sizable="true"
+						onAfterRender="gridCount.setValue(self.getColumnIndex())">
+						<template name="children" var="item">
+							<listheader align="center" width="150px">
+								<label value="@load(item)" style="white-space: normal;"
+									multiline="true" />
+							</listheader>
+						</template>
+					</listhead>
+
+
+					<template name="model" var="line">
+						<listitem children="@bind(line)">
+							<template name="children" var="cell">
+								<listcell>
+									<textbox value="@bind(cell.name)" sclass="inputs"
+										inplace="true">
+										<attribute w:name="onChange">
+											$(this).addClass('modified');
+
+										</attribute>
+
+									</textbox>
+								</listcell>
+							</template>
+						</listitem>
+					</template>
+				</listbox>
+				<button label="Do/Re-Do Mapping" visible="true"
+					onClick="@command('updateGrid')" disabled="@bind(!vm.canPreviewMapping)"
+					id="MappingButton">
+					<attribute w:name="onClick">
+						this.$f('updateImportedList').show();
+						<!-- this.$f('ReMappingButton').show(); -->
+					</attribute>
+				</button>
+				<listbox id="canPreviewFinalList1" model="@bind(vm.lstItems)"
+					vflex="true" hflex="1" selectedItem="@bind(vm.selectedItems)"
+					width="600px" mold="paging" pageSize="@bind(vm.selectedPageSize)"
+					>
+					<auxhead sclass="category-center">
+						<auxheader colspan="1">
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.name)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.description)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.type)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1"> 
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.totalBalance)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1"> 
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.isactive)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+						</auxheader>
+					</auxhead>
+					<listhead menupopup="auto" sizable="true">
+						<listheader label="Edit" width="50px" />
+						<listheader label="Name" width="280px" sort="auto('accountName')" />
+						<listheader label="Name In Arabic" width="300px"
+							sort="auto('description')" />
+						<listheader label="Type" width="250px" sort="auto('accountType')" />
+						<listheader label="Total Balance" width="150px" align="right"
+							sort="auto('totalBalance')" />
+							<listheader label="Status" width="150px" align="right"
+							sort="auto('isActive')" />
+
+
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell>
+								<button image="/images/rowedit.png" visible="@bind(vm.companyRole.canModify)"
+									onClick="@command('editChartOfAccountCommand', row=each)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.accountName)"
+									onDoubleClick="@command('viewChartofAccountCommand', row=each)"
+									style="@bind(each.subLevel eq 0 ? 'color:black;font-weight:bold;' : each.subLevel eq 1 ? 'margin-left:30px' : each.subLevel eq 2 ? 'margin-left:60px' : each.subLevel eq 3 ? 'margin-left:90px' : 'margin-left:120px')" />
+							</listcell>
+
+							<listcell>
+								<label value="@bind(each.description)"
+									onDoubleClick="@command('viewChartofAccountCommand', row=each)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.accountType)"
+									onClick="@command('viewChartofAccountCommand', row=each)" />
+							</listcell>
+							<listcell>
+								<label value="${c:formatNumber(each.totalBalance, '###,###,###.00')}"
+									onDoubleClick="@command('viewChartofAccountCommand', row=each)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.isActive)"
+									onDoubleClick="@command('viewChartofAccountCommand', row=each)"  style="@bind(each.isActive eq 'Active' ? 'color:black;font-weight:bold;' : 'color:red;margin-left:0px') "/>
+							</listcell>
+
+						</listitem>
+					</template>
+				</listbox>
+				<button label="Save" disabled="@bind(!vm.canSave)"
+					onClick="@command('updateChartofAccountList')" id="updateImportedList"></button>
+			</vlayout>
+		</center>
+
+	</borderlayout>
+</zk>

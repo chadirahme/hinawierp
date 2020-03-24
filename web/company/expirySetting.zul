@@ -1,0 +1,169 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('hr.ExpirySettings')"
+		vflex="1">
+		<style dynamic="true">
+  .savedTab .z-tab-text {
+    color:red;
+  }
+</style>
+		<zscript>
+  void savedTabStyle(Tab t) {
+    t.setSclass("savedTab");
+    t.invalidate();
+  } 
+</zscript>
+
+		<scrollview orient="vertical" vflex="1">
+		<hbox>
+			<label value="Expiry Settings  (Checking these won't Allow the user to create Activities(Leave/Loan) if theses expires with in"
+				style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+				<label value="@bind(vm.totalDays)"
+				style="color:#2c6f99;font-weight:bold;margin:5px;font-size:16px;"></label>
+				<label value="Day/Days"
+				style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label></hbox>
+			<grid>
+				<columns>
+					<column width="150px"></column>
+					<column width="250px"></column>
+					<column width="30px"></column>
+					<column width="150px"></column>
+					<column></column>
+
+				</columns>
+				<rows>
+					<row>
+						<label value="Company"></label>
+						<listbox multiple="false" hflex="1" mold="select"
+							model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)"
+							>
+							<template name="model" var="item">
+								<listitem>
+									<listcell label="@load(item.enCompanyName)"></listcell>
+								</listitem>
+							</template>
+						</listbox>
+						<space></space>
+						<label value="Enter the Exipry Days"></label>
+						<intbox width="120px" value="@bind(vm.totalDays)"
+												constraint="no empty: Please enter total number of Exipry days !!!"></intbox>
+					</row>
+					
+					</rows>
+			
+			</grid>
+					
+
+					<tabbox width="100%" sclass="nav_tabs">
+						<tabs id="tabs">
+							<tab label="Leave Request" onSelect='savedTabStyle(self);'/>
+							<tab label="Loan Request" onSelect='savedTabStyle(self);'/>
+						</tabs>
+
+						<tabpanels>
+							<tabpanel>
+						 <grid>
+									<columns>
+										<column width="170px"></column>
+										<column width="250px"></column>
+									</columns>
+									<rows>
+
+										<row>
+											<checkbox label="Visa" 
+												checked="@bind(vm.checkLeaveVisa)"></checkbox>
+
+										</row>
+
+										<row>
+											<checkbox label="Passport" 
+												checked="@bind(vm.checkLeavePassport)"></checkbox>
+										</row>
+										
+										<!-- <row>
+											<checkbox label="Residence" 
+												checked="@bind(vm.checkLeaveResidence)"></checkbox>
+										</row> -->
+										
+										<row>
+											<checkbox label="Labour Card" 
+												checked="@bind(vm.checkLeaveLabourCrad)"></checkbox>
+										</row>
+
+										<row>
+											<checkbox label="Government Id" 
+												checked="@bind(vm.checkLeaveGovtId)"></checkbox>
+										</row>
+
+										<row>
+											<checkbox label="Health Card" 
+												checked="@bind(vm.checkLeaveHealthCard)"></checkbox>
+										</row>
+
+
+
+									</rows>
+								</grid>
+
+							</tabpanel>
+						 <tabpanel>
+								<grid>
+									<columns>
+										<column width="170px"></column>
+										<column width="250px"></column>
+									</columns>
+									<rows>
+
+										<row>
+											<checkbox label="Visa" 
+												checked="@bind(vm.checkLoanVisa)"></checkbox>
+
+										</row>
+
+										<row>
+											<checkbox label="Passport" 
+												checked="@bind(vm.checkLoanPassport)"></checkbox>
+										</row>
+										
+										<!-- <row>
+											<checkbox label="Residence" 
+												checked="@bind(vm.checkLoanResidence)"></checkbox>
+										</row> -->
+										
+										<row>
+											<checkbox label="Labour Card" 
+												checked="@bind(vm.checkLoanLabourCrad)"></checkbox>
+										</row>
+
+										<row>
+											<checkbox label="Government Id" 
+												checked="@bind(vm.checkLoanGovtId)"></checkbox>
+										</row>
+
+										<row>
+											<checkbox label="Health Card" 
+												checked="@bind(vm.checkLoanHealthCard)"></checkbox>
+										</row>
+
+
+
+									</rows>
+								</grid>
+
+							</tabpanel>
+
+						</tabpanels>
+					</tabbox>
+
+					<hbox align="center" pack="center" hflex="1">
+						<button id="btn1" label="Save" onLongOp="@command('save')"
+							/><!-- </button>
+						<button label="Clear" onClick="@command('clearData')" /> -->
+					</hbox>
+		</scrollview>
+	</vlayout>
+
+</zk>

@@ -1,0 +1,260 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+	<borderlayout id="mainlayout2">
+
+		<center autoscroll="true">
+			<vlayout
+				apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+				viewModel="@id('vm') @init('hba.BarcodePrintingViewModel')" style="overflow:auto" >
+
+				<grid height="430px"
+					emptyMessage="There is no data found for this criteria"
+					model="@load(vm.lstItems)">
+					<auxhead sclass="category-center">
+						<auxheader colspan="1">
+							<checkbox onCheck="@command('chkAll',cmp=ItemModalDialog)" value="@bind(vm.chkAll)"></checkbox>
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.name)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.description)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.type)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.salesPrice)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.isactive)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.barcode)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value=""
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+
+						</auxheader>
+					</auxhead>
+
+					<columns sizable="true">
+						
+						<column label="" width="50px" style="chk"/>
+						<column label="Item Name" width="230px" />
+						<column label="Description" hflex="1"
+							sort="auto(purchaseDesc)" />
+						<column label="Item Type" width="150px"
+							sort="auto(itemType)" />
+						<column label="Selling Price" width="100px"
+							sort="auto(salesPrice)" align="right" />
+						<column label="Active" width="60px"
+							sort="auto(isActive)" />
+						<column label="Barcode" width="200px"
+							sort="auto(barcode)" />
+						<column label="Quantity to Print" width="150px"
+							sort="auto(printQtyBarcode)" align="right" />
+					</columns>
+
+
+					<template name="model">
+						<row>
+							<checkbox
+								checked="@bind(each.checkedItem)">
+							</checkbox>
+							<label value="@bind(each.name)"></label>
+							<label value="@bind(each.purchaseDesc)"></label>
+							<label value="@bind(each.itemType)" />
+							<label value="@bind(each.salesPrice)"></label>
+							<label value="@bind(each.isActive)"></label>
+							<label value="@bind(each.barcode)"></label>
+							<textbox value="@bind(each.printQtyBarcode)"
+								style="text-align: right" width="130px" constraint="/^[0-9]+$/: Please enter a number" maxlength="3">
+							</textbox>
+						</row>
+
+					</template>
+				</grid>
+
+				<grid >
+					<columns>
+						<column width="180px"></column>
+						<column width="180px"></column>
+						<column width="180px"></column>
+						<column width="180px"></column>
+						<column width="250px"></column>
+						<column hflex="1"></column>
+					</columns>
+					
+					<rows>
+						<row>
+							<cell>Page Type * </cell>
+							
+							<cell colspan="2">
+								<radiogroup id="rbnPageType" selectedItem="@bind(vm.selectedPageType)" onCheck="@command('selectPageTypeCommand')">
+								  	<radio label="A4" value="1" radiogroup="rbnPageType" checked="true"></radio>
+								  	<space width="50px"></space>
+								  	<radio label="Ribbon" value="2" radiogroup="rbnPageType"></radio>
+								</radiogroup>
+							</cell>
+							
+							<cell><!-- Printer Name *  --></cell>
+							
+							<cell>
+								<!--listbox hflex="1" mold="select" model="@load(vm.lstPrinters)" selectedItem="@bind(vm.printerName)">
+									<template name="model" var="item">
+										<listitem>
+											<listcell label="@load(item)"></listcell>
+										</listitem>
+									</template>
+								</listbox-->
+							</cell>
+							
+							<cell></cell>
+						</row>
+						
+						<row>
+							<cell>Barcode Size * </cell>
+							
+							<cell colspan="2">
+								<listbox width="200px" mold="select" model="@load(vm.fillBarcodeSize)" selectedItem="@bind(vm.selectedBarcodeSize)" onSelect="@command('changeBarcodeStartLocation',cmp=ItemModalDialog)">
+									<template name="model" var="item">
+										<listitem>
+											<listcell label="@load(item)"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+								
+								<space></space><label tooltiptext="Size of the barcode labels.">?</label>
+							</cell>
+							
+							
+							<cell>Start Location</cell>
+							
+							<cell>
+								<listbox hflex="1" mold="select" model="@load(vm.fillBarcodeStartLoc)" selectedItem="@bind(vm.selectedStartLocation)" disabled="@bind(vm.startLocDisable)">
+									<template name="model" var="item">
+										<listitem>
+											<listcell label="@load(item)"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+								<space></space><label tooltiptext="This is the location on the paper where you want to start printing the barcodes.">?</label>
+							</cell>
+							
+							<cell></cell>
+						</row>
+						
+						<row>
+							<cell>Information to Print / Order</cell>
+							
+							<cell>
+								<checkbox label="Item Name" checked="@bind(vm.printItemName)" width="15px" onCheck="@command('ChangeOrderItemName',cmp=ItemModalDialog)" />
+								<space width="30px"></space>
+								<textbox width="25px" multiline="false" value="@bind(vm.printItemNameOrder)" readonly="true"></textbox>
+							</cell>
+							
+							<cell>
+								<checkbox label="Description" checked="@bind(vm.printDescription)" width="15px" onCheck="@command('ChangeOrderDescription',cmp=ItemModalDialog)" />
+								<space width="30px"></space>
+								<textbox width="25px" multiline="false" value="@bind(vm.printDescriptionOrder)" readonly="true"></textbox>
+							</cell>
+							
+							<cell colspan="3">
+								<checkbox label="Selling Price" checked="@bind(vm.printSellingPrice)" width="15px" onCheck="@command('ChangeOrderSellingPrice',cmp=ItemModalDialog)" />
+								<space width="30px"></space>
+								<textbox width="25px" multiline="false" value="@bind(vm.printSellingPriceOrder)" readonly="true"></textbox>
+								
+								<space></space><label tooltiptext="Information To Print On The Label as specified in order.">?</label>
+							</cell>
+						</row>
+						
+						<row>
+							<cell>Information Position</cell>
+							
+							<cell>
+								<listbox width="115px" mold="select" model="@load(vm.fillInfPosition)" selectedItem="@bind(vm.selectedInfPosItmName)">
+									<template name="model" var="item">
+										<listitem>
+											<listcell label="@load(item)"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</cell>
+							
+							<cell>
+								<listbox width="115px" mold="select" model="@load(vm.fillInfPosition)" selectedItem="@bind(vm.selectedInfPosItmDesc)">
+									<template name="model" var="item">
+										<listitem>
+											<listcell label="@load(item)"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</cell>
+							
+							<cell colspan="3">
+								<listbox width="115px" mold="select" model="@load(vm.fillInfPosition)" selectedItem="@bind(vm.selectedInfPosItmSellPrice)">
+									<template name="model" var="item">
+										<listitem>
+											<listcell label="@load(item)"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+								
+								<space></space><label tooltiptext="Location to print the above information.">?</label>
+							</cell>
+						</row>
+						
+						
+						<row>
+							<cell colspan="6">
+								<hbox pack="right" hflex="1">
+									<button label="Preview/Print"  onClick="@command('printBarcode')">
+									</button>
+									<button label="Close" onClick="@command('CloseBarcodePrinting')">
+									</button>
+								</hbox>
+							</cell>
+						</row>
+					</rows>
+				</grid>
+			</vlayout>
+		</center>
+	</borderlayout>
+	
+	
+	<!--popup id="tipLocId" width="300px">
+		<vlayout>
+			This is the location on the paper where you want to start printing the barcodes.
+		</vlayout>
+	</popup>
+	<popup id="tipPrinterId" width="300px">
+		<vlayout>
+			This is the printer name where the barcodes will be printed.
+		</vlayout>
+	</popup-->
+
+</zk>

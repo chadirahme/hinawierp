@@ -1,0 +1,246 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+	<window id="vendorList" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Select Vendors" border="normal" position="center,center"
+		closable="true" sizable="true" onCancel="vendorList.detach()" width="80%"
+		height="85%">
+
+		<borderlayout apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('hba.VendorListViewModel' , type='vendor')">
+			<center autoscroll="true" border="none">
+				<vlayout hflex="1" vflex="1">
+					<vlayout>
+						<style>
+							.z-center-body {
+							overflow-x: auto !important;
+							}
+							.inputs {
+							font-weight: 800; }
+
+							.modified { color: green; }
+						</style>
+						<panel collapsible="true" hflex="1" sizable="false" id="panelll"
+							border="true">
+							<panelchildren>
+								<grid>
+									<columns>
+										<column width="300px"></column>
+										<column width="250px"></column>
+										<column width="200px"></column>
+										<column width="270px"></column>
+										<column width="0px"></column>
+										<column width="0px"></column>
+									</columns>
+									<rows>
+										<row>
+											<cell>
+												<label value="No. Of Records"></label>
+												<space></space>
+												<listbox multiple="false" width="120px" mold="select"
+													model="@load(vm.lstAllPageSize)" selectedItem="@bind(vm.selectedAllPageSize)">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item)"></listcell>
+														</listitem>
+													</template>
+												</listbox>
+
+
+											</cell>
+											<cell>
+												<label value="Vendor Status"></label>
+												<space></space>
+												<listbox multiple="false" width="100px" mold="select"
+													model="@load(vm.lstStatus)" selectedItem="@bind(vm.selectedStatus)">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item)"></listcell>
+														</listitem>
+													</template>
+												</listbox>
+											</cell>
+											<cell>
+												<checkbox checked="@bind(vm.hideEmail)" label="Hide Vendors with No E-mails"
+													onClick="@command('hideVendorsWithNoEmailsForSendEmails')"
+													visible="true"></checkbox>
+											</cell>
+										</row>
+									</rows>
+								</grid>
+								<label value="@bind(vm.message)" style="color:red" id="messageLab"></label>
+
+							</panelchildren>
+						</panel>
+					</vlayout>
+
+
+					<listbox id="canPreviewFinalList1" model="@bind(vm.lstVendors)"
+						checkmark="true" multiple="true" vflex="1" hflex="1"
+						selectedItem="@bind(vm.selectedVendor)" width="900px" mold="paging" selectedItems="@bind(vm.selectedVendorsEntities)"
+						pageSize="@bind(vm.selectedPageSize)">
+						<!-- <auxhead> <auxheader label="Vendor List" colspan="7" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;" 
+							align="left" /> </auxhead> -->
+						<auxhead sclass="category-center">
+							<auxheader colspan="1" label="" width="50px">
+							</auxheader>
+							<auxheader colspan="1" label="" width="50px">
+							</auxheader>
+
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px" value="@bind(vm.filter.name)"
+									onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px" value="@bind(vm.filter.arname)"
+									onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px" value="@bind(vm.filter.phone)"
+									onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px" value="@bind(vm.filter.fax)"
+									onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px" value="@bind(vm.filter.email)"
+									onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px" value="@bind(vm.filter.contact)"
+									onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px"
+									value="@bind(vm.filter.accountNumber)" onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px"
+									value="@bind(vm.filter.accountName)" onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px"
+									value="@bind(vm.filter.bankName)" onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px"
+									value="@bind(vm.filter.branchName)" onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px"
+									value="@bind(vm.filter.ibanumber)" onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px"
+									value="@bind(vm.filter.isactive)" onChange="@command('changeFilter')" />
+							</auxheader>
+						</auxhead>
+						<listhead menupopup="auto" sizable="true">
+							<listheader label="Check" width="80px" />
+							<listheader label="Edit" width="150px" />
+							<listheader label="Name" sort="auto('name')" width="150px" />
+							<listheader label="Arabic Name" sort="auto('arName')"
+								width="150px" />
+							<listheader label="Phone" sort="auto('phone')" width="150px" />
+							<listheader label="Fax" sort="auto('fax')" width="150px" />
+							<listheader label="Email" sort="auto('email')" width="150px" />
+							<listheader label="Contact" sort="auto('contact')"
+								width="150px" />
+							<listheader label="Bank Account Number" sort="auto('accountNumber')"
+								width="150px" />
+							<listheader label="Bank Account Name" sort="auto('accountName')"
+								width="150px" />
+							<listheader label="Bank Name" sort="auto('bankName')"
+								width="150px" />
+							<listheader label="Branch Name" sort="auto('branchName')"
+								width="150px" />
+							<listheader label="IBAN No." sort="auto('ibanNo')"
+								width="150px" />
+							<listheader label="Status" sort="auto('isActive')"
+								width="150px" />
+
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell>
+								</listcell>
+								<listcell>
+									<button image="/images/rowedit.png" onClick="@command('editVendorCommand', row=each)" /><space></space>
+									<button label="View" onClick="@command('viewVendorCommand', row=each)" />
+								</listcell>
+
+								<listcell>
+									<label value="@bind(each.name)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.arName)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.phone)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.fax)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.email)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.contact)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.accountNumber)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.accountName)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.bankName)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.branchName)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.ibanNo)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.isActive)"
+										style="@bind(each.isActive eq 'Active' ? 'color:black;font-weight:bold;' : 'color:red;margin-left:0px') " />
+								</listcell>
+
+
+							</listitem>
+						</template>
+					</listbox>
+					<hlayout hflex="1" style="text-align: right">
+						<!-- <label value="@load(vm.footer)" style="color:#2c6f99;text-align: 
+							right;font-weight: bold;"></label> -->
+						<space></space>
+						<space></space>
+						<space></space>
+						<space></space>
+					</hlayout>
+					<hbox></hbox>
+					<hbox></hbox>
+					<hbox pack="center" hflex="1">
+						<button label="OK"
+							onClick="@command('selectVendorsForSendEmails',cmp=vendorList) " />
+						<button label="Close" onClick="vendorList.detach()"></button>
+					</hbox>
+
+				</vlayout>
+			</center>
+		</borderlayout>
+	</window>
+</zk>

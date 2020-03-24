@@ -1,0 +1,138 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+<?page id="" title="new page title" contentType="text/html;charset=UTF-8" ?>
+
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+<borderlayout id="mainlayout2">
+<center autoscroll="true" >
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('timesheet.TransferViewModel')" vflex="1" >
+	 	<style>
+.z-datebox-text-disd {
+        background:transparent;
+    }
+    .z-datebox-disd .z-datebox-inp {
+        color:black !important;
+    }
+</style>
+	 
+	
+	 
+	 <label value="Transfer between Sites\Locations" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	 
+	 <grid>
+			<columns>		
+			<column  width="150px"></column>
+			<column  width="180px"></column>
+			<column  width="100px"></column>
+			<column  width="150px"></column>
+			<column  width="200px"></column>
+			<column  width="100px"></column>
+			<column  width="180px"></column>							
+			</columns>
+			<rows>
+			
+			<row>
+			<label value="Company"></label>
+			<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enCompanyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<cell colspan="2">
+			<button label="Add Employee"  onClick="@command('findEmployeeCommand')"></button>	
+			</cell>
+			</row>
+			
+			<row>
+			<label value="Form No"></label>
+			<textbox value="@bind(vm.formNo)" readonly="true"></textbox>
+			<label value="Create Date"></label>
+			<datebox value="@bind(vm.createDate)" format="dd/MM/yyyy" disabled="true"></datebox>
+			<cell>
+			<label value="Transfer Date"></label>
+			<datebox value="@bind(vm.transferDate)" format="dd/MM/yyyy" ></datebox>
+			</cell>
+			
+			</row>
+			
+			<row>
+			<label value="New Location/Project(TO)"></label>
+			<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstProject)" selectedItem="@bind(vm.selectedProject)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.projectName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			
+			<label value="Team List"></label>
+			<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstWorkGroup)" selectedItem="@bind(vm.selectedWorkGroup)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.groupName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			
+			<label value="Supervisor In Charge"></label>
+			<label value="@bind(vm.siteInCharge)" style="color:green"></label>
+			
+			<label value="Total no of employee under Team"></label>
+			<label value="@bind(vm.contactNO)" style="color:green"></label>
+			</row>
+			<row>
+			<label value="Memo"></label>
+			<cell colspan="3">
+			
+			<textbox multiline="true" rows="4" hflex="1" value="@bind(vm.memo)" style="color:#008FD2;"></textbox>
+			</cell>
+			
+			<cell colspan="2">
+			<hbox hflex="1" pack="center">			
+			<button label="Save" width="100px" onClick="@command('saveCommand')"></button>	
+			<button label="Clear" width="100px" onClick="@command('clearCommand')"></button>			
+			</hbox>
+			</cell>
+			
+			</row>
+			</rows>
+			
+			</grid>
+			
+			
+			<grid vflex="1"  emptyMessage="There is no data found for this criteria"
+        	model="@load(vm.lstEmployee)" >
+        	<columns sizable="true">
+        	  <column  label="SNO." width="50px"/>
+        	    <column  label="Emp No."  width="100px" sort="auto(employeeNo)" />
+        	      <column  label="Name" hflex="1" sort="auto(fullName)"/>
+        	        <column  label="Last Transfer" width="100px" sort="auto(lastTransferDate)"/>
+        	          <column  label="Current Location(From)" hflex="1" sort="auto(projectName)"/>        	         
+        	</columns>
+        	
+        	
+        	  <template name="model">
+        	<row>
+        	<label value="@bind(forEachStatus.index+1)"></label>
+        	<label value="@bind(each.employeeNo)"></label>
+        	<label value="@bind(each.fullName)"></label>        
+        	<label value="@bind(each.lastTransferDate)" />
+        	<label value="@bind(each.projectName)"></label>
+        	
+        	</row>
+        	
+        	  
+        	  </template>
+        	
+        	</grid>
+					
+			
+			</vlayout>
+			</center>
+			</borderlayout>
+			
+		</zk>

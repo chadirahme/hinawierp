@@ -1,0 +1,253 @@
+<?page title="Hinawi Software" contentType="text/html;charset=UTF-8"?>
+
+<?link rel="stylesheet" type="text/css" href="/css/navmenustyle.css"?>
+<?link rel="stylesheet" type="text/css" href="/css/hstyle.css"?>
+
+
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout/template.zul"?>
+
+<zk>
+<html>
+<body onload="setActiveMenu()">
+</body>
+<script type="text/javascript">
+   function setActiveMenu() 
+   {
+      var elem = document.getElementById("home");    
+      elem.style.background='rgba(168, 168, 168, 0.5)';
+      // elem.style= 'background-image: -moz-linear-gradient(left center , rgba(168, 168, 168, 0.5), rgba(168, 168, 168, 0) 50%, rgba(168, 168, 168, 0.5));';
+   }
+</script>
+
+</html>
+<style>
+
+.H1 {
+font-family:Arial, Helvetica, sans-serif;
+color:#2c6f99;
+font-size:16px;
+font-weight:bold;
+margin:0 0 11px 0;
+padding:10px;
+float:left;
+width:526px;
+padding-right:20px;
+padding-top:6px;
+}
+
+.H2
+{
+font-size:16px;
+font-weight:bold;
+}
+
+.MyRowHeight tr.z-row td.z-row-inner 
+{ 
+height:50px; 
+} 
+
+.z-checkbox-cnt
+{
+margin-left:5px;
+}
+</style>
+<vlayout self="@define(content)" apply="org.zkoss.bind.BindComposer" 
+		viewModel="@id('vm') @init('home.QuotationViewModel')" hflex="1">
+
+<hbox style="padding-left:45px;margin-left:30px;" form="@id('fx') @load(vm.quotModel) @save(vm.quotModel, before='registerCommand') ">			
+	
+	<grid  sclass="hide-header" style="border: 0px;">
+	<columns>
+	 <column align="left" width="200px"/>
+	<column ></column>
+	</columns>
+	
+	<rows>
+	
+	<row>
+	<cell colspan="2">
+	<label style="color:#2C6F99;font-size:15px" value="Register now and get 3 month free !!"></label>
+	
+	</cell>
+	</row>
+	
+	<row>
+	<cell colspan="2">
+	<label style="color:#2C6F99;font-size:15px" value="Please fill the information below and will contact you soon !!"></label>
+	
+	</cell>
+	</row>
+	
+	 			<row>
+                    <cell sclass="row-title">
+                    <label value="Company information :" zclass="H2"></label>
+                    </cell>
+                    <cell><label value="( * ) fields are mandatory."/></cell>
+                </row>
+                
+                   <row height="40px">
+                    <cell sclass="row-title">Are you : <label style="color:red" value="*"></label></cell>
+                    <cell>
+                    <hlayout>
+                       <checkbox checked="@bind(vm.custtype1)" label="Visitor"></checkbox>
+                     
+                        <checkbox checked="@bind(vm.custtype2)" label="Customer"></checkbox>
+                      
+                                          
+                          <checkbox checked="@bind(vm.custtype4)" label="QuickBooks User"></checkbox>
+                            <checkbox checked="@bind(vm.custtype3)" label="Others"></checkbox> 
+               
+                       </hlayout>
+                    </cell>
+                </row>
+                                                
+	
+	 		 <row height="40px">
+                    <cell sclass="row-title">Company Name : <label style="color:red" value="*"></label></cell>
+                    <cell>
+                        <textbox
+                        constraint="no empty: Please enter Company Name" width="300px" value="@bind(fx.companyName)"/>
+                    </cell>
+                </row>
+                
+                 <row  height="40px">
+                    <cell sclass="row-title">Contact person : <span style="color:red">*</span></cell>
+                    <cell>
+                    <hlayout>
+                    <listbox rows="1" width="50px" mold="select" selectedItem="@bind(fx.contactTitle)">
+                    <listitem value="Mr." label="Mr." selected="true"></listitem>
+                     <listitem value="Ms." label="Ms."></listitem>                     
+                    </listbox>
+                     <textbox
+                        constraint="no empty: Please enter Contact person" width="250px" value="@bind(fx.contactName)"/>
+                    </hlayout>
+                       
+                    </cell>
+                </row>
+                
+                 <row height="40px">
+                    <cell sclass="row-title">Position : <span style="color:red">*</span></cell>
+                    <cell>
+                    <vlayout>
+                        <listbox mold="select" width="300px" model="@bind(vm.lstPositions)" selectedItem="@bind(vm.selectedPosition)">
+                        <template name="model" var="item" status="s">
+                          <listitem>                	
+                		<listcell label="@bind(item.positionname)"/>
+            			</listitem>
+        				</template>
+                        </listbox>                       
+                        <textbox  visible="@bind(vm.selectedPosition.positionname eq 'Other')" value="@bind(vm.otherPosition)" width="300px"></textbox>
+                        </vlayout>
+                    </cell>
+                </row>
+                
+                 <row height="40px">
+                    <cell sclass="row-title">Country : <span style="color:red">*</span></cell>
+                    <cell>
+                         <listbox mold="select" model="@bind(vm.lstCountry)" width="300px" selectedItem="@bind(vm.selectedCountry)">
+                          <template name="model" var="item" status="s">
+                          <listitem>                	
+                		<listcell label="@bind(item.countryname)"/>
+            			</listitem>
+        				</template>
+                         </listbox>
+                    </cell>
+                </row>
+                
+                 <row height="40px">
+                    <cell sclass="row-title">City : <span style="color:red">*</span></cell>
+                    <cell>
+                        <textbox
+                        constraint="no empty: Please enter your City" width="300px" value="@bind(fx.city)"/>
+                    </cell>
+                </row>
+                
+                 <row>
+                    <cell sclass="row-title">Mobile No. : <span style="color:red">*</span></cell>
+                    <cell>                    
+                     <hlayout>
+                      <textbox width="50px" value="@bind(vm.selectedCountry.countrycode)" readonly="true"/>
+                       <textbox width="250px"  constraint="no empty: Please enter your Mobile" value="@bind(fx.mobile1)"/>
+                     </hlayout>
+                    </cell>
+                </row>
+                
+                <row>
+                    <cell sclass="row-title">Telephone No.: <span style="color:red">*</span></cell>
+                    <cell>
+                   
+                     <hlayout>
+                      <textbox width="50px" value="@bind(vm.selectedCountry.countrycode)" readonly="true"/>
+                       <textbox width="250px"  constraint="no empty: Please enter your Phone" value="@bind(fx.telephone1)"/>
+                     </hlayout>
+                   
+                    </cell>
+                </row>
+                                                 
+                
+                <row height="40px">
+                 <cell sclass="row-title">Email : <span style="color:red">*</span></cell>
+                 <cell>
+                  <textbox
+                    constraint="/^[A-Za-z0-9_\-\.]+@[A-Za-z0-9_\-\.]{2,}\.[A-Za-z0-9]{2,}(\.[A-Za-z0-9])?/: Please enter a valid e-mail address"
+                         width="300px" value="@bind(fx.email)"/>
+                 </cell>
+                 
+                </row>
+                
+                <row height="40px">
+                 <cell sclass="row-title">Website :</cell>
+                 <cell>
+                 <vlayout>
+                 <hlayout>
+                 <label value="http://"></label>
+                 <textbox
+                       width="280px" value="@bind(fx.website)"/>
+                 </hlayout>
+                 <label value="(i.e : www.xyz.com)"></label>
+                  </vlayout>
+                 </cell>
+                 
+                </row>
+                
+      <row>
+	<cell colspan="2">
+	<label value="Interested in the following modules : " zclass="H2"></label>
+	</cell>
+	</row>
+	 
+	 <row>
+                <cell colspan="2"  align="left">
+                <vlayout>
+                
+                <listbox width="300px" multiple="true" checkmark="true" model="@bind(vm.lstModules)" selectedItems="@bind(vm.selectedModules)">              
+                </listbox>                              
+                </vlayout>
+                </cell>
+                </row>
+                
+                   <row>
+                <cell colspan="2"  align="left">                 	 
+                <label value="Notes" zclass="H2"></label>
+                </cell>
+                </row>
+                 <row>
+                <cell colspan="2"  align="left">                 	 
+                <textbox height="50px" hflex="1" multiline="true" value="@bind(fx.notes)"></textbox>
+                </cell>
+                </row>
+                
+                
+	
+	
+	<row>
+	<cell colspan="2" align="center">
+	<image src="images/submit.png" onClick="@command('registerCommand')"></image>
+	
+	</cell>
+	</row>
+	</rows>
+	</grid>
+	</hbox>
+</vlayout>
+</zk>

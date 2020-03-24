@@ -1,0 +1,17 @@
+<?link rel="stylesheet" type="text/css" href="/css/style.css"?>
+<?link rel="stylesheet" type="text/css" href="/css/hstyle.css"?>
+<zk>
+<borderlayout id="mainlayout2">
+	<north size="15%">
+		<include src="/layout/topnav.zul"></include>
+	</north>
+
+	<center>
+	<include self="@define(content)" src="contentdemo.zul"/>
+	</center>
+
+	<south size="5%">
+		<include src="/layout/footer.zul"></include>
+	</south>
+</borderlayout>
+</zk>

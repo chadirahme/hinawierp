@@ -1,0 +1,108 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="Mobile Modules To Sell" border="normal" vflex="1">
+
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('admin.HomeViewModel')" vflex="1" hflex="1">
+
+
+<space width="100px"></space>
+
+
+<hbox>
+<label value="Company"></label>
+<listbox multiple="false" width="250px" mold="select" model="@load(vm.lstMobileComapny)" selectedItem="@bind(vm.selectedMobileCompany)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.companyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			
+			
+			<space width="100px"></space>
+			
+			<checkbox label="Active" checked="@bind(vm.selectedMobileCompany.active)" ></checkbox>
+			
+			
+			<space width="100px"></space>
+			
+			<label value="Last Updated"></label>
+			<label value="@bind(vm.selectedMobileCompany.lastUpdated)"></label>
+			
+			</hbox>
+			
+			
+			<groupbox id="mygrp2">
+			<caption label="Server Info" />
+			
+			<grid>
+			<columns>
+			<column width="120px"></column>
+			<column></column>
+			<column width="120px"></column>
+			<column></column>
+			</columns>
+			
+			<rows>
+			
+			<row>
+				
+			<label value="Server"></label>
+			<textbox hflex="1" value="@bind(vm.selectedMobileCompany.serverName)"></textbox>
+			
+			
+			<label value="DataBase Name"></label>
+			<textbox hflex="1"  value="@bind(vm.selectedMobileCompany.dbname)"></textbox>
+			</row>
+			
+			<row>
+			
+			<label value="User Name"></label>
+			<textbox hflex="1"  value="@bind(vm.selectedMobileCompany.dbuser)"></textbox>
+							
+			
+			
+			<label value="Password"></label>
+			<textbox hflex="1"  type="password" value="@bind(vm.selectedMobileCompany.dbpwd)"></textbox>
+			
+		
+			
+			</row>
+			
+			</rows>
+			
+			</grid>
+									
+		</groupbox>
+		
+				<groupbox >
+			<caption label="Modules" />	
+ 			<hbox>
+ 			
+ 			<space width="100px"></space>
+			<checkbox label="HR Module" checked="@bind(vm.selectedMobileCompany.hr)" ></checkbox>
+			
+			<space width="100px"></space>
+			<checkbox label="Accounting Module" checked="@bind(vm.selectedMobileCompany.accounting)" ></checkbox>
+			
+			<space width="100px"></space>
+			<checkbox label="Realstate Module" checked="@bind(vm.selectedMobileCompany.realEstate)" ></checkbox>
+			
+			<space width="100px"></space>
+			<checkbox label="Admin Module" checked="@bind(vm.selectedMobileCompany.admin)" ></checkbox>
+								
+ 			</hbox>
+ 			</groupbox>
+ 		
+
+		
+		<space height="100px"></space>
+		<hbox hflex="1" pack="center" vflex="1" >
+		<button label="Save" onClick="@command('saveMobileCompanyCommand')" width="120px"></button>
+		</hbox>
+
+</vlayout>
+</window>
+</zk>

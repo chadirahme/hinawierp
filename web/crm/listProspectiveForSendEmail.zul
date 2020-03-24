@@ -1,0 +1,333 @@
+<?page title="prospective" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="pospective" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Select Prospective" border="normal"
+		position="center,center" closable="true" sizable="true" onCancel="pospective.detach()"
+		width="80%" height="85%">
+		<vlayout apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('hba.ProspectiveViewModel')"
+			vflex="1">
+			<scrollview orient="vertical" vflex="1">
+				<label style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+				<hbox>
+					<!-- <label value="Search By :"></label> <listbox id="prospective" onSelect="toggleDisp()" 
+						mold="select" selectedIndex="@bind(vm.selectedIndex)"> <listitem label="Please 
+						Select an item.." selected="true" /> <listitem label="Prospective Name" /> 
+						<listitem label="Category" /> <listitem label="How you know us" /> <listitem 
+						label="Telephone" /> <listitem label="Fax" /> </listbox> -->
+
+					<bandbox id="bd" mold="rounded" autodrop="true" visible="false"
+						placeholder="Select">
+						<bandpopup>
+							<listbox id="prospRes" height="250px" width="300px" mold="paging"
+								autopaging="true" pageSize="10" model="@load(vm.lstSearch)"
+								onSelect="bd.value=self.selectedItem.label; bd.close();"
+								selectedItem="@bind(vm.selectedProspectiveResult)">
+								<auxhead>
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" hflex="1" value="@bind(vm.filter.name)"
+											onChange="@command('changeFilter')" />
+									</auxheader>
+								</auxhead>
+								<listhead menupopup="auto">
+									<listheader label="Name" sort="auto('result')" />
+								</listhead>
+								<template name="model" var="prospective">
+									<listitem label="@load(prospective.result)" />
+								</template>
+							</listbox>
+						</bandpopup>
+					</bandbox>
+
+					<!-- <textbox visible="true" id="prospectTxt" value="@bind(vm.prospectiveTxt)"> 
+						</textbox> <button visible="true" label="Search" id="btnSubmit" onClick="@command('getSearchResult')"> 
+						</button> -->
+					<!-- *********************************************** -->
+					<panel collapsible="true">
+						<panelchildren>
+							<grid>
+								<columns>
+									<column width="120px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="190px"></column>
+								</columns>
+								<rows>
+									<row>
+
+										<cell>
+											<label value="No. of Records"></label>
+										</cell>
+										<cell>
+											<listbox multiple="false" width="120px" mold="select"
+												model="@load(vm.lstAllPageSize)" selectedItem="@bind(vm.selectedAllPageSize)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item)"></listcell>
+													</listitem>
+												</template>
+
+
+											</listbox>
+										</cell>
+										<cell>
+											<label value="Prospective Status"></label>
+										</cell>
+										<cell>
+											<listbox multiple="false" width="100px" mold="select"
+												model="@load(vm.lstStatus)" selectedItem="@bind(vm.selectedIsActive)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item)"></listcell>
+													</listitem>
+												</template>
+											</listbox>
+										</cell>
+										<cell>
+											<button visible="true" label="Add New Prospective" id="Add"
+												onClick="@command('addProspectiveCommand')"></button>
+										</cell>
+										<cell>
+											<button label="Reset" onClick="@command('refreshCommand')"></button>
+										</cell>
+
+										<cell>
+											<checkbox checked="@bind(vm.selectedStatus)"></checkbox>
+											<label>Converted To Customer</label>
+										</cell>
+
+									</row>
+								</rows>
+							</grid>
+						</panelchildren>
+					</panel>
+					<!-- *********************************************** -->
+
+
+
+				</hbox>
+				<listbox model="@bind(vm.lstProspectiveSearchRes)" vflex="1"
+					multiple="true" selectedItems="@bind(vm.selectedProspectiveEntities)"
+					checkmark="true" mold="paging" pagingPosition="bottom" height="250px"
+					hflex="1" emptyMessage="No items match your search" pageSize="300">
+
+					<auxhead sclass="category-center">
+						<auxheader colspan="1" label="" width="50px">
+						</auxheader>
+						<auxheader colspan="1" label="" width="50px">
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.name)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.arName)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.created_date)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="200px"
+								value="@bind(vm.filter.companyName)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="200px"
+								value="@bind(vm.filter.contactPerson)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px"
+								value="@bind(vm.filter.has_quotation)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.category)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.description)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.email)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.website)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.telphone1)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.telephone2)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.other1)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.other2)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.adress1)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+
+						</auxheader>
+					</auxhead>
+					<listhead sizable="true">
+						<listheader label="Select" width="50px" />
+						<listheader label="Edit" width="150px" />
+						<listheader label="Name " width="280px" sort="auto('name')" />
+						<listheader label="Arabic Name" sort="auto('arName')"
+							width="150px" />
+						<listheader label="Created Date" sort="auto('created_date')"
+							width="150px" />
+						<listheader label="Company Name" sort="auto('companyName')"
+							width="300px" />
+						<listheader label="Contact Person" sort="auto('contactPerson')"
+							width="300px" />
+						<listheader label="Has Qoutation" sort="auto('has_quotation')"
+							width="120px" />
+						<listheader label="Category" sort="auto('category')"
+							width="200px" />
+						<listheader label="Email" sort="auto('email')" width="200px" />
+						<listheader label="Website" sort="auto('website')"
+							width="200px" />
+						<listheader label="Telephone1" sort="auto('telphone1')"
+							width="150px" />
+						<listheader label="Telephone2" sort="auto('telephone2')"
+							width="150px" />
+						<listheader label="Mobile1" sort="auto('other1')"
+							width="150px" />
+						<listheader label="mobile2" sort="auto('other2')"
+							width="150px" />
+						<listheader label="Address" sort="auto('adress1')"
+							width="150px" />
+						<listheader label="Fax" sort="auto('fax')" width="150px" />
+					</listhead>
+					<template name="model" var="prospectives">
+						<listitem selected="@bind(prospectives.selected)">
+							<listcell></listcell>
+							<listcell>
+								<button image="/images/rowedit.png"
+									onClick="@command('editProspectiveCommand', row=prospectives)" />
+								<button image="/images/email.gif"
+									onClick="@command('ProspectiveSendEmail', row=prospectives)" />
+								<button image="/images/task.png" onClick="@command('addTask', row=prospectives)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewProspectiveCommand', row=prospectives)">
+								<label value="@bind(prospectives.name)" style="@bind(prospectives.rowColor)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewProspectiveCommand',row=prospectives)">
+								<label value="@bind(prospectives.arName)" style="@bind(prospectives.rowColor)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewProspectiveCommand', row=prospectives)">
+								<label value="@bind(prospectives.created_date)" style="@bind(prospectives.rowColor)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewProspectiveCommand', row=prospectives)">
+								<label value="@bind(prospectives.companyName)" style="@bind(prospectives.rowColor)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewProspectiveCommand', row=prospectives)">
+								<label value="@bind(prospectives.contactPerson)" style="@bind(prospectives.rowColor)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewProspectiveCommand', row=prospectives)">
+								<label value="@bind(prospectives.has_quotation)" style="@bind(prospectives.rowColor)" />
+
+							</listcell>
+							<listcell onDoubleClick="@command('viewProspectiveCommand', row=prospectives)">
+								<label value="@bind(prospectives.category)" style="@bind(prospectives.rowColor)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewProspectiveCommand', row=prospectives)">
+								<label value="@bind(prospectives.email)" style="@bind(prospectives.rowColor)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewProspectiveCommand', row=prospectives)">
+								<label value="@bind(prospectives.website)" style="@bind(prospectives.rowColor)" />
+
+							</listcell>
+							<listcell onDoubleClick="@command('viewProspectiveCommand', row=prospectives)">
+								<label value="@bind(prospectives.phone)" style="@bind(prospectives.rowColor)" />
+							</listcell>
+							<listcell onDoubleClick="@command('viewProspectiveCommand',row=prospectives)">
+								<label value="@bind(prospectives.directPhone)" style="@bind(prospectives.rowColor)" />
+							</listcell>
+
+							<listcell onDoubleClick="@command('viewProspectiveCommand', row=prospectives)">
+								<label value="@bind(prospectives.other1)" style="@bind(prospectives.rowColor)" />
+							</listcell>
+
+							<listcell onDoubleClick="@command('viewProspectiveCommand', row=prospectives)">
+								<label value="@bind(prospectives.other2)" style="@bind(prospectives.rowColor)" />
+							</listcell>
+
+							<listcell onDoubleClick="@command('viewProspectiveCommand', row=prospectives)">
+								<!-- <label value="@bind(prospectives.adress1)" style="@bind(prospectives.rowColor)" 
+									hflex="1" /> -->
+								<textbox multiline="true" rows="3" readonly="true"
+									hflex="1" value="@bind(prospectives.adress1)" style="color:#008FD2;"></textbox>
+							</listcell>
+
+							<listcell onDoubleClick="@command('viewProspectiveCommand', row=prospectives)">
+								<label value="@bind(prospectives.fax)" style="@bind(prospectives.rowColor)" />
+
+							</listcell>
+						</listitem>
+					</template>
+				</listbox>
+				<hlayout hflex="1" style="text-align: right">
+					<!-- <label value="@load(vm.footer)" style="color:#2c6f99;text-align: 
+						right;font-weight: bold;"></label> -->
+					<space></space>
+					<space></space>
+					<space></space>
+					<space></space>
+				</hlayout>
+				<hbox></hbox>
+				<hbox></hbox>
+				<hbox pack="center" hflex="1">
+					<button label="OK"
+						onClick="@command('selectProspectiveSendEmail',cmp=pospective) " />
+					<button label="Close" onClick="pospective.detach()"></button>
+				</hbox>
+			</scrollview>
+
+		</vlayout>
+
+	</window>
+
+</zk>

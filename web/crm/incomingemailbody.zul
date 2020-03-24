@@ -1,0 +1,25 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<window id="templatemodalDialog"  border="normal" title="Email Body"  width="700px" height="450px" closable="true" sizable="true"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('crm.IncomingEmailViewModel' , type='body')"
+		onCancel="templatemodalDialog.detach()">
+		<vlayout>
+		
+			<hbox>
+			<label value="To: "></label>
+			<label value="@bind(vm.selectedEmail.emailTo)"></label>
+			</hbox>
+			
+			<hbox>
+			<label value="CC: "></label>
+			<label value="@bind(vm.selectedEmail.emailCc)"></label>
+			</hbox>					       		      
+				
+
+ <ckeditor value="@bind(vm.selectedEmail.body)" height="280px" customConfigurationsPath="/js/ckconfig.js" toolbar="emptyToolbar"/>
+
+</vlayout>
+</window>
+</zk>

@@ -1,0 +1,101 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+		<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('crm.IncomingEmailViewModel', type='email')">
+		
+		<center>
+		<vlayout vflex="1">
+		<hbox>
+		<label value="Email:"></label>
+		<label value="@bind(vm.userEmail.useremail)"></label>
+		
+		<button label="Get Emails" onClick="@command('getEmailCommand')"></button>			
+			
+		</hbox>
+		<listbox model="@bind(vm.lstIncomingEmails)"  hflex="1"  vflex="1"
+			selectedItem="@bind(vm.selectedEmail)" width="900px" mold="paging"  pageSize="10" pagingPosition="both">
+			
+			<auxhead sclass="category-center">
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value="@bind(vm.filter.dueDate)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value="@bind(vm.filter.email)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value="@bind(vm.filter.fullname)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value="@bind(vm.filter.companyName)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value="@bind(vm.filter.decription)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+			
+			</auxhead>
+						<listhead sizable="true" menupopup="auto">
+					
+						<listheader label="Date" width="170px" sort="auto('dateReceived')"/>				
+						<listheader label="From" width="350px" sort="auto('fromEmail')"/>
+						<listheader label="Name" width="200px" sort="auto('fromEmail')"/>
+						<listheader label="Company" width="200px" sort="auto('fromEmail')"/>
+						
+						<listheader label="Subject" hflex="1" sort="auto('subject')"/>
+						
+						</listhead>
+						
+						<template name="model">
+						<listitem>	
+							<listcell onClick="@command('openEmailBodyCommand')">
+								<label value="@bind(each.dateReceived)"/>
+							</listcell>
+																				
+							<listcell onClick="@command('openEmailBodyCommand')">						
+								<label value="@bind(each.emailFromAddress)" />
+								
+							</listcell>
+							
+							<listcell onClick="@command('openUnknownEmailCommand')">						
+								<label value="@bind(each.emailCustomer.fullName)" />
+								
+							</listcell>
+							
+							<listcell onClick="@command('openUnknownEmailCommand')">						
+								<label value="@bind(each.emailCustomer.companyName)" />
+								
+							</listcell>
+							
+							<listcell onClick="@command('openEmailBodyCommand')">
+								<label value="@bind(each.subject)"/>
+							</listcell>
+							
+							
+							
+							</listitem>
+							</template>
+			
+					</listbox>
+			
+			
+		
+		</vlayout>
+		</center>
+		
+		</borderlayout>
+
+</zk>

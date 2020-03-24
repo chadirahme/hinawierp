@@ -1,0 +1,325 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window title="Prospective Details" border="normal" closable="true"
+		width="1000px" height="500px" id="windetails" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm')
+	 @init('hba.ProspectiveDetailsViewModel')"
+		hflex="max" mode="overlapped">
+
+		<tabbox width="100%">
+						<tabs id="tabs">
+							<tab label="Company Information" />
+							<tab label="Contact Information" />
+							<tab label="Notes" />
+						</tabs>
+						<tabpanels>
+							<tabpanel>
+								<hbox id="uploadWindow2">
+									<grid
+										form="@id('fx') @load(vm.prospectiveModel) @save(vm.prospectiveModel, before='updateProspective')">
+										<columns>
+											<column width="120px"></column>
+											<column width="150px"></column>
+											<column width="100px"></column>
+											<column width="150px"></column>
+											<column width="190px"></column>
+
+										</columns>
+										<rows>
+											<row>
+												<cell sclass="">English Name *:</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.name)" hflex="1"
+														maxlength="31" />
+												</cell>
+
+												<cell sclass="">Priority :</cell>
+
+												<cell colspan="2">
+													<checkbox checked="@bind(vm.prospectivePriority)"></checkbox>
+												</cell>
+
+
+
+											</row>
+
+											<row>
+												<cell sclass="">Arabic Name :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.arName)" hflex="1" />
+												</cell>
+												<cell sclass="">Print Cheque As :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.printChequeAs)" hflex="1" />
+												</cell>
+
+											</row>
+
+											<row>
+												<cell sclass="">Company :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.companyName)" hflex="1" />
+												</cell>
+												<cell>Sub Of</cell>
+												<cell colspan="2">
+													<checkbox id="l1" label="" onCheck="@command('doChecked')"
+														checked="@bind(vm.selectedCheckBox)" width="15px" />
+													<space></space>
+													<combobox autodrop="true" mold="rounded"
+														buttonVisible="true" model="@load(fx.subOfdropDown)"
+														hflex="1" readonly="true" id="comboSubOf" disabled="@bind(vm.disableSubOf)"
+														selectedItem="@bind(fx.selectedSubOf)">
+														<template name="model" var="option">
+															<comboitem label="${option.name}"
+
+																style="@bind(option.subLevel eq 0 ? 'color:black;font-weight:bold;' : option.subLevel eq 1 ? 'text-indent:30px;' : option.subLevel eq 2 ? 'text-indent:60px' : option.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px')" />
+														</template>
+
+													</combobox>
+												</cell>
+
+											</row>
+
+
+
+											<row>
+												<cell sclass="">Contact Person :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.contactPerson)" hflex="1" />
+												</cell>
+												<cell sclass="">Phone :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.phone)" hflex="1" />
+												</cell>
+											</row>
+											<row>
+												<cell sclass="">Alt. Contact :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(fx.altContactPerson)" hflex="1" />
+												</cell>
+												<cell sclass="">Alt. Phone :</cell>
+												<cell colspan="2">
+													<textbox value="@bind(fx.altPhone)" hflex="1" />
+												</cell>
+											</row>
+											<row>
+												<cell sclass="">Country :</cell>
+
+												<cell colspan="2">
+													<listbox mold="select" model="@load(vm.countries)"
+														width="100%" selectedItem="@bind(vm.selectedCountry)">
+														<template name="model" var="country">
+															<listitem>
+																<listcell label="@load(country.enDescription)"></listcell>
+															</listitem>
+														</template>
+													</listbox>
+
+												</cell>
+												<cell sclass="">City :</cell>
+
+												<cell colspan="2">
+													<listbox mold="select" model="@load(vm.cities)"
+														width="100%" selectedItem="@bind(vm.selectedCity)">
+														<template name="model" var="city">
+															<listitem>
+																<listcell label="@load(city.enDescription)"></listcell>
+															</listitem>
+														</template>
+													</listbox>
+												</cell>
+
+											</row>
+											<row>
+
+												<cell sclass="">Street :</cell>
+
+												<cell colspan="2">
+													<listbox mold="select" model="@load(vm.streets)"
+														width="100%" selectedItem="@bind(vm.selectedStreet)">
+														<template name="model" var="street">
+															<listitem>
+																<listcell label="@load(street.enDescription)"></listcell>
+															</listitem>
+														</template>
+													</listbox>
+												</cell>
+												<cell sclass="">Fax :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.fax)" hflex="1" />
+												</cell>
+
+											</row>
+											<row>
+
+												<cell sclass="">Zip Code :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.zipCode)" hflex="1" />
+												</cell>
+												<cell sclass="">P.O. Box :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.pobox)" hflex="1" />
+												</cell>
+
+											</row>
+											<row>
+
+												<cell sclass="">Email :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.email)" hflex="1" />
+												</cell>
+												<cell sclass="">CC :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.cC)" hflex="1" />
+												</cell>
+
+											</row>
+
+
+
+											<row>
+
+												<cell sclass="">Website :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.website)" hflex="1" />
+												</cell>
+												<cell sclass="">Skype ID :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.skypeId)" hflex="1" />
+												</cell>
+
+											</row>
+											<row>
+
+												<cell sclass="">How Did You Know About Us :</cell>
+
+												<cell colspan="2">
+													<listbox mold="select" model="@load(vm.howDid)"
+														width="100%" selectedItem="@bind(vm.selectedHowDid)">
+														<template name="model" var="howDid">
+															<listitem>
+																<listcell label="@load(howDid.enDescription)"></listcell>
+															</listitem>
+														</template>
+													</listbox>
+												</cell>
+												<cell sclass="">Level Of interest :</cell>
+
+												<cell colspan="2">
+													<textbox value="@bind(fx.levelOfInterset)" hflex="1" />
+												</cell>
+
+											</row>
+
+
+										</rows>
+
+									</grid>
+									<vbox id="uploadWindow1">
+										<window border="normal" width="130px" height="120Px"
+											id="uploadWindow" title="Upload An Image">
+											 
+											<image id="image">
+												<custom-attributes
+													org.zkoss.zul.image.preload="true" />
+											</image>
+										</window>
+
+										<button label="Choose Image" upload="true"
+											onUpload="@command('uploadFile',attId=4)"></button>
+										<hbox>
+											<label value="File Name" />
+											:
+											<label value="@bind(vm.attFile4)" />
+										</hbox>
+										<button label="Click To See Image" onClick="@command('loadImage')"></button>
+
+									</vbox>
+								</hbox>
+
+							</tabpanel>
+							<tabpanel>
+								<listbox model="@load(vm.lstProspectiveContact)" vflex="1"
+									id="lstProspectiveContactGrid" hflex="1" mold="paging"
+									selectedItem="@bind(vm.contactDetailsModel)">
+									<listhead menupopup="auto" sizable="true">
+										<listheader label="Add/Delete" width="70px"></listheader>
+										<listheader label="Contact Person" />
+										<listheader label="Position" />
+										<listheader label="Phone" />
+										<listheader label="Mobile" />
+										<listheader label="Extension" />
+										<listheader label="Fax" />
+										<listheader label="Email" />
+
+									</listhead>
+									<template name="model">
+										<listitem>
+											<listcell>
+												<image src="/images/edit.png" width="20px" height="20px"
+													context="editPopupProspectiveContact" onClick="openContexMenu(1)" />
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.name)" />
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.position)" />
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.tel)" />
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.mobile)" />
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.extension)" />
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.fax)" />
+											</listcell>
+											<listcell>
+												<textbox value="@bind(each.email)" />
+											</listcell>
+
+										</listitem>
+									</template>
+								</listbox>
+							</tabpanel>
+							<tabpanel>
+								<hbox id="note">
+									<grid
+										form="@id('fx') @load(vm.prospectiveModel) @save(vm.prospectiveModel, before='updateProspective')">
+										<columns>
+											<column width="100%"></column>
+										</columns>
+										<rows>
+											<row>
+												
+												<cell sclass="">
+													<textbox multiline="true" rows="12" readonly="false"
+														hflex="1" value="@bind(fx.notes)" style="color:#008FD2;"></textbox>
+												</cell>
+											</row>
+										</rows>
+									</grid>
+								</hbox>
+							</tabpanel>
+						</tabpanels>
+					</tabbox>
+
+
+	</window>
+</zk>

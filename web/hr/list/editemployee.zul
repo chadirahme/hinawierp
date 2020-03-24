@@ -1,0 +1,219 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window id="modalDialog" apply="org.zkoss.bind.BindComposer" mode="highlighted" title="Add/Edit Employee" border="normal" position="center,center" closable="true" contentStyle="overflow:auto;" 
+viewModel="@id('vm')  @init('hr.EditEmployeeViewModel')"  sizable="true"
+onCancel="modalDialog.detach()"
+ width="650px" height="600px">
+ 
+<grid form="@id('fx') @load(vm.selectedEmployee) @save(vm.selectedEmployee, before='saveEmployeeCommand') @validator(vm.todoValidator)">
+<columns>
+<column width="120px"></column>
+<column width="150px"></column>
+<column width="120px"></column>
+<column width="120px"></column>
+<column width="120px"></column>
+</columns>
+
+<rows>
+<row>
+<label value="Company Name *"></label>
+<cell colspan="2">
+<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enCompanyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			</cell>	
+</row>
+
+<row>
+<label value="Employee Type *"></label>
+<listbox multiple="false" mold="select" selectedItem="@bind(fx.employeeType)" >			
+			<listitem label="Employee" value="E"></listitem>
+			<listitem label="Labor" value="L"></listitem>
+			</listbox>
+</row>
+
+<row>
+<label value="Department *"></label>
+<cell colspan="2">
+<listbox mold="select" hflex="1"
+							model="@load(vm.lstDepartment)"
+							selectedItem="@bind(vm.selectedDepartment)">
+						<template name="model">
+						 	<listitem label="@load(each.enDescription)" />
+						 
+						</template>
+					  </listbox>
+					  </cell>
+</row>
+
+
+<row>
+<label value="Position *"></label>
+<cell colspan="2">
+<listbox mold="select" hflex="1"
+							model="@load(vm.lstPosition)"
+							selectedItem="@bind(vm.selectedPosition)">
+						 <template name="model">
+								<listitem label="@load(each.enDescription)" />
+							
+						</template>
+					  </listbox>
+					  </cell>
+</row>
+
+<row>
+<label value="Employee No. *"></label>
+<textbox value="@bind(vm.employeeNo)" ></textbox>
+<cell align="right">
+<label value="Standard No."></label>
+</cell>
+<textbox value="@bind(fx.standardNo)"></textbox>
+</row>
+
+<row>
+<label value="Name - English *"></label>
+<textbox value="@bind(fx.enFirstName)" ></textbox>
+<textbox value="@bind(fx.enMiddleName)" ></textbox>
+<textbox value="@bind(fx.enLastName)" ></textbox>
+</row>
+
+<row>
+<label value="Name - Arabic"></label>
+<textbox value="@bind(vm.selectedEmployee.arFirstName)"></textbox>
+<textbox value="@bind(vm.selectedEmployee.arMiddleName)"></textbox>
+<textbox value="@bind(vm.selectedEmployee.arLastName)"></textbox>
+</row>
+
+<row>
+<label value="Nationality *"></label>
+<hbox>
+<radiogroup selectedItem="@bind(fx.local)">
+<radio label="Local" value="1"></radio>
+<radio label="Non Local" value="0"></radio>
+</radiogroup>
+
+
+</hbox>
+<listbox mold="select" hflex="1" disabled="@bind(fx.local eq '1')"
+							model="@load(vm.lstNationality)"
+							selectedItem="@bind(vm.selectedNationality)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+</row>
+
+<row>
+<label value="Sex *"></label>
+<listbox mold="select" hflex="1"
+							model="@load(vm.lstGender)"
+							selectedItem="@bind(vm.selectedGender)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+
+<cell align="right">		
+<label value="DOB *"></label>  
+</cell>
+<cell colspan="2">
+<hbox>	
+<datebox value="@bind(vm.dateofbirth)" format="dd-MMM-yyyy" onChange="@command('changeBirthDate')" />
+
+</hbox>		  
+</cell>
+</row>
+
+<row>
+<label value="Blood Type"></label>
+<listbox mold="select" hflex="1"
+							model="@load(vm.lstBlood)"
+							selectedItem="@bind(vm.selectedBlood)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+					  <cell align="right"><label value="Age *"></label></cell><cell>
+<intbox value="@bind(vm.age)" width="50px" readonly="true"></intbox></cell>
+					 	  
+</row>
+
+<row>
+<cell>
+<label value="Marital Status *"></label></cell><cell>
+<listbox mold="select" hflex="1"
+							model="@load(vm.lstMarital)"
+							selectedItem="@bind(vm.selectedMarital)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+					  </cell>
+					   <cell align="right">
+	<label value="Start Work Date *"></label>
+	</cell>
+			
+	<datebox value="@bind(fx.employeementDate)" format="dd-MMM-yyyy" />	
+					  
+</row>
+
+
+<row>
+<label value="Status *"></label>
+<listbox mold="select" hflex="1"
+							model="@load(vm.lstStatus)"
+							selectedItem="@bind(vm.selectedStatus)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+</row>
+
+<row>
+<label value="Country of Birth"></label>
+<listbox mold="select" hflex="1"
+							model="@load(vm.lstCountryOfBirth)"
+							selectedItem="@bind(vm.selectedCountryOfBirth)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+					  
+<cell align="right">					  
+<label value="Place of Birth"></label>
+</cell>		
+<textbox value="@bind(vm.selectedEmployee.placeOfBirth)"></textbox>			  
+</row>
+
+<row>
+<label value="Religion *"></label>
+<listbox mold="select" hflex="1"
+							model="@load(vm.lstReligion)"
+							selectedItem="@bind(vm.selectedReligion)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+			<cell align="right">					  
+<label value="E-mail *"></label>
+</cell>		
+<textbox value="@bind(vm.selectedEmployee.email)"  constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address (example@example.com)" ></textbox>			  
+					  
+</row>
+
+<row>
+<cell colspan="5">
+<hbox pack="center" hflex="1">
+<button label="Save" onClick="@command('saveEmployeeCommand')" visible="@bind(vm.canSave)"></button>
+<button label="Close" onClick="modalDialog.detach()" ></button>
+</hbox>
+</cell>
+</row>
+</rows>
+</grid>
+</window>
+</zk>

@@ -1,0 +1,128 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('timesheet.DepartmentViewModel')" vflex="1">
+	 
+	 <label value="Department Setup" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	 
+	 <grid>
+	 <columns>
+	 <column width="300px"></column>
+	 <column width="400px"></column>
+	 <column></column>
+	 </columns>
+	 <rows>
+	 <row>
+	 <hbox style="margin:15px">
+	 <label value="Company"></label>
+				<listbox multiple="false" width="200px" mold="select" model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+				<template name="model" var="item">
+						<listitem>
+						<listcell label="@load(item.enCompanyName)"></listcell>
+						</listitem>
+					</template>
+				</listbox>
+			
+			
+	 	
+	 </hbox>
+	 
+	   <hbox style="margin:15px">
+ 	  <label value="Find Department"></label>
+			<listbox multiple="false" width="200px" mold="select" model="@load(vm.lstDepartment)" selectedItem="@bind(vm.selectedDepartment)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enDescription)"></listcell>
+					</listitem>
+				</template>
+			</listbox>				 	
+     </hbox>
+     
+     <cell>
+     <button label="Add Position" onClick="@command('addPositionCommand')"></button>
+     </cell>
+	 </row>
+	 </rows>
+	 </grid>
+	 
+ 
+	
+   
+   
+   <grid height="250px"  emptyMessage="There is no positions found for this department" 
+    model="@bind(vm.lstPositions) @template(each.editingStatus ? 'editable' : 'noneditable')">
+   <columns>
+   <column label="Position" width="300px"></column>
+   <column label="Max Allowed Employee Nos." width="200px"></column>
+   <column label="Delete" visible="@bind(vm.companyRole.canDelete)"></column>
+   </columns>
+   
+   			<template name="noneditable">        	
+        	<row>   
+        	<label value="@bind(each.enDescription)"></label>
+        	<intbox value="@bind(each.fieldId)" constraint="no negative: it shall not be negative"></intbox>
+        	  <button 
+                        image="/images/cross.png"
+                        onClick="@command('deleteCommand', row=each)" />
+        	</row>        	
+        	</template>
+        	
+        	<template name="editable">        	
+        	<row>   
+        	<listbox multiple="false" width="200px" mold="select" model="@load(vm.lstHRPositions)" selectedItem="@bind(each.selectedHRValue)"
+        	onSelect="@command('selectPositionCommand',row=each)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enDescription)"></listcell>
+					</listitem>
+				</template>
+			</listbox>	
+        	<intbox value="@bind(each.fieldId)" constraint="no negative: it shall not be negative"></intbox>
+        	 <button 
+                        image="/images/cross.png"
+                        onClick="@command('deleteCommand', row=each)" />
+        	</row>        	
+        	</template>
+        	
+   </grid>
+	 
+	 <hbox hflex="1">
+	 <groupbox >
+	 <caption label="Setup Details" style="color:green"></caption>
+	 <grid>
+	 <columns>
+	 <column width="120px"></column>
+	 <column width="150px"></column>
+	 <column width="250px"></column>
+	 <column width="150px"></column>
+	  <column width="150px"></column>
+	 <column></column>
+	 </columns>
+	 <rows>
+	 <row>
+	 <label value="Total Departments"></label>
+	 <textbox value="@bind(vm.totalDepartments)" readonly="true" style="color:gray"></textbox>
+	 <label value="Total Employees Allowed in the Company"></label>
+	 <textbox value="@bind(vm.totalEmployeeAllowd)" readonly="true" style="color:gray"></textbox>
+	 </row>
+	 
+	  <row>
+	 <label value="Total Positions"></label>
+	 <textbox value="@bind(vm.totalPositions)" readonly="true" style="color:gray"></textbox>
+	 <label value="Total Employees in the Company"></label>
+	 <textbox value="@bind(vm.totalCompanyEmployee)" readonly="true" style="color:gray"></textbox>
+	 
+	  <label value="Total Vacancies"></label>
+	 <textbox value="@bind(vm.totalVacancies)" readonly="true" style="color:gray"></textbox>
+	 </row>
+	 
+	 </rows>
+	 </grid>
+	 </groupbox>
+	 </hbox>
+	 <hbox hflex="1" pack="center">
+	 <button label="Save" onClick="@command('saveCommand')" visible="@bind(vm.companyRole.canAdd)"></button>
+	 </hbox>
+	 </vlayout>
+</zk>

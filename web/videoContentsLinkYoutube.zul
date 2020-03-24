@@ -1,0 +1,116 @@
+<?page title="Hinawi Software- Services" contentType="text/html;charset=UTF-8"?>
+<zk:zk xmlns="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:zk="http://www.zkoss.org/2005/zul">
+	
+
+<zk:borderlayout hflex="1" style="background:none" >
+ 
+  
+  
+  <zk:center margins="1,115,1,1" border="none" hflex="1" autoscroll="true">
+<zk:vlayout>
+<zk:image src="/images/Underconstruction.jpg" width="800px" height="400px"></zk:image>
+<!-- <table style="font-size: 14px;color:#424242;margin-left:25px" width="95%">
+    		 <tr>
+    		 <td>
+    		 
+    		
+	 	<h1> <br/>Products (Desktop Softwares)</h1>
+	 <br/>
+         <h2 id="training">Hinawi HR, Time Sheet, Payroll and Taxes Software</h2>
+   <br/>
+<ul>
+<li><h3><a href="https://www.youtube.com/watch?v=nWftASuhKek&amp;feature=youtube_gdata_player" target="_blank" >Introduction</a></h3></li>
+
+</ul>
+<ul>
+<li><h3><a href="https://www.youtube.com/watch?v=Gf-SckLsDMA" target="_blank">Setup Module</a></h3></li>
+
+</ul>
+<ul>
+<li><h3><a href="https://www.youtube.com/watch?v=cfrrvOm2EaA" target="_blank">Setup Module شرح بالعربي</a></h3></li>
+</ul>
+
+<h2>Hinawi Business Accounting Software (HBA)</h2>
+ <br/>
+ <ul>
+ <li><h3><a href="https://www.youtube.com/watch?v=xfkQMDp-UzU&amp;feature=youtube_gdata_player" target="_blank">Introduction</a></h3></li>
+ </ul>
+ <ul>
+ <li><h3><a href="http://www.youtube.com/watch?v=U_kIMrD6Z1Q&amp;feature=youtu.be" target="_blank">Why HBA is important for QuickBooks users - عربي</a></h3></li>
+ </ul>
+ 
+ 
+ <h2>Hinawi School Management Software</h2>
+ <br/>
+ <ul>
+<li><h3><a href="https://www.youtube.com/watch?v=5HAN4jvgFWg&amp;feature=youtube_gdata_player" target="_blank">Introduction</a></h3></li> 
+
+
+ </ul>
+ 
+ 
+ </td>
+    		 </tr>	
+    		 </table> -->
+
+</zk:vlayout>
+
+</zk:center>
+
+<zk:east title="Contacts" size="18%"  margins="1,1,45,1">
+		<zk:vlayout>
+		<div class="contact" style="padding-bottom:10px;margin:5px;">
+            	
+                <p><img src="images/i_tel.gif" width="20" height="20" />Tel:<span > +971 2 671 42 42
+                <br/>&#160; &#160; &#160; Mob: +971 50 622 80 24
+                </span></p>
+                
+                
+                <p><img src="images/i_fax.gif" width="20" height="20" alt="Fax Hinawi Software" />Fax:<span> +971 2  671 13 11</span></p>
+                <p><img src="images/i_mail.gif" width="20" height="20" alt="Mail Hinawi Software" /><a href="mailto:hinawi@eim.ae">hinawi@eim.ae</a></p>
+                
+                <p><img src="images/fb.jpg" width="20" height="20" alt="hinawisoftware" /><a target="blank" href="https://www.facebook.com/hinawisoftware">hinawisoftware</a></p>
+                
+                <div class="adress">Abu Dhabi - UAE<br />
+                P.O. Box: 29006</div>    
+              
+            </div>
+         	 
+            
+         		<hr/>
+          
+          	 
+           
+           <ul>
+           <li>
+           <a href="quotationContactUsLayout.zul">
+           <zk:label value="Quotation Request \ Contact Us " style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-weight:bold;font-size:14px;"></zk:label>
+			</a>
+           </li>
+            <li>
+            	<a href="customerFeedbackLayout.zul">
+           <zk:label value="Feedback Form" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-weight:bold;font-size:14px;"></zk:label>
+           </a>
+           </li>
+            <li>
+            <a href="contactus.zul">
+           <zk:label value="Company Address"  style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-weight:bold;font-size:14px;"></zk:label>
+           </a>
+           </li>
+           </ul>
+            <hr/>
+         <img src="images/advertise.png" style="width:240px;height:150px"></img>
+         
+          
+         
+           					
+            </zk:vlayout>
+</zk:east>
+      
+      
+  </zk:borderlayout>
+	
+	</zk:zk>
+	

@@ -1,0 +1,24 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="Hinawi Mobile" border="normal">
+
+<grid>
+<columns>
+<column></column>
+<column></column>
+</columns>
+
+<rows>
+<row>
+<cell>
+<a href="mobile/customers.zul" > Customers</a>
+</cell>
+
+<cell>
+<a href="">Tasks</a>
+</cell>
+</row>
+</rows>
+</grid>
+</window>
+</zk>

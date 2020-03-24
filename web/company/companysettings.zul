@@ -1,0 +1,45 @@
+<zk>
+
+<borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('company.CompanySettingsViewModel')">
+	
+	<center autoscroll="true" border="none">
+	
+	<vlayout hflex="1" vflex="1">
+			<grid>
+			<columns>
+			<column width="200px"></column>
+			<column width="400px"></column>
+			<column width="100px"></column>
+			<column width="200px"></column>
+			</columns>
+			
+			<rows>
+			<row>		
+			<checkbox label="Use Workflow for Sales" checked="@bind(vm.useSalesFlow)"></checkbox>
+			<label style="color:red" value="(Quotation--->Delivery--->Cash / Credit Invoices)"></label>
+			<checkbox label="Allow to skip" checked="@bind(vm.allowToSkip)"></checkbox>
+			<label style="color:red" value="(You can begin in any forms)"></label>
+			</row>
+			
+			<row>		
+			<checkbox label="Use Workflow for Purchases" checked="@bind(vm.usePurchaseFlow)"></checkbox>
+			<label style="color:red" value="(Materials Request--->Purchase Order--->Item Receipts--->Bill)"></label>
+			<checkbox label="Allow to skip" checked="@bind(vm.allowToSkipPurchase)"></checkbox>
+			<label style="color:red" value="(You can begin in any forms)"></label>
+			
+			</row>
+						
+						
+			</rows>
+			</grid>
+			
+			
+			<hbox hflex="1" pack="center">
+			<button label="Save" onClick="@command('saveCommand')" visible="@bind(vm.companyRole.canAdd)"></button>
+			</hbox>
+			</vlayout>
+	</center>
+	</borderlayout>
+	
+	</zk>

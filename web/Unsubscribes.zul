@@ -1,0 +1,30 @@
+<?page title="Unsubscribe Email" contentType="text/html;charset=UTF-8"?>
+
+<zk>
+	   
+		<borderlayout 
+		apply="org.zkoss.bind.BindComposer" 
+		viewModel="@id('vm') @init('common.UnsubscribeViewModel')"  >
+		
+		
+		<center border="none">
+		<vlayout>			
+	  	<hbox  align="center" pack="center"  hflex="1">
+		
+		
+ <label value="@bind(vm.msg)" style="color:green;font-weight:bold;font-size: 16px"></label>
+
+ </hbox>
+ 
+ <hbox height="50px"></hbox>
+ 
+ <hbox pack="center" hflex="1">
+ <button label="Unsubscribe" onClick="@command('UnSubscribeCommnand')" visible="@bind(!vm.subscribe)"></button>
+ </hbox>
+</vlayout>
+ 
+ 	</center>
+		</borderlayout>
+  
+
+</zk>

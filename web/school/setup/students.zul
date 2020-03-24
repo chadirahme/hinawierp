@@ -1,0 +1,64 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<div apply="org.zkoss.bind.BindComposer"
+    viewModel="@id('vm') @init('school.SchoolViewModel' , type='students')">
+ 	
+ 	<vlayout>
+ 	<hlayout>
+ 	<label value="No. of Records"></label>
+ 	<listbox multiple="false" width="120px" mold="select" model="@load(vm.lstPageSize)" selectedItem="@bind(vm.selectedPageSize)">
+		<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+
+</listbox>
+ 	</hlayout>
+ 	<grid model="@load(vm.lstStudents)" mold="paging" pageSize="@bind(vm.selectedPageSize)" pagingPosition="both" >
+        <auxhead >
+            <auxheader label="Student List" colspan="6" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;" align="center"/>
+        </auxhead>
+        <auxhead sclass="category-center">
+            <auxheader colspan="1">
+                  <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1"
+                    value="@bind(vm.studentFilter.applicationNo)" onChange="@command('changeFilter')" />
+            </auxheader>
+            <auxheader colspan="1">
+                 <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1"
+                    value="@bind(vm.studentFilter.enFullName)" onChange="@command('changeFilter')"/>
+            </auxheader>
+            <auxheader colspan="1">
+               <image src="/images/funnel.png" />
+                <textbox instant="true" hflex="1"
+                    value="@bind(vm.studentFilter.arFullName)" onChange="@command('changeFilter')"/>
+            </auxheader>
+            <auxheader label="Detail Data of Students" colspan="3" />
+        </auxhead>
+        <columns menupopup="auto">
+            <column width="80px" sort="auto('applicationNo')" label="App. No"></column>
+            <column hflex="2" sort="auto('enFullName')" label="English Name"></column>
+            <column width="230px" sort="auto('arFullName')" label="Arabic Name"></column>
+            <column width="100px" sort="auto('academicYear')" label="Academic Year"></column>
+            <column hflex="1" sort="auto('homePhone')" label="Home Phone"></column>
+            <column hflex="1" sort="auto('officePhone')" label="Office Phone"></column>
+        </columns>
+        <template name="model">
+            <row>
+                <label value="@load(each.applicationNo)" />
+                <label value="@load(each.enFullName)" />
+                <label value="@load(each.arFullName)" />
+                <label value="@load(each.academicYear)" />
+                <label value="@load(each.homePhone)" />
+                <label value="@load(each.officePhone)" />
+            </row>
+        </template>
+        <foot>
+            <footer span="6" class="footer_right" label="@load(vm.studentFooter)" />
+        </foot>
+    </grid>
+    </vlayout>
+    </div>
+</zk>

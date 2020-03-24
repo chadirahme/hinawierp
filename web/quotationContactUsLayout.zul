@@ -1,0 +1,14 @@
+<?page title="Hinawi Online" contentType="text/html;charset=UTF-8"?>
+
+
+<?link rel="stylesheet" type="text/css" href="/css/hstyle.css"?>
+<?link rel="stylesheet" type="text/css" href="/css/navmenustyle.css"?>
+
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout/template.zul"?>
+
+<zk>
+<include self="@define(content)" src="quotation.zul" hflex="1">
+
+
+</include>
+</zk>

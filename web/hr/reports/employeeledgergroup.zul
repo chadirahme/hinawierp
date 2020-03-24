@@ -1,0 +1,67 @@
+<div apply="org.zkoss.bind.BindComposer"
+    viewModel="@id('vm') @init('hr.EmployeeLedgerGroupViewModel')">
+    <grid id="demoGrid" height="400px"
+        model="@load(vm.activityModel)">
+        <columns menupopup="auto">
+            <column  label="Name" width="150px"/>
+            <column  label="Top Nutrients" hflex="1" /> 
+            <column  label="% of Daily" hflex="1" align="center"/>
+            <column  label="Calories" hflex="1" align="center"  />
+            <column  label="Quantity" />
+        </columns>
+        <!-- template for group -->
+        <template name="model:group">
+            <group label="@load(each)" />
+        </template>
+         
+        <!-- template for each element in model -->
+        <template name="model">
+            <row>
+                <label value="@load(each.activity)" />
+                <label value="@load(each.activity)" />
+                <label value="@load(each.activity)" />
+                <label value="@load(each.activity)" />
+                <label value="@load(each.activity)" />
+            </row>
+        </template>
+             
+        <!-- template for footer -->
+        <template name="model:groupfoot">
+            <groupfoot>
+                <cell colspan="5" style="text-align: right; padding-right: 15px">
+                    <label value="@load(each)" style="font-weight:bold;" />
+                </cell>
+            </groupfoot>
+        </template>
+    </grid>
+</div>
+
+
+
+<!-- <div width="100%">
+			<grid width="100%" model="@bind(vm.lstEmployee)">
+
+			<columns>
+		 	<column  width="50px"/>  
+           <column label="Employee" width="250px"/>         
+           <column label="Department" width="1000px"/>     
+            
+        	</columns>
+        
+         <template name="model" var="item">
+         <row>
+         <custom-attributes
+			objEmployee="${item}" fdate="${vm.fromDate}" todate="${vm.toDate}"/>
+									
+         <detail open="false" fulfill="onOpen">
+			<include src="_details.zul" emp="${objEmployee}" fdate="${fdate}" tdate="${todate}"/>
+		</detail>
+						
+             <label value="@bind(item.fullName)" /> 
+             <label value="@bind(item.department)"/> 
+                           
+            </row>
+        </template>
+        			
+		</grid>
+		</div> -->

@@ -1,0 +1,11 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="../layout/demotemplate.zul"?>
+
+<zk>
+
+
+
+<image src="../images/fb.jpg"></image>
+
+</zk>

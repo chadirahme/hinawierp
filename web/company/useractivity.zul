@@ -1,0 +1,97 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+   
+<?page title="Chart of Account" contentType="text/html;charset=UTF-8"?>
+<zk>
+<borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('company.UserActivityViewModel')">
+		 <center autoscroll="true" border="none">
+		<vlayout vflex="1">
+		 
+ 	<hbox>	
+		<label value="User Name"></label>
+		<listbox model="@bind(vm.lstUsers)" multiple="false" width="150px" mold="select" selectedItem="@bind(vm.selectedUser)">
+								<template name="model" var="item">
+								<listitem>
+								<listcell label="@load(item)"></listcell>
+								</listitem>
+							</template>
+							</listbox>
+							
+			<label value="Form Name"></label>
+			<listbox model="@bind(vm.lstActivityType)" multiple="false" width="150px" mold="select" selectedItem="@bind(vm.selectedActivityType)">
+								<template name="model" var="item">
+								<listitem>
+								<listcell label="@load(item.enDescription)"></listcell>
+								</listitem>
+							</template>
+							</listbox>				
+										
+			<label value="From"></label>
+			<datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy" ></datebox>
+			<label value="To"></label>
+			<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy" ></datebox>
+			
+			<button label="View" onClick="@command('viewCommand')"></button>
+			
+			<button label="Refresh" onClick="@command('refreshNew')"
+					visible="true"></button>
+			
+			</hbox>	
+					
+			
+	<listbox model="@bind(vm.lstActivity)" vflex="1" emptyMessage="There is no data found for this criteria"  >
+			
+			<listhead menupopup="auto" sizable="true">
+
+					<listheader label="SNo." width="50px" />
+					<listheader label="Form Name" sort="auto('formName')" width="150px" />
+					<listheader label="Activity" sort="auto('activity')" width="100px" />
+					<listheader label="User" sort="auto('userName')" width="100px" />
+					<listheader label="Date" sort="auto('logDate')" width="100px" />
+					<listheader label="Time" sort="auto('logTime')" width="100px" />
+					<listheader label="Emp. No" sort="auto('employeeNumber')" width="100px" />
+					<listheader label="Employee Name" sort="auto('employeeName')" width="150px" />
+					<listheader label="Company Name" sort="auto('companyName')" width="150px" />
+					<listheader label="Description" sort="auto('description')"  width="350px"/>
+							
+			</listhead>
+							
+				<template name="model">
+				<listitem>
+				<listcell label="${forEachStatus.index+1}" />
+					<listcell>
+						<label value="@bind(each.formName)" />
+					</listcell>
+					<listcell>
+						<label value="@bind(each.activity)" />
+					</listcell>
+					<listcell>
+						<label value="@bind(each.userName)" />
+					</listcell>
+					<listcell>
+						<label value="@bind(each.logDate)" />
+					</listcell>
+					<listcell>
+						<label value="@bind(each.logTime)" />
+					</listcell>
+					<listcell>
+						<label value="@bind(each.employeeNumber)" />
+					</listcell>
+					<listcell>
+						<label value="@bind(each.employeeName)" />
+					</listcell>
+					<listcell>
+						<label value="@bind(each.companyName)" />
+					</listcell>
+					<listcell hflex="1">
+						<label value="@bind(each.description)"  />
+					</listcell>
+					</listitem>
+					
+					</template>
+			</listbox>
+						
+		</vlayout>
+		</center> 
+		</borderlayout>
+</zk>

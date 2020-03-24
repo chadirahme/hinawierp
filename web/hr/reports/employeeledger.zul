@@ -1,0 +1,216 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+ <?xel-method prefix="d" name="formatNumber" class="common.FormatNegativeNumber"
+   signature="java.lang.String formatNegativeNumber(double)"?>
+       
+   
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('hr.EmployeeLedgerViewModel')" height="100%">
+	 	
+	 
+			<label value="Employee Ledger" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+				
+			<grid>
+			<columns>
+			<column width="80px"></column>
+			<column  width="180px"></column>
+			<column  width="80px"></column>
+			<column  width="120px"></column>
+			<column  width="100px"></column>
+			<column  width="120px"></column>
+			<column  width="70px"></column>
+			<column  width="120px"></column>
+			<column  width="120px"></column>
+			<column  width="120px"></column>
+			<column  width="180px"></column>
+			
+					
+			</columns>
+			<rows>
+			<row>
+			<label value="Company"></label>
+			<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enCompanyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+		<label value="Period"></label>
+			
+		<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstPeriods)" selectedItem="@bind(vm.selectedPeriods)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+	
+	<label value="From"></label>
+	<datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy" disabled="@bind(vm.selectedPeriods eq 'Customize' ? false : true)"></datebox>
+	<label value="To"></label>
+	<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy" disabled="@bind(vm.selectedPeriods eq 'Customize' ? false : true)"></datebox>
+	
+		<label value="Employee Status"></label>
+		
+		<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstStatus)" selectedItem="@bind(vm.selectedStatus)" >
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<hlayout hflex="1">
+		  <checkbox checked="@bind(vm.showEOS)" disabled="@bind(!vm.enableEOS)"></checkbox>
+		  <label value="Include EOS Employees"></label>
+		  </hlayout>
+			</row>
+			
+			
+			<row>
+			<label value="Employee"></label>
+		    <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstCompEmployees)" selectedItem="@bind(vm.selectedCompEmployee)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.fullName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			
+			
+			
+			<label value="Activity"></label>
+			<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstActivity)" selectedItem="@bind(vm.selectedActivity)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			
+			<label value="Department"></label>
+			<listbox mold="select" hflex="1"
+							model="@load(vm.lstDepartment)"
+							selectedItem="@bind(vm.selectedDepartment)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+			
+			<label value="Position"></label>
+			<listbox mold="select" hflex="1"
+							model="@load(vm.lstPosition)"
+							selectedItem="@bind(vm.selectedPosition)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+					  
+			
+			<button  id="btn1" label="View" width="100px"  onLongOp="@command('searchCommand')"></button>		
+			<cell colspan="2">
+			<label value="@bind(vm.message)" style="color:Red"></label>
+			</cell>									
+			</row>
+			
+			
+			
+			
+			</rows>
+			
+			</grid>  
+  
+    <scrollview hflex="1" height="320px" orient="vertical">
+    <grid id="demoGrid" vflex="true"  emptyMessage="There is no data found for this criteria" visible="@bind(vm.activityModel.groupCount gt 0)"
+        model="@load(vm.activityModel)">
+        <columns menupopup="auto" sizable="true" draggable="true">
+            <!-- <column  label="Emp No." hflex="1"/>-->
+            <!-- <column  label="Employee Name" hflex="1" />  -->
+            <column>
+            <button label="+/-" onClick="@command('colseGroup')"></button>
+            </column>
+            
+            <column  label="Activity" hflex="1" />
+             <column  label="Activity Item" width="150px"/>
+             <column  label="From" />
+            <column  label="To" />
+             <column  label="Nos." />
+              <column  label="Amount" />
+               <column  label="Totals" />
+                <column  label="Status" />
+              <!--   <column  label="Employee Status" />  -->
+             
+            
+        </columns>
+        <!-- template for group -->
+        <template name="model:group">
+        
+            <group>
+            <cell>
+            <label value="Emp NO. : " style="color:green;"></label>
+            <label value="@load(each[0])" style="color:green;"></label>
+              <label value=" | Name : " style="color:green;"></label>
+            <label value="@load(each[1])" style="color:green;"></label>
+            <label value=" | Department : " style="color:green;"></label>
+            <label value="@load(each[3])" style="color:green;"></label>
+            <label value=" | Position : " style="color:green;"></label>
+            <label value="@load(each[4])" style="color:green;"></label>
+            <label value=" | Nationality : " style="color:green;"></label>
+            <label value="@load(each[5])" style="color:green;"></label>
+            
+            <label value=" | Status : " style="color:green;"></label>
+            <label value="@load(each[2])" style="@load(each[2] eq 'EOS' ? 'color:red;' : 'color:green')"></label>
+            <label value=" | Joining Date : " style="color:green;"></label>               
+            <label value="@load(each[6])" style="color:green;"/>
+            </cell>
+            </group>         
+        </template>
+         
+        <!-- template for each element in model -->
+        <template name="model">
+            <row>
+             <!--    <label value="@load(each.empNo)" /> -->
+             <!-- <label value="@load(each.employeeName)" />  -->
+                             
+                  <label value="${c:formatDate(each.activityDate, 'dd/MM/yyyy')}" />
+                <label value="@load(each.activity)" />
+                <label value="@load(each.activityItem)" />
+                 <label value="@load(each.fromHour)" />
+                  <label value="@load(each.toHour)" />
+                   <label value="@load(each.noofDays)" />
+                    <label value="${d:formatNumber(each.amount)}" style="@bind(each.amount lt 0 ? 'color:red;' : '')" />
+                    <label value="${d:formatNumber(each.balance)}" style="@bind(each.balance lt 0 ? 'color:red;' : '')"/>                          
+                      <label value="@load(each.status)" />
+                     <!-- <label value="@load(each.employeeStatus)" />-->
+                
+                
+            </row>
+        </template>
+             
+        <!-- template for footer -->
+        <template name="model:groupfoot">
+            <groupfoot>
+                <cell colspan="3" style="text-align: right; padding-right: 15px">
+                    <label value="@load(each[0])" style="font-weight:bold;" />
+                </cell>
+                    <cell colspan="4"></cell>
+                 <cell colspan="2">
+                   <label value="@load(each[1])" style="font-weight:bold;" />
+                 </cell>
+            </groupfoot>
+        </template>
+    </grid>
+					
+ 	</scrollview>
+ 	
+ 	<label value="@bind(vm.totalRecords)" style="color:green;font-weight:bold;"></label>
+ 	 		
+	
+ </vlayout>
+ 
+	
+</zk>

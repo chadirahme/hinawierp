@@ -1,0 +1,58 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<vlayout apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('school.SchoolViewModel' , type='sections' )" >
+	 
+	 <label value="Sections Setup" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	 <button label="Add New Section" onClick="@command('addNewSectionCommand')"></button>
+	 
+	 <listbox id="demoGrid" height="600px"
+           model="@load(vm.lstSections) @template(each.editingStatus ? 'editable' : 'noneditable')">
+          <listhead sizable="true">
+             <listheader label="English Section Name" sort="auto('enSectionName')" />
+              <listheader label="Arabic Section Name" sort="auto('arSectionName')" />
+             <listheader />
+           
+            </listhead>
+           <template name="editable">
+                <listitem>
+                    <listcell>
+                        <textbox cols="60" style="text-transform:uppercase;"
+                            value="@load(each.enSectionName) @save(each.enSectionName, before='saveSectionCommand')" />
+                 </listcell>
+                   <listcell>
+                        <textbox style="text-transform:uppercase;"
+                         value="@load(each.arSectionName) @save(each.arSectionName, before='saveSectionCommand')" />
+                   </listcell>
+                   <listcell>
+                        <div>
+                         <button image="/images/success.gif"
+                             onClick="@command('saveSectionCommand', row=each)" />
+                           <button image="/images/cross.png"
+                              onClick="@command('changeSectionEditableStatus', row=each )" />
+                     </div>
+                    </listcell>
+               </listitem>
+           </template>
+           <template name="noneditable">
+             <listitem>
+                    <listcell>
+                        <label value="@load(each.enSectionName)" />
+                   </listcell>
+                   <listcell>
+                        <label value="@load(each.arSectionName)" />
+                  </listcell>
+                   <listcell>
+                        <button image="/images/rowedit.png"
+                         onClick="@command('changeSectionEditableStatus', row=each )" />
+                 </listcell>
+                 
+               </listitem>
+           </template>
+       </listbox>
+       
+	 
+	 
+	 </vlayout>
+</zk>

@@ -1,0 +1,135 @@
+<zk>
+
+<borderlayout>
+
+	
+<center autoscroll="true" >
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('timesheet.ProjectListViewModel')" vflex="1" style="@bind(vm.language eq 'ar' ? 'direction: rtl;' : '')">
+	 
+	 <style xmlns:w="http://www.zkoss.org/2005/zk/client">
+.z-notification .z-notification-cl, 
+.z-notification .z-notification-cnt {
+    height: 100px;
+    width: 350px;
+}
+
+.z-datebox-text-disd {
+        background:transparent;
+    }
+    .z-datebox-disd .z-datebox-inp {
+        color:black !important;
+    }
+</style>
+	 
+	
+	 
+	 <label value="${labels.ts.projectlist.title}" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	 
+	 <grid>
+			<columns>		
+			<column  width="150px"></column>
+			<column  width="180px"></column>
+			<column  width="100px"></column>
+			<column  width="120px"></column>
+			<column  width="200px"></column>
+			<column  width="0px"></column>
+								
+			</columns>
+			<rows>
+			
+			<row>
+			<label value="${labels.ts.projectlist.company}" style="@bind(vm.language eq 'ar' ? 'font-size:14px' : '')"></label>
+			<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstComapnies) @template(vm.language eq 'ar' ? 'ar' : 'en')" selectedItem="@bind(vm.selectedCompany)">
+			<template name="en" var="item">
+					<listitem>
+					<listcell label="@load(item.enCompanyName)"></listcell>
+					</listitem>
+				</template>
+				<template name="ar" var="item">
+					<listitem>
+					<listcell label="@load(item.arCompanyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<cell colspan="2">
+			<button label="${labels.ts.projectlist.AddNew}"  onClick="@command('addNewCommand')" visible="@bind(vm.companyRole.canAdd)"></button>	
+			</cell>
+			
+			<cell>
+											<hbox>
+							<label value="Last Modified : "></label>
+								<label value="@bind(vm.lastModified)"></label>
+								</hbox>
+											</cell>
+											
+			</row>
+			
+			
+			</rows>
+			
+			</grid>
+			
+			
+			<grid vflex="1"  emptyMessage="There is no project found for this company"
+        	model="@load(vm.lstProject) @template(each.editingStatus ? 'editable' : 'noneditable')" >
+        	<columns sizable="true" >
+        	    <column label="${labels.ts.projectlist.edit}"  width="150px" align="@bind(vm.language eq 'ar' ? 'right' : 'left' )" visible="@bind(vm.companyRole.canModify)"></column>   
+        	    <column label="${labels.ts.projectlist.delete}" width="100px" align="@bind(vm.language eq 'ar' ? 'right' : 'left' )" visible="@bind(vm.companyRole.canDelete)"></column>   
+        	 	<column  label="${labels.ts.projectlist.code}"  width="100px" sort="auto(projectCode)" align="@bind(vm.language eq 'ar' ? 'right' : 'left' )"/>        	        	   
+        	     <column  label="${labels.ts.projectlist.enName}" width="200px" sort="auto(projectName)" align="@bind(vm.language eq 'ar' ? 'right' : 'left' )"/>
+        	     <column  label="${labels.ts.projectlist.arName}" width="200px" sort="auto(projectArName)" align="@bind(vm.language eq 'ar' ? 'right' : 'left' )"/>   
+        	       <column  label="${labels.ts.projectlist.status}" width="200px" sort="auto(isActive)" align="@bind(vm.language eq 'ar' ? 'right' : 'left' )"/>  
+        	         <column  label="${labels.ts.projectlist.startDate}" width="200px" sort="auto(isActive)" align="@bind(vm.language eq 'ar' ? 'right' : 'left' )"/>       	      
+        	     <column  label="${labels.ts.projectlist.endDate}" width="200px" sort="auto(isActive)" align="@bind(vm.language eq 'ar' ? 'right' : 'left' )"/>  	         
+        	</columns>
+        	<template name="editable">
+        	
+        	<row>  
+        	    <div>
+                        <button
+                            label="${labels.ts.projectlist.save}"
+                            onClick="@command('confirm', row=each)" />
+                        <button
+                           label="${labels.ts.projectlist.cancel}"
+                            onClick="@command('changeEditableStatus', row=each)" />
+                    </div>   
+                     <div></div>    		
+        	<textbox value="@load(each.projectCode) @save(each.projectCode, before='confirm')" constraint="no empty : *" hflex="1" ></textbox> 
+        	<textbox value="@load(each.projectName) @save(each.projectName, before='confirm')" constraint="no empty : *" hflex="1"></textbox> 
+        	<textbox value="@load(each.projectArName) @save(each.projectArName, before='confirm')" hflex="1"></textbox>        
+        	<checkbox checked="@bind(each.activeStatus)"></checkbox>
+        	<datebox value="@bind(each.startDate)" format="dd/MM/yyyy"></datebox>
+        	<datebox value="@bind(each.endDate)" format="dd/MM/yyyy"></datebox>
+        	</row>
+        	</template>
+        	
+        	<template name="noneditable">
+        	<row>        	
+        		<button visible="@bind(vm.companyRole.canModify)"
+                        image="/images/rowedit.png"
+                        onClick="@command('changeEditableStatus', row=each)" />
+                        <button visible="@bind(vm.companyRole.canDelete)"
+                        image="/images/cross.png"
+                        onClick="@command('deleteCommand', row=each)" />
+                        
+        	<label value="@bind(each.projectCode)"></label>
+        	<label value="@bind(each.projectName)"></label>  
+        	<label value="@bind(each.projectArName)"></label>       
+        	<label value="@bind(vm.language eq 'ar' ? each.arActive : each.isActive)" style="@bind(each.isActive eq 'Active' ? 'color:black;font-weight:bold;' : 'color:red;margin-left:0px') "></label> 
+        	<datebox value="@bind(each.startDate)" format="dd/MM/yyyy" readonly="true" disabled="true"></datebox>
+        	<datebox value="@bind(each.endDate)" format="dd/MM/yyyy" readonly="true" disabled="true"></datebox>
+        	</row>
+        	
+        	  
+        	  </template>
+        	
+        	</grid>
+					
+			
+			</vlayout>
+			</center>
+			</borderlayout>
+			
+			</zk>

@@ -1,0 +1,113 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('realestate.RealEstateViewModel' , type='realstate')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<hlayout>
+					<label value="No. of Records"></label>
+					<listbox multiple="false" width="120px" mold="select"
+						model="@load(vm.lstAllPageSize)" selectedItem="@bind(vm.selectedAllPageSize)">
+						<template name="model" var="item">
+							<listitem>
+								<listcell label="@load(item)"></listcell>
+							</listitem>
+						</template>
+
+					</listbox>
+				</hlayout>
+
+
+				<listbox model="@bind(vm.lstRealEstate)" vflex="1" hflex="1"
+					selectedItem="@bind(vm.selectedRealEstate)" width="900px" mold="paging"
+					pageSize="@bind(vm.selectedPageSize)">
+					<auxhead sclass="category-center">
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.flatName)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.filter.buildingName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.status)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.rent)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.deposit)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+					</auxhead>
+
+					<listhead menupopup="auto" sizable="true">
+
+						<listheader label="Flat Name" sort="auto('flatName')" />
+						<listheader label="Building Name" sort="auto('buildingName')" />
+						<listheader label="Status" sort="auto('status')" />
+						<listheader label="Rent" sort="auto('rent')" />
+						<listheader label="Deposit" sort="auto('deposit')" />
+
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell>
+								<label value="@bind(each.flatName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.buildingName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.status)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.rent)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.deposit)" />
+							</listcell>
+
+						</listitem>
+					</template>
+				</listbox>
+
+			</vlayout>
+		</center>
+
+
+		<!-- <east width="400px" visible="@bind(not empty vm.selectedRealEstate)" 
+			border="none" collapsible="false" splittable="true" minsize="300" autoscroll="true"> 
+			<vlayout form="@id('fx') @load(vm.selectedRealEstate)"> <grid hflex="1"> 
+			<columns> <column align="right" hflex="min"/> <column/> </columns> <rows> 
+			<row> <cell sclass="row-title">Flat Name :</cell> <hlayout> <textbox value="@bind(fx.flatName)" 
+			readonly="true"/> </hlayout> </row> <row> <cell sclass="row-title">Building 
+			Name :</cell> <hlayout> <textbox value="@bind(fx.buildingName)" readonly="true"/> 
+			</hlayout> </row> <row> <cell sclass="row-title">Status :</cell> <hlayout> 
+			<textbox value="@bind(fx.status)"/> </hlayout> </row> <row> <cell sclass="row-title">Rent 
+			:</cell> <hlayout> <textbox value="@bind(fx.rent)"/> </hlayout> </row> <row> 
+			<cell sclass="row-title">Deposit :</cell> <hlayout> <textbox value="@bind(fx.deposit)"/> 
+			</hlayout> </row> <row> <cell sclass="row-title">Flat No :</cell> <hlayout> 
+			<textbox value="@bind(fx.flatNo)"/> </hlayout> </row> <row> <cell sclass="row-title">No. 
+			of Room :</cell> <hlayout> <textbox value="@bind(fx.noOfRoom)"/> </hlayout> 
+			</row> <row> <cell sclass="row-title">No. of Balcony :</cell> <hlayout> <textbox 
+			value="@bind(fx.noOfBalcony)"/> </hlayout> </row> <row> <cell sclass="row-title">No. 
+			of BathRooms :</cell> <hlayout> <textbox value="@bind(fx.noOfBathRoom)"/> 
+			</hlayout> </row> <row> <cell sclass="row-title">Flat Type :</cell> <hlayout> 
+			<textbox value="@bind(fx.flatTypeDesc)"/> </hlayout> </row> <row> <cell sclass="row-title">Size 
+			:</cell> <hlayout> <textbox value="@bind(fx.sizeTypeDesc)"/> </hlayout> </row> 
+			<row> <cell sclass="row-title">Purpose :</cell> <hlayout> <textbox value="@bind(fx.purposeDesc)"/> 
+			</hlayout> </row> <row> <cell sclass="row-title">Floor :</cell> <hlayout> 
+			<textbox value="@bind(fx.floorDesc)"/> </hlayout> </row> </rows> </grid> 
+			</vlayout> </east> -->
+	</borderlayout>
+</zk>

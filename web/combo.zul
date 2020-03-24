@@ -1,0 +1,21 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="new page title" border="normal" apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('hba.ChequePaymentViewModel')">
+New Content Here!
+
+
+<combobox>
+<comboitem label="aaaaaaa" image="/images/plus.png"></comboitem>
+</combobox>
+
+<combobox id="combo"  autodrop="true" mold="rounded">
+
+</combobox>
+<zscript><![CDATA[
+        ListModel dictModel= new SimpleListModel(hba.ChequePaymentViewModel.getDirectory());
+        combo.setModel(dictModel);
+    ]]></zscript>
+
+</window>
+</zk>

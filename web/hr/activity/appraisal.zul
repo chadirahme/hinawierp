@@ -1,0 +1,76 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('hr.AppraisalViewModel')" vflex="1">
+	 
+	 <scrollview orient="vertical" vflex="1">
+	 			<label value="Leave Request" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	 		<grid>
+			<columns>
+			<column width="150px"></column>
+			<column width="250px"></column>
+			<column width="300px"></column>
+			<column width="150px"></column>
+			<column width="100px"></column>
+			<column></column>
+			
+			</columns>
+			<rows>
+		
+			<row>
+			<label value="Employee"></label>
+		    <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstCompEmployees)" selectedItem="@bind(vm.selectedCompEmployee)"
+		    >
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.fullName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			
+			<hbox>
+			
+			<button label="Search" onClick="@command('searchCommand')" ></button>
+			</hbox>
+						
+			</row>
+			
+			</rows>
+			
+			</grid>
+			
+			<grid model="@bind(vm.lstAppraisal)" height="700px" width="18000px">		
+			<columns>
+										<column label="Title" width="220px"></column>
+										<column width="100px" label="poor">											
+										</column>
+										<column width="100px" label="satisfactory">											
+										</column>
+										<column width="100px" label="good">											
+										</column>
+										<column width="100px" label="excellent">											
+										</column>
+										
+											</columns>			
+						<template name="model">
+							<row>																																
+											<label value="@load(each.title)"></label>
+											<checkbox checked="@bind(each.poor)"
+											onCheck="@command('checkAllAddCommand',row=each,chk=self.checked,type='poor')"></checkbox>
+											<checkbox checked="@bind(each.satisfactory)"
+											onCheck="@command('checkAllAddCommand',row=each,chk=self.checked,type='satisfactory')"></checkbox>
+											<checkbox checked="@bind(each.good)"
+											onCheck="@command('checkAllAddCommand',row=each,chk=self.checked,type='good')"></checkbox>
+											<checkbox checked="@bind(each.excellent)"
+											onCheck="@command('checkAllAddCommand',row=each,chk=self.checked,type='excellent')"></checkbox>										
+										</row>
+									</template>
+								
+							
+
+					</grid>
+			
+			</scrollview>
+	 </vlayout>
+</zk>

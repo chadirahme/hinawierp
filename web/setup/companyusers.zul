@@ -1,0 +1,117 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="Users Setup" border="normal" vflex="1">
+
+	 
+<borderlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('admin.HomeViewModel')" >	 
+<north>
+
+<hbox>
+<label value="Company"></label>
+<listbox multiple="false" width="150px" mold="select" model="@load(vm.companyUserList)" selectedItem="@bind(vm.selectedCompany)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.companyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			
+			<!-- <button label="ADD New User" onClick="@command('addNewUserCommand')"></button> -->
+</hbox>
+
+</north>
+  <center autoscroll="true" border="none">
+	<listbox model="@bind(vm.lstUsers)" selectedItem="@bind(vm.selectedUser)"  vflex="1">
+					<listhead>
+						<listheader label="First Name" sort="auto('firstname')"/>
+						<listheader label="Last Name" sort="auto('lastname')"/>
+						<listheader label="User Name" sort="auto('username')"/>	
+						<listheader label="Email" sort="auto('useremail')"/>						
+						<listheader label="Delete" hflex="min"/>
+					</listhead>
+					<template name="model">
+						<listitem>							
+							<listcell>
+								<label value="@bind(each.firstname)"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.lastname)"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.username)"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.useremail)"/>
+							</listcell>						
+							<listcell>
+								<button onClick="@command('deleteUser',todo=each)" image="/images/cross.png" width="36px" />
+							</listcell>
+							
+						</listitem>
+					</template>
+				</listbox>
+				
+				</center>
+				
+				
+		<east width="400px"   visible="@bind(not empty vm.selectedUser)"  border="none" collapsible="false" splittable="true" minsize="300" autoscroll="true">
+			<vlayout 
+				form="@id('fx') @load(vm.selectedUser) @save(vm.selectedUser, before='updateUser')">
+				
+				<grid hflex="1">
+					<columns>
+						<column align="right" hflex="min"/>
+						<column/>
+					</columns>
+					<rows>
+						<row>
+							<cell sclass="row-title">First Name :</cell>
+						
+							<textbox value="@bind(fx.firstname)"  constraint="no empty"/>							
+					
+						</row>
+						<row>
+							<cell sclass="row-title">Last Name :</cell>																		
+							<textbox value="@bind(fx.lastname)" hflex="1"  constraint="no empty"/>												
+						</row>
+						<row>
+							<cell sclass="row-title">User Name :</cell>
+							<textbox value="@bind(fx.username)" hflex="1" constraint="no empty"/>
+						</row>
+						<row>
+							<cell sclass="row-title">Password :</cell>
+							<textbox value="@bind(fx.userpwd)" hflex="1" constraint="no empty: *"/>
+						</row>
+						<row>
+							<cell sclass="row-title">Email :</cell>
+							<textbox value="@bind(fx.useremail)" hflex="1"  constraint="no empty"/>
+						</row>
+						<row>
+							<cell sclass="row-title">Mobile :</cell>
+							<textbox value="@bind(fx.usermobile)" hflex="1"  constraint="no empty"/>
+						</row>
+						
+						
+							
+					</rows>
+				</grid>
+				<hlayout>
+					<button onClick="@command('updateUser')" label="Update"/>
+					<button onClick="@command('reloadUser')" label="Reload"/>
+				</hlayout>
+				
+				<label value="@bind(vmsgs['lastnameContentError'])" style="color: red;" />
+				
+			</vlayout>
+			
+			
+			</east>
+			
+				</borderlayout>
+				
+
+
+</window>
+</zk>

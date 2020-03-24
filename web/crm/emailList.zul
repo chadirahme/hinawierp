@@ -1,0 +1,145 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<vlayout apply="org.zkoss.bind.BindComposer" vflex="1"
+	viewModel="@id('vm') @init('crm.ContactEmailViewModel' , type='list' )" >
+	 
+	  <grid>
+	  <columns>
+	  <column width="180px"></column>
+	  <column width="200px"></column>
+	  <column width="150px"></column>
+	  <column></column>
+	  </columns>
+	  
+	  <rows>
+	  <row>
+	  <label value="Search Emails " style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	  <textbox value="@bind(vm.email)" placeholder="Ex: @hotmail or abc@gmail.com" hflex="1"></textbox>
+	 <cell></cell>
+	  <button label="Add New Email" onClick="@command('addNewEmailCommand')" visible="true"></button>
+	  </row>
+	  
+	  <row visible="false">
+	   <label value="Add Bulk Emails " style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	   <cell colspan="2">
+	  <textbox value="@bind(vm.bulkmEails)" rows="3" hflex="1"></textbox>
+	  </cell>
+	  </row>
+	  
+	  <row>
+	  <label value="Emails Group" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	  <listbox mold="select" model="@load(vm.bulkGroups)"
+											hflex="1" selectedItem="@bind(vm.selectBulkGroup)">
+											<template name="model" var="item">
+												<listitem>
+													<listcell label="@load(item)"></listcell>
+												</listitem>
+											</template>
+										</listbox> 
+	  
+	  </row>
+	  
+	  <row>
+	  <label value="Industry Group" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	  <listbox mold="select" model="@load(vm.industryGroups)"
+											hflex="1" selectedItem="@bind(vm.selectedIndustryGroup)">
+											<template name="model" var="item">
+												<listitem>
+													<listcell label="@load(item)"></listcell>
+												</listitem>
+											</template>
+										</listbox> 
+	  
+	  </row>
+	  
+	  <row>
+	  <cell colspan="3">
+	  <hbox pack="center" hflex="1">
+	   <button label="Search" onClick="@command('searchEmailCommand')"></button>
+	  </hbox>
+	  </cell>
+	  </row>
+	  
+	  
+	  <row visible="false">
+	  <cell colspan="3">
+	  <hbox pack="center" hflex="1">
+	  <button label="Save Bulk Emails" onClick="@command('saveBulkEmailsCommand')"></button>
+	  </hbox>
+	  </cell>
+	  </row>
+	  
+	  </rows>
+	  </grid>
+	  
+
+	 
+	 <listbox id="demoGrid" height="400px"  mold="paging" pageSize="1000"
+           model="@load(vm.lstEmails) @template(each.editingStatus ? 'editable' : 'noneditable')">
+          <listhead sizable="true">
+             <listheader label="Email" sort="auto('email')" width="250px" />  
+             <listheader label="Email Group" sort="auto('bulkGroup')" width="200px" />  
+             <listheader label="Industry Group" sort="auto('industryGroup')" width="200px" />  
+             <listheader label="Unsubscribe" sort="auto('email')" width="150px" />          
+             
+             <listheader label="Edit" width="130px"/>
+            <listheader label="Delete" width="100px"/>
+            </listhead>
+           <template name="editable">
+                <listitem>
+                    <listcell>
+                        <textbox cols="60"
+                            value="@load(each.email) @save(each.email, before='saveEmailInfo')"
+                            constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address" />
+                 </listcell>
+                   <listcell>
+                        <label value="@load(each.bulkGroup)" />
+                   </listcell> 
+                   <listcell>
+                        <label value="@load(each.industryGroup)" />
+                   </listcell> 
+                  <listcell>
+                        <label value="@load(each.unsubscribe)" />
+                   </listcell>   
+                   <listcell>
+                        <div>
+                         <button image="/images/success.gif"
+                             onClick="@command('saveEmailInfo', row=each)" />
+                           <button image="/images/cross.png"
+                              onClick="@command('changeEditableStatus', row=each )" />
+                     </div>
+                    </listcell>
+               </listitem>
+           </template>
+           <template name="noneditable">
+             <listitem>
+                    <listcell>
+                        <label value="@load(each.email)" />
+                   </listcell> 
+                    <listcell>
+                        <label value="@load(each.bulkGroup)" />
+                   </listcell> 
+                   <listcell>
+                        <label value="@load(each.industryGroup)" />
+                   </listcell>   
+                    <listcell>
+                    
+                 <button image="@bind(each.unsubscribe? '/images/success.gif' : '/images/cross.png' )" onClick="@command('unSubscribeCommand',row=each)" />
+                   </listcell>                    
+                   <listcell>
+                        <button image="/images/rowedit.png"
+                         onClick="@command('changeEditableStatus', row=each )" />
+                 </listcell>
+                   <listcell>
+                        <button image="/images/cross.png"
+                         onClick="@command('deleteEmailCommand', row=each )" />
+                 </listcell>
+                 
+               </listitem>
+           </template>
+       </listbox>
+       	 
+	 
+	 </vlayout>
+</zk>

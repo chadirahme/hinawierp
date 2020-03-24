@@ -1,0 +1,30 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<hlayout style="height : 40px;background:#2C6F99;width: 100%;align:center;color:white">
+	
+		<hbox hflex="1" vflex="1" pack="center" >
+		<!-- <label value="Hinawi Software" style="font-weight: bold;"></label> -->
+		<!-- <button  autodisable="self" zclass="link-Button"  orient="vertical" label="www.hinawi.com" href="http://hinawi.com/"></button> -->
+		
+		<image src="/images/i_mail.gif" width="20" height="20" /><a href="mailto:hinawi@eim.ae" style="color:white;">hinawi@eim.ae</a>
+		
+		
+		<!-- <button  autodisable="self" zclass="link-Button"  orient="vertical" label="Email: hinawi@eim.ae" href="mailto:hinawi@eim.ae"></button> -->
+		<image src="/images/i_tel.gif" width="20" height="20" />
+		<label style="color:white;" value="	+971 2 671 42 42 | +971 50 622 80 24 | Skype: hinawisoftware | Facebook: "></label>
+		<a href="https://www.facebook.com/hinawisoftware" target="blank" style="color:white;">hinawisoftware
+						</a>
+		 	<a href="/quotationContactUsLayout.zul">
+      		 <label value="| Quotation Request \ Contact Us " style="color:white;"></label>
+			</a>				
+			<a href="/customerFeedbackLayout.zul">
+           <label value="| Feedback Form" style="color:white;"></label>
+           </a>		
+           
+           <a href="/contactus.zul">
+           <label value="| Company Address"  style="cursor:pointer;color:black;text-decoration:none;color:white"></label>
+           </a>				
+	</hbox>
+		
+	</hlayout>
+</zk>

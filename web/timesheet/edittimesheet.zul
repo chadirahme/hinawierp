@@ -1,0 +1,479 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/css/style.css"?>
+<?link rel="stylesheet" type="text/css" href="/css/hstyle.css"?>
+
+<zk>
+<borderlayout id="mainlayout2">
+	
+<center autoscroll="true" >
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('timesheet.DailyTimeSheetViewModel' , type='edit')" vflex="1">
+	 
+	
+	 
+	 <label value="Edit Time Sheet" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	 
+	 <grid>
+			<columns>		
+			<column  width="100px"></column>
+			<column  width="200px"></column>
+			<column  width="100px"></column>
+			<column  width="120px"></column>
+			<column  width="120px"></column>
+			<column  width="100px"></column>
+			<column  width="140px"></column>		
+			<column  width="100px"></column>	
+			<column  width="120px"></column>						
+			</columns>
+			<rows>
+			
+			<row>
+			<label value="Company"></label>
+			<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enCompanyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<cell colspan="4">
+			<label value="@bind(vm.lastTimeSheet)" style="color:green"></label>
+			</cell>
+			<cell colspan="3">
+			<hbox>
+			<textbox placeholder="Search by Emp No. or Name"  value="@bind(vm.searchText)"></textbox>
+			<button label="Search" onClick="@command('searchforEmployeeCommand')"></button>	
+					
+			</hbox>
+			</cell>
+			
+			
+			</row>
+			
+			<row>
+			<cell colspan="6">
+			<label value="@bind(vm.lastTimeSheetByUser)" style="color:green"></label>
+			</cell>
+			</row>
+			
+			<row>
+			<label value="Date"></label>
+			<cell colspan="4">
+			<hbox visible="@bind(vm.compSettings.dateType eq '3')">
+			<radiogroup selectedIndex="@bind(vm.selectedDateType)" >
+			 <radio label="By Month" value="1" disabled="@bind(vm.compSettings.dateType eq '1')" />
+            <radio label="By Dates" value="2" disabled="@bind(vm.compSettings.dateType eq '2')"/>
+			</radiogroup>
+			<hbox visible="@bind(vm.showMonth)">
+			<listbox multiple="false" mold="select" model="@load(vm.lstMonths)" selectedItem="@bind(vm.selectedMonth)">
+				<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+				</listbox>
+			
+			 <listbox multiple="false" mold="select" model="@load(vm.lstYears)" selectedItem="@bind(vm.selectedYear)">
+				<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+				</listbox>
+			</hbox>
+			
+			<hbox visible="@bind(!vm.showMonth)">
+			<label value="Between"></label>
+			<datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy" ></datebox>
+			<label value="And"></label>
+			<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy" ></datebox>
+			</hbox>	
+			</hbox>
+			
+			<hbox visible="@bind(vm.compSettings.dateType eq '1')">
+			<label value="Between"></label>
+			<datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy" ></datebox>
+			<label value="And"></label>
+			<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy" ></datebox>
+			</hbox>
+			
+				<hbox visible="@bind(vm.compSettings.dateType eq '2')">
+			<listbox multiple="false" mold="select" model="@load(vm.lstMonths)" selectedItem="@bind(vm.selectedMonth)">
+				<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+				</listbox>
+			
+			 <listbox multiple="false" mold="select" model="@load(vm.lstYears)" selectedItem="@bind(vm.selectedYear)">
+				<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+				</listbox>
+			</hbox>
+			
+			<hbox visible="@bind(vm.compSettings.dateType eq '4' || vm.compSettings.dateType eq '5')">
+			
+			<hbox>
+			<label value="Between"></label>
+			<datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy" constraint="no future,no empty"></datebox>
+			<label value="And"></label>
+			<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy"  constraint="no future,no empty"></datebox>
+			</hbox>
+			
+			</hbox>
+			
+			<hbox visible="@bind(vm.compSettings.dateType eq '6' )">
+			
+			<hbox>
+			<label value="Between"></label>
+			<datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy" constraint="no past,no empty"></datebox>
+			<label value="And"></label>
+			<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy"  constraint="no past,no empty"></datebox>
+			</hbox>
+			
+			</hbox>
+							
+			</cell>
+			
+			
+			
+			<button  id="btn1" label="View" hflex="1"  onLongOp="@command('viewCommand')" visible="true"></button>	
+			<button label="Find Employees"  onClick="@command('findEmployeeCommand')" visible="@bind(vm.employeeKey eq 0)"></button>
+			<button label="Auto Fill"  onClick="@command('autoFillCommand')"></button>	
+			
+						
+			</row>
+			</rows>
+			
+			</grid>
+			
+		<grid id="resultgrid"  vflex="true"  emptyMessage="There is no data found for this criteria" 
+        	model="@load(vm.tsGroupModel)" >
+        	<auxhead sclass="category-center">						
+					
+						<auxheader colspan="3">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="160px"  placeholder="Search by Emp No." 
+								 value="@bind(vm.employeeFilter.employeeNo)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="3">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="160px"  placeholder="Search by Emp Name" 
+								 value="@bind(vm.employeeFilter.fullName)" onChange="@command('changeFilter')" />
+						</auxheader>												
+						
+						</auxhead>
+						
+						<columns sizable="true" >
+        	
+            <column width="50px">
+            <button label="+/-" onClick="@command('colseGroup')"></button>
+            </column>
+            <column  label="Date" width="80px" />
+            <column  label="Day" width="100px"/>
+             <column  label="" width="50px"/>
+              <column  width="100px">
+            <checkbox label="Status" checked="@bind(vm.checkAllStatus)"></checkbox>
+            </column>
+            
+            <column  if="${!vm.compSettings.hidecalculate}" visible="@bind(!vm.compSettings.hidecalculate)" width="70px">
+              <checkbox label="Calculate" checked="@bind(vm.checkAllCalculate)"></checkbox>
+             </column>
+             
+             
+            <column  label="Unit Type" width="70px"/>
+           <column label="From Time" if="${!vm.compSettings.hideTime}" visible="@bind(vm.timingFlag and !vm.compSettings.hideTime)" width="100px"></column>
+            <column label="To Time"  if="${!vm.compSettings.hideTime}" visible="@bind(vm.timingFlag and !vm.compSettings.hideTime)" width="100px"></column>
+             <column  label="Units" width="50px" />
+              <column  label="Total" width="50px" />
+            <column  label="OT Unit 1.25" width="90px" if="${!vm.compSettings.hideOverTime}" visible="@bind(!vm.compSettings.hideOverTime)"/>
+               <column  label="OT Unit 1.5" width="90px" if="${!vm.compSettings.hideOverTime}" visible="@bind(!vm.compSettings.hideOverTime)"/>
+               <column  label="OT Unit 2" width="90px"  if="${!vm.compSettings.hideOverTime}" visible="@bind(!vm.compSettings.hideOverTime)"/>
+                <column  label="Total" width="50px" if="${!vm.compSettings.hideOverTime}" visible="@bind(!vm.compSettings.hideOverTime)"/>  
+                
+               <column  label="Customer Job" width="150px" if="${!vm.compSettings.hideCustomerJob}" visible="@bind(!vm.compSettings.hideCustomerJob)"/>  
+                <column  label="Customer Task Name" width="150px" if="${!vm.compSettings.hideCustomerTask}" visible="@bind(!vm.compSettings.hideCustomerTask)"/>  
+                <column  label="Task Status" width="150px" if="${!vm.compSettings.hideCustomerTask}" visible="@bind(!vm.compSettings.hideCustomerTask)"/>  
+                        
+              <column  label="Project" width="150px"/>       
+              <column  label="Service Type" width="150px" if="${!vm.compSettings.hideservice}" visible="@bind(!vm.compSettings.hideservice)"/> 
+                 <column  label="Notes"  width="150px" /> 
+             <column  label="Tomorrows Plan" width="150px" if="${!vm.compSettings.hideTomorrowPlan}" visible="@bind(!vm.compSettings.hideTomorrowPlan)"/> 
+              <column  label="Attachment" width="150px" if="${!vm.compSettings.hideAttachment}" visible="@bind(!vm.compSettings.hideAttachment)"/> 
+       		 </columns>
+        
+        	
+        <!-- template for group -->
+        <template name="model:group">        
+            <group >
+            <cell>
+            <label value="@load(each[3])" ></label>
+             <label value="  Emp NO. : " ></label>
+            <label value="@load(each[0])" ></label>
+              <label value=" | Name : " ></label>
+            <label value="@load(each[1])" ></label>
+               <label value=" | Position : " ></label>
+            <label value="@load(each[5])" ></label>
+              <label value=" | Status : " ></label>
+            <label value="@load(each[2])" ></label>
+            <label value=" @load(each[6])" style="color:green" ></label>
+             <button label="Remove" onClick="@command('removeCommand',emp=each[0])"></button>
+            </cell>
+            </group>         
+        </template>
+         
+        <!-- template for each element in model -->
+        <template name="model">
+            <row style="@bind(each.holiday eq true ? 'background:#D3D3D3;' : '')" >  
+           		 
+           		 <cell rowspan="@load(each.noOfshifts)" if="${each.firstOfRecord and each.timingFlag}"> 
+            	  <label value="" />
+            	 </cell>
+            		                    		 
+				 <cell rowspan="1" if="${!each.timingFlag}"> 
+           		 <label value="" />
+           		 </cell>
+
+           		  <cell rowspan="@load(each.noOfshifts)" if="${each.firstOfRecord and each.timingFlag}">        
+                 	<label value="${c:formatDate(each.tsDate, 'dd/MM/yyyy')}" />
+                  </cell>
+                            
+                  <cell rowspan="1" if="${!each.timingFlag}">           
+                	<label value="${c:formatDate(each.tsDate, 'dd/MM/yyyy')}" />
+                 </cell>
+                 
+                  <cell rowspan="@load(each.noOfshifts)" if="${each.firstOfRecord and each.timingFlag}">       
+                 	<label value="@load(each.dayName)" />
+                  </cell>
+                               
+                  <cell rowspan="1" if="${!each.timingFlag}">           
+                	<label value="@load(each.dayName)" />
+                 </cell>
+                        
+                          <cell>
+                           <image src="/images/edit.png" width="20px" height="20px" 
+					context="${c:cat(editPopupCashInvoice,each.rowIndex)}" visible="@bind(!each.cantChange)">									
+				</image>
+				  <menupopup id="${c:cat(editPopupCashInvoice,each.rowIndex)}">
+						<menuitem label="Insert Line" 
+							onClick="@command('addNewLineCommand',row=each)"></menuitem>
+						<menuitem label="Delete Line"
+							onClick="@command('deleteNewLineCommand',row=each)"></menuitem>
+					</menupopup>  
+                          </cell>            
+                   
+                  <cell>   
+                 <listbox if="${!each.cantChange}" multiple="false" hflex="1" mold="select" model="@load(vm.lstStatus)"  disabled="@bind(each.approved eq 1 || each.cantChange)" 
+                 selectedItem="@bind(each.status)" onSelect="@command('changeStatus',row=each)">
+				 <template name="model" var="item">
+					<listitem >
+					<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+				</listbox>
+			        
+			       <label if="${each.cantChange}" value="@bind(each.status)"></label>                   
+                 </cell>      
+                                                              
+               <cell if="${!vm.compSettings.hidecalculate}">	
+            <listbox mold="select" model="@load(vm.lstCalculate)" selectedItem="@bind(each.calculate)" onSelect="@command('changeCalculate',row=each)" 
+            	disabled="@bind(each.approved eq 1 || each.cantChange)">             
+		               
+		                <template name="model" var="item">
+						<listitem >
+						<listcell label="@bind(item)"></listcell>
+					</listitem>
+						</template>
+		                  </listbox>
+		                  </cell>
+		                  
+		                  
+		                  <cell>
+		                  <label value="@load(each.unitType)"  /> 		              
+		                  </cell>
+		                  		
+		         <timebox hflex="1"  if="${!vm.compSettings.hideTime}"   value="@bind(each.tsFromTime)" visible="@bind(each.timingFlag  and !vm.compSettings.hideTime)" disabled="@bind(!vm.objCompanySetup.timesheetChangeTime || each.cantChange || each.approved eq 1)" format="a hh:mm" onChange="@command('changeFromTime',row=each,type=1)"></timebox>
+		                    		                   	          		                  
+		                   
+		          <timebox hflex="1"  if="${!vm.compSettings.hideTime}"  value="@bind(each.tstoTime)" visible="@bind(each.timingFlag  and !vm.compSettings.hideTime)" disabled="@bind(!vm.objCompanySetup.timesheetChangeTime || each.cantChange || each.approved eq 1)" format="a hh:mm" onChange="@command('changeFromTime',row=each,type=1)"></timebox>
+		                     		                    		                		                  
+		                     		
+		    	<doublebox hflex="1" value="@bind(each.units)" readonly="@bind(!each.timingFlag)" disabled="@bind(!vm.objCompanySetup.timesheetChangeTime || each.cantChange || each.approved eq 1)" onChange="@command('changeFromTime',row=each,type=2)"></doublebox>                   
+		                          
+		             <cell rowspan="@load(each.noOfshifts)" if="${each.firstOfRecord and each.timingFlag}">       
+	                 <label value="@bind(each.totals)" />
+	                  </cell>
+	                   <cell rowspan="1" if="${!each.timingFlag}">           
+	                 <label value="@bind(each.totals)" />
+                  </cell> 
+                        
+		                   <cell if="${!vm.compSettings.hideOverTime}">
+		                   <intbox inplace="true" value="@bind(each.otUnit1)"  onChange="@command('checkOT',row=each,type=1)" disabled="@load(each.otUnit1Enable || each.approved eq 1 || each.cantChange)"></intbox>		                     		                   		                 
+		                   </cell>
+		                   
+		                 		                   		                  
+		                      <cell if="${!vm.compSettings.hideOverTime}">	
+		                      <intbox inplace="true" value="@bind(each.otUnit2)"  onChange="@command('checkOT',row=each,type=2)" disabled="@load(each.otUnit2Enable || each.approved eq 1 || each.cantChange)"></intbox>		                       		                       		                      		                     
+		                       </cell>
+		                        
+		                   
+		                       <cell if="${!vm.compSettings.hideOverTime}">
+		                       <intbox inplace="true" value="@bind(each.otUnit3)"  onChange="@command('checkOT',row=each,type=3)" disabled="@load(each.otUnit3Enable || each.approved eq 1 || each.cantChange)"></intbox>		                       		                       		                      
+		                        </cell>
+	
+           					   <cell  rowspan="@load(each.noOfshifts)" if="${each.firstOfRecord and each.timingFlag and !vm.compSettings.hideOverTime}">       
+	                	 <label value="@bind(each.totalOTUnits)"></label>
+	                  </cell>
+	                   <cell rowspan="1" if="${!each.timingFlag and !vm.compSettings.hideOverTime}">           
+	                		 <label value="@bind(each.totalOTUnits)"></label>
+                 		</cell>
+		                        
+		                         		                                  					  		                    		                 		                              		 		               
+		                       <!--  <cell>
+		                         <label value="@bind(each.otUnit1+each.otUnit2+each.otUnit3)" />
+		                         </cell> -->
+		                       
+		                       
+		            <cell width="150px" rowspan="1" if="${!vm.compSettings.hideCustomerJob}">		                  
+		          <listbox width="150px" mold="select" model="@load(vm.lstCustomerJob)" selectedItem="@bind(each.customerJob)"  disabled="@bind(each.approved eq 1 || each.cantChange)" >
+		                	<template name="model" var="option">
+							<listitem>							
+							
+							<listcell label="${option.name}: ${option.listType}"></listcell>
+							
+							</listitem>
+						
+							</template>
+		                   </listbox> 
+		                   <!--    <combobox 	autodrop="true" mold="rounded" buttonVisible="true" readonly="true" disabled="@bind(each.approved eq 1 || each.cantChange)" 
+												model="@load(vm.lstCustomerJob)" hflex="1" 
+												 selectedItem="@bind(each.customerJob)">
+												<template name="model" var="option">
+													<comboitem label="${option.name}: ${option.listType}"
+														style="@bind(option.subLevel eq 0 ? 'color:black;font-weight:bold;' : option.subLevel eq 1 ? 'text-indent:30px' : option.subLevel eq 2 ? 'text-indent:60px' : option.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') "
+														/>
+												</template>
+
+											</combobox> -->
+		                                       
+		              </cell>
+		                       
+		              <cell width="150px" rowspan="1" if="${!vm.compSettings.hideCustomerTask}">	
+		               <listbox multiple="false" hflex="1" mold="select" disabled="@bind(each.approved eq 1 || each.cantChange)" 
+								model="@load(each.lstCustomerTaks)" selectedItem="@bind(each.selectedTask)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="${item.taskName}: ${item.taskNumber}"></listcell>
+													</listitem>
+												</template>
+						</listbox>
+		               
+		               </cell>
+		                <cell width="150px" rowspan="1" if="${!vm.compSettings.hideCustomerTask}">	
+		                <listbox multiple="false" hflex="1" mold="select" disabled="@bind(each.approved eq 1 || each.cantChange)" 
+								model="@load(each.lstTaskStatus)" selectedItem="@bind(each.selectedTaskStatus)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item.enDescription)"></listcell>
+													</listitem>
+												</template>
+						</listbox>
+		                
+		                </cell>      
+		                   
+		                       
+		                         <cell>
+		           			<listbox width="150px" mold="select" model="@load(vm.lstProject)" selectedItem="@bind(each.project)" disabled="@bind(each.approved eq 1 || each.cantChange)" >
+		                	<template name="model" var="item">
+							<listitem >
+								<listcell label="@bind(vm.compSettings.projecttype eq '1' ? item.projectCode :
+							vm.compSettings.projecttype eq '2' ?  item.projectName : item.enCodeName)"></listcell>
+						</listitem>
+							</template>
+		                  </listbox>		                        
+		                          </cell>
+		                          
+                          
+		          
+		          	 <cell if="${!vm.compSettings.hideservice}">
+		                    <listbox hflex="1" mold="select" model="@load(vm.lstPositions)" selectedItem="@bind(each.service)" disabled="@bind(each.approved eq 1 || each.cantChange)">
+		                	<template name="model" var="item">
+							<listitem >
+							<listcell label="@load(item.enDescription)"></listcell>
+						</listitem>
+							</template>
+		                  </listbox>				                  		                         		                  
+		                    </cell>
+		                    		          		                         
+		                   <cell rowspan="1" >
+		                      <textbox value="@bind(each.notes)" inplace="false" hflex="1" disabled="@bind(each.approved eq 1 || each.cantChange)"/>
+                             </cell>
+                             
+                               <cell rowspan="@load(each.noOfshifts)" if="${!vm.compSettings.hideTomorrowPlan}">
+		                      <textbox  multiline="true" rows="4" value="@bind(each.tomorrowPlan)" inplace="false" hflex="1" disabled="@bind(each.approved eq 1 || each.cantChange)"/>
+                             </cell>
+                             
+                              <cell rowspan="@load(each.noOfshifts)" if="${!vm.compSettings.hideAttachment}">
+		                     	<vbox>
+		                   	 <button label="Attachment"  onClick="@command('attachFileCommand',row=each)"
+		                     disabled="@bind(each.approved eq 1 || each.cantChange)"></button>
+		                      <hbox>
+                             <label value="@bind(each.listOfattchments.size())"></label>
+                             <label value="file(s)"></label>
+                              </hbox>
+		                     
+		                     </vbox>
+		                     
+		                    
+		                       
+		                    <!--  <button label="Choose File" upload="true,maxsize=-1"
+		                      onUpload="@command('attachFileCommand',row=each)" disabled="@bind(each.approved eq 1 || each.cantChange)"></button>		                    
+                             -->
+                        
+                           <!--   <hbox visible="@load(each.attachPath  ne '')"> 
+                         	 <image src="/images/downarrow.png" width="50px;" height="30px" onClick="@command('downloadFileCommand',row=each)"></image>     
+                         	 <image src="/images/cross.png" width="20px;" height="20px" onClick="@command('deleteFileCommand',row=each)"></image>
+                         	 </hbox>      -->             
+                             </cell>
+                 
+                                                                                                                        
+            </row>
+        </template>
+             
+        <!-- template for footer -->
+        <template name="model:groupfoot">
+            <groupfoot>
+                <cell colspan="3" style="text-align: right; padding-right: 15px">
+                    <label value="@load(each[0])" style="font-weight:bold;" />
+                </cell>                               
+            </groupfoot>
+        </template>
+    </grid>
+			<hlayout>
+			<hbox hflex="1" pack="center">
+			<button label="Export" width="100px" onClick="@command('exportExcelByDataModel')" visible="@bind(vm.companyRole.canExport)"></button>	
+			
+			<button label="Save" width="100px" onClick="@command('saveCommand')" visible="@bind(vm.companyRole.canAdd)"></button>
+			<button label="Save &amp; e-mail" width="100px" onClick="@command('clickButtonSendEmail')" visible="@bind(vm.companyRole.canAdd)"></button>
+			<button label="Clear" width="100px" onClick="@command('clearCommand')"></button>
+			<space></space><space></space><space></space><space></space><space></space><space></space>
+			<label value="@load(vm.footer)"
+					style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+						
+			</hbox>
+			
+			</hlayout>
+	 </vlayout>
+
+</center>
+
+
+</borderlayout>
+
+</zk>

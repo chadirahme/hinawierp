@@ -1,0 +1,188 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') 	 @init('home.QuotationHistoryViewModel')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<hlayout>
+					<panel collapsible="true">
+						<panelchildren>
+							<grid>
+								<columns>
+									<column width="120px"></column>
+									<column width="170px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+								</columns>
+								<rows>
+									<row>
+										<cell>
+											<label value="Date Range :"></label>
+										</cell>
+										<cell>
+											<hbox>
+												<label value="From"></label>
+												<datebox id="dbfromDate" cols="12" format="dd/MM/yyyy"
+													mold="rounded" value="@bind(vm.fromdate)" />
+											</hbox>
+										</cell>
+										<cell>
+											<hbox>
+												<label value="To"></label>
+												<datebox id="dbtoDate" cols="12" format="dd/MM/yyyy"
+													mold="rounded" value="@bind(vm.todate)" />
+											</hbox>
+										</cell>
+										<cell colspan="1">
+											<button id="btnGo" label="Go" disabled="false"
+												onClick="@command('getHistory')" />
+										</cell>
+										<cell colspan="2">
+											<label value="Total Number : " style="color:blue"></label>
+											<label value="@bind(vm.totalNumber)" style="color:blue"></label>
+										</cell>
+
+
+									</row>
+								</rows>
+							</grid>
+						</panelchildren>
+					</panel>
+
+
+				</hlayout>
+				<listbox sizedByContent="true" id="lstQuotationHist" vflex="1" hflex="1"
+					model="@bind(vm.lstQuotationHist)" emptyMessage="No items match your search">
+					<auxhead>
+						<auxheader label="Contact-Us/Quotation List" colspan="9"
+							style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"
+							align="center" />
+					</auxhead>
+
+					<auxhead sclass="category-center">
+					<auxheader colspan="1">
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filterModel.date)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filterModel.companyName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filterModel.contactName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filterModel.city)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filterModel.country)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filterModel.telephone)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filterModel.mobile)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filterModel.email)" onChange="@command('changeFilter')" />
+						</auxheader>
+					</auxhead>
+					<listhead sizable="true">
+						<listheader align="center" label="Details" width="200px" />
+						<listheader align="center" sort="auto('creationDate')"
+							label="Date" width="110px" />
+
+						<listheader align="left" id="companyName" sort="auto('companyName')"
+							width="200px" label="Company Name" />
+						<listheader align="left" id="name" width="150px"
+							sort="auto('contactName')" label="Contact Name" />
+
+						<listheader align="center" width="100px" sort="auto('city')"
+							label="City" />
+
+						<listheader align="center" width="100px" sort="auto('countryName')"
+							label="Country" />
+
+						<listheader align="center" width="100px" id="telephone1"
+							label="Telephone" />
+						<listheader align="center" id="mobile1" width="120px"
+							label="Mobile" />
+						<listheader align="left"  label="Email" />
+					</listhead>
+					<template name="model" var="quotationHist">
+						<listitem>
+						<listcell>
+								<button label="View"
+									onClick="@command('viewHistoryCommand', id=quotationHist.quotationid)"></button>
+									
+									<button label="Add New Task"
+									onClick="@command('addTask', id=quotationHist.quotationid)"></button>
+							</listcell>
+							<listcell label="@bind(quotationHist.creationDate)">
+							</listcell>
+
+							<listcell label="@bind(quotationHist.companyName)">
+							</listcell>
+							<listcell label="@bind(quotationHist.contactName)">
+
+							</listcell>
+							<listcell label="@bind(quotationHist.city)">
+							</listcell>
+							<listcell label="@bind(quotationHist.countryName)">
+							</listcell>
+
+
+
+							<listcell label="@bind(quotationHist.telephone1)">
+
+							</listcell>
+							<listcell label="@bind(quotationHist.mobile1)">
+
+							</listcell>
+							<listcell>
+								<a href="@bind(quotationHist.mailTo)">
+									<label value="@bind(quotationHist.email)" style="color:blue"></label>
+								</a>
+							</listcell>
+						</listitem>
+					</template>
+				</listbox>
+
+				<hlayout hflex="1" style="text-align: right">
+				<label value="Total Number"
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<label value="@bind(vm.totalNumber)"
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<space></space>
+					<space></space>
+					<space></space>
+					<space></space>
+				</hlayout>
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>
+	
+	
+	

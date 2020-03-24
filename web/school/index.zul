@@ -1,0 +1,14 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<borderlayout hflex="1" vflex="1" id="mainlayout2">
+		
+		<west width="180px" title="Setup" collapsible="true" splittable="true" minsize="100">
+			<include src="/school/layout/sidebar.zul"/>
+		</west>
+		<center id="mainContent2" autoscroll="true" border="none" self="@insert(content)">
+		</center>
+		<south height="50px" border="none" hflex="1">
+			
+		</south>
+	</borderlayout>
+</zk>

@@ -1,0 +1,109 @@
+/* TIHID.com (This Is How It's Done) */
+body {
+	background:#f9f9f9;
+	font-family: Tahoma,Verdana,Arial,sans-serif;
+}
+*{
+	margin:0px; 
+	padding:0px;
+	outline:none;
+	font-style: normal;
+}
+a{
+	text-decoration:none;	
+}
+
+/* TIHID Top Nav */
+#tihidANav{
+	width:90%;
+	font-size:12px;
+	background:#fff;
+	color:#444;
+	overflow:hidden;
+	padding:8px 5%;
+}
+#tihidANav a{
+	color: #3B8DBD;
+}
+.tihidANavL{
+	float:left;
+}
+.tihidANavR{
+	float:right;
+}
+/* END TIHID Top Nav */
+
+#tihidContainer{
+	width:800px;
+	margin:120px auto;
+	background:#f9f9f9;
+	position:relative;
+	overflow:hidden;
+}
+.tihidFullWrap{
+	width:750px;
+	margin:80px auto;
+	position:relative;
+	overflow:inherit;
+}
+.tihidLeftWrap{
+	width:316px;
+	float:left;
+	position:relative
+}
+.tihidRightWrap{
+	width:412px;
+	float:right;
+}
+.tihidInputs{
+	position:relative;
+}
+.tihidLeftWrap .tihidInputs i, .tihidRightWrap .tihidInputs i{
+	left: 0px;
+    top: 0px;
+    position: absolute;
+	width: 36px;
+    color: #ffffff;
+	background:#0199d2;
+    text-align: center;
+}
+
+.tihidLeftWrap .tihidInputs i{
+	line-height: 36px;	
+}
+
+.tihidRightWrap .tihidInputs i{
+	height: 82px;
+	line-height: 82px;
+}
+
+.tihidInputs input[type=text], .tihidInputs input[type=email]{
+	width:251px;
+	border:1px solid #f0f0f0;
+	color:black;
+    font-size: 13px;
+    padding: 8px 18px 10px 45px;
+	margin-bottom:10px;
+}
+.tihidInputs input[type=submit]{
+	width:412px;
+	color:#ffffff;
+	background:#39b54a;
+	border:none;
+    font-size: 13px;
+    height:35px;
+	margin-bottom:10px;
+}
+.tihidInputs textarea{
+	width:347px;
+	height:62px;
+	border:1px solid #f0f0f0;
+	color:black;
+    font-size: 13px;
+    padding: 8px 18px 10px 45px;
+	margin-bottom:7px;
+	font-family: Tahoma,Verdana,Arial,sans-serif;
+}
+
+
+

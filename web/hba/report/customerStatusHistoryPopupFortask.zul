@@ -1,0 +1,67 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="customerStatusHistory" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Add/Edit Customer" border="normal" position="center,center"
+		closable="true" sizable="true" onCancel="customerStatusHistory.detach()"
+		width="70%" height="50%">
+		<borderlayout apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('hba.CustomerStatusHistoryPopupFortask')">
+			<center autoscroll="true" border="none">
+				<vlayout hflex="1" vflex="1">
+					<label value="@bind(vm.customerName)"
+						style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+					<grid>
+						<columns>
+							<column width="200px"></column>
+							<column width="200px"></column>
+							<column width="270px"></column>
+							<column width="200px"></column>
+						</columns>
+
+					</grid>
+
+					<listbox model="@load(vm.customerHistroyStatusReport)"
+						vflex="1" id="customerStatusHistroyReport" emptyMessage="No data found">
+						<listhead menupopup="auto" sizable="true">
+							<listheader label="Type" sort="auto('type')" width="120px" />
+							<listheader label="Action Date " sort="auto('actionDatstr')"
+								width="150px" />
+							<listheader label="Status Description " sort="auto('statusDescription')"
+								width="300px" />
+							<listheader label="Created From" sort="auto('createdFrom')"
+								width="120px" />
+							<listheader label="Txn Ref Number" sort="auto('txnRefNumber')"
+								width="200px" />
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell>
+									<label value="@bind(each.type)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.actionDatstr)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.statusDescription)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.createdFrom)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.txnRefNumber)" />
+								</listcell>
+							</listitem>
+						</template>
+
+					</listbox>
+					<hbox pack="center" hflex="1">
+
+						<button label="Close" onClick="customerStatusHistory.detach()"></button>
+					</hbox>
+
+				</vlayout>
+			</center>
+		</borderlayout>
+	</window>
+</zk>

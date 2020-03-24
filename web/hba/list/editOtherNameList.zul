@@ -1,0 +1,145 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+<?page id="popMain" title="new page title" contentType="text/html;charset=UTF-8" ?>
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+
+	<window id="otherNameListModalDialog" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Edit Other Name Info" border="normal" 
+		position="center,center" closable="true"
+		viewModel="@id('vm')  @init('hba.EditOtherNameViewModel')"
+		sizable="true" onCancel="otherNameListModalDialog.detach()" width="500px" height="680px">
+		<grid id="grid_id"
+			form="@id('fx') @load(vm.selectedOtherName)  @save(vm.selectedOtherName, before='updateOtherNameList')"
+			hflex="1" vflex="1">
+				<columns>
+					<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="0px"></column>
+				</columns>
+				<rows>
+					<row>
+						<cell >Name </cell>
+						<cell colspan="2"><textbox value="@bind(fx.name)"  maxlength="31" hflex="1"/></cell>
+						
+					</row>
+					<row>
+					<cell >Arabic Name </cell>
+						<cell colspan="2"><textbox value="@bind(fx.arName)"   maxlength="31" hflex="1"/></cell>
+					</row>
+					<row>
+						<cell>Company Name </cell>
+						<cell colspan="2"><textbox value="@bind(fx.companyName)" hflex="1" /></cell>
+						
+					</row>
+					<row>
+					<cell >Phone </cell>
+						<cell colspan="2"><textbox value="@bind(fx.phone)" hflex="1"/></cell>
+					</row>
+					<row>
+						<cell >Alternate Phone </cell>
+						<cell colspan="2"><textbox value="@bind(fx.altphone)" hflex="1" /></cell>
+						
+					</row>
+					<row>
+					<cell >Fax </cell>
+						<cell colspan="2"><textbox value="@bind(fx.fax)"  hflex="1" /></cell>
+					</row>
+					
+					<row>
+						<cell >Email </cell>
+							<cell colspan="2"><textbox value="@bind(fx.email)"  hflex="1" />
+						</cell>
+						
+					</row>
+					<row>
+					<cell >Contact </cell>
+						<cell colspan="2"><textbox value="@bind(fx.contact)" hflex="1" /></cell>
+					</row>
+					<row>
+						<cell >Alternate Contact</cell>
+						<cell colspan="2"><textbox value="@bind(fx.alternateContact)" hflex="1" /></cell>
+						
+					</row>
+					<!-- <row>
+						<cell sclass="row-title">Contact Person :</cell>
+						<cell><textbox value="@bind(fx.altphone)"  width="120px" /></cell>
+						<cell sclass="row-title">Alternate Contact :</cell>
+						<cell><textbox value="@bind(fx.alternateContact)"  width="120px" /></cell>
+					</row> -->
+					<row>
+						<cell >Skype ID </cell>
+						<cell colspan="2"><textbox value="@bind(fx.skypeID)" hflex="1" /></cell>
+						
+					</row>
+					<row>
+					<cell >Print Cheque As:</cell>
+						<cell colspan="2"><textbox value="@bind(fx.printChequeAs)" hflex="1"  /></cell>
+					</row>
+					<row>
+					<cell >Bank Account Name </cell>
+						<cell colspan="2">
+							<textbox value="@bind(fx.accountName)"  hflex="1" maxlength="31" />
+						</cell>
+					</row>
+					<row>
+					<cell >Bank Account No. </cell>
+						<cell colspan="2">
+							<textbox value="@bind(fx.accountNumber)"  hflex="1" />
+						</cell>
+					</row>
+					<row>
+						
+						<cell >Bank Name </cell>
+						<cell colspan="2">
+							<textbox value="@bind(fx.bankName)" hflex="1"  />
+						</cell>
+					</row>
+					
+					<row>
+						<cell >Branch
+							</cell>
+						<cell colspan="2">
+							<textbox value="@bind(fx.branchName)" hflex="1"  />
+						</cell>
+						
+					</row>
+					<row>
+					<cell >IBAN No. </cell>
+						<cell colspan="2">
+							<textbox value="@bind(fx.bBANNumber)"  hflex="1" />
+						</cell>
+					</row>
+					<row>
+					<cell >Address </cell>
+					<cell colspan="2">
+						<textbox hflex="1" multiline="true" rows="3" value="@bind(fx.billCountry)"
+							style="color:#008FD2;"></textbox>
+					</cell>
+
+				</row>
+					
+					
+					<row>
+						<cell >INActive
+							</cell>
+						<cell>
+							<checkbox checked="@bind(vm.activeOtherName)" ></checkbox>
+						</cell>
+					</row>
+					
+					<row>
+					<cell colspan="4">
+						<hbox pack="center" hflex="1">
+							<button label="Save"
+								onClick="@command('updateOtherNameList',cmp=otherNameListModalDialog)"
+								visible="@bind(vm.canSave)"></button>
+							<button label="Close" onClick="otherNameListModalDialog.detach()"></button>
+						</hbox>
+					</cell>
+				</row>
+				</rows>
+			</grid>
+
+	</window>
+</zk>

@@ -1,0 +1,230 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="vendorModalDialog" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Add/Edit Vendor" border="normal" position="center,center"
+		closable="true" viewModel="@id('vm')  @init('hba.EditVendorViewModel')"
+		sizable="true" onCancel="vendorModalDialog.detach()" width="970px" height="650px">
+
+		<grid
+			form="@id('fx') @load(vm.selectedVendor) @save(vm.selectedVendor, before='updateVendor')">
+			<columns>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="150px"></column>
+			</columns>
+
+			<rows>
+
+
+				<row>
+					<cell >Name *</cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.name)" hflex="1" maxlength="31"/>
+					</cell>
+					<cell >Arabic Name </cell>
+
+					<cell colspan="2">
+						<textbox value="@bind(fx.arName)" hflex="1" maxlength="31"/>
+					</cell>
+
+				</row>
+
+				<row>
+					<cell >Salutation(Mr./Mrs.) </cell>
+
+					<cell colspan="2">
+						<textbox value="@bind(fx.salutation)" hflex="1" maxlength="4"/>
+					</cell>
+					<cell >First Name </cell>
+
+					<cell colspan="2">
+						<textbox value="@bind(fx.firstName)" hflex="1" maxlength="31"/>
+					</cell>
+
+				</row>
+				<row>
+					<cell >Middle Name </cell>
+
+					<cell colspan="2">
+						<textbox value="@bind(fx.middleName)" hflex="1" maxlength="31"/>
+					</cell>
+					<cell >Last Name </cell>
+
+					<cell colspan="2">
+						<textbox value="@bind(fx.lastName)" hflex="1" maxlength="31"/>
+					</cell>
+
+				</row>
+
+				<row>
+					<cell >Print Cheque As </cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.printChequeAs)" hflex="1"/>
+					</cell>
+					<cell >Company Name</cell>
+
+					<cell colspan="2">
+						<textbox value="@bind(fx.companyName)" hflex="1"/>
+					</cell>
+
+				</row>
+				<row>
+				<cell >Phone </cell>
+
+				<cell colspan="2">
+					<textbox value="@bind(fx.phone)" hflex="1"/>
+				</cell>
+				<cell >Alternate Phone </cell>
+
+				<cell colspan="2">
+					<textbox value="@bind(fx.altPhone)" hflex="1"/>
+				</cell>
+				</row>
+				<row>
+					<cell >Address </cell>
+
+					<cell colspan="2">
+						<textbox value="@bind(fx.billAddress1)" hflex="1"/>
+					</cell>
+					<cell >Fax </cell>
+
+					<cell colspan="2">
+						<textbox value="@bind(fx.fax)" hflex="1"/>
+					</cell>
+
+				</row>
+				<row>
+					<cell >Email </cell>
+
+					<cell colspan="2">
+						<textbox value="@bind(fx.email)" hflex="1"/>
+					</cell>
+					<cell >Cc </cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.cC)" hflex="1"/>
+					</cell>
+
+				</row>
+
+				<row>
+					<cell >WebSite </cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.webSite)" hflex="1"/>
+					</cell>
+					<cell >Skype Name </cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.skypeId)" hflex="1"/>
+					</cell>
+
+				</row>
+
+				<row>
+					<cell >Contact </cell>
+
+					<cell colspan="2">
+						<textbox value="@bind(fx.contact)" hflex="1"/>
+					</cell>
+					<cell >Alternate Contact </cell>
+
+					<cell colspan="2">
+						<textbox value="@bind(fx.altContact)" hflex="1"/>
+					</cell>
+
+				</row>
+				<row>
+					<cell >Balance </cell>
+
+					<cell colspan="2">
+						<doublebox value="@bind(fx.balance)" hflex="1" format="###,###,###.00"/>
+					</cell>
+					<cell >Total Balance </cell>
+
+					<cell colspan="2">
+						<doublebox value="@bind(fx.totalBalance)" hflex="1" format="###,###,###.00"/>
+					</cell>
+
+				</row>
+				<row>
+					<cell >Bank Account Name </cell>
+
+					<cell colspan="2">
+						<textbox value="@bind(fx.accountName)" hflex="1" maxlength="31"/>
+					</cell>
+					<cell >Bank Account Number </cell>
+
+					<cell colspan="2">
+						<textbox value="@bind(fx.accountNumber)" hflex="1"/>
+					</cell>
+
+				</row>
+				<row>
+					<cell >Bank Name </cell>
+
+					<cell colspan="2">
+						<textbox value="@bind(fx.bankName)"  hflex="1"/>
+					</cell>
+					<cell >Branch Name </cell>
+
+					<cell colspan="2">
+						<textbox value="@bind(fx.branchName)"  hflex="1" />
+					</cell>
+
+				</row>
+				<row>
+					<cell >IBAN No.</cell>
+
+					<cell colspan="2">
+						<textbox value="@bind(fx.ibanNo)"  hflex="1"/>
+					</cell>
+					
+												<cell sclass="" visible="@bind(vm.compSetting.useVat eq 'Y')">TRN Nos:</cell>
+
+												<cell colspan="2" visible="@bind(vm.compSetting.useVat eq 'Y')" >
+													<textbox value="@bind(fx.vatRegNo)" hflex="1" />
+												</cell>
+												
+											
+					
+
+				</row>
+				<row>
+					<cell >Note </cell>
+					<cell colspan="2">
+						<textbox hflex="1" multiline="true" rows="3"
+							value="@bind(fx.note)" style="color:#008FD2;"></textbox>
+					</cell>
+
+				</row>
+
+
+
+
+
+				<row>
+					<cell>INActive </cell>
+
+					<cell>
+						<checkbox checked="@bind(vm.activeVendor)"></checkbox>
+					</cell>
+
+				</row>
+
+				<row>
+					<cell colspan="8">
+						<hbox pack="center" hflex="1">
+							<button label="Save" onClick="@command('updateVendor')"
+								visible="@bind(vm.canSave)"></button>
+							<button label="Close" onClick="vendorModalDialog.detach()"></button>
+						</hbox>
+					</cell>
+				</row>
+
+			</rows>
+
+		</grid>
+
+	</window>
+</zk>

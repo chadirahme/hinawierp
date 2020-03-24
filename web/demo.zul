@@ -1,0 +1,10 @@
+<?page title="Hinawi Software" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/css/style.css"?>
+<?link rel="stylesheet" type="text/css" href="/css/hstyle.css"?>
+
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout/demotemplate.zul"?>
+
+<zk>
+	<include self="@define(content)" src="contentdemo.zul" style="background-image: url('images/backgroundlogo2.jpg');background-repeat:no-repeat;background-position: center; "/>
+	
+</zk>

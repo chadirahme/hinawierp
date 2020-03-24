@@ -1,0 +1,97 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<vlayout apply="org.zkoss.bind.BindComposer" vflex="1" hflex="1"
+		viewModel="@id('vm') @init('hba.EstimateItemViewModel')">
+		
+		<borderlayout vflex="1" hflex="1">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<label value="BOQ Estimate Items"
+					style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+					
+					
+					
+				<listbox model="@load(vm.lstEstimate)" vflex="1" multiple="true" checkmark="true" selectedItems="@bind(vm.selectedItem)"
+					id="estimateReport" emptyMessage="No data found" hflex="1"
+					width="920px">
+					
+					<listhead menupopup="auto" sizable="true">			
+					<listheader width="50px"/>		
+						<listheader label="Estimate No" width="110px" sort="auto('estimateNo')" />
+						<listheader label="Estimate Name " sort="auto('estimateName')"
+							width="150px" />
+						<listheader label="Customer / Job" sort="auto('customerName')"
+							width="200px" />
+						<listheader label="Industry Type" sort="auto('industryTypeEN')"
+							width="300px" />
+						<listheader label="Item Name" sort="auto('itemName')" width="120px" />
+						<listheader label="Quantity" sort="auto('quantity')"
+							width="100px" />
+						<listheader label="Request Quantity" sort="auto('requestQuantity')"
+							width="120px" />						
+					</listhead>
+					
+					<template name="model">
+						<listitem>	
+						<listcell></listcell>													
+							<listcell>
+								<label value="@bind(each.estimateNo)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.estimateName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.customerName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.industryTypeEN)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.itemName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.quantity)" />
+							</listcell>
+							<listcell>
+							<doublebox value="@bind(each.requestQuantity)" onChange="@command('checkQty',row=each)"></doublebox>
+								
+							</listcell>							
+
+						</listitem>
+					</template>
+					
+					</listbox>
+					
+					<hbox align="right">
+					<label value="Total Estimate: "
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<label value="@load(vm.totalEstimate)"
+						style="color:#2c6f99;text-align: right;font-weight: 
+					bold;"></label>
+					<space></space>
+					
+					<space></space>
+					<label value="Total Item Selected: "
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<label
+						value="@load(vm.totalItemSelected)"
+						style="color:#2c6f99;text-align: right;font-weight: 
+					bold;"></label>
+					<space></space>
+					<label value="Total Requested Quantity: "
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<label
+						value="@load(vm.totalRequestedQuantity)"
+						style="color:#2c6f99;text-align: right;font-weight: 
+					bold;"></label>
+					<space></space>
+				</hbox>
+					
+					</vlayout>
+					</center>
+					</borderlayout>
+					
+		</vlayout>
+		
+		</zk>

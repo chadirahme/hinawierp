@@ -1,0 +1,11 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window id="modalDialog" apply="org.zkoss.bind.BindComposer" mode="highlighted" title="Edit List" border="normal" position="center,center" closable="true"
+viewModel="@id('vm')  @init('timesheet.AutoFillViewModel')"  sizable="true"
+onCancel="modalDialog.detach()" onOK="@command('okCommand')"
+ width="600px" height="550px">
+ 
+ 
+ 
+</window>
+</zk>

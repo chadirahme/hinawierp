@@ -1,0 +1,83 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk xmlns:w="client">
+	<window id="customFieldPopUp" apply="org.zkoss.bind.BindComposer" mode="highlighted" title="Custom Field" border="normal" position="center,center"
+		closable="true" sizable="true" onCancel="customFieldPopUp.detach()"
+		width="20%" height="30%">
+		<borderlayout apply="org.zkoss.bind.BindComposer" id="printId" viewModel="@id('vm') @init('hba.DeliveryCustomField')">
+			<center border="none" autoscroll="true">
+				<vlayout>
+					<panel title="" >
+						<panelchildren>
+							<grid>
+								<columns>
+									<column width="100px"></column>
+									<column width="240px"></column>
+									<column width="10px"></column>
+								</columns>
+								<rows>
+									<row>		
+										<cell>
+											<label value="">Field 1</label>
+										</cell>
+										<cell>
+											<textbox width="225px" value="@bind(vm.field1)"></textbox>
+										</cell>
+									</row>
+									<row>		
+										<cell>
+											<label value="">Field 2</label>
+										</cell>
+										<cell>
+											<textbox width="225px" value="@bind(vm.field2)"></textbox>
+										</cell>
+									</row>
+									<row>		
+										<cell>
+											<label value="">Field 3</label>
+										</cell>
+										<cell>
+											<textbox width="225px" value="@bind(vm.field3)"></textbox>
+										</cell>
+									</row>
+									<row>		
+										<cell>
+											<label value="">Field 4</label>
+										</cell>
+										<cell>
+											<textbox width="225px" value="@bind(vm.field4)"></textbox>
+										</cell>
+									</row>
+									<row>		
+										<cell>
+											<label value="">Field 5</label>
+										</cell>
+										<cell>
+											<textbox width="225px" value="@bind(vm.field5)"></textbox>
+										</cell>
+									</row>
+								</rows>
+							</grid>
+						</panelchildren>
+					</panel>
+					<div hflex="1" style="align:right;valign:top">
+						<grid>
+							<columns>
+								<column></column>
+							</columns>
+							<rows>
+								<row>
+									<cell align="center">
+										<hlayout>
+											<button label="Ok" onClick="@command('addCustomFields',cmp=customFieldPopUp)"></button>
+											<button label="Close" onClick="customFieldPopUp.detach()"></button>
+										</hlayout>
+									</cell>
+								</row>
+							</rows>
+						</grid>
+					</div>
+				</vlayout>
+			</center>
+		</borderlayout>
+	</window>
+</zk>

@@ -1,0 +1,78 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+<?page id="popMain" title="new page title" contentType="text/html;charset=UTF-8" ?>
+<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+
+
+	<window id="workGroupAddEmployeeModalDialog" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Edit Sponsor Info" border="normal" position="center,center"
+		closable="true" viewModel="@id('vm')  @init('hr.editWorkGroupEmployeeAdd')"
+		sizable="true" onCancel="workGroupAddEmployeeModalDialog.detach()" width="500px"
+		height="200px">
+		
+		 <grid >
+			<columns>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="150px"></column>
+			</columns>
+			<rows>
+				<row>
+					<cell>Comapny Name</cell>
+					<cell colspan="2">
+						<textbox value="@bind(vm.selectedCompanyName)" maxlength="31" hflex="1" readonly="true"/>
+					</cell>
+				</row>
+				<row>
+				
+				<cell>Search By</cell>
+				<cell colspan="2">
+				<radiogroup id="imp" selectedItem="@bind(vm.selectedRadio)">
+												<label value="Employee Name"></label>
+												<radio id="Employee_Name" radiogroup="imp" value="B"></radio>
+												<space></space>
+												<space></space>
+												<label value="Employee NO."></label>
+												<radio id="Employee_NO" radiogroup="imp" value="A"></radio>
+												
+											</radiogroup>
+				
+				
+				</cell>
+				</row>
+				
+				
+				<row>
+				<cell>
+			<label value="Employees"></label></cell>
+			<cell colspan="2">
+			<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstSupervisor)" selectedItem="@bind(vm.selectedSupervisor)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.fullName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>	
+			</cell>
+				</row>
+				<!-- <row>
+				
+				<cell>Work Group Name-Arabic</cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.groupNameAR)" hflex="1" />
+					</cell>
+				</row> -->
+			
+			</rows>
+		</grid> 
+				
+				
+				<hbox pack="center" width="500px" >
+							<button label="Save"
+								onClick="@command('saveEmployeeSelected',cmp=workGroupAddEmployeeModalDialog)"
+								visible="true"></button>
+							<button label="Close" onClick="workGroupAddEmployeeModalDialog.detach()"></button>
+						</hbox>
+
+	</window>
+</zk>

@@ -1,0 +1,187 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+	<window id="taskCustomers" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Select Customers" border="normal"
+		position="center,center" closable="true" sizable="true"
+		onCancel="taskCustomers.detach()" width="80%" height="85%">
+
+		<borderlayout apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('company.CustomerContractViewModel',type='customer')">
+			<center autoscroll="true" border="none">
+				<vlayout hflex="1" vflex="1">
+					<hlayout>
+						<panel collapsible="true">
+							<panelchildren>
+								<grid>
+									<columns>
+										<column width="120px"></column>
+										<column width="150px"></column>
+										<column width="150px"></column>
+										<column width="150px"></column>
+										<column width="150px"></column>
+										<column width="150px"></column>
+										<column width="250px"></column>
+										<column width="150px"></column>
+									</columns>
+									<rows>
+										<row>
+
+											<cell>
+												<label value="No. of Records"></label>
+											</cell>
+											<cell>
+												<listbox multiple="false" width="120px" mold="select"
+													model="@load(vm.lstPageSize)" selectedItem="@bind(vm.selectedPageSize)">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item)"></listcell>
+														</listitem>
+													</template>
+
+
+												</listbox>
+											</cell>
+											<cell>
+												<label value="Customer Status"></label>
+											</cell>
+											<cell colspan="2">
+												<listbox multiple="false" hflex="1" mold="select"
+													model="@load(vm.lstStatus)" selectedItem="@bind(vm.selectedStatus)">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item)"></listcell>
+														</listitem>
+													</template>
+												</listbox>
+											</cell>
+																													
+										</row>
+									</rows>
+								</grid>
+							</panelchildren>
+						</panel>
+
+
+					</hlayout>
+					<listbox model="@bind(vm.lstCustomers)" vflex="1" hflex="1"
+						width="900px" mold="paging"
+						selectedItems="@bind(vm.selectedCutomerEntities)" checkmark="true"
+						multiple="true" pageSize="@bind(vm.selectedPageSize)">
+
+						<auxhead sclass="category-center">
+							<auxheader colspan="1" label="" width="50px">
+							</auxheader>
+							
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px" value="@bind(vm.filter.name)"
+									onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px" value="@bind(vm.filter.arname)"
+									onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px" value="@bind(vm.filter.phone)"
+									onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px" value="@bind(vm.filter.fax)"
+									onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px" value="@bind(vm.filter.email)"
+									onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px" value="@bind(vm.filter.contact)"
+									onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px"
+									value="@bind(vm.filter.isActive)" onChange="@command('changeFilter')" />
+							</auxheader>
+						</auxhead>
+						<listhead menupopup="auto" sizable="true">
+							<listheader label="Check" width="60px"/>
+						
+							<listheader label="Name" sort="auto('name')" />
+							<listheader label="Arabic Name" sort="auto('arName')" />
+							<listheader label="Phone" sort="auto('phone')" />
+							<listheader label="Fax" sort="auto('fax')" />
+							<listheader label="Email" sort="auto('email')" />
+							<listheader label="Contact" sort="auto('contact')" />
+							<listheader label="Expired Date" sort="auto('customerContactExpiryDateStr')" />
+							<listheader label="LocalBalance" sort="auto('LocalBalance')" />
+
+						</listhead>
+						<template name="model">
+							<listitem selected="@bind(each.selected)">
+								<listcell ></listcell>
+								
+								<listcell>
+									<label value="@bind(each.name)"
+										style="@bind(each.sublevel eq 0 ? 'color:black;font-weight:bold;' : 'color:green;margin-left:20px') " />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.arName)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.phone)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.fax)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.email)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.contact)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.customerContactExpiryDateStr)" />
+								</listcell>
+								<listcell>
+								<label value="@bind(each.localBalance)"></label>
+								</listcell>
+
+
+							</listitem>
+						</template>
+					</listbox>
+					<hlayout hflex="1" style="text-align: right">
+					<label value="@load(vm.selectCount)"
+							style="color:green;text-align: right;font-weight: bold;"></label>
+							
+						<label value="@load(vm.footer)"
+							style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+						<space></space>
+						<space></space>
+						<space></space>
+						<space></space>
+						
+					</hlayout>
+
+
+
+					<hbox></hbox>
+					<hbox></hbox>
+					<hbox pack="center" hflex="1">
+						<button label="OK"
+							onClick="@command('selectCutomersCommand',cmp=taskCustomers) " />
+						<button label="Close" onClick="taskCustomers.detach()"></button>
+					</hbox>
+				</vlayout>
+
+			</center>
+
+		</borderlayout>
+	</window>
+</zk>

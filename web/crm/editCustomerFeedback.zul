@@ -1,0 +1,393 @@
+<?page title="Cutomer Feed Back" contentType="text/html;charset=UTF-8"?>
+<?page title="Hinawi Online" contentType="text/html;charset=UTF-8"?>
+
+<zk>
+	<style>
+
+		.H1 {
+		font-family:Arial, Helvetica, sans-serif;
+		color:#2c6f99;
+		font-size:16px;
+		font-weight:bold;
+		margin:0 0 11px 0;
+		padding:10px;
+		float:left;
+		width:526px;
+		padding-right:20px;
+		padding-top:6px;
+		}
+
+		.H2
+		{
+		font-size:16px;
+		font-weight:bold;
+		}
+
+		.MyRowHeight tr.z-row td.z-row-inner
+		{
+		height:50px;
+		}
+
+		.z-checkbox-cnt
+		{
+		margin-left:5px;
+		}
+	</style>
+	<window id="customerFeedBackDialog" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Edit Customer Feedback" border="normal"
+		position="center,center" closable="true" sizable="true"
+		onCancel="customerFeedBackDialog.detach()" width="45%" height="85%">
+		<borderlayout apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('home.CustomerFeedback')"
+			validationMessages="@id('vmsgs')">
+			<center autoscroll="true" border="none">
+				<vlayout>
+					<grid width="100%">
+						<columns>
+							<column align="left" width="150px" />
+							<column width="570px" />
+							
+						</columns>
+						<rows>
+							<row height="40px">
+								<cell sclass="">Map To Customer*:</cell>
+								<cell>
+									<hbox>
+										<vbox>
+											<combobox constraint="no empty:Select An Existing Customer Type' !!!"
+												height="20px" width="300px" autodrop="true" mold="rounded"
+												buttonVisible="true" readonly="true" value="Client Type"
+												model="@load(vm.listClientType)" selectedItem="@bind(vm.selectedClientType)">
+												<template name="model" var="option">
+													<comboitem label="${option}" />
+												</template>
+											</combobox>
+											<combobox constraint="no empty:Select An Existing 'Customer Name' !!!"
+												height="20px" width="300px" autodrop="true" mold="rounded"
+												buttonVisible="true" model="@load(vm.lstCustomerJob)"
+												selectedItem="@bind(vm.lstSelectedCustomerJob)">
+												<template name="model" var="option">
+													<comboitem label="${option.fullName}"
+														description="@bind(option.listType)" />
+												</template>
+											</combobox>
+										</vbox>
+										<a href="" style="color:blue;text-decoration:underline;cursor: hand;"
+											onClick="@command('customerInfoInEachEditFeedBack')" width="150px">Info
+										</a>
+									</hbox>
+								</cell>
+							</row>
+							<row>
+								<cell sclass="row-title" colspan="2">
+									<label value="Company information :" zclass="H2"></label>
+									<space></space>
+									<space></space>
+									<label value="( * ) fields are mandatory." />
+								</cell>
+							</row>
+							<row height="40px">
+								<cell sclass="row-title">
+									FeedBack Number  :
+									<label style="color:red" value="*"></label>
+								</cell>
+								<cell>
+									<textbox readonly="true"
+										height="20px" width="300px" value="@bind(vm.feedBackNumber)"
+										maxlength="50" />
+								</cell>
+							</row>
+							<row height="40px">
+								<cell sclass="row-title">
+									Company Name :
+									<label style="color:red" value="*"></label>
+								</cell>
+								<cell>
+									<textbox constraint="no empty: Please enter Company Name"
+										height="20px" width="300px" value="@bind(vm.companyName)"
+										maxlength="50" />
+								</cell>
+							</row>
+							<row height="40px">
+								<cell sclass="row-title">
+									Contact person :
+									<span style="color:red">*</span>
+								</cell>
+								<cell>
+									<hlayout>
+										<listbox rows="1" width="50px" mold="select" height="20px"
+											model="@load(vm.lstContactPersonIntial)" selectedItem="@bind(vm.selectedContactPersonIntial)">
+											<template name="model" var="item" status="s">
+												<listitem>
+													<listcell label="@bind(item.enDescription)" />
+												</listitem>
+											</template>
+										</listbox>
+										<textbox constraint="no empty: Please enter Contact person"
+											height="20px" width="250px" value="@bind(vm.contactPersonName)"
+											maxlength="50" />
+									</hlayout>
+
+								</cell>
+							</row>
+
+							<!-- <row height="40px"> <cell sclass="row-title"> Position : <span 
+								style="color:red">*</span> </cell> <cell> <vlayout> <listbox mold="select" 
+								width="300px" model="@load(vm.lstPosition)" selectedItem="@bind(vm.selectedPosition)"> 
+								<template name="model" var="item" status="s"> <listitem> <listcell label="@bind(item.enDescription)" 
+								/> </listitem> </template> </listbox> <textbox visible="@bind(vm.selectedPosition.positionname 
+								eq 'Other')" value="@bind(vm.otherPosition)" width="300px"></textbox> </vlayout> 
+								</cell> </row> <row height="40px"> <cell sclass="row-title"> Country : <span 
+								style="color:red">*</span> </cell> <cell> <listbox mold="select" model="@load(vm.lstCountry)" 
+								width="300px" selectedItem="@bind(vm.selectedCountry)"> <template name="model" 
+								var="item" status="s"> <listitem> <listcell label="@bind(item.enDescription)" 
+								/> </listitem> </template> </listbox> <textbox visible="@bind(vm.selectedPosition.positionname 
+								eq 'Other')" value="@bind(vm.otherPosition)" width="300px"></textbox> </cell> 
+								</row> <row height="40px"> <cell sclass="row-title"> City : <span style="color:red">*</span> 
+								</cell> <cell> <listbox mold="select" model="@load(vm.lstCity)" width="300px" 
+								selectedItem="@bind(vm.selectedCity)"> <template name="model" var="item" 
+								status="s"> <listitem> <listcell label="@bind(item.enDescription)" /> </listitem> 
+								</template> </listbox> <textbox visible="@bind(vm.selectedPosition.positionname 
+								eq 'Other')" value="@bind(vm.otherPosition)" width="300px"></textbox> </cell> 
+								</row> -->
+
+
+
+							<row>
+								<cell sclass="row-title">
+									Mobile No. :
+
+								</cell>
+								<cell>
+									<vlayout>
+										<hlayout>
+											<textbox width="250px" height="20px" value="@bind(vm.mobile1)"
+												maxlength="15" />
+										</hlayout>
+										<!-- <hlayout> <textbox width="50px" value="@bind(vm.mobileAreaCode2)" 
+											readonly="false" /> <textbox width="250px" value="@bind(vm.mobile2)" /> </hlayout> -->
+										<!-- <span class="fs11">(You can fill one of these)</span> -->
+									</vlayout>
+								</cell>
+							</row>
+
+							<row>
+								<cell sclass="row-title">
+									Telephone No.:
+
+								</cell>
+								<cell>
+									<vlayout>
+										<hlayout>
+											<textbox width="250px" height="20px" value="@bind(vm.telphone1)"
+												maxlength="15" />
+										</hlayout>
+										<!-- <hlayout> <textbox width="50px" value="@bind(vm.telphoneAreaCode2)" 
+											readonly="false" maxlength="6" /> <textbox width="250px" value="@bind(vm.telphone2)" 
+											maxlength="10" /> </hlayout> <span class="fs11">(You can fill one of these)</span> -->
+									</vlayout>
+
+								</cell>
+							</row>
+
+
+							<row height="40px">
+								<cell sclass="row-title">
+									Email :
+									<span style="color:red">*</span>
+								</cell>
+								<cell>
+									<textbox
+										constraint="/^[A-Za-z0-9_\-\.]+@[A-Za-z0-9_\-\.]{2,}\.[A-Za-z0-9]{2,}(\.[A-Za-z0-9])?/: Please enter a valid e-mail address"
+										height="20px" width="300px" value="@bind(vm.email)" />
+								</cell>
+
+							</row>
+
+							<row height="40px">
+								<cell sclass="row-title">Website :</cell>
+								<cell>
+									<vlayout>
+										<hlayout>
+											<label value="http://"></label>
+											<textbox width="280px" value="@bind(vm.website)"
+												height="20px" />
+											<label value="(i.e : www.xyz.com)"></label>
+										</hlayout>
+
+									</vlayout>
+								</cell>
+
+							</row>
+
+							<row>
+								<cell sclass="row-title" colspan="2">
+									<label value="Feed Back information :" zclass="H2"></label>
+									<space></space>
+									<space></space>
+									<label value="( * ) fields are mandatory." />
+								</cell>
+							</row>
+							<row>
+							</row>
+
+							<row height="40px">
+								<cell sclass="row-title">
+									Feedback Type :
+									<span style="color:red">*</span>
+								</cell>
+								<cell colspan="1">
+									<listbox model="@load(vm.selectedFeedBackType)" 
+										width="300px" multiple="true" >
+										<listhead sizable="true">
+											<listheader label="Name" width="200px" />
+										</listhead>
+										<template name="model" var="item">
+											<listitem>
+												<listcell>
+													<label value="@bind(item.enDescription)" />
+												</listcell>
+											</listitem>
+										</template>
+									</listbox>
+								</cell>
+							</row>
+							
+							<row height="40px">
+								<cell sclass="row-title">
+									Task Details :
+									
+								</cell>
+								<cell colspan="2">
+									<listbox model="@load(vm.taskRelationlist)" 
+										multiple="true" >
+										<listhead sizable="true">
+											<listheader label="Task Number" width="200px" />
+											<listheader label=" Task Status" width="150px" />
+											<listheader label=" Status Update By" width="150px" />
+										</listhead>
+										<template name="model" var="item">
+											<listitem>
+												<listcell style="@bind(item.taskStatus eq 'Done' ? 'background:#A3FFA3;' : item.taskStatus eq 'Closed' ? 'background:#A3FFA3;' : 'background:#FF8B8B;')">
+													<label value="@bind(item.taskNo)" />
+													<button label="view" onClick="@command('openTask', taskId=item.taskID)"/>
+												</listcell>
+												<listcell>
+													<label value="@bind(item.taskStatus)" />
+												</listcell>
+													<listcell>
+													<label value="@bind(item.userName)" />
+												</listcell>
+											</listitem>
+										</template>
+									</listbox>
+								</cell>
+							</row>
+
+
+							<row height="40px">
+								<cell sclass="row-title">
+									Software Type :
+									<!-- <span style="color:red">*</span> -->
+								</cell>
+								<cell colspan="1">
+									<listbox mold="select" model="@load(vm.lstSoftwareType)"
+										width="300px" height="30px" selectedItem="@bind(vm.selectedSoftwareType)">
+										<template name="model" var="item" status="s">
+											<listitem>
+												<listcell label="@bind(item)" />
+											</listitem>
+										</template>
+									</listbox>
+								</cell>
+							</row>
+
+
+							<row>
+								<cell colspan="2" align="left">
+									<label value="Instructions (Explain in Memo)" zclass="H2"></label>
+								</cell>
+							</row>
+
+							<row>
+								<cell colspan="2" align="left">
+									<textbox height="80px" hflex="1" multiline="true" readonly="true"
+										value="@bind(vm.instruction)"></textbox>
+								</cell>
+							</row>
+
+
+							<row>
+								<cell colspan="2" align="left">
+									<label value="Memo" zclass="H2"></label>
+								</cell>
+							</row>
+
+							<row>
+								<cell colspan="2" align="left">
+									<textbox height="80px" hflex="1" multiline="true"
+										value="@bind(vm.memo)"></textbox>
+								</cell>
+							</row>
+
+
+							<row>
+								<cell colspan="2" align="left">
+									<label value="Attachments" zclass="H2"></label>
+								</cell>
+							</row>
+							<row>
+								<cell colspan="2">
+									<vbox id="uploadWindow1">
+										<listbox model="@bind(vm.lstAtt)" height="120px"
+											emptyMessage="No data found" selectedItem="@bind(vm.selectedAttchemnets)"
+											mold="paging">
+
+											<listhead menupopup="auto" sizable="true">
+												<listheader label="Delete" width="50px" />
+												<listheader label="Attachments" />
+											</listhead>
+											<template name="model">
+												<listitem>
+													<listcell>
+														<button image="/images/cross.png"
+															onClick="@command('deleteFromAttchamentList', row=each)" />
+													</listcell>
+													<listcell onDoubleClick="@command('download', row=each)">
+														<label value="@bind(each.filename)" />
+													</listcell>
+												</listitem>
+											</template>
+										</listbox>
+										<button label="Choose File" upload="true"
+											onUpload="@command('uploadFile',attId=4)"></button>
+									</vbox>
+								</cell>
+							</row>
+							<row>
+								<cell colspan="4" align="center">
+									<hlayout>
+										<button onClick="@command('saveCustomerFeedbackFromEdit',cmp=customerFeedBackDialog)" visible="@bind(vm.canSave)"
+											label="Save" />
+										<button label="Close" onClick="customerFeedBackDialog.detach()"></button>
+									</hlayout>
+								</cell>
+							</row>
+
+							<!-- <row> <cell colspan="4" align="center"> <label value="@bind(vmsgs['lastnameContentError'])" 
+								style="color: red;" /> </cell> </row> -->
+
+						</rows>
+					</grid>
+
+
+
+
+
+				</vlayout>
+			</center>
+
+		</borderlayout>
+	</window>
+
+</zk>

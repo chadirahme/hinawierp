@@ -1,0 +1,57 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="Companies Setup" border="normal">
+
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('admin.HomeViewModel')" vflex="1">
+	 
+	 <button label="Add New Company" onClick="@command('addNewCommand')"></button>
+<grid  model="@load(vm.companyList)" height="600px">
+<columns>             	
+                <column width="150px">Company</column>
+                <column width="150px">Contact</column>
+                <column width="150px">Telephone</column>
+                <column width="150px">Mobile</column>
+                <column width="150px">Email</column>    
+                <column width="150px">No. of Users</column>           
+                  <column width="150px">Use Merged Database</column>                            
+                <column width="100px">Save</column>
+                <column width="100px">Delete</column>
+            </columns>
+                   
+             <template name="model">
+              <row>              			                   
+                    <textbox
+                        value="@bind(each.companyName)" />
+                    <textbox
+                        value="@bind(each.contactname)" />
+                         <textbox
+                        value="@bind(each.telephone)" />
+                         <textbox
+                        value="@bind(each.mobile)" />
+                     <textbox
+                        value="@bind(each.email)" constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address (example@example.com)"/>
+                        
+                         <intbox
+                        value="@bind(each.maxNoUsers)" />
+                        
+                            <checkbox  checked="@bind(each.mergeChecked)" />
+                                          
+                             <button
+                          label="Save"
+                            onClick="@command('saveCommand' ,row=each)" />
+                            
+                            <button
+                          image="/images/cross.png" width="36px"
+                            onClick="@command('deleteCommand' ,row=each)" />
+                   
+                </row>
+             </template>
+            
+</grid>
+
+</vlayout>
+
+</window>
+</zk>

@@ -1,0 +1,154 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/css/style.css"?>
+<?link rel="stylesheet" type="text/css" href="/css/hstyle.css"?>
+
+
+
+<zk>
+<window id="SalaryDialog" apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+ mode="highlighted" title="Salary Sheet Draft" border="normal" position="center,center" closable="true"
+viewModel="@id('vm')  @init('payroll.DraftSalarySheetViewModel',SalaryFlag=arg.SalaryFlag ,compKey=arg.compKey,selectedDraftCompany=arg.selectedDraftCompany)"  sizable="true"
+onCancel="SalaryDialog.detach()" onOK="@command('searchCommand')"
+ width="1150px" height="600px">
+
+
+<vlayout vflex="1">	 		
+	 
+	  <grid >
+			<columns>		
+			<column  width="130px"></column>
+			<column  width="120px"></column>
+			<column  width="100px"></column>
+			<column  width="150px"></column>
+			<column  width="130px"></column>
+			<column  width="150px"></column>
+			<column  width="150px"></column>		
+			</columns>
+			<rows>
+			
+			<row>
+			<label value="Salary For the Month"></label>
+			<listbox multiple="false" mold="select" model="@load(vm.lstMonths)"
+								selectedIndex="@bind(vm.selectedMonth)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+							
+							<listbox multiple="false" mold="select" model="@load(vm.lstYears)"
+								selectedItem="@bind(vm.selectedYear)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+							
+							<cell>
+							<hbox>
+							<label value="Date"></label>
+							<datebox value="@bind(vm.salaryDate)" format="dd/MM/yyyy" ></datebox>
+							</hbox>
+							</cell>
+							
+							<cell>
+							<button label="Set Priority" onClick="@command('openSetPriorityCommand')"></button>
+							</cell>
+			
+			</row>
+			
+			<row>
+			<label value="Company"></label>
+			<cell colspan="2">
+			<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enCompanyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			</cell>
+			
+			<button label="Filter Employee" onClick="@command('filterCommand')"></button>
+			<button label="View" onClick="@command('viewSalaryDraftCommand')"></button>
+			<label value="Total No of Employees"></label>
+			<intbox readonly="true" value="@bind(vm.totalNoofEmployee)"></intbox>
+			</row>
+			</rows>
+			
+			</grid>
+			
+				<listbox  model="@bind(vm.lstEmployeeDraftSalary)"
+						hflex="1" vflex="1" emptyMessage="No data found">
+						<listhead menupopup="auto" sizable="true">
+							<listheader label="Employee No." width="100px" sort="auto('empNo')" />
+							<listheader label="Name" sort="auto('enFullName')" width="200px" />
+							<listheader label="Position" sort="auto('position')" width="150px" />
+							<listheader width="200px" label="Department" sort="auto('department')" />						
+							<listheader width="130px" label="Total No. of Days" sort="auto('totalDays')" />
+							<listheader width="100px" label="Present" sort="auto('totalPresentDays')" />						
+							<listheader width="100px" label="Leave" sort="auto('totalLeaveDays')" />
+							<listheader width="100px" label="Basic Salary"></listheader>
+							<listheader width="100px" label="Allowances"></listheader>
+							<listheader width="100px" label="Total Salary"></listheader>						
+							<listheader width="100px" label="Over Time"></listheader>
+							<listheader width="100px" label="Net to Pay"></listheader>
+						</listhead>
+						
+							<template name="model">
+							<listitem>
+								<listcell label="@bind(each.empNo)">
+									
+								</listcell>
+								<listcell label="@bind(each.enFullName)">									
+								</listcell>
+								<listcell label="@bind(each.position)">									
+								</listcell>
+								<listcell label="@bind(each.department)">									
+								</listcell>
+								<listcell label="@bind(each.totalDays)">									
+								</listcell>
+								<listcell label="@bind(each.totalPresentDays)">									
+								</listcell>
+								<listcell label="@bind(each.totalLeaveDays)">
+									
+								</listcell>
+								<listcell label="@bind(each.basicSalary)"></listcell>
+								<listcell label="@bind(each.totalAllowance)"></listcell>
+								<listcell label="@bind(each.totalSalary)"></listcell>
+								<listcell label="@bind(each.otAmount)"></listcell>
+								<listcell label="@bind(each.netToPay)"></listcell>
+							</listitem>
+						</template>
+						
+						</listbox>
+			
+		
+		
+				<hbox hflex="1" pack="center">
+				<grid>
+				<columns>
+				<column width="250px"/>
+				<column width="250px"/>
+				<column width="250px"/>
+				<column hflex="1"/>				
+				</columns>
+				<rows>
+				<row>
+				<label value="@bind(vm.lastSheetCreated)"></label>
+				<label value="@bind(vm.lastSheetApproved)"></label>
+				<label value="@bind(vm.lastSheetPaid)"></label>
+				<label value="@bind(vm.salaryCalculation)"></label>
+				</row>
+				</rows>
+				</grid>
+			
+						</hbox>
+						
+						
+	 </vlayout>
+	 </window>
+</zk>

@@ -1,0 +1,220 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<!-- <style>
+
+ .z-intbox-disd,  .z-intbox-disd * { 
+ color: #A0522D !important;
+ opacity: 1; 
+background-color: #FFFFFF;
+font-weight:bold;
+ }
+</style> -->
+
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('hr.DefaultSetupViewModel')">
+		<center autoscroll="true" border="none">
+
+			<vlayout hflex="1" >
+
+				<hlayout>
+					<label value="Company"></label>
+					<listbox multiple="false" width="200px"
+						mold="select" model="@load(vm.lstComapnies)"
+						selectedItem="@bind(vm.selectedCompany)">
+						<template name="model" var="item">
+							<listitem>
+								<listcell
+									label="@load(item.enCompanyName)">
+								</listcell>
+							</listitem>
+						</template>
+					</listbox>
+				
+				</hlayout>
+
+
+				<tabbox>
+					<tabs>
+						<tab label="Salaries" ></tab>
+						<tab label="Leaves"></tab>
+						<tab label="Absence &amp; EOS"></tab>
+					</tabs>
+
+				<tabpanels>
+
+				<tabpanel height="600px">
+				<vlayout>
+				
+				<label value="Select the Salary Items you want to Setup" style="color:blue;text-decoration:underline;"></label>
+				<label style="color:blue;" value=" (If the column 'Is Setup Done' is Yes, user can change the setup from Desktop under File-->Settings-->Advanced Basic Salary and Allowances and Select Salary Item)"></label>
+				
+				<separator height="5px"></separator>
+				<hbox>
+				<label value="Effective Date"></label>
+				<datebox value="@bind(vm.salaryEffDate)" format="dd/MM/yyyy"></datebox>
+				<label style="color:gray;" value="(Items that Grayed out are already setup. To change the setup go to Advanced.)"></label>
+				</hbox>
+				
+				<separator height="5px"></separator>
+				
+				<grid model="@load(vm.lstSalaries)" height="500px">
+				<columns sizable="true">
+				<column label="" width="50px"></column>
+				<column label="Salary Item" width="200px"></column>
+				<column label="Pension" width="100px"></column>
+				<column width="120px">
+				<vlayout>
+				<label value="Pension Employee"></label>
+				<label value="(Locals)%"></label>
+				</vlayout>
+				</column>
+				<column width="120px">
+				<vlayout>
+				<label value="Pension Company"></label>
+				<label value="(Locals)%"></label>
+				</vlayout>
+				</column>						
+				<column label="Minimum" width="100px"></column>
+				<column label="Maximum" width="100px"></column>
+				<column label="Is Setup Done" width="120px"></column>
+				<column label="Changed From Advanced Setup"></column>
+				
+				</columns>
+				
+				<template name="model">
+				<row style="@bind(each.headItem eq true ? 'background:#99FF99;' :  each.hasSetup ? 'background:#DCDCDC;' : '')">
+				
+				<cell>
+				<checkbox checked="@bind(each.editSalary)" onCheck="@command('editSalaryCommand',row=each)" if="${!each.headItem}" disabled="@bind(each.hasSetup)"></checkbox>
+				</cell>
+								
+				<cell colspan="7"  if="${each.headItem}">
+				<label value="@load(each.salaryItem)"></label>
+				</cell>
+				
+				<cell colspan="1"  if="${!each.headItem}">
+				<label value="@load(each.salaryItem)"></label>
+				</cell>
+				
+				
+				
+				<cell>
+				<checkbox checked="@bind(each.editPension)" onCheck="@command('changePensionCommand',row=each)" if="${!each.headItem}" disabled="@bind(each.hasSetup || each.rowDisable)"></checkbox>
+				</cell>
+				
+				<intbox value="@bind(each.pensionEmployee)" if="${!each.headItem}" disabled="@bind(!each.editPension || each.rowDisable)" ></intbox>
+				<intbox value="@bind(each.pensionCompany)" if="${!each.headItem}" disabled="@bind(!each.editPension || each.rowDisable)"></intbox>
+				
+				<intbox value="@bind(each.minimum)" onChange="@command('changeMinCommand',row=each)" if="${!each.headItem}" disabled="@bind(each.hasSetup || each.rowDisable)"></intbox>
+				<intbox value="@bind(each.maximum)" onChange="@command('changeMaxCommand',row=each)" if="${!each.headItem}" disabled="@bind(each.hasSetup || each.rowDisable)"></intbox>
+				
+				<label value="@bind(each.setupDone)" if="${!each.headItem}"></label>
+				
+				<label value="@bind(each.changeFromAdvancedSetup)" if="${!each.headItem}"></label>
+				</row>
+				</template>
+				
+				</grid>
+				
+				</vlayout>
+				
+				</tabpanel>
+				
+				<tabpanel>
+				<vlayout>
+				<label value="Select the Leaves you want to Setup" style="color:blue;text-decoration:underline;"></label>
+				<label style="color:blue;" value=" (If the column 'Is Setup Done' is Yes, user can change the setup from Desktop under File-->Settings-->Advanced Basic Salary and Allowances and Select Salary Item)"></label>
+				<separator height="5px"></separator>
+				<hbox>
+				<label value="Effective Date"></label>
+				<datebox value="@bind(vm.leaveEffDate)" format="dd/MM/yyyy"></datebox>
+				<label style="color:gray;" value="(Items that Grayed out are already setup. To change the setup go to Advanced.)"></label>
+				</hbox>
+				
+				<separator height="5px"></separator>
+				
+				<grid model="@load(vm.lstLeaves)" height="400px">
+				<columns sizable="true">
+				<column label="" width="50px"></column>
+				<column label="Leave Type" width="220px"></column>
+				<column label="Days" width="100px"></column>				
+				<column label="Is Setup Done" width="150px"></column>		
+				<column label="Changed From Advanced Setup"></column>						
+				</columns>
+				
+				<template name="model">
+				<row style="@bind(each.hasSetup ? 'background:#DCDCDC;' : '')">
+				
+				<cell>
+				<checkbox checked="@bind(each.editSalary)" disabled="@bind(each.hasSetup)"></checkbox>
+				</cell>
+												
+				<cell>
+				<label value="@load(each.leaveType)"></label>
+				</cell>
+				
+				<intbox hflex="1" value="@bind(each.noOfDays)" disabled="@bind(each.hasSetup)" ></intbox>
+				
+				<label value="@bind(each.setupDone)" ></label>
+				<label value="@bind(each.changeFromAdvancedSetup)" if="${!each.headItem}"></label>
+				</row>
+				</template>
+				
+				</grid>
+				
+				</vlayout>
+				
+				</tabpanel>
+				
+				<tabpanel>
+				<vlayout>
+				<label value="Absence &amp; EOS Setup (Setup is reading from Desktop Application)" style="color:blue;text-decoration:underline;"></label>
+				<label style="color:blue;" value=" (If the column 'Is Setup Done' is Yes, user can change the setup from Desktop under File-->Settings-->Advanced Basic Salary and Allowances and Select Salary Item)"></label>
+				<separator height="5px"></separator>
+				<hbox>
+				<label value="Effective Date"></label>
+				<datebox value="@bind(vm.eosEffDate)" format="dd/MM/yyyy"></datebox>
+				<label style="color:gray;" value="(Items that Grayed out are already setup. To change the setup go to Advanced.)"></label>
+				</hbox>
+				
+				<separator height="5px"></separator>
+				
+				<grid model="@load(vm.lstActivity)" height="400px">
+				<columns sizable="true">
+				<column label="" width="50px"></column>
+				<column label="Activity" width="220px"></column>						
+				<column label="Is Setup Done" width="150px"></column>								
+				</columns>
+				
+				<template name="model">
+				<row style="@bind(each.hasSetup ? 'background:#DCDCDC;' : '')">
+				
+				<cell>
+				<checkbox checked="@bind(each.editSalary)" disabled="@bind(each.hasSetup)"></checkbox>
+				</cell>
+												
+				<cell>
+				<label value="@load(each.leaveType)"></label>
+				</cell>
+											
+				<label value="@bind(each.setupDone)" ></label>
+				</row>
+				</template>
+				
+				</grid>
+				
+				</vlayout>
+				
+				</tabpanel>
+				
+				</tabpanels>
+			</tabbox>
+			
+			<hbox pack="center" hflex="1" >
+			<button label="Save" onClick="@command('saveCommand')" visible="@bind(vm.companyRole.canAdd)"></button>
+			</hbox>
+			</vlayout>
+
+		</center>
+	</borderlayout>
+</zk>

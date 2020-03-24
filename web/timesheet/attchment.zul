@@ -1,0 +1,66 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window id="modalDialog" apply="org.zkoss.bind.BindComposer" mode="highlighted" title="Timesheet Attachment" 
+border="normal" position="center,center" closable="true"
+viewModel="@id('vm')  @init('timesheet.AttachmentViewModel')"  sizable="true"
+onCancel="modalDialog.detach()" onOK="@command('okCommand')"
+ width="600px" height="350px">
+ 
+ <grid>
+ <columns>
+ <column></column>
+ <column></column>
+ </columns>
+ <rows>
+ <row>
+ <label value="Select file:"></label>
+  <button label="Choose File" upload="true,maxsize=-1" visible="true"
+	onUpload="@command('attachFileCommand')" ></button>
+ </row>
+ 
+ <row>
+ <cell colspan="2">
+ <listbox model="@bind(vm.row.listOfattchments)" height="220px"
+		emptyMessage="No Attachment found" 
+				mold="paging">
+
+										<listhead menupopup="auto" sizable="true">
+											<listheader label="Delete" width="50px" />
+											<listheader label="Attachments" />
+										 <listheader label="View" width="50px" />
+										</listhead>
+										<template name="model">
+											<listitem>
+												<listcell>
+													<button image="/images/cross.png"
+														onClick="@command('deleteFromAttchamentList', row=each)" />
+												</listcell>
+												<listcell>
+													<label value="@bind(each.filename)" />
+												</listcell>
+												<listcell>
+									<image src="/images/downarrow.png" width="50px;" height="30px" 
+									onClick="@command('downloadFileCommand',row=each)"></image>  
+												</listcell>
+											</listitem>
+										</template>
+									</listbox>
+ 
+ </cell>
+ </row>
+ 
+ <row>
+<cell colspan="2">
+<hbox  pack="center" hflex="1">	
+<button label="OK"  onClick="@command('okCommand')"></button>
+<button label="Close" onClick="@command('okCommand')"></button>
+</hbox>	
+</cell>
+</row>
+
+ </rows>
+ </grid>
+ 
+ 
+</window>
+</zk>

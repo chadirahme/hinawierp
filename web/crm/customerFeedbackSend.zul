@@ -1,0 +1,551 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+	<style dynamic="true">
+		.savedTab .z-tab-text {
+		color:red;
+		}
+	</style>
+
+	<zscript>
+		void savedTabStyle(Tab t) {
+		t.setSclass("savedTab");
+		t.invalidate();
+		}
+	</zscript>
+	<borderlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm') @init('home.CustomerFeebackSend',type='customer')">
+		<center autoscroll="true" border="none">
+			<vlayout style="overflow:auto">
+				
+				<hlayout>
+					<panel collapsible="true">
+						<panelchildren>
+							<grid>
+								<columns>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+								</columns>
+								<rows>
+									<row>
+
+										<cell>
+											<label value="No. of Records"></label>
+										</cell>
+										<cell>
+											<listbox multiple="false" width="120px" mold="select"
+												model="@load(vm.lstAllPageSize)" selectedItem="@bind(vm.selectedAllPageSize)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item)"></listcell>
+													</listitem>
+												</template>
+
+
+											</listbox>
+										</cell>
+									</row>
+									<row>
+										<cell>
+											<button label="View E-mails" onLongOp="@command('searchFeedBackSent')" id="btn1"
+												visible="true"></button>
+										</cell>
+										<cell>
+											<button label="New E-mail " onClick="@command('AddCustomerFeedback')"
+												visible="@bind(vm.companyRole.canAdd)"></button>
+										</cell>
+										<cell>
+											<button label="Reset" onClick="@command('resetCustomerFeedBackSent')"
+												visible="true"></button>
+										</cell>
+										<cell visible="@bind(vm.companyRole.canAdd)">
+											<a style="color:#0000FF;text-align:left" onClick="@command('setUpEmailSignature')">Set Up
+												Signature.
+											</a>
+										</cell>
+									</row>
+									<!-- <row> <cell> <label value="Sort By"></label> </cell> <cell> 
+										<listbox multiple="false" width="120px" mold="select" model="@load(vm.lstAllPageSize)" 
+										selectedItem="@bind(vm.selectedAllPageSize)"> <template name="model" var="item"> 
+										<listitem> <listcell label="@load(item)"></listcell> </listitem> </template> 
+										</listbox> </cell> </row> -->
+								</rows>
+							</grid>
+						</panelchildren>
+					</panel>
+
+
+				</hlayout>
+
+				<tabbox id="tb" vflex="1" width="1500px">
+					<tabs id="tabs" vflex="1" >
+						<tab id="Sent" label="Sent E-mails" onSelect='savedTabStyle(self);'
+							vflex="1" hflex="1" />
+						<tab id="Scheduled" label="Scheduled E-mails" onSelect='savedTabStyle(self);'
+							vflex="1"  />
+						<tab id="Draft" label="Draft E-mails" onSelect='savedTabStyle(self);'
+							vflex="1" hflex="1" />
+					</tabs>
+					<tabpanels>
+						<tabpanel vflex="1">
+							<listbox model="@bind(vm.lstCustomerFeedback)" height="400px"
+								 selectedItem="@bind(vm.selectedCustomerFeedBack)"
+								mold="paging" emptyMessage="No data found">
+
+								<auxhead sclass="category-center">
+									<auxheader colspan="1" label="" width="50px">
+									</auxheader>
+
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" hflex="=1"
+											value="@bind(vm.filter.feedbackNUmber)" onChange="@command('changeFilter')" />
+									</auxheader>
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" hflex="=1"
+											value="@bind(vm.filter.createdDateStr)" onChange="@command('changeFilter')" />
+									</auxheader>
+
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" hflex="=1"
+											value="@bind(vm.filter.modifeldDateStr)" onChange="@command('changeFilter')" />
+									</auxheader>
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" hflex="=1"
+											value="@bind(vm.filter.sentFromEmail)" onChange="@command('changeFilter')" />
+									</auxheader>
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" hflex="=1"
+											value="@bind(vm.sentEmailSearch)" onChange="@command('searchSources',cmp=vm.sentEmailSearch,type='SentEmails')" />
+
+									</auxheader>
+
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" hflex="=1"
+											value="@bind(vm.filter.subject)" onChange="@command('changeFilter')" />
+									</auxheader>
+									
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" hflex="=1"
+											value="@bind(vm.sourceSerach)" onChange="@command('searchSources',cmp=vm.sourceSerach,type='sourceType')" />
+									</auxheader>
+
+								</auxhead>
+								<listhead menupopup="auto" sizable="true">
+									<listheader label="Edit" width="60px" />
+									<listheader label="Mail No." sort="auto('feedbackNUmber')"
+										width="80px" />
+									<listheader label="Created Date" sort="auto('createdDateStr')"
+										width="120px" />
+									<listheader label="Modified Date" sort="auto('modifeldDateStr')"
+										width="150px" />
+
+									<listheader label="Sent From" sort="auto('sentFromEmail')"
+										width="130px" />
+
+									<listheader label="Sent To" sort="auto('subject')"
+										width="300px" />
+
+									<listheader label="Subject" sort="auto('subject')" />
+									
+									<listheader label="Source Names" sort="auto('subject')" />
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell>
+											<button image="/images/rowedit.png"
+												onClick="@command('editCustomerFeedBack', row=each)"
+												autodisable="self" visible="@bind(vm.companyRole.canModify)" />
+										</listcell>
+										<listcell>
+											<label value="@bind(each.feedbackNUmber)" />
+										</listcell>
+										<listcell>
+											<label value="@bind(each.createdDateStr)" />
+										</listcell>
+										<listcell>
+											<label value="@bind(each.modifeldDateStr)" />
+										</listcell>
+										<listcell>
+											<label value="@bind(each.sentFromEmail)" />
+										</listcell>
+										<listcell>
+											<listbox model="@bind(each.listOfSentEmails)" height="100px"
+												hflex="1">
+
+												<listhead menupopup="auto" sizable="true">
+													<listheader label="Type" width="40px" />
+													<listheader label="E-mail" />
+												</listhead>
+												<template name="model">
+													<listitem>
+														<listcell>
+															<label value="@bind(each.emailType)" />
+														</listcell>
+														<listcell>
+															<label value="@bind(each.email)" />
+														</listcell>
+													</listitem>
+												</template>
+											</listbox>
+										</listcell>
+										<listcell>
+											<label value="@bind(each.subject)" />
+										</listcell>
+										<listcell>
+												<listbox model="@bind(each.sourcesLIst)" height="100px"
+												hflex="1">
+												<listhead menupopup="auto" sizable="true">
+													<listheader label="Type" width="100px" />
+													<listheader label="Name" />
+												</listhead>
+												<template name="model">
+													<listitem>
+														<listcell>
+															<label value="@bind(each.sourceType)" />
+														</listcell>
+														<listcell>
+															<label value="@bind(each.custName)" />
+														</listcell>
+													</listitem>
+												</template>
+											</listbox>
+											</listcell>
+
+									</listitem>
+								</template>
+							</listbox>
+
+							<hlayout hflex="1" style="text-align: right">
+								<label value="@load(vm.footer)"
+									style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+								<space></space>
+								<space></space>
+								<space></space>
+								<space></space>
+							</hlayout>
+						</tabpanel>
+						
+						<tabpanel vflex="1" width="1700px">
+							<listbox model="@bind(vm.lstScheduledEmail)" vflex="1"
+								hflex="max" selectedItem="@bind(vm.selectedScheduledEmail)"
+								mold="paging" emptyMessage="No Yet Ready">
+
+								<auxhead sclass="category-center">
+									<auxheader colspan="1" label="" width="50px">
+									</auxheader>
+
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" width="50px"
+											value="@bind(vm.filter.feedbackNUmber)" onChange="@command('changeFilterReminder')" />
+									</auxheader>
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" width="80px"
+											value="@bind(vm.filter.createdDateStr)" onChange="@command('changeFilterReminder')" />
+									</auxheader>
+
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" width="80px"
+											value="@bind(vm.filter.modifeldDateStr)" onChange="@command('changeFilterReminder')" />
+									</auxheader>
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" width="80px"
+											value="@bind(vm.filter.sentFromEmail)" onChange="@command('changeFilterReminder')" />
+									</auxheader>
+
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" width="80px"
+											value="@bind(vm.sentEmailSearch)" onChange="@command('searchSources',cmp=vm.sentEmailSearch,type='SentEmails')" />
+
+									</auxheader>
+
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" width="80px"
+											value="@bind(vm.filter.subject)" onChange="@command('changeFilterReminder')" />
+									</auxheader>
+									
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+									
+									</auxheader>
+									
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" width="80px"
+											value="@bind(vm.sourceSerach)" onChange="@command('searchSources',cmp=vm.sourceSerach,type='sourceType')"/>
+									</auxheader>
+
+
+								</auxhead>
+								<listhead menupopup="auto" sizable="true">
+									<listheader label="Edit" width="60px" />
+									<listheader label="Mail No." sort="auto('feedbackNUmber')"
+										width="80px" />
+									<listheader label="Created Date" sort="auto('createdDateStr')"
+										width="120px" />
+									<listheader label="Modified Date" sort="auto('modifeldDateStr')"
+										width="150px" />
+
+									<listheader label="Sent From" sort="auto('sentFromEmail')"
+										width="130px" />
+
+									<listheader label="Sent To" sort="auto('subject')"
+										width="300px" />
+
+									<listheader label="Subject" sort="auto('subject')" />
+
+									<listheader label="Start/Stop Reminders" sort="auto('subject')" />
+									
+									<listheader label="Source Names" sort="auto('subject')" />
+
+
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell>
+											<button image="/images/rowedit.png"
+												onClick="@command('editCustomerFeedBack', row=each)"
+												autodisable="self" />
+										</listcell>
+										<listcell>
+											<label value="@bind(each.feedbackNUmber)" />
+										</listcell>
+										<listcell>
+											<label value="@bind(each.createdDateStr)" />
+										</listcell>
+										<listcell>
+											<label value="@bind(each.modifeldDateStr)" />
+										</listcell>
+										<listcell>
+											<label value="@bind(each.sentFromEmail)" />
+										</listcell>
+										<listcell>
+											<listbox model="@bind(each.listOfSentEmails)" height="100px"
+												hflex="1">
+
+												<listhead menupopup="auto" sizable="true">
+													<listheader label="Type" width="40px" />
+													<listheader label="E-mail" />
+												</listhead>
+												<template name="model">
+													<listitem>
+														<listcell>
+															<label value="@bind(each.emailType)" />
+														</listcell>
+														<listcell>
+															<label value="@bind(each.email)" />
+														</listcell>
+													</listitem>
+												</template>
+											</listbox>
+										</listcell>
+										<listcell>
+											<label value="@bind(each.subject)" />
+										</listcell>
+										<listcell>
+											<checkbox checked="@bind(each.enabaleReminder)"></checkbox>
+											<space></space>
+											<button label="Confirm"
+												onClick="@command('updateMailReminderSchedulerSettings',row=each)"
+												visible="true"></button>
+										</listcell>
+										
+											<listcell>
+												<listbox model="@bind(each.sourcesLIst)" height="100px"
+												hflex="1">
+												<listhead menupopup="auto" sizable="true">
+													<listheader label="Type" width="100px" />
+													<listheader label="Name" />
+												</listhead>
+												<template name="model">
+													<listitem>
+														<listcell>
+															<label value="@bind(each.sourceType)" />
+														</listcell>
+														<listcell>
+															<label value="@bind(each.custName)" />
+														</listcell>
+													</listitem>
+												</template>
+											</listbox>
+											</listcell>
+									</listitem>
+								</template>
+							</listbox>
+
+							<hlayout hflex="1" style="text-align: right">
+								<label value="@load(vm.footerScheduled)"
+									style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+								<space></space>
+								<space></space>
+								<space></space>
+								<space></space>
+							</hlayout>
+						</tabpanel>
+						
+						<tabpanel vflex="1" >
+							<listbox model="@bind(vm.lstDrafEmail)" vflex="1" hflex="max"
+								selectedItem="@bind(vm.selectedDraftEmail)" mold="paging"
+								emptyMessage="No Yet Ready">
+
+								<auxhead sclass="category-center">
+									<auxheader colspan="1" label="" width="50px">
+									</auxheader>
+
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" width="50px"
+											value="@bind(vm.filter.feedbackNUmber)" onChange="@command('changeFilterDrfat')" />
+									</auxheader>
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" width="80px"
+											value="@bind(vm.filter.createdDateStr)" onChange="@command('changeFilterDrfat')" />
+									</auxheader>
+
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" width="80px"
+											value="@bind(vm.filter.modifeldDateStr)" onChange="@command('changeFilterDrfat')" />
+									</auxheader>
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" width="80px"
+											value="@bind(vm.filter.sentFromEmail)" onChange="@command('changeFilterDrfat')" />
+									</auxheader>
+
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" width="80px"
+											value="@bind(vm.sentEmailSearch)" onChange="@command('searchSources',cmp=vm.sentEmailSearch,type='SentEmails')" />
+
+									</auxheader>
+
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" width="80px"
+											value="@bind(vm.filter.subject)" onChange="@command('changeFilterDrfat')" />
+									</auxheader>
+									
+									<auxheader colspan="1">
+										<image src="/images/funnel.png" />
+										<textbox instant="true" width="80px"
+											value="@bind(vm.sourceSerach)" onChange="@command('searchSources',cmp=vm.sourceSerach,type='sourceType')" />
+									</auxheader>
+
+								</auxhead>
+								<listhead menupopup="auto" sizable="true">
+									<listheader label="Edit" width="60px" />
+									<listheader label="Mail No." sort="auto('feedbackNUmber')"
+										width="80px" />
+									<listheader label="Created Date" sort="auto('createdDateStr')"
+										width="120px" />
+									<listheader label="Modified Date" sort="auto('modifeldDateStr')"
+										width="150px" />
+
+									<listheader label="Sent From" sort="auto('sentFromEmail')"
+										width="130px" />
+									<listheader label="Sent To" sort="auto('subject')"
+										width="300px" />
+
+									<listheader label="Subject" sort="auto('subject')" />
+									
+									<listheader label="Source Names" sort="auto('subject')" />
+
+								</listhead>
+								<template name="model">
+									<listitem>
+										<listcell>
+											<button image="/images/rowedit.png"
+												onClick="@command('editCustomerFeedBack', row=each)"
+												autodisable="self" />
+										</listcell>
+										<listcell>
+											<label value="@bind(each.feedbackNUmber)" />
+										</listcell>
+										<listcell>
+											<label value="@bind(each.createdDateStr)" />
+										</listcell>
+										<listcell>
+											<label value="@bind(each.modifeldDateStr)" />
+										</listcell>
+										<listcell>
+											<label value="@bind(each.sentFromEmail)" />
+										</listcell>
+
+										<listcell>
+											<listbox model="@bind(each.listOfSentEmails)" height="100px"
+												hflex="1">
+												<listhead menupopup="auto" sizable="true">
+													<listheader label="Type" width="40px" />
+													<listheader label="E-mail" />
+												</listhead>
+												<template name="model">
+													<listitem>
+														<listcell>
+															<label value="@bind(each.emailType)" />
+														</listcell>
+														<listcell>
+															<label value="@bind(each.email)" />
+														</listcell>
+													</listitem>
+												</template>
+											</listbox>
+										</listcell>
+										<listcell>
+											<label value="@bind(each.subject)" />
+										</listcell>
+											<listcell>
+											<listbox model="@bind(each.sourcesLIst)" height="100px"
+												hflex="1">
+												<listhead menupopup="auto" sizable="true">
+													<listheader label="Type" width="100px" />
+													<listheader label="Name" />
+												</listhead>
+												<template name="model">
+													<listitem>
+														<listcell>
+															<label value="@bind(each.sourceType)" />
+														</listcell>
+														<listcell>
+															<label value="@bind(each.custName)" />
+														</listcell>
+													</listitem>
+												</template>
+											</listbox>
+										</listcell>
+									</listitem>
+								</template>
+							</listbox>
+
+							<hlayout hflex="1" style="text-align: right">
+								<label value="@load(vm.footerDraft)"
+									style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+								<space></space>
+								<space></space>
+								<space></space>
+								<space></space>
+							</hlayout>
+						</tabpanel>
+					</tabpanels>
+				</tabbox>
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

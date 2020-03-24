@@ -1,0 +1,1583 @@
+<?page title="Hinawi Software- Services" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/css/navmenustyle.css"?>
+<?link rel="stylesheet" type="text/css" href="/css/hstyle.css"?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout/template.zul"?>
+
+<zk:zk xmlns="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:zk="http://www.zkoss.org/2005/zul">
+	
+	<zk:zscript><![CDATA[
+	void showme(int x)
+	{
+		lbl0.setStyle("cursor:pointer;color:green;text-decoration:none;background:none;font-size:14px;text-align:left;");
+		lbl1.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none");
+		lbl2.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none");
+		lbl3.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none");
+		lbl4.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none");
+		lbl5.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none");
+		lbl6.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none");
+		lbl7.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none");
+		lbl8.setStyle("cursor:pointer;color:green;text-decoration:none;background:none;font-size:14px;text-align:left;");
+		lbl9.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none");
+		lbl11.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none");
+		lbl12.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none");
+		//lbl13.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none");
+		//lbl10.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:none");
+		
+		v0.setVisible(false);	
+		v1.setVisible(false);	
+		v2.setVisible(false);
+		v3.setVisible(false);
+		v4.setVisible(false);
+		v5.setVisible(false);
+		v6.setVisible(false);
+		v7.setVisible(false);
+		v8.setVisible(false);
+		v9.setVisible(false);
+		v10.setVisible(false);
+		v11.setVisible(false);
+		v12.setVisible(false);
+		v13.setVisible(false);
+		
+		if(x==0)
+		{
+			lbl0.setStyle("cursor:pointer;color:green;text-decoration:none;background:#C6C6C6;font-size:14px;text-align:left;");
+		v0.setVisible(true);				
+		}
+	if(x==1)
+	{
+	v1.setVisible(true);	
+	
+	lbl1.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6");
+	}
+	if(x==2)
+	{
+		
+		v2.setVisible(true);
+		lbl2.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6");
+		
+	}
+	if(x==3)
+	{	
+		v3.setVisible(true);
+		lbl3.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6");		
+	}
+	
+	if(x==4)
+	{
+		
+		v4.setVisible(true);
+		lbl4.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6");
+	}
+	
+	if(x==5)
+	{
+	
+		v5.setVisible(true);
+		lbl5.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6");
+	}
+	if(x==6)
+	{
+	
+		v6.setVisible(true);
+		lbl6.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6");
+	}
+	if(x==7)
+	{
+	
+		v7.setVisible(true);
+		lbl7.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6");
+	}
+	if(x==8)
+	{
+	
+		v8.setVisible(true);
+		lbl8.setStyle("cursor:pointer;color:green;text-decoration:none;background:#C6C6C6;font-size:14px;text-align:left;");
+	}
+	if(x==9)
+	{
+	
+		v9.setVisible(true);
+		lbl9.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6");
+	}
+	
+	if(x==11)
+	{
+	
+		v11.setVisible(true);
+		lbl11.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6");
+	}
+	if(x==12)
+	{
+	
+		v12.setVisible(true);
+		lbl12.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6");
+	}
+	if(x==13)
+	{
+	
+		v13.setVisible(true);
+		//lbl13.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6");
+	}
+	
+	if(x==10)
+	{
+	
+		v10.setVisible(true);
+		//lbl10.setStyle("cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6");
+	}
+	
+	
+	}
+	
+	void showpopup()
+	{		
+		infoFavorite1.doPopup();
+	}
+]]></zk:zscript>
+
+<zk:vlayout vflex="1" hflex="1" self="@define(content)">
+<zk:borderlayout hflex="1" style="background:none" vflex="1">
+
+<zk:west width="180px" maxsize="250" margins="1,105,1,1" border="none">
+  
+  	<zk:vlayout>
+
+	<div class="leftMenu">
+	
+	<h:ul> 
+
+		<h:li style='background:none;'>					
+		<zk:label id="lbl0"  value="Hinawi ERP (Desktop) Modules are" onClick="showme(0)" style="text-align:left;cursor:pointer;color:Green;text-decoration:none;background:none;font-size:14px;background:none"></zk:label>
+		</h:li>
+		
+		
+		<h:li style='background:none'>
+		<zk:label id="lbl1" value="CRM" onClick="showme(1)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none"></zk:label>			
+		</h:li>
+		<h:li style='background:none'>		
+			
+		<zk:label id="lbl2" value="Accounting" onClick="showme(2)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none"></zk:label>
+		</h:li>
+		
+		<h:li style='background:none'>		
+			
+		<zk:label id="lbl3" value="Fixed Assets" onClick="showme(3)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none"></zk:label>
+		</h:li>
+		
+		<h:li style='background:none'>		
+			
+		<zk:label id="lbl4" value="Real Estate" onClick="showme(4)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none"></zk:label>
+		</h:li>
+		
+		<h:li style='background:none'>		
+			
+		<zk:label id="lbl7" value="School" onClick="showme(7)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none"></zk:label>
+		</h:li>
+		
+		
+		<h:li style='background:none'>		
+			
+		<zk:label id="lbl5" value="Garage" onClick="showme(5)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none"></zk:label>
+		</h:li>
+		
+		<h:li style='background:none'>					
+		<zk:label id="lbl6" value="HRMS" onClick="showme(6)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none"></zk:label>
+		</h:li>
+		
+	
+		
+		<h:li style='background:none'>					
+		<zk:label id="lbl9" value="Settings" onClick="showme(9)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none"></zk:label>
+		</h:li>
+		
+		
+		
+		<h:li style='background:none'>					
+		<zk:label id="lbl12" value="Information Center - Desktop" onClick="showme(12)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:#C6C6C6"></zk:label>
+		</h:li>
+		
+		
+		<h:li style='background:none;'>					
+		<zk:label id="lbl8" value="Hinawi ERP Web Application" onClick="showme(8)" style="text-align:left;cursor:pointer;color:Green;text-decoration:none;background:none;font-size:14px;"></zk:label>
+		</h:li>
+		
+		<h:li style='background:none'>					
+		<zk:label id="lbl11" value="PDF ERP Web" onClick="showme(11)" style="cursor:pointer;color:#2c6f99;text-decoration:none;background:none"></zk:label>
+		</h:li>
+
+		
+	</h:ul>
+	  
+</div>
+
+ 
+	</zk:vlayout>
+	
+	
+	</zk:west>
+	
+<zk:center margins="1,15,1,1" border="none" hflex="1" autoscroll="true">
+<zk:vlayout>
+
+<zk:vbox id="v0" visible="false">
+<html>
+<body>
+<div class="">
+<div class="">
+<img src="images/HRstaffphoto.jpg" style="width:750px;height:280px"></img>
+<br/><br/>
+<h1>Introduction</h1>
+<br/>
+<html>
+<body>
+<p style="font-size:14px;">
+Hinawi Business Management (Hinawi ERP) is software solution for your business.
+</p>
+<p style="font-size:14px;">
+It is built to meet the user’s requirements the way they expected. It is integrated with QuickBooks Accounting software and also covers most of the missing forms in QuickBooks. 
+</p>
+
+<p style="font-size:14px;">
+Hinawi Desktop is fully integrated with Hinawi Online which will be helpful for the user to work from anywhere. We provide all kind of reports and also the software is highly customizable as per user requirements. Hinawi ERP can be used for any type of business.
+</p>
+
+<p style="font-size:14px;">
+Our main objective in the business is customer satisfaction.
+</p>
+
+
+<tr>
+<td>
+<br/><br/>
+<h1 style="text-decoration:underline">Screen Shots:<br/><br/></h1>
+</td>
+</tr>
+
+
+<tr>
+<td>
+<li> <img src="images/fsettingsAll.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/7grevqd6yeokfx1/AABT4BQWNH04Tuwj6xRz8kTma?dl=0" target="blank">All ERP Screen Shots.</a>
+</li>
+
+</td>
+</tr>
+
+
+
+</body>
+</html>
+</div>
+</div>
+</body>
+</html>
+
+
+
+
+</zk:vbox>
+
+
+<zk:vbox id="v1" visible="false">
+<html>
+<body>
+
+<table style="font-size:12px;padding:5em">
+<tr>
+<td rowspan="1"><img src="images/CRM.jpg" style="width:750px;height:280px"></img>
+<br/><br/>
+  </td>
+</tr>
+
+<tr>
+<td>
+<p></p>
+<h1>Customer Relation Management (CRM) Module</h1>
+<br/>
+</td>
+</tr>
+<tr>
+<td style="width:500px">
+<ul>
+<li>
+Hinawi ERP CRM (Customer relationship management) module is a tool of customer interaction in an effective manner. Through CRM one can manage customer data, access their business information, automate sales, marketing, customer support and reminders. The cloud based Hinawi application is fully integrated with this desktop software and user has no limits to access the data from anywhere.
+</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td>
+<h1 style="text-decoration:underline">Features:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li>-	Ease of use.</li>
+<li>-	Detailed Customer database with enhanced contact details.</li>
+<li>-	Flexible follow up options.</li>
+<li>-	Automatic reminders.</li>
+<li>-	Tasks management.</li>
+<li>-	Record of email correspondences.</li>
+<li>-	Visits history.</li>
+<li>-	Incoming and outging letters.</li>
+
+
+</td>
+</tr>
+
+<tr>
+<td>
+<br/><br/>
+<h1 style="text-decoration:underline">More Features:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li>-	Design templates forms and Printing.</li>
+<li>-	Arabic and English.</li>
+</td>
+</tr>
+
+<tr>
+<td>
+<br/><br/>
+<h1 style="text-decoration:underline">More Features:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li>-	Design templates forms and Printing.</li>
+<li>-	Arabic and English.</li>
+</td>
+</tr>
+
+<tr>
+<td>
+<br/><br/>
+<h1 style="text-decoration:underline">Screen Shots:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li> <img src="images/fsettings1.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/hd4ck1y9370a8so/AABX_XajbgbA-6lW6gnBdLS-a?dl=0" target="blank">Settings</a>
+</li>
+
+<li> <img src="images/factivites.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/55v0kqd6vufm0bf/AAA6d3ENyKjpXxWtLgPgPpHka?dl=0" target="blank">Activities</a>
+</li>
+
+<li> <img src="images/freports.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/6exuip8asl9xfp2/AAC3o6H-wuLXJ_hAkAkS37TLa?dl=0" target="blank">Reports</a>
+</li>
+
+<li> <img src="images/fsettingOthers.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/cvneud6cqiyduw2/AABQQ3_vV-CDF5SCwmtZmWuIa?dl=0" target="blank">Others</a>
+</li>
+
+</td>
+</tr>
+
+</table>
+</body>
+</html>  
+
+
+
+</zk:vbox>
+
+
+	<zk:vbox id="v2" visible="false">
+	<html>
+<body>
+
+<table style="font-size:12px;padding:5em">
+<tr>
+<td rowspan="1"><img src="images/accounting.jpg" style="width:750px;height:280px"></img>
+<br/><br/>
+  </td>
+</tr>
+
+<tr>
+<td>
+<p></p>
+<h1>Accounting Module</h1>
+<br/>
+</td>
+</tr>
+<tr>
+<td style="width:500px">
+<ul>
+<li>
+Hinawi ERP is a well know software initially designed to overcome the weaknesses of QuickBooks Accounting Software but, over the period of more than 15 years, now Hinawi ERP has become a whole ERP package with many other modules. Accounting module is the base of whole software. All activities are integrated with each other with a lot of functional controls. The user friendly customizable templates can be used to print the forms and send directly to customers and suppliers.
+</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td>
+<h1 style="text-decoration:underline">Features:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li>-	Cheques printing.</li>
+<li>-	Customizable templates to print.</li>
+<li>-	Predefined templates for activities.</li>
+<li>-	Reminders.</li>
+<li>-	Post Dated Cheques management.</li>
+<li>-	Status of customers and suppliers.</li>
+<li>-	Reports.</li>
+
+</td>
+</tr>
+
+<tr>
+<td>
+<br/><br/>
+<h1 style="text-decoration:underline">More Features:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li>-	Reminders.</li>
+<li>-	Settings.</li>
+<li>-	Design templates forms and Printing.</li>
+<li>-	Arabic and English.</li>
+<li>-	Integrated with Other modules in Hinawi ERP and Hinawi Online.</li>
+<li>-	Integrated with QuickBooks accounting.</li>
+
+</td>
+</tr>
+
+<tr>
+<td>
+<br/><br/>
+<h1 style="text-decoration:underline">Screen Shots:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li> <img src="images/fsettings.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/fpnzrb44d50apem/AABZR_yOD_LFsIQypbFoDETWa?dl=0" target="blank">Settings</a>
+</li>
+
+<li> <img src="images/factivites.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/uikk0jtvm2vhexw/AABfc6n7Qc4GVyasZplbNfc3a?dl=0" target="blank">Activities</a>
+</li>
+
+<li> <img src="images/freports.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/ds64fgkao5uzwp9/AAD78j_o4gPjjfZ5iL-9OImNa?dl=0" target="blank">Reports</a>
+</li>
+
+<li> <img src="images/fsettingOthers.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/yrbtnqojv6vxqmq/AACAsl54ScnTPPJlzS_eAoV2a?dl=0" target="blank">Others</a>
+</li>
+
+</td>
+</tr>
+
+
+</table>
+</body>
+</html>   
+
+</zk:vbox>
+	
+	
+	<zk:vbox id="v3" visible="false">
+<html>
+<body>
+<table style="font-size:12px;padding:5em">
+<tr>
+<td>
+<img src="images/Fixedassets.jpg" style="width:750px;height:280px"></img>
+<br/><br/>
+  </td>
+</tr>
+
+<tr>
+<td>
+<p></p>
+<h1>Fixed Assets Module</h1>
+<br/>
+</td>
+</tr>
+
+
+
+<!-- <tr>
+<td style="width:500px">
+<ul>
+<li>
+<h1 style="text-decoration:underline">Introduction:<br/></h1>
+</li>
+</ul>
+</td>
+</tr> -->
+<tr>
+<td>
+
+<ul>
+<li>
+The Fixed Assets module provides complete visibility into your assets and depreciation calculations quickly and easily. You can tracks assets from acquisition through final disposition. Detailed asset profile provides complete information about asset, depreciation, maintenance, insurance and lot more. Comprehensive reporting help you to manage asset acquisitions, depreciation transactions, Net book values and disposals etc.
+</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td>
+
+<h1 style="text-decoration:underline">Features:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li>-	Have Multiple Asset Types.</li>
+<li>-	Purchase new fixed assets or import from a file.</li>
+<li>-	Add used assets manually or import from a file.</li>
+<li>-	Track asset maintenance records.</li>
+<li>-	Use automated depreciation schedule.</li>
+<li>-	Use and track Asset maintenance.</li>
+<li>-	Transfer between locations.</li>
+<li>-	Make disposals.</li>
+<li>-	Depreciation by project.</li>
+</td>
+</tr>
+
+<tr>
+<td>
+<br/><br/>
+<h1 style="text-decoration:underline">More Features:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li>-	Reminders.</li>
+<li>-	Settings.</li>
+<li>-	Design templates forms and Printing.</li>
+<li>-	Arabic and English.</li>
+<li>-	Integrated with QuickBooks accounting.</li>
+
+</td>
+</tr>
+
+<tr>
+<td>
+<br/><br/>
+<h1 style="text-decoration:underline">Screen Shots:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li> <img src="images/fsettings1.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/0r3xc5kw7y8exkj/AADP3GF1O-GZDHSZs226YxWaa?dl=0" target="blank">Settings</a>
+</li>
+
+<li> <img src="images/factivites.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/3bvo921a64o8sjx/AADFPv1_MkH-Am66n07QGL9ma?dl=0" target="blank">Activities</a>
+</li>
+
+<li> <img src="images/freports.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/iw6qtdv1nlfkhll/AACosbsD9SQhFwQM2Rd4hJkFa?dl=0" target="blank">Reports</a>
+</li>
+
+<li> <img src="images/fsettingOthers.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/hre3aoq1o7nevn0/AAAOUsJZMTp5GKD19NLUMvbDa?dl=0" target="blank">Others</a>
+</li>
+
+</td>
+</tr>
+
+
+</table>
+
+</body>
+</html>
+
+</zk:vbox>
+
+
+<zk:vbox id="v4" visible="false">
+<html>
+<body>
+<table style="font-size:12px;padding:5em">
+<tr>
+<td>
+<img src="images/realstate.png" style="width:700px;height:280px"></img>
+<br/><br/>
+  </td>
+</tr>
+
+<tr>
+<td>
+<p></p>
+<h1>Real Estate Module</h1>
+<br/>
+</td>
+</tr>
+
+<tr>
+<td>
+
+<ul>
+<li>
+The Hinawi Real Estate module gives the user a complete insight and control for properties management. Having all the properties, tenants and contracts at one place in this software is much more reliable and time-saving compared to manual. Hinawi Real Estate provides a 
+complete cycle for real estate agents. This information with user friendly reports helps the user to track the contract status and cash flows.
+</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td>
+
+<h1 style="text-decoration:underline">Features:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li>-	Adding properties and units of different types with images.</li>
+<li>-	Tenants center with detailed information.</li>
+<li>-	Tenancy Contract quotation with customizable templates.</li>
+<li>-	Create Tenancy Contracts, Cancel, Pre-terminate, Release and Renew.</li>
+<li>-	Commission.</li>
+<li>-	Maintenance of properties.</li>
+
+</td>
+</tr>
+
+<tr>
+<td>
+<br/><br/>
+<h1 style="text-decoration:underline">More Features:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li>-	Reminders.</li>
+<li>-	Settings.</li>
+<li>-	Design templates forms and Printing.</li>
+<li>-	Arabic and English.</li>
+<li>-	Integrated with Other modules in Hinawi ERP and Hinawi Online.</li>
+<li>-	Integrated with QuickBooks accounting.</li>
+
+</td>
+</tr>
+
+<tr>
+<td>
+<br/><br/>
+<h1 style="text-decoration:underline">Screen Shots:<br/><br/></h1>
+</td>
+</tr>
+
+
+<tr>
+<td>
+<li> <img src="images/fsettings1.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/4nvtp8v9qvlxb9i/AADpyZEqtiwpt8BXtUj7BQQga?dl=0" target="blank">Settings</a>
+</li>
+
+<li> <img src="images/factivites.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/2ly5k6tkn5pxkib/AACyIwfYsSu3UjceqOJc-AT_a?dl=0" target="blank">Activities</a>
+</li>
+
+<li> <img src="images/freports.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/ybd40phxg7kwybn/AABBPn_RjJD4ctFZXby9fghwa?dl=0" target="blank">Reports</a>
+</li>
+
+<li> <img src="images/fsettingOthers.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/pbdb91lwiryq4kg/AABs0XljgN8y394EadHolSP5a?dl=0" target="blank">Others</a>
+</li>
+
+</td>
+</tr>
+
+
+</table>
+
+</body>
+</html>
+
+</zk:vbox>
+
+
+
+
+<zk:vbox id="v5" visible="false">
+<html>
+<body>
+<table style="font-size:12px;padding:5em">
+<tr>
+<td>
+<img src="images/Garage.jpg" style="width:750px;height:280px"></img>
+<br/><br/>
+  </td>
+</tr>
+
+<tr>
+<td>
+<p></p>
+<h1>Garage Module</h1>
+<br/>
+</td>
+</tr>
+
+<tr>
+<td>
+
+<ul>
+<li>
+Garage module in Hinawi ERP has the complete flow of activities required for garage business. 
+This garage module is fully integrated with Accounting &amp; inventory module and allows the user to have the required information quickly and on time.
+</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td>
+
+<h1 style="text-decoration:underline">Features:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li>-	Create vehicles.</li>
+<li>-	Create job cards.</li>
+<li>-	Track time (in and out).</li>
+<li>-	Costing of employees, services and Inventory.</li>
+<li>-	Add extra services from third party.</li>
+<li>-	Stock of spare parts.</li>
+<li>-	Invoicing and payments.</li>
+<li>-	Reports.</li>
+</td>
+</tr>
+
+<tr>
+<td>
+<br/><br/>
+<h1 style="text-decoration:underline">More Features:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li>-	Reminders.</li>
+<li>-	Settings.</li>
+<li>-	Design templates forms and Printing.</li>
+<li>-	Arabic and English.</li>
+<li>-	Integrated with QuickBooks accounting.</li>
+
+</td>
+</tr>
+
+
+<tr>
+<td>
+<br/><br/>
+<h1 style="text-decoration:underline">Screen Shots:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li> <img src="images/fsettings1.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/i3r832oe3dxif8r/AACNIwC_PEXKqQM1WSG5Mckca?dl=0" target="blank">Settings</a>
+</li>
+
+<li> <img src="images/factivites.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/2g4dz2uhmmdets9/AAAXIG45kVZE_HJL5CnxriN6a?dl=0" target="blank">Activities</a>
+</li>
+
+<li> <img src="images/freports.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/clcpr1dkh1t2ajh/AAD7pVt7xvAZIvXmV7AC4r1ya?dl=0" target="blank">Reports</a>
+</li>
+
+<li> <img src="images/fsettingOthers.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/v17fg6yjey3y59s/AABjmRcHrVYftTCI85CVmiLIa?dl=0" target="blank">Others</a>
+</li>
+
+</td>
+</tr>
+
+
+</table>
+
+</body>
+</html>
+
+</zk:vbox>
+	
+	
+	
+	<zk:vbox id="v6" visible="false" hflex="1">
+<html>
+<body>
+<table style="font-size:12px;padding:5em">
+<tr>
+<td>
+<img src="images/HRMS.png" style="width:750px;height:280px"></img>
+<br/><br/>
+  </td>
+</tr>
+
+<tr>
+<td>
+<p></p>
+<h1>&#160;  &#160;HRMS, Timesheet, Payroll &amp; Taxes Module</h1>
+<br/>
+</td>
+</tr>
+
+<tr>
+
+<td>
+<table style="width:600px">
+<tr>
+
+<td width="400px;"></td>
+<td>
+<a href="http://hinawi2.dyndns.org:8181/sata/documents/HRActivitiesERP.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:green;align-right:300px">HR Activities PDF</a>
+ 
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td>
+<ul>
+<li>
+<h1 style="text-decoration:underline">HR:<br/></h1>
+</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td>
+
+<ul>
+<li>
+Human Resources module in Hinawi ERP is a platform to be used as a central control in performing entire Human Resources functions. It has the employee database with their personal as well as family, contact, education, experience and much more information. Their monthly activities can be recorded and payroll will be updated to accounts with just one click. Employee self service provides access to specific information online sparing time of HR personnel and cost-effective.
+</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td>
+<ul>
+<li>
+<h1 style="text-decoration:underline">Timesheet:<br/></h1>
+</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td>
+
+<ul>
+<li>
+Timesheet module can be used to track the time of employees in an effective manner. Employees cost can be recorded by projects and location. Employee can fill this timesheet using Employees self service online also.
+</li>
+</ul>
+</td>
+</tr>
+
+
+<tr>
+<td>
+<ul>
+<li>
+<h1 style="text-decoration:underline">Payroll:<br/></h1>
+</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td>
+
+<ul>
+<li>
+Hinawi ERP allows to create payroll for both type of employees HR and timesheet with just one click and it can be updated directly to accounts thus avoiding duplication of work. Through this integrated system Salary Information file (SIF) can also be generated and sent to bank directly.
+</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td>
+<ul>
+<li>
+<h1 style="text-decoration:underline">Taxes:<br/></h1>
+</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td>
+
+<ul>
+<li>
+Taxes in Hinawi ERP are available to be used for HR and payroll module and will automatically be deducted from wages. User can define the deduction preferences and tax basis. The tax basis can be setup by different filters for employee or group of employees.
+</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td style="margin-left:50px">
+
+<h1 style="text-decoration:underline">Features HRMS:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li>-	Employee database (Information, documents and salaries).</li>
+<li>-	Tracking of leaves, absences and loans etc.</li>
+<li>-	Time tracking through timesheet.</li>
+<li>-	Monthly payroll.</li>
+<li>-	Wages protection system (WPS).</li>
+<li>-	End of service / Indemnity.</li>
+<li>-	Flexible Settings in correspondence to UAE labour law.</li>
+<li>-	Comprehensive reports.</li>
+
+</td>
+</tr>
+
+<tr>
+<td>
+<br/><br/>
+<h1 style="text-decoration:underline">More Features:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li>-	Reminders.</li>
+<li>-	Advanced Settings.</li>
+<li>-	Design templates forms and Printing.</li>
+<li>-	Arabic and English.</li>
+<li>-	Integrated with QuickBooks accounting.</li>
+
+</td>
+</tr>
+
+<tr>
+<td>
+<br/><br/>
+<h1 style="text-decoration:underline">Screen Shots:<br/><br/></h1>
+</td>
+</tr>
+
+
+<tr>
+<td>
+<li> <img src="images/fsettings1.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/r2ixvusa1byjz2x/AAAW0I2aQAg7ceS9Q4LKxvlba?dl=0" target="blank">Settings</a>
+</li>
+
+<li><div> <img src="images/factivites.png" style="width:50px;height:50px"></img> 
+
+<a href="https://www.dropbox.com/sh/03aycyobhso5hhu/AABTVv8Rt69B4gH9aid60TDqa?dl=0" target="blank">Activities HR </a> ,
+<a href="https://www.dropbox.com/sh/mdhqgi2bf0truac/AAAKKAA5zioJhShEci89K83Ya?dl=0" target="blank">Activities Payroll</a> ,
+<a href="https://www.dropbox.com/sh/m0kxj9dsoybn1m1/AAA4QT55h56toHFOysTbLQwLa?dl=0" target="blank">Activities TimeSheet</a> 
+</div>
+</li>
+
+
+<li> <img src="images/freports.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/7uza6x44vm6aw82/AABzbQTbmUdnYlm_ffc6eEZLa?dl=0" target="blank">Reports HR</a> ,
+<a href="https://www.dropbox.com/sh/4gglbbxvos6875h/AACIVx7hNyMUTv8L0CR_QCM7a?dl=0" target="blank">Reports TimeSheet</a> 
+</li>
+
+<li> <img src="images/fsettingOthers.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/qo6rcdk2ly8uh9p/AABfanQHtDKHXJ1p3-rADzFha?dl=0" target="blank">Others</a>
+</li>
+
+</td>
+</tr>
+
+</table>
+
+</body>
+</html>
+
+</zk:vbox>
+
+
+<zk:vbox id="v7" visible="false">
+
+<html>
+<body>
+
+<table style="font-size:12px;padding:5em">
+<tr>
+<td rowspan="1"><img src="images/KidsRaisingHands.jpg" style="width:750px;height:280px"></img>
+<br/><br/>
+  </td>
+</tr>
+
+<tr>
+<td>
+<p></p>
+<h1>School Management Module</h1>
+<br/>
+</td>
+</tr>
+<tr>
+<td style="width:500px">
+<ul>
+<li>
+Hinawi ERP school module is a package with flexible settings to suit school business in various environments. 
+One software can store all the records at one place. This school software can be used to manage students, teachers, employees, courses 
+and all the system &amp; process related activities to run your institute efficiently.
+</li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td>
+<h1 style="text-decoration:underline">Features:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li>-	Admissions management.</li>
+<li>-	Enrollment management.</li>
+<li>-	Events management.</li>
+<li>-	Student Portal.</li>
+<li>-	Guardians Database.</li>
+<li>-	Student Activities.</li>
+<li>-	Bus tracking by students.</li>
+<li>-	Income and school fees tracking.</li>
+
+</td>
+</tr>
+
+<tr>
+<td>
+<br/><br/>
+<h1 style="text-decoration:underline">More Features:<br/><br/></h1>
+</td>
+</tr>
+<tr>
+<td>
+<li>-	Reminders.</li>
+<li>-	Advanced Settings.</li>
+<li>-	Design templates forms and Printing.</li>
+<li>-	Arabic and English.</li>
+<li>-	Integrated with QuickBooks accounting.</li>
+</td>
+</tr>
+
+<tr>
+<td>
+<br/><br/>
+<h1 style="text-decoration:underline">Screen Shots:<br/><br/></h1>
+</td>
+</tr>
+
+
+<tr>
+<td>
+<li> <img src="images/fsettings1.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/9o7ss47o9lcx8hm/AADi33fLEEvd8yx-ddF4WRFYa?dl=0" target="blank">Settings</a>
+</li>
+
+<li> <img src="images/factivites.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/iyyaatzd6p8tzza/AAAsJ7io56s0nvbFxQ3xmEw1a?dl=0" target="blank">Activities</a>
+</li>
+
+<li> <img src="images/freports.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/xv2m7ub3uc0k02m/AAAOlaHCu7LhWYZ_gslneRKUa?dl=0" target="blank">Reports</a>
+</li>
+
+<li> <img src="images/fsettingOthers.png" style="width:50px;height:50px"></img> 
+<a href="https://www.dropbox.com/sh/2ux0euelktfx94q/AAAgMoomDzL085ZD03jY3101a?dl=0" target="blank">Others</a>
+</li>
+
+</td>
+</tr>
+
+
+</table>
+</body>
+</html>  
+
+
+
+</zk:vbox>
+
+<zk:vbox id="v8" visible="false">
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>Hinawi Web application</h1>
+<br/>
+<html>
+<body>
+
+<ul>
+<li>
+•	This is the Web based version of Hinawi Softwares. This web application is in the Beta version and can be used as stand  &#160;  &#160;  alone once completed. <br/>
+</li>
+
+<li>
+ •	User can use this for Accounting, HR, Timesheet and payroll module. Hinawi Web Application provides great solutions for  &#160;  &#160; all business software needs and which can be used as independent. <br/>
+</li>
+
+<li>
+•	No installation is needed. User can access the software anytime if internet is available.<br/> &#160;  &#160; Data is stored in Explorer database. Users can have the database in their own Office or Explorer Computer Office. <br/>
+</li>
+
+<li>
+•	With Hinawi Web Application software, the data is always-updated, backed-up and data is centralized and accessible  &#160;  &#160;  &#160;  &#160; over the web from any computer at any time. 
+</li>
+
+<li>
+•	Also our software works on any platform with a web browser and internet connection. 
+</li>
+<li>
+•	Users can post transactions online at Any Time and Data entered gets saved at the customer’s servers to promote  &#160;  &#160;  &#160;  &#160;  &#160; privacy and security. 
+</li>
+<li>
+•	The Online Application is integrated with Hinawi Desktop and QuickBooks Accounting Software .
+</li>
+
+</ul>
+
+<h1>Features </h1>
+<br/>
+<ul>
+<li>
+•	 Stand Alone software - This can be used without integrated with any other software. 
+</li>
+<li>
+•	Reduce business costs - Less time spent talking to customers over the phone; eliminate printed materials; allow users to  &#160;  &#160; update their own details; saves time. 
+</li>
+<li>
+•	Auto updation - Whenever new changes/updates, it will be automatically updated. 
+</li>
+<li>
+•	Zero install - No installation of the Software required. 
+</li>
+<li>
+•	Easy to use This software is easy to use and user friendly. All you need is a good Internet Connection. 
+</li>
+<li>
+•	 Available 24/7 - Software is available 24 hours a day, 7 days a week. 
+</li>
+<li>
+•	Direct access - Direct access to latest information -for Employees wherever they are located. 
+</li>
+<li>
+•	Always up-to-date - Data and software is always up to date. 
+</li>
+
+</ul>
+
+
+</body>
+</html>  
+
+</div>
+</div>
+</body>
+</html>
+
+</zk:vbox>
+
+
+<zk:vbox id="v9" visible="false">
+	<zk:hbox >
+	<zk:label value="Screen Slider Show" onClick="showpopup()" style="font-size:14px;cursor:pointer;color:#2c6f99;text-decoration:underline;background:none"></zk:label>
+   
+	</zk:hbox>
+		
+   	 
+   
+<html>
+<body>
+<div class="">
+<div class="">
+<!-- <img src="images/Setting.png" style="width:600px;height:280px"></img>
+<br/><br/> -->
+<br/>
+	
+   
+<h1>Introduction:</h1>
+<br/>
+<p style="font-size:12px;">Setup is the most powerful and important module in Hinawi ERP. We are proud to introduce this module which allows the customers to build their own needs and to apply the company policies and rules.</p>
+
+<p>Our software is Customizable to use for any type of business as per their requirement. We have flexible settings for each module separately. </p>
+
+<p>Hinawi ERP has pre-defined setup for each module as normal practice of companies which allows the user to start using program within minutes. </p>
+
+<p>For HRMS module the default setup is designed as per UAE Labour Law but still user can change it as per their needs.</p>   <br></br>            
+
+
+<h1>Features:</h1><br/>
+<li>-	Access control for admin only.</li>
+<li>-	Flexible options for each module.</li>
+<li>-	Limit the access for users.</li>
+<li>-	Integration preferences with QuickBooks.</li>
+
+</div>
+</div>
+</body>
+</html>
+</zk:vbox>
+
+<zk:vbox id="v11" visible="false">
+<html>
+<body>
+<div class="">
+<div class="">
+<br/><br/>
+<h1>PDF ERP Web:</h1>
+<br></br>
+
+  <a href="http://hinawi2.dyndns.org:8181/sata/documents/WebApplicationInfo.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">Web Application Info</a>
+ 
+ <br/><br/>
+ <a href="http://hinawi2.dyndns.org:8181/sata/documents/WebApplicationDesktop.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">Web Application &amp; Desktop</a>
+ 
+ <br/><br/>
+ <a href="http://hinawi2.dyndns.org:8181/sata/documents/Webrequirements.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">Web Application Requirements</a>
+ 
+</div>
+</div>
+</body>
+</html>
+</zk:vbox>
+
+<zk:vbox id="v12" visible="true">
+<zk:grid style="background: white;" >
+<zk:columns>
+<zk:column></zk:column>
+<zk:column></zk:column>
+</zk:columns>
+
+<zk:rows>
+<zk:row style="background: white; ">
+
+<zk:cell><h1><div  style="text-decoration:underline;color:green">Things to prepare for new order :</div></h1> </zk:cell>
+<zk:cell><h1><div  style="text-decoration:underline;color:green"> PDF For ERP Desktop: </div></h1> </zk:cell>
+</zk:row>
+
+<zk:row style="background: white; ">
+
+<zk:cell>
+<zk:vlayout>
+ <a href="http://hinawi2.dyndns.org:8181/sata/documents/PrepareERP.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">Standard General Requirements - PDF</a>
+
+<a href="http://hinawi2.dyndns.org:8181/sata/documents/Importing Data By Journal Entry.xlsx" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">Importing Data By Journal Entry - Excel</a>
+ 
+
+ <a href="http://hinawi2.dyndns.org:8181/sata/documents/Importing Data of CUC.xlsx" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">Importing Data of CUC - Excel</a>
+ 
+ <a href="http://hinawi2.dyndns.org:8181/sata/documents/Importing Data of PDC.xlsx" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">Importing Data of PDC - Excel</a>
+ 
+ 
+ <a href="http://hinawi2.dyndns.org:8181/sata/documents/Importing Data of Fixed Assets from Excel.xls" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">Importing Data of Fixed Assets - Excel</a>
+ 
+ <a href="http://hinawi2.dyndns.org:8181/sata/documents/Importing Data of HR from Excel.xls" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">Importing Data of HR - Excel</a>
+ 
+ 
+ 
+ <a href="http://hinawi2.dyndns.org:8181/sata/documents/Importing Data of Real Estate from Excel.xls" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">Importing Data of Real Estate - Excel</a>
+ 
+ <a href="http://hinawi2.dyndns.org:8181/sata/documents/Importing Data of Students from Excel.xlsx" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">Importing Data of Students - Excel</a>
+ 
+ <a href="http://www.techsmith.com/snagit.html" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">Download Image and Video Screen Capture</a>
+ 
+ <a href= "http://hinawi2.dyndns.org:8181/sata/documents/How to download and install TeamViewer10.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">How to download and install Teamviewer - PDF</a>
+ 
+ 
+</zk:vlayout>
+</zk:cell>
+
+<zk:cell valign="top">
+<zk:vlayout>
+<a href="http://hinawi2.dyndns.org:8181/sata/documents/HinawiERPMenus.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">Hinawi ERP Menus</a>
+ 
+ <br/>
+ <br/>
+ <h1><div  style="text-decoration:underline;color:green">IT Support : </div></h1>
+ 
+  <a href="http://hinawi2.dyndns.org:8181/sata/documents/System Requirements for Hinawi ERP.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">System Requirements for Hinawi ERP</a>
+ 
+ 
+<!-- <a href="http://hinawi2.dyndns.org:8181/sata/documents/BackupRestoreData.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">How to Backup &amp; Restore Data</a>
+ -->
+
+ <a href="http://hinawi2.dyndns.org:8181/sata/documents/Installing SQL Server.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">How to Install SQL on Server</a>
+  
+  <a href="http://hinawi2.dyndns.org:8181/sata/documents/How to do SQL Server Surface Area Configuration.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">How to do SQL Server Surface Area Configuration</a>
+  
+  <a href="http://hinawi2.dyndns.org:8181/sata/documents/How to do SQL-ODBC Test on Client Machines.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">How to do SQL-ODBC Test on Client Machines</a>
+  
+  <a href="http://hinawi2.dyndns.org:8181/sata/documents/How to Create new data with ERP.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">How to Create new data with ERP</a>
+  
+  
+  <a href="http://hinawi2.dyndns.org:8181/sata/documents/How to Backup database using Hinawi Software and SQL Server.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">How to Backup database using Hinawi Software and SQL Server</a>
+  
+ 
+  <a href="http://hinawi2.dyndns.org:8181/sata/documents/User Access Control - Vista.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">User Access Control - Vista</a>
+ 
+ <a href="http://hinawi2.dyndns.org:8181/sata/documents/User Access Control - Win7.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">User Access Control - Win7</a>
+ 
+ 
+</zk:vlayout>
+</zk:cell>
+
+</zk:row>
+
+</zk:rows>
+</zk:grid>
+
+
+</zk:vbox>
+
+
+<zk:vbox id="v91" visible="false">
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>Human Resources Online</h1>
+<br/><br/>
+<html>
+<body>
+
+<ul>
+<li>
+A web based application is a software package that can be accessed through the web browser. The software and database reside on a central server rather than being installed on the desktop system and is accessed over a network.<br/>
+</li>
+</ul>
+
+<div style="color: #979797;font-weight: bold;font-family: Arial,Helvetica,sans-serif;">Features</div>
+<br/>
+<div style="color: black;font-weight: bold;font-family: Arial,Helvetica,sans-serif;">Why web based?</div>
+<br/>
+
+<ul>
+<li>
+- Accessible from every where and at any time. 
+</li>
+<li>
+- Constant updates for all jobs - at any time users are running the latest version of software.
+</li>
+<li>- Load balancing on the server.</li>
+<li>- Encryption of data streams.</li>
+<li>- Simple hardware requirements to work with web applications.</li>
+<li>- 100% compatible with all known operating systems.</li>
+
+</ul>
+
+<br/>
+<div style="color: black;font-weight: bold;font-family: Arial,Helvetica,sans-serif;">What you get?</div>
+<br/>
+
+<div style="color: black;font-weight: bold;font-family: Arial,Helvetica,sans-serif;">Saves time</div>
+
+<div>Web based applications allows you to set separate level of access for each type of users.</div>
+<br/>
+
+<div style="color: black;font-weight: bold;font-family: Arial,Helvetica,sans-serif;">Saves money on upgrading computers</div>
+
+<div>Requirements of the PC configuration are minimal.</div>
+<br/>
+
+<div style="color: black;font-weight: bold;font-family: Arial,Helvetica,sans-serif;">Savings on software maintenance</div>
+
+<div>Upgrading or editing the software is made on a server only.</div>
+<br/>
+<div style="color: black;font-weight: bold;font-family: Arial,Helvetica,sans-serif;">Savings on hardware maintenance</div>
+
+<div>Programs and end user's data are stored on the server, even the physical destruction of workplace of users, not to mention the failures of power or communication channel, it does not entail any loss of data and malfunctions. </div>
+<br/>
+<div style="color: black;font-weight: bold;font-family: Arial,Helvetica,sans-serif;">Ability to work on the slow lines</div>
+
+<div>Applications are not pumped over the network and don't run on your computer, and the exchange with the server data on keystrokes, mouse movements and screen updates are very quick.</div>
+<br/>
+
+<div style="color: black;font-weight: bold;font-family: Arial,Helvetica,sans-serif;">Increased information security</div>
+
+<div>The level of security associated with the transition from distributed to centralized database on a single space, access to which can be easily managed.</div>
+<br/>
+
+
+<div style="color: black;font-weight: bold;font-family: Arial,Helvetica,sans-serif;">Brief description</div>
+
+<div>This is a new Web Based module that allows employee to fill their request and needs through the website without leaving their site or location and without disturbing HR Department in the Head office. </div>
+<br/>
+
+<div style="color: black;font-weight: bold;font-family: Arial,Helvetica,sans-serif;">Full case study</div>
+
+<div>This web application associated with a Windows-based application Human Resources Management, suitable for different size and type of business.  </div>
+<br/>
+<div>Windows-application stores all the employee data that is essential for both private companies and for government agencies, and also includes all the modules, which are important for monitoring employees. Access is a necessary form and documents are carried out with the aid of a web browser. Also implemented a system of e-mail communications (Incoming and Outgoing) between staff and the HR-department of the company. </div>
+<br/>
+<div>This application also allows employee to see and print all his information saved in the system (Employee profile). Users are not allowed to change data on line, but are allowed to print and change his data at the printed form and submit it as attachment on line to Head office or via fax. Employee Ledger reports are also available in this application. </div>
+<br/>
+<div>For settings and controls, the admin can also setup what form to be use by employee, it depends on his status. E.g., Employee cannot fill leave request or loan request if he is in test period; there is link between the status of employee and filling the forms. The status like: under test, normal, active/inactive, loan status and passport status.</div>
+<br/>
+
+<div>The application allows you to fill in various forms: </div>
+<br/>
+<li>- Leave request </li>
+<li>- Loan request </li>
+<li>- Employee expenses </li>
+<li>- Employee absence</li>
+<li>- Passport request </li>
+
+<p><b>OS requirements:</b>Microsoft XP SP2 or higher, Vista 7, Win 7 </p>
+
+
+<p><b>Technologies:</b> Microsoft.NET, extJS, Ajax </p>
+
+
+<p><b>Database:</b> Microsoft SQL </p>
+
+</body>
+</html>  
+
+</div>
+</div>
+</body>
+</html>
+
+</zk:vbox>
+
+
+
+<zk:vbox id="v10" visible="false">
+<html>
+<body>
+<div class="rightColumn">
+<div class="textLeft">
+<h1>Curriculum Vitae Online</h1>
+<br/><br/>
+<html>
+<body>
+
+
+Curriculum Vitae Online (CV Online) application could be easily implemented to your website and it will be updated through online directly at HR server. This CV Online module can be set and sell separate from HR Online Module.
+<br/>
+<br/>
+<div style="color: #979797;font-weight: bold;font-family: Arial,Helvetica,sans-serif;">Features</div>
+<br/>
+
+<div>
+The application allows you to organize the supplied resume online, automatically checks for possible errors by the applicant, stores information and copies of documents in the database. 
+</div>
+<br></br>
+<div>All resumes are available for updates from the staff, also realized the system of feedback from the administrators of HR. </div>
+<br/>
+<div>CVs structure allows you to display a summary of the most important characteristics of future employees.</div>
+<br/>
+
+
+<div style="color: #979797;font-weight: bold;font-family: Arial,Helvetica,sans-serif;">Web</div>
+<br/>
+<p><b>OS requirements:</b>Microsoft XP SP2 or higher, Vista 7, Win 7 </p>
+
+
+<p><b>Technologies:</b> Microsoft.NET, extJS, Ajax </p>
+
+
+<p><b>Database:</b> Microsoft SQL </p>
+
+</body>
+</html>  
+
+</div>
+</div>
+</body>
+</html>
+
+</zk:vbox>
+
+<zk:vbox id="v13" visible="false">
+<zk:grid style="background: white; ">
+<zk:columns>
+<zk:column></zk:column>
+<zk:column></zk:column>
+</zk:columns>
+
+<zk:rows>
+<zk:row style="background: white; ">
+
+<zk:cell><h1>Support :</h1> </zk:cell>
+<zk:cell> </zk:cell>
+</zk:row>
+
+<zk:row style="background: white; ">
+<zk:cell>
+<a href="http://hinawi2.dyndns.org:8181/sata/documents/BackupRestoreData.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">How to Backup &amp; Restore Data</a>
+ 
+</zk:cell>
+</zk:row>
+
+<zk:row style="background: white; ">
+<zk:cell>
+<a href="http://hinawi2.dyndns.org:8181/sata/documents/SystemRequirements.pdf" 
+  target="blank" style="font-size:14px;text-decoration:underline;font-weight:bold;color:#2C6F99">System Requirements</a>
+ 
+</zk:cell>
+</zk:row>
+
+</zk:rows>
+</zk:grid>
+
+</zk:vbox>
+
+	</zk:vlayout>
+</zk:center>
+
+ <zk:east title="Contacts" size="18%"  margins="1,1,45,1" border="none">
+		<zk:include src="rightmenu.zul"></zk:include>
+		</zk:east>
+		
+		
+</zk:borderlayout>
+</zk:vlayout>
+</zk:zk>

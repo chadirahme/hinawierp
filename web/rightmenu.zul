@@ -1,0 +1,89 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk:zk xmlns="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:zk="http://www.zkoss.org/2005/zul"
+	xmlns:c="http://www.zkoss.org/dsp/web/core">
+	<style dynamic="true"> 
+
+
+<!-- Make Plain Grid --> 
+.GridLayoutNoBorder tr.z-row td.z-row-inner, tr.z-row .z-cell,div.z-grid 
+{ 
+border: none; 
+overflow: hidden; 
+zoom: 1; 
+background: white; 
+border-top: none; 
+border-left: none; 
+border-right: none; 
+border-bottom: none; 
+} 
+
+</style> 
+		<zk:vlayout>
+		<zk:grid sclass="GridLayoutNoBorder">
+         	<zk:columns>
+         	<zk:column></zk:column>
+         	</zk:columns>
+         	<zk:rows>
+         	<zk:row>
+         	 <a href="http://hinawi2.dyndns.org:8181/sata/quotationContactUsLayout.zul">
+         	 <zk:label value="Quotation Request \ Contact Us " style="margin-left:5px;cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-weight:bold;font-size:14px;"></zk:label>
+			</a>
+          
+          
+           
+         	</zk:row>
+         	<zk:row>
+         	<a href="http://hinawi2.dyndns.org:8181/sata/customerFeedbackLayout.zul">
+           <zk:label value="Feedback Form" style="margin-left:5px;cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-weight:bold;font-size:14px;"></zk:label>
+           </a>
+         	</zk:row>
+         	<zk:row>
+         	<a href="http://hinawi2.dyndns.org:8181/sata/contactus.zul">
+           <zk:label value="Company Address"  style="margin-left:5px;cursor:pointer;color:#2c6f99;text-decoration:none;background:none;font-weight:bold;font-size:14px;"></zk:label>
+           </a>
+         	</zk:row>
+         	
+         		<zk:row>
+         	<a href="http://hinawi2.dyndns.org:8181/sata/products/whyquickbook.zul">
+           <zk:label value="Why QuickBooks users need Hinawi ERP"   style="margin-left:5px;cursor:pointer;color:green;text-decoration:none;background:none;font-weight:bold;font-size:14px;"></zk:label>
+           </a>
+         	</zk:row>
+         	
+         	
+         
+         	</zk:rows>
+         	</zk:grid>
+         	
+		<div class="contact" style="padding-bottom:10px;margin:5px;">
+            	
+                <p><img  src="http://hinawi2.dyndns.org:8181/sata/images/i_tel.gif" width="20" height="20" />Tel:<span > +971 2 671 42 42
+                <br/>&#160; &#160; &#160; Mob: +971 50 622 80 24
+                </span></p>
+                
+                
+                <p><img src="http://hinawi2.dyndns.org:8181/sata/images/i_fax.gif" width="20" height="20" alt="Fax Hinawi Software" />Fax:<span> +971 2  671 13 11</span></p>
+                <p><img src="http://hinawi2.dyndns.org:8181/sata/images/i_mail.gif" width="20" height="20" alt="Mail Hinawi Software" /><a href="mailto:hinawi@eim.ae">hinawi@eim.ae</a></p>
+                
+                <p><img src="http://hinawi2.dyndns.org:8181/sata/images/fb.jpg" width="20" height="20" alt="hinawisoftware" /><a target="blank" href="https://www.facebook.com/hinawisoftware">hinawisoftware</a></p>
+                
+                 <p><img src="http://hinawi2.dyndns.org:8181/sata/images/skype.png" width="20" height="20" alt="Skype" />hinawisoftware</p>
+                 
+                <div class="adress">Abu Dhabi - UAE<br />
+                P.O. Box: 29006</div>    
+              <br/>
+               <hbox>
+         	<img src="http://hinawi2.dyndns.org:8181/sata/images/qblogo.jpg" style="width:100px;height:80px"></img> 
+          	<img src="http://hinawi2.dyndns.org:8181/sata/images/Intuit.JPG" style="width:100px;height:80px"></img> 
+        	</hbox>
+              
+              
+            </div>
+         	
+         	            			        
+          
+         
+           					
+            </zk:vlayout>
+            </zk:zk>

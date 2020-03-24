@@ -1,0 +1,189 @@
+<zk>
+
+	<borderlayout>
+
+		<center autoscroll="true">
+			<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+				viewModel="@id('vm')
+	 @init('list.ListViewModel',type='general')"
+				vflex="1" style="@bind(vm.language eq 'ar' ? 'direction: rtl;' : '')">
+
+
+				<label value="@bind(vm.title)"
+					style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+
+				<grid>
+					<columns>
+						<column width="150px"></column>
+						<column width="100px"></column>
+						<column width="150px"></column>
+						<column width="200px"></column>
+						<column width="120px"></column>
+					</columns>
+					<rows>
+
+						<row>
+							<cell colspan="3">
+								<hbox visible="@bind(vm.passFieldId eq 0)">
+									<label value="${labels.general.field}"></label>
+
+									<listbox multiple="false" hflex="1" mold="select"
+										model="@load(vm.lstHRFields) @template(vm.language eq 'ar' ? 'ar' : 'en')"
+										selectedItem="@bind(vm.selectedHRFields)">
+										<template name="en" var="item">
+											<listitem>
+												<listcell label="@load(item.descreption)"></listcell>
+											</listitem>
+										</template>
+										<template name="ar" var="item">
+											<listitem>
+												<listcell label="@load(item.arabic)"></listcell>
+											</listitem>
+										</template>
+
+									</listbox>
+
+								</hbox>
+							</cell>
+							<cell>
+								<hbox>
+									<label value="Last Modified : "></label>
+									<label value="@bind(vm.lastModified)"></label>
+								</hbox>
+							</cell>
+							<cell>
+								<hbox>
+
+									<button label="${labels.general.add}" onClick="@command('addNewCommand')"
+										disabled="@bind(vm.selectedHRFields.newFlag eq 'N')" visible="@bind(vm.companyRole.canAdd)"></button>
+								</hbox>
+							</cell>
+
+						</row>
+
+						<row visible="@bind(vm.selectedHRFields.parentlistId gt 0)">
+							<label value="${labels.general.mainfield}"></label>
+
+				<cell colspan="2">
+							<listbox multiple="false" hflex="1" mold="select"
+								model="@load(vm.lstParentHRFields) @template(vm.language eq 'ar' ? 'ar' : 'en')"
+								selectedItem="@bind(vm.selectedParentHRFields)">
+								<template name="en" var="item">
+									<listitem>
+										<listcell label="@load(item.enDescription)"></listcell>
+									</listitem>
+								</template>
+								<template name="ar" var="item">
+									<listitem>
+										<listcell label="@load(item.arDescription)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+							</cell>
+						</row>
+
+					</rows>
+
+				</grid>
+
+				<grid vflex="1" emptyMessage="There is no data"
+					model="@load(vm.lstHRValues) @template(each.editingStatus ? 'editable' : 'noneditable')">
+					<auxhead sclass="category-center">
+						<auxheader>
+							<image src="/images/funnel.png" />
+						</auxheader>
+
+						<auxheader>
+							<image src="/images/funnel.png" />
+						</auxheader>
+						<auxheader>
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.enDescription)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader>
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.arDescription)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader>
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.priorityId)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader>
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.notes)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+
+					</auxhead>
+
+					<columns sizable="true">
+						<column label="${labels.general.edit}" width="150px"
+							align="@bind(vm.language eq 'ar' ? 'right' : 'left' )" visible="@bind(vm.companyRole.canModify)"></column>
+						<column label="${labels.general.delete}" width="100px"
+							align="@bind(vm.language eq 'ar' ? 'right' : 'left' )" visible="@bind(vm.companyRole.canDelete)"></column>
+						<column label="${labels.general.enName}" width="250px"
+							sort="auto('enDescription')" align="@bind(vm.language eq 'ar' ? 'right' : 'left' )" />
+						<column label="${labels.general.arName}" width="200px"
+							sort="auto('arDescription')" align="@bind(vm.language eq 'ar' ? 'right' : 'left' )" />
+						<column label="${labels.general.priority}" width="100px"
+							sort="auto('priorityId')" align="@bind(vm.language eq 'ar' ? 'right' : 'left' )" />
+						<column label="${labels.general.notes}" width="300px"
+							sort="auto('notes')" align="@bind(vm.language eq 'ar' ? 'right' : 'left' )" />
+
+					</columns>
+					<template name="editable">
+
+						<row>
+							<div>
+								<button label="${labels.general.save}" onClick="@command('confirm', row=each)" />
+								<button label="${labels.general.cancel}"
+									onClick="@command('changeEditableStatus', row=each)" />
+							</div>
+							<div></div>
+							<textbox
+								value="@load(each.enDescription) @save(each.enDescription, before='confirm')"
+								constraint="no empty : Should not be Blank" hflex="1"></textbox>
+							<textbox
+								value="@load(each.arDescription) @save(each.arDescription, before='confirm')"
+								hflex="1"></textbox>
+							<intbox
+								value="@load(each.priorityId) @save(each.priorityId, before='confirm')"
+								hflex="1" constraint="no negative,no empty"></intbox>
+							<textbox value="@load(each.notes) @save(each.notes, before='confirm')"
+								hflex="1" multiline="true" rows="4"
+								></textbox>
+
+						</row>
+					</template>
+
+					<template name="noneditable">
+						<row>
+							<button image="/images/rowedit.png" disabled="@bind(vm.selectedHRFields.editFlag eq 'N')"
+								onClick="@command('changeEditableStatus', row=each)" />
+							<button image="/images/cross.png"
+								disabled="@bind(vm.selectedHRFields.deleteFlag eq 'N')" onClick="@command('deleteCommand', row=each)" />
+							<label value="@bind(each.enDescription)"></label>
+							<label value="@bind(each.arDescription)"></label>
+							<label value="@bind(each.priorityId)"></label>
+							<textbox value="@bind(each.notes)" hflex="1" multiline="true"
+								rows="4" readonly="true"
+								></textbox>
+
+						</row>
+
+
+					</template>
+
+				</grid>
+
+				<label style="color:green;font-weight:bold;margin:15px;font-size:14px;"
+					value="${labels.general.note}"></label>
+			</vlayout>
+		</center>
+	</borderlayout>
+
+</zk>

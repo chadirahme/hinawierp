@@ -1,0 +1,270 @@
+
+<zk>    
+<style>
+.row
+{
+style="background:#FFFFFF;"
+}
+</style>
+
+   <grid hflex="1" style="${sessionScope.Authentication.language eq 'English' ? 'direction: rtl;' : '' }"
+   apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('layout.HeaderViewModel')">
+	<columns>
+	<column width="100px"></column>
+	<column width="240px"></column>
+	<column width="740px"></column>
+	<column hflex="1"></column>
+	</columns>
+	<rows >
+	
+	
+	<row style="background:#FFFFFF;">
+	<cell rowspan="2" align="left" valign="top">
+
+	<a href="/index.zul" class="homeIcon">
+<!-- 	<image src="/images/logo.jpg" height="100px" width="150px" ></image> -->
+	</a>
+	</cell>
+	<cell align="right">
+<!-- 	<label style="color:#2C6F99;font-size:30px">المكتشف للكمبيوتر</label> <separator height="1px"></separator>
+	<label style="color:#2C6F99;font-size:25px">Explorer Computer</label> -->
+	
+	<image src="/images/logo.jpg" height="80px" width="230px" ></image>
+	</cell>
+	
+	<cell>
+	
+	</cell>
+	
+	<cell align="right" visible="false">
+   	<hbox>
+   	   	  
+   	<div style="margin-right:5px" if="${sessionScope.Authentication.language eq 'Arabic' }">
+   	 <a href="" onClick="infoFavorite.doPopup();" >What's New</a>
+   </div>
+   	
+   	<div style="margin-right:550px;font-size:15px;" if="${sessionScope.Authentication.language eq 'English' }">
+   	 <a href="" onClick="infoFavorite.doPopup();" style="font-size:15px;" >ما الجديد</a>
+   </div>
+   
+   
+   <div style="margin-right:15px" if="${sessionScope.Authentication.language eq 'Arabic' }">
+   <a href="/register.zul"  >Free Trial</a> or
+   		<a href="/login.zul">Log In</a>
+   </div>
+   
+    <div style="margin-right:50px" if="${sessionScope.Authentication.language eq 'English' }">
+   <a href="register.zul"  style="font-size:15px;">إختبار مؤقت</a> أو
+   		<a href="login.zul" style="font-size:15px;">دخول</a>
+   </div>
+   
+        		
+   </hbox>
+	  
+	
+	
+	
+	 </cell>
+			
+	</row>
+	
+	
+	<row style="background:#FFFFFF;">
+	<cell colspan="4" if="${sessionScope.Authentication.language eq 'Arabic' }" >
+	<html>
+		<div xmlns:n="native">		
+	
+				<n:nav style="width:100%;">
+            	<n:ul class="fancyNav">
+                <n:li id="home" ><a href="http://localhost:8080/sata/index.zul" class="homeIcon">Home</a></n:li>
+                <n:li id="product"><a href="http://localhost:8080/sata/products/erp.zul">Hinawi ERP</a></n:li>
+                <n:li id="quickbooks"><a href="http://localhost:8080/sata/quickbooks/quickbook.zul">QuickBooks</a></n:li>
+                <n:li id="services"><a href="http://localhost:8080/sata/servicecontent.zul">Services</a></n:li>
+            <!--     <n:li id="contact"><a href="request.zul">Contact us</a></n:li>
+                <n:li id="video"><a href="videoContents.zul">Video</a></n:li> -->
+                <n:li id="demo"><a href="http://localhost:8080/sata/demo.zul">Demo</a></n:li>
+                   
+            	</n:ul>
+        		</n:nav>
+        		
+				<!-- <n:nav style="width:100%;">
+            	<n:ul class="fancyNav">
+                <n:li id="home" ><a href="http://hinawi2.dyndns.org:8181/sata/index.zul" class="homeIcon">Home</a></n:li>
+                <n:li id="product"><a href="http://hinawi2.dyndns.org:8181/sata/products/erp.zul">Hinawi ERP</a></n:li>
+                <n:li id="quickbooks"><a href="http://hinawi2.dyndns.org:8181/sata/quickbook.zul">QuickBooks</a></n:li>
+                <n:li id="services"><a href="http://hinawi2.dyndns.org:8181/sata/servicecontent.zul">Services</a></n:li>
+                <n:li id="contact"><a href="request.zul">Contact us</a></n:li>
+                <n:li id="video"><a href="videoContents.zul">Video</a></n:li>
+                <n:li id="demo"><a href="http://hinawi2.dyndns.org:8181/sata/demo.zul">Demo</a></n:li>
+                   
+            	</n:ul>
+        		</n:nav> -->
+        		
+	</div>
+	</html>
+	</cell>
+	
+	<cell colspan="4" if="${sessionScope.Authentication.language eq 'English' }" align="center">
+	<html>
+		<div xmlns:n="native">		
+	
+				<n:nav style="width:100%;">
+            	<n:ul class="fancyNav">
+            	 
+                <n:li id="demo"><a href="demo.zul">تجربة البرنامج</a></n:li>
+                 <n:li id="video"><a href="videoContents.zul">عرض بالفيديو</a></n:li>
+                 <n:li id="contact"><a href="request.zul">الاتصال بنا</a></n:li>
+                  <n:li id="services"><a href="servicecontent.zul">الخدمات</a></n:li>
+                  <n:li id="quickbooks"><a href="quickbook.zul">كويك بوك</a></n:li>
+                    <n:li id="product"><a href="product.zul">البرامج</a></n:li>
+                      <n:li id="home" ><a href="index.zul" class="homeIcon">Home</a></n:li>
+            	</n:ul>
+        		</n:nav>
+        		
+	</div>
+	</html>
+	</cell>
+	
+	</row>
+	</rows>
+	</grid>
+
+
+	
+	<window id="infoFavorite" width="350px"  visible="false" border="none" closable="true"  title="" style="margin-left:900px;margin-top:70px;" >
+	
+     <vlayout>
+	
+	<grid height="380px" >
+	<columns>
+	<column width="100px"></column>
+    <column width="200px"></column>
+   
+	</columns>
+	
+	   <rows>
+   
+   <row style="background:#FFFFFF;">
+   <cell rowspan="15">
+ 	<image src="images/new.jpg" height="80px" width="80px"></image>
+ 	</cell>
+ 		
+   </row>
+   <row style="background:#FFFFFF;">
+   <a href="/timesheet/sidebar.zul" >Timesheet Setup</a>    
+   </row>
+   
+     <row style="background:#FFFFFF;">
+   <a href="/timesheet/sidebar.zul" >Timesheet Reports</a>
+    
+   </row>
+   
+    <row style="background:#FFFFFF;">
+   <a href="/hr/list/sidebar.zul" >HR Setup</a>
+    
+   </row>
+   
+    <row style="background:#FFFFFF;">
+   <a href="/hr/list/sidebar.zul" >HR Activities</a>
+    
+   </row>
+   
+   
+    <row style="background:#FFFFFF;">
+   <a href="/hba/list/sidebar.zul" >Accounting Activities</a>
+    
+   </row>
+   
+   <row style="background:#FFFFFF;">
+   <a href="/hba/list/sidebar.zul" >Accounting Reports</a>
+    
+   </row>
+   
+    <row style="background:#FFFFFF;">
+    <a href="/hba/list/sidebar.zul" >Accounting Setup</a>
+  
+   </row>
+  
+    <row style="background:#FFFFFF;">
+     <a href="/hba/list/sidebar.zul" >Quotation</a>
+  
+   </row>		
+  
+  <row style="background:#FFFFFF;">
+     <a href="/hba/list/sidebar.zul" >Item Receipt</a>
+  
+   </row>
+   
+    <row style="background:#FFFFFF;">
+    <a href="/hba/list/sidebar.zul" >Cash Invoice(Point Of Sale)</a>
+  
+   </row>
+   
+   <row style="background:#FFFFFF;">
+    <a href="/hba/list/sidebar.zul" >Credit Invoice</a>
+  
+   </row>
+    
+    <row style="background:#FFFFFF;">
+     <a href="/hba/list/sidebar.zul" >Cash Payment</a>
+  
+   </row>	
+   
+   <row style="background:#FFFFFF;">
+    <a href="/hr/list/sidebar.zul" >Help and Support -> Manual</a>
+  
+   </row>
+   
+	</rows>
+	</grid>
+
+  <hbox pack="end" hflex="1">
+ 	<grid>
+	<columns>
+	<column width="60px"></column>
+    <column width="60px"></column>
+    <column width="60px"></column>
+    <column width="60px"></column>   
+	</columns>
+	
+   <rows>
+   
+   <row  style="background:#FFFFFF;">
+   <cell colspan="3" align="left">
+   <label value="Follow us" style="font-weight:bold"></label>
+   </cell>
+   </row>
+   
+   
+   <row style="background:#FFFFFF;">
+	
+	 <a href="https://www.twitter.com/hinawisoftware" target="_blank">
+		<image src="images/twitter-icon.png" height="50px" width="50px"></image>
+		</a>	
+		
+		
+		
+	 <a href="https://www.facebook.com/hinawisoftware" target="_blank">
+		<image src="images/facebook-icon.png" height="50px" width="50px"></image>
+     </a>
+     
+       <a href="https://ae.linkedin.com/pub/hatem-hinnawi/23/99/90a" target="_blank">
+		<image src="images/Linked_in.png" height="50px" width="50px"></image>
+		</a>	
+		
+		  <a href="https://plus.google.com/u/0/s/hatem%20hinawi" target="_blank">
+		<image src="images/googleplus.jpg" height="50px" width="50px"></image>
+		</a>	
+     
+	</row>
+	</rows>
+	</grid>
+  
+  
+  	</hbox>
+
+	</vlayout>
+	</window>
+	
+	
+</zk>

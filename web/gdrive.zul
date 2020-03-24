@@ -1,0 +1,19 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="new page title" border="normal" apply="org.zkoss.bind.BindComposer" 
+		viewModel="@id('vm') @init('home.TestGoogleDriveViewModel')">
+
+<grid>
+<columns>
+<column width="150px"></column>
+<column width="250px"></column>
+<column width="150px"></column>
+<column></column>
+</columns>
+
+<rows>
+
+</rows>
+</grid>
+</window>
+</zk>

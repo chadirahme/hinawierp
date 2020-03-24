@@ -1,0 +1,158 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('hba.ReportViewModel')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<label value="General Ledger Report"
+					style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+				<grid>
+					<columns>
+						<column width="200px"></column>
+						<column width="200px"></column>
+						<column width="220px"></column>
+						<column width="200px"></column>
+					</columns>
+					<rows>
+						<row>
+							<cell>
+								<button id="btn1" label="View" width="100px"
+									onClick="@command('searchGeneralLedgerCommand')"></button>
+							</cell>
+							<cell>
+								<button id="btn2" label="Reset" width="100px" visible="false"
+									onClick="@command('resetTrialBalanceReport')"></button>
+							</cell>
+							<cell>
+								<button label="Export To Excel" visible="false"
+									onClick="@command('exportProfitToExcel',ref=balanceSheetReport)"></button>
+							</cell>
+							<cell>
+								<checkbox checked="@bind(vm.hideArabic)" width="15px"
+									visible="false" label="Hide description11" />
+							</cell> 
+							
+							
+						</row>
+						<!-- <row>
+						 <cell>
+								<label value=""></label>
+							</cell>
+							
+							<cell>
+							<checkbox checked="@bind(vm.hideZero)" width="15px"
+									visible="true" label="Hide accounts with value zero"/>								
+								
+							</cell>
+						</row> -->
+					
+					</rows>
+				</grid>
+				<listbox model="@load(vm.lstGeneralLedgerReport)" vflex="1"
+					id="balanceSheetReport" emptyMessage="No data found" hflex="1"
+					width="920px">
+					 <auxhead sclass="category-center">
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.filter.actName)" onChange="@command('changeProfitFilter')" />
+						</auxheader>
+						
+						<auxheader colspan="1" visible="@bind(!vm.hideArabic)">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" value="@bind(vm.filter.description)"
+								onChange="@command('changeProfitFilter')" />
+						</auxheader>
+												
+						
+					</auxhead> 
+
+					<listhead menupopup="auto" sizable="true">
+						<listheader  sort="auto('accountNameORG')" label="Account Name"
+							width="150px">							
+							</listheader>
+								
+							<listheader  sort="auto('accountNameORG')" label="Account No." width="150px">							
+							</listheader>	
+							<listheader  sort="auto('accountNameORG')" label="Account Type" width="150px">							
+							</listheader>				
+							<listheader  sort="auto('accountNameORG')" label="Date" width="150px">							
+							</listheader>	
+							<listheader  sort="auto('accountNameORG')" label="Type" width="150px">							
+							</listheader>	
+							<listheader  sort="auto('accountNameORG')" label="Number" width="150px">							
+							</listheader>	
+							<listheader  sort="auto('accountNameORG')" label="Name" width="150px">							
+							</listheader>				
+							<listheader  sort="auto('accountNameORG')" label="Name Type" width="150px">							
+							</listheader>	
+							<listheader  sort="auto('accountNameORG')" label="Memo" width="100px">							
+							</listheader>	
+							<listheader  sort="auto('accountNameORG')" label="Multiple" width="150px">							
+							</listheader>	
+							<listheader  sort="auto('accountNameORG')" label="Debit" width="100px">							
+							</listheader>	
+							<listheader  sort="auto('accountNameORG')" label="Credit" width="100px">							
+							</listheader>	
+							<listheader  sort="auto('accountNameORG')" label="Balance" width="100px">							
+							</listheader>	
+																		
+																			
+					</listhead>
+					<template name="model">
+						<listitem style="@bind(each.rowColor eq 'blue' ? 'background:#CCF5EB;' : each.istotalSummary eq 1 ? 'background:#CCF5EB;' : each.istotal eq 2 ? 'margin-left:60px' : each.istotal eq 3 ? 'margin-left:90px' : 'margin-left:120px')">
+							<listcell>
+								<label value="@bind(each.accountNameORG)" 
+								style="@bind(each.subLevel eq 0 ? 'color:black;font-weight:bold;' : each.subLevel eq 1 ? 'margin-left:30px' : each.subLevel eq 2 ? 'margin-left:60px' : each.subLevel eq 3 ? 'margin-left:90px' : 'margin-left:120px')"
+								/>
+							</listcell>
+							
+							<listcell>
+								<label value="@bind(each.accountNumber)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.accountType)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.txnDate)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.txnType)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.txnNo)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.entityName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.entityListType)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.memo)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.splitActName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.debit)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.credit)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.balance)" />
+							</listcell>
+																																												
+
+						</listitem>
+					</template>
+
+				</listbox>
+				
+
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

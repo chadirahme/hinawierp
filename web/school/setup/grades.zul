@@ -1,0 +1,58 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<vlayout apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('school.SchoolViewModel' , type='grades' )" >
+	 
+	 <label value="Grades Setup" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	 
+	 
+	 <listbox id="demoGrid" height="600px"
+           model="@load(vm.lstGrades) @template(each.editingStatus ? 'editable' : 'noneditable')">
+          <listhead sizable="true">
+             <listheader label="English Grade Name" />
+              <listheader label="Arabic Grade Name" />
+             <listheader />
+           
+            </listhead>
+           <template name="editable">
+                <listitem>
+                    <listcell>
+                        <textbox cols="60"
+                            value="@load(each.enGradeName) @save(each.enGradeName, before='saveGradeCommand')" />
+                 </listcell>
+                   <listcell>
+                        <textbox
+                         value="@load(each.arGradeName) @save(each.arGradeName, before='saveGradeCommand')" />
+                   </listcell>
+                   <listcell>
+                        <div>
+                         <button image="/images/success.gif"
+                             onClick="@command('saveGradeCommand', row=each)" />
+                           <button image="/images/cross.png"
+                              onClick="@command('changeEditableStatus', row=each )" />
+                     </div>
+                    </listcell>
+               </listitem>
+           </template>
+           <template name="noneditable">
+             <listitem>
+                    <listcell>
+                        <label value="@load(each.enGradeName)" />
+                   </listcell>
+                   <listcell>
+                        <label value="@load(each.arGradeName)" />
+                  </listcell>
+                   <listcell>
+                        <button image="/images/rowedit.png"
+                         onClick="@command('changeEditableStatus', row=each )" />
+                 </listcell>
+                 
+               </listitem>
+           </template>
+       </listbox>
+       
+	 
+	 
+	 </vlayout>
+</zk>

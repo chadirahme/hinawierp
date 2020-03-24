@@ -1,0 +1,268 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/css/style.css"?>
+<?link rel="stylesheet" type="text/css" href="/css/hstyle.css"?>
+
+<zk>
+	<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('timesheet.TimesheetGenaratedReport')"
+		vflex="1">
+
+		<label value="List Of Created TimeSheet"
+			style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+
+
+		<grid>
+			<columns>
+				<column width="100px"></column>
+				<column width="180px"></column>
+				<column width="100px"></column>
+				<column width="180px"></column>
+				<column width="100px"></column>
+				<column width="250px"></column>
+			</columns>
+			<rows>
+
+				<row>
+					<label value="Company"></label>
+					<listbox multiple="false" hflex="1" mold="select"
+						model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+						<template name="model" var="item">
+							<listitem>
+								<listcell label="@load(item.enCompanyName)"></listcell>
+							</listitem>
+						</template>
+					</listbox>
+
+					<label value="Project"></label>
+					<listbox hflex="1" mold="select" model="@load(vm.lstProject)"
+						selectedItem="@bind(vm.selectedProject)">
+						<template name="model" var="item">
+							<listitem>
+								<listcell label="@load(item.projectName)"></listcell>
+							</listitem>
+						</template>
+					</listbox>
+
+					<label value="Employee"></label>
+					<listbox multiple="false" hflex="1" mold="select"
+						model="@load(vm.lstCompEmployees)" selectedItem="@bind(vm.selectedCompEmployee)">
+						<template name="model" var="item">
+							<listitem>
+								<listcell label="@load(item.fullName)"></listcell>
+							</listitem>
+						</template>
+					</listbox>
+
+				</row>
+
+				<row>
+					<cell colspan="4">
+						<hbox>
+							<label value="Period From"></label>
+							<!-- <listbox multiple="false" mold="select" selectedIndex="@bind(vm.selectedPeriod)"> 
+								<listitem label="All"></listitem> <listitem label="Period"></listitem> </listbox> -->
+
+							<listbox multiple="false" mold="select" model="@load(vm.lstMonths)"
+								selectedIndex="@bind(vm.selectedFromMonth)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+
+							<listbox multiple="false" mold="select" model="@load(vm.lstYears)"
+								selectedItem="@bind(vm.selectedYear)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+
+							<label value="To"></label>
+							<listbox multiple="false" mold="select" model="@load(vm.lstToMonths)"
+								selectedIndex="@bind(vm.selectedToMonth)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+
+							<listbox multiple="false" mold="select" model="@load(vm.lstToYears)"
+								selectedItem="@bind(vm.selectedToYear)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+
+							<button label="Search" id="btn1" onLongOp="@command('searchCommand')"
+								visible="@bind(vm.companyRole.canView)"></button>
+						</hbox>
+					</cell>
+
+					<cell colspan="2">
+						<hbox>
+
+
+							<button label="Filter" onClick="@command('filterCommand')"></button>
+
+							<button label="Clear" onClick="@command('clearCommand')"></button>
+
+						<!-- 	<button label="PDF" onClick="@command('exportCommand',ref=lstHistory)"
+								visible="@bind(vm.companyRole.canExport)"></button> -->
+
+					 <button label="Excel" onClick="@command('exportToExcel',ref=lstHistory)"
+								visible="@bind(vm.companyRole.canExport)"></button>
+
+						</hbox>
+					</cell>
+
+				</row>
+			</rows>
+		</grid>
+
+
+        <grid id="lstHistory" model="@load(vm.reportGroupModel)" hflex="1"
+			width="620px" vflex="1" emptyMessage="No data found">
+			<auxhead sclass="category-center">						
+					
+						<auxheader colspan="2">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="160px"  placeholder="Search by Emp No." 
+								 value="@bind(vm.employeeFilter.employeeNo)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="2">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="160px"  placeholder="Search by Emp Name" 
+								 value="@bind(vm.employeeFilter.fullName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="2">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="160px"  placeholder="Search by Position" 
+								 value="@bind(vm.employeeFilter.position)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="2">
+							<image src="/images/funnel.png" />
+						<textbox instant="true" width="160px"  placeholder="Search by Status" 
+								 value="@bind(vm.employeeFilter.tsStatus)" onChange="@command('changeFilter')" />
+						</auxheader>
+						</auxhead>
+			<columns menupopup="auto" sizable="true">
+				<column width="110px" label="Employee No." sort="auto('empNo')" />
+				<column width="200px" label="Name" sort="auto('enFullName')" />
+				<column width="120px" label="Position" sort="auto('enPositionName')" />
+				<column width="100px" label="Date" sort="auto('tsDate')" />
+				<column width="100px" label="Day" sort="auto('dayofWeek')" />
+				<column width="100px" label="Status" sort="auto('tsStatus')" />
+				<column width="100px" label="Calculate " sort="auto('calcFlag')" />
+				<column width="100px" label="Unit" sort="auto('dayOrHours')" />
+				<column width="100px" label="Total Hrs/Days" sort="auto('unitNO')" />
+				<column width="100px" label="OT Unit 1.25" sort="auto('ot1')" />
+				<column width="100px" label="OT Unit 1.5" sort="auto('ot2')" />
+				<column width="100px" label="OT Unit 2" sort="auto('ot3')" />
+				<column width="100px" label="Total OT" sort="auto('totalOverTime')" />
+
+			</columns>
+			<template name="model:group">
+				<group>
+					<cell>
+						<!-- <label value="@load(each[3])" ></label> -->
+						<label value="  Emp NO. : "></label>
+						<label value="@load(each[0])"></label>
+						<label value=" | Name : "></label>
+						<label value="@load(each[1])"></label>
+						<!-- <label value=" | Position : "></label>
+						<label value="@load(each[5])"></label>
+						<label value=" | Present : "></label>
+						<label value="@load(each[11])"></label>
+						<label value=" | Absence : "></label>
+						<label value="@load(each[12])"></label>
+						<label value=" | Leave : "></label>
+						<label value="@load(each[13])"></label>
+						<label value=" | Holiday : "></label>
+						<label value="@load(each[14])"></label>
+						<label value=" | Total OT : "></label>
+						<label value="@load(each[15])"></label> -->
+						<!-- <label value=" @load(each[2])" style="color:green" ></label> -->
+					</cell>
+				</group>
+			</template>
+			<template name="model">
+				<row
+					style="@bind(each.dayofWeek eq 'Friday' || each.tsStatus eq 'Holiday' || each.tsStatus eq 'Absence' || each.tsStatus eq 'Leave' ? 'background:#D68533' : '#D68533')">
+					<label value="@bind(each.empNo)">
+					</label>
+					<label value="@bind(each.enFullName)">
+					</label>
+					<label value="@bind(each.enPositionName)">
+					</label>
+					<label value="@bind(each.tsDate)">
+					</label>
+					<label value="@bind(each.dayofWeek)">
+					</label>
+					<label value="@bind(each.tsStatus)"
+						style="@bind(each.tsStatus eq 'Holiday' || each.tsStatus eq 'Absence' || each.tsStatus eq 'Leave' ? 'color:red;' : '')">
+					</label>
+					<label value="@bind(each.calcFlag)">
+					</label>
+					<label value="@bind(each.dayOrHours)" />
+
+					<label value="${c:formatNumber(each.unitNO, '###')}" />
+
+					<label value="${c:formatNumber(each.ot1, '###')}">
+					</label>
+
+					<label value="${c:formatNumber(each.ot2, '###')}">
+					</label>
+
+					<label value="${c:formatNumber(each.ot3, '###')}">
+					</label>
+					<label value="@bind(each.totalOverTime)" style="font-weight:bold;color:green">
+					</label>
+				</row>
+				
+			</template>
+			<template name="model:groupfoot">
+				<groupfoot  style="font-weight:bold;background:#D6E0FF">
+					<cell colspan="8" style="text-align: right; padding-right: 15px">
+						<label value="@load(each[0])" style="font-weight:bold;color:balck" />
+						
+					</cell>
+					<cell>
+					<label value="Present : "></label>
+						<label value="@load(each[11])" style="font-weight:bold;color:balck"></label>
+					</cell>
+					<cell>
+					<label value="Absence : "></label>
+						<label value="@load(each[12])" style="font-weight:bold;color:balck"></label>
+						
+					</cell>
+					<cell>
+					<label value="Leave : "></label>
+						<label value="@load(each[13])" style="font-weight:bold;color:balck"></label>
+						
+					</cell>
+					<cell>
+					<label value="Holiday : "></label>
+						<label value="@load(each[14])" style="font-weight:bold;color:balck"></label>
+						
+					</cell>
+					<cell>
+					<label value="Total OT : "></label>
+						<label value="@load(each[15])"></label>
+					</cell>
+				</groupfoot>
+			</template>
+			
+		</grid>
+        
+		
+
+	</vlayout>
+</zk>

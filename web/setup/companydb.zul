@@ -1,0 +1,105 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="DataBases Setup" border="normal">
+
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('setup.users.CompanyDBViewModel')" vflex="1">
+	 
+	 
+<grid >
+<columns>
+<column width="100px"></column>
+<column width="150px"></column>
+<column></column>
+</columns>
+
+<rows>
+<row>
+<label value="Company"></label>
+<listbox multiple="false" hflex="1" mold="select" model="@load(vm.companyList)" selectedItem="@bind(vm.selectedCompany)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.companyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			
+			<button label="ADD New Host" onClick="@command('addNewHostCommand')"></button>
+</row>
+
+<row>
+<cell colspan="3">
+<grid id="demoGrid" model="@load(vm.companyAccessList) @template((vm.displayEdit) ? 'editable' : 'noneditable')" height="300px">
+<columns>             	
+                <column width="130px">DataBase Type</column>
+                <column width="180px">Host</column>
+                <column width="130px">DataBase Name</column>
+                <column width="110px">Login ID</column>
+                <column width="110px">Password</column>
+                 <column width="70px">Status</column>
+                
+                <column width="120px" visible="@load(vm.displayEdit)">Test Connection</column>
+                <column width="120px" visible="@load(vm.displayEdit)">Save</column>
+                <column width="120px" visible="@load(vm.displayEdit)">Delete</column>
+            </columns>
+            
+            <template name="noneditable">
+                <row>
+                    <label value="@load(each.dbtype)" />
+                    <label value="@load(each.userip)" />
+                    <label value="@load(each.dbname)" />
+                    <label value="@load(each.dbuser)" />
+                    <label value="@load(each.dbpwd)" />
+                     <label value="@load(each.serverStatus)" />
+                    <button
+                        image="/widgets/grid/inline_row_editing/img/pencil-small.png"
+                        onClick="@command('changeEditableStatus', languageContributionStatus=each)" />
+                </row>
+            </template>
+            
+             <template name="editable">
+              <row>
+              <listbox multiple="false" hflex="1" mold="select" model="@load(vm.dbTypeList)" selectedItem="@bind(each.dbtype)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			                    
+                    <textbox
+                        value="@bind(each.userip)" />
+                    <textbox
+                        value="@bind(each.dbname)" />
+                         <textbox
+                        value="@bind(each.dbuser)" />
+                         <textbox type="password"
+                        value="@bind(each.dbpwd)" />
+                   
+                   <image src="@bind(each.serverUp?'/images/up.jpg':'/images/down.png')" width="30px;" height="30px"></image>                
+                        <button
+                          label="Test"
+                            onClick="@command('testConnectionCommand' ,row=each)" />
+                            
+                             <button
+                          label="Save"
+                            onClick="@command('saveConnectionCommand' ,row=each)" />
+                            
+                            <button
+                         image="/images/cross.png" width="36px"
+                            onClick="@command('deleteConnectionCommand' ,row=each)" />
+                   
+                </row>
+             </template>
+            
+</grid>
+</cell>
+</row>
+</rows>
+</grid>
+
+
+</vlayout>
+</window>
+</zk>

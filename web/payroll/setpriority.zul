@@ -1,0 +1,56 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<window id="priorityDialog" apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+ mode="highlighted" title="Set Priority for Employees in Salary Sheet" border="normal" position="center,center" closable="true"
+viewModel="@id('vm')  @init('payroll.DraftSalarySheetViewModel',SalaryFlag=arg.SalaryFlag ,compKey=arg.compKey)"  sizable="true"
+onCancel="priorityDialog.detach()"
+ width="990px" height="600px">
+
+<vlayout vflex="1">
+<listbox  model="@bind(vm.lstPriorityEmployees)"
+		hflex="1" vflex="1" emptyMessage="No data found">
+						
+						<listhead menupopup="auto" sizable="true">
+						<listheader label="S.No" width="50px" sort="auto('srNo')" />
+						<listheader label="Empl.No." sort="auto('employeeNo')" width="100px" />
+						<listheader label="Employee Name" sort="auto('fullName')" width="200px" />
+						<listheader label="Department" sort="auto('department')" width="200px" />
+						<listheader label="Position" sort="auto('position')" width="200px" />
+						<listheader label="Start Work" sort="auto('employeementDateString')" width="100px" />
+						<listheader label="Priority" sort="auto('priorityNo')" width="100px" />
+					
+								
+						</listhead>
+							<template name="model">
+							<listitem>
+								<listcell label="@load(each.srNo)" />					
+								
+								<listcell label="@load(each.employeeNo)" />					
+								
+								<listcell label="@load(each.fullName)" />					
+								
+								<listcell label="@load(each.department)" />					
+								
+								<listcell label="@load(each.position)" />					
+								
+								<listcell label="@load(each.employeementDateString)" />					
+								
+											
+								<listcell>
+								<intbox value="@bind(each.priorityNo)" width="50px"></intbox>
+								</listcell>
+												
+								</listitem>
+								</template>
+																											
+						</listbox>
+						
+						<hbox hflex="1" pack="center">
+						<button label="Save" onClick="@command('savePriorityCommand')"></button>
+						<button label="Close" onClick="priorityDialog.detach()"></button>
+						</hbox>
+						</vlayout>
+
+</window>
+</zk>

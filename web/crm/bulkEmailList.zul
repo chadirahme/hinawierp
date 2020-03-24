@@ -1,0 +1,144 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<borderlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm') @init('crm.ContactEmailViewModel',type='bulkEmail')">
+		<center autoscroll="true" border="none">
+	
+		
+		<vlayout hflex="1" vflex="1">
+		<grid>
+								<columns>
+									<column width="100px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+								</columns>
+								
+								<rows>
+								
+								<row>
+								<cell>
+								<label value="Email Status">
+								</label>
+								</cell>
+								
+								<cell>
+				<listbox multiple="false" mold="select" hflex="1" model="@load(vm.lstEmailStatus)" selectedItem="@bind(vm.selectedEmailStatus)">
+				<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+				</listbox>
+											
+								</cell>
+								
+										<cell>
+									<button label="View E-mails" onClick="@command('searchBulkEmailSent')"
+												visible="true"></button>
+										</cell>
+										<cell>
+											<button label="New E-mail " onClick="@command('NewEmailCommand')"
+												visible="true"></button>
+										</cell>
+										
+											
+																				
+									</row>
+									
+								</rows>
+								</grid>
+								
+								
+			<listbox id="BulkGrid" height="400px"  mold="paging" pageSize="50"
+           model="@load(vm.lstBulkEmails)">
+          <listhead sizable="true">
+             <listheader label="Descreption" sort="auto('descreption')" width="200px" />
+              <listheader label="Filter" sort="auto('emailsFilter')" width="100px" />
+                <listheader label="Type" sort="auto('emailType')" width="100px" />
+                <listheader label="Subject" sort="auto('subject')" width="200px" />
+                
+                
+                 <listheader label="Creation date" sort="auto('creationdate')" width="100px" />
+                    <listheader label="Last Run Time" sort="auto('lastTimeRun')" width="100px" />
+                 
+                <listheader label="Status" sort="auto('status')" width="100px" />
+                           
+             <listheader label="# of Mails" sort="auto('numberofMails')" width="100px" />
+                 <listheader label="# Mails Send" sort="auto('numberEmailsend')" width="100px" />
+                      <listheader label="With Reminder" sort="auto('withReminder')" width="100px" />
+                            
+                            
+             <!-- <listheader label="Edit" width="130px"/> -->
+            <listheader label="Stop/Run" width="100px"/>
+             <listheader label="Edit" width="100px"/>
+               
+            </listhead>
+         
+           <template name="model">
+             <listitem>
+                    <listcell>
+                        <label value="@load(each.descreption)" />
+                   </listcell>   
+                     <listcell>
+                        <label value="@load(each.emailsFilter)" />
+                   </listcell>  
+                    
+                     <listcell>
+                        <label value="@load(each.emailType)" />
+                   </listcell> 
+                   
+                    <listcell>
+                        <label value="@load(each.subject)" />
+                   </listcell>  
+                     <listcell>
+                        <label value="@load(each.creationdate)" />
+                   </listcell>  
+                   <listcell>
+                        <label value="@load(each.lastTimeRun)" />
+                   </listcell> 
+                     <listcell>
+                        <label value="@load(each.status)" />
+                   </listcell>  
+                   
+                      <listcell>
+                        <label value="@load(each.numberofMails)" />
+                   </listcell>  
+                                                   
+                   
+                   <listcell>
+                        <label value="@load(each.numberEmailsend)" />
+                   </listcell>  
+                   
+                    <listcell>
+                        <label value="@load(each.withReminder)" />
+                   </listcell>  
+                   
+                  <!--  <listcell>
+                        <button image="/images/rowedit.png"
+                         onClick="@command('changeEditableStatus', row=each )" />
+                 </listcell> -->
+                 
+                   <listcell>
+                        <button image="/images/rowedit.png"
+                         onClick="@command('stopEmailCommand', row=each )" />
+                 </listcell>
+                 
+                  <listcell>
+                        <button image="/images/rowedit.png"
+                         onClick="@command('editEmailCommand', row=each )" />
+                 </listcell>
+                 
+               </listitem>
+           </template>
+       </listbox>				
+		
+		</vlayout>
+		
+		</center>
+		
+		</borderlayout>
+</zk>

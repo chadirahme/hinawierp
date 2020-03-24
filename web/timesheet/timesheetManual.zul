@@ -1,0 +1,33 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<borderlayout apply="org.zkoss.bind.BindComposer">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<label value="Welcome To Timesheet Help And Support"
+					style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+				<grid>
+					<columns>
+						<column width="300px"></column>
+						<column width="200px"></column>
+						<column width="200px"></column>
+						<column width="200px"></column>
+					</columns>
+					<rows>
+						<row>
+							<cell>
+							
+							<button label="Download Manual" id="dowloadBtton">
+											<attribute name="onClick"><![CDATA[
+       	 	Filedownload.save("/download/Timesheet.pdf", null);
+  		  ]]></attribute>
+  		  </button>
+  		  </cell>
+						</row>
+						</rows>
+						</grid>
+						</vlayout>
+			
+		</center>
+	</borderlayout>
+</zk>

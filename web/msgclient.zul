@@ -1,0 +1,147 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+ <zk>
+<html>
+<style>
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+</style>
+
+<script type="text/javascript">
+    var webSocket = 
+      new WebSocket('ws://localhost:8080/sata/websocket');
+
+    webSocket.onerror = function(event) {
+      onError(event)
+    };
+
+    webSocket.onopen = function(event) {
+      onOpen(event)
+    };
+
+    webSocket.onmessage = function(event) {
+      onMessage(event)
+    };
+
+    function onMessage(event) {
+    	playSound("/sata/audio/alarm-new");
+      document.getElementById('messages').innerHTML = 'Received message: ' + event.data;
+    }
+
+    function onOpen(event) {
+      //document.getElementById('messages').innerHTML 
+      //  = 'Connection established';
+    }
+
+    function onError(event) {
+      alert(event.data);
+    }
+
+    function send() 
+    {
+    	var msg = {
+    		    type: "message",
+    		    text: document.getElementById("inputmessage").value,
+    		    id:   "234",
+    		    date: Date.now()
+    		  };
+      webSocket.send(JSON.stringify(msg));
+    	
+     // var txt = document.getElementById('inputmessage').value;
+     // webSocket.send(txt);
+      return false;
+    }
+    function playSound(filename){   
+        document.getElementById("sound").innerHTML='<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename +'.mp3" /></audio>';
+    }
+    
+    
+    
+    // Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal 
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+  </script>
+<button id="myBtn">Open Modal</button>
+ 	 <a href="" onClick="infoFavorite.doPopup();" >What's New</a>
+ <img src="images/alarm_icon_red.gif" onClick="infoFavorite.doPopup();"/>
+ <div id="messages" style="color:red"></div>
+  <div id="sound"></div>
+     
+     
+     <!-- The Modal -->
+	<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">x</span>
+    <p>Some text in the Modal..</p>
+  </div>
+
+	</div>
+
+
+     
+     </html>
+     
+     
+     
+	
+	
+	
+</zk>

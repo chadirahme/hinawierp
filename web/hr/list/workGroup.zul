@@ -1,0 +1,156 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('hr.WorkGroupViewModel')">
+		
+		<center autoscroll="true" border="none">
+		
+			<vlayout hflex="1" vflex="1">
+			 <label value="Assign employees to supervisor" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+				<grid>
+					<columns>
+						<column width="250px"></column>
+						<column width="250px"></column>
+						<column width="250px"></column>
+						<column width="250px"></column>
+						<column></column>
+					</columns>
+					<rows>
+						<row>
+							<cell>
+								<label value="No. of Records"></label>
+								<space></space>
+								<listbox multiple="false" hflex="1" mold="select"
+									model="@load(vm.lstAllPageSize)" selectedItem="@bind(vm.selectedAllPageSize)">
+									<template name="model" var="item">
+										<listitem>
+											<listcell label="@load(item)"></listcell>
+										</listitem>
+									</template>
+
+								</listbox>
+							</cell>
+							<cell>
+								<label value="Company"></label>
+								<space></space>
+								<listbox multiple="false" hflex="1" mold="select"
+									model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+									<template name="model" var="item">
+										<listitem>
+											<listcell label="@load(item.enCompanyName)"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</cell>
+							<cell>
+								<label value="Team Status"></label>
+								<space></space>
+								<listbox multiple="false" width="100px" mold="select"
+									model="@load(vm.lstStatus)" selectedItem="@bind(vm.selectedStatus)">
+									<template name="model" var="item">
+										<listitem>
+											<listcell label="@load(item)"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</cell>
+							<cell>
+								<button label="Add New Team"  visible="@bind(vm.companyRole.canAdd)" width="130px"
+									onClick="@command('addWorkGroupCommand')" id="addWorkGroup">
+								</button>
+								<space></space>
+								<space></space>
+								<button label="Reset" visible="true" width="50px"
+									onClick="@command('resetWorkGroup')" id="resetWorkGroup">
+								</button>
+							</cell>
+						</row>
+					</rows>
+				</grid>
+
+
+
+				<listbox model="@bind(vm.lstWorkGroup)" vflex="1" hflex="1"
+					selectedItem="@bind(vm.selectedWorkGroup)" width="920px" mold="paging"
+					pageSize="@bind(vm.selectedPageSize)">
+					<auxhead sclass="category-center">
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.employeeFilter.supervisorNumber)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.employeeFilter.supervisorName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.employeeFilter.groupName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								value="@bind(vm.employeeFilter.isActive)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px"
+								 />
+						</auxheader>
+
+					</auxhead>
+
+					<listhead menupopup="auto" sizable="true">
+						<listheader label="Edit" width="60px" />
+						<listheader label="Delete" width="60px" />
+						<listheader label="Supervisor Number" sort="auto('supervisorNumber')" />
+						<listheader label="Supervisor Name" sort="auto('supervisorName')" />
+						<listheader label="Team Name" sort="auto('groupName')" />
+						<listheader label="Status" sort="auto('isActive')" />
+						<listheader label="Total No. of Employees" sort="false" />
+
+
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell>
+								<button image="/images/rowedit.png"
+									onClick="@command('editWorkGroupCommand', row=each)" />
+							</listcell>
+							<listcell>
+								<button image="/images/rowdelete.png"
+									onClick="@command('deleteWorkGroup', row=each)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.supervisorNumber)" onClick="@command('viewWorkGroupCommand', row=each)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.supervisorName)" onClick="@command('viewWorkGroupCommand', row=each)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.groupName)" onClick="@command('viewWorkGroupCommand', row=each)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.isActive)" onClick="@command('viewWorkGroupCommand', row=each)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.totalNoOfEmployees)" onClick="@command('viewWorkGroupCommand', row=each)" style="@bind(each.isActive eq 'Active' ? 'color:black;font-weight:bold;' : 'color:red;margin-left:0px') "/>
+							</listcell>
+							
+						</listitem>
+					</template>
+				</listbox>
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

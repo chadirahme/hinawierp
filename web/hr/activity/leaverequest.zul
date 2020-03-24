@@ -1,0 +1,262 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('hr.LeaveRequestViewModel')" vflex="1">
+	 
+	 		<scrollview orient="vertical" vflex="1">
+	 			<label value="Leave Request" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	 		<grid>
+			<columns>
+			<column width="150px"></column>
+			<column width="250px"></column>
+			<column width="300px"></column>
+			<column width="150px"></column>
+			<column width="100px"></column>
+			<column></column>
+			
+			</columns>
+			<rows>
+			<row>
+			<label value="Company"></label>
+			<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)"  disabled="@bind(vm.employeeKey gt 0)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enCompanyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<space></space>
+               <label value="Leave Application Date :"></label>
+               <datebox  value="@bind(vm.requestDate)" format="dd/MM/yyyy" hflex="1" constraint="no empty" ></datebox>
+			</row>
+			
+			<row>
+			<label value="Employee"></label>
+		    <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstCompEmployees)" selectedItem="@bind(vm.selectedCompEmployee)"
+		    disabled="@bind(vm.employeeKey gt 0)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.fullName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			
+			<hbox>
+			<label value="Employee No."></label>
+			<textbox value="@bind(vm.employeeNumber)" width="100px" disabled="@bind(vm.employeeKey gt 0)"></textbox>
+			<button label="Search" onClick="@command('searchCommand')" visible="@bind(vm.employeeKey eq 0)"></button>
+			</hbox>
+			
+			<label value="Email:" if="${vm.employeeKey gt 0}"></label>
+			<label value="@bind(vm.employeeEmail)" if="${vm.employeeKey gt 0}"></label>
+			</row>
+			
+			</rows>
+			
+			</grid>
+			
+			
+			
+			
+			<grid>
+			<columns>
+			<column width="150px"></column>
+			<column width="300px"></column>
+			<column width="200px"></column>
+			<column width="300px"></column>
+			<column width="200px"></column>
+			<column width="300px"></column>
+			<column width="1px"></column>
+			</columns>
+			
+			<rows>
+			<row>
+				<label value="Employee Name: "></label>
+				<label value="@bind(vm.selectedCompEmployee.fullName)" style="color:black;font-weight:bold" visible="@bind(vm.selectedCompEmployee.employeeKey gt 0)"></label>
+				<label value="Arabic Name: "></label>
+				<label value="@bind(vm.selectedCompEmployee.arabicName)"></label>
+				<label value="Employee No.: "></label>
+				<label value="@bind(vm.selectedCompEmployee.employeeNo)"></label>
+				
+			</row>
+			
+				<row>
+				<label value="Nationality: "></label>
+				<label value="@bind(vm.selectedCompEmployee.country)"></label>
+				<label value="Sex: "></label>
+				<label value="@bind(vm.selectedCompEmployee.gender)"></label>
+				<label value="Marital Status: "></label>
+				<label value="@bind(vm.selectedCompEmployee.marital)"></label>
+				
+			</row>
+			
+			<row>
+				<label value="Department: "></label>
+				<label value="@bind(vm.selectedCompEmployee.department)"></label>
+				<label value="Position: "></label>
+				<label value="@bind(vm.selectedCompEmployee.position)"></label>
+				<label value="Joining Date: "></label>
+				<label value="@bind(vm.selectedCompEmployee.employeementDateString)"></label>		
+			</row>
+			
+			
+			<row>
+				<label value="Status: "></label>
+				<label value="@bind(vm.employeePassport.status)" style="color:red"></label>
+				<label value="Passport Status: "></label>
+				<label value="@bind(vm.employeePassport.passportLocation)" ></label>
+				
+				<label value="Outstanding Loans: "></label>			
+				  <label value="@bind(vm.empOSL)"></label>				 
+			</row>
+			
+			
+			
+			<row>
+				<label value="Last Leave Return: "></label>
+				<label value="@bind(vm.lastEmployeeLeave.leavReturnDate)"></label>
+				<label value="Type: "></label>
+				<label value="@bind(vm.lastEmployeeLeave.leaveTypeDesc)" ></label>
+				<label value="Number of Days:  "></label>
+				<cell>
+				<label value="@bind(vm.lastEmployeeLeave.noOfDays)" ></label><space></space><space></space>	<image style="cursor: help" tooltip="isSupervisorHint"  src="/images/hint-icon.png"></image>	
+									 <popup id="isSupervisorHint" width="300px">
+       			 					 <html><![CDATA[Please select Type of Leave to see the No of Days.]]></html>        				
+				   					 </popup>			</cell>
+				
+				
+			</row>
+			
+			<row>
+				<label value="Passport Exipry : "></label>
+				<cell colspan="1"><label value="@bind(vm.passportExpiry)"></label><space></space>
+				<label value="@bind(vm.expPasprtMsg)" style="color:red" visible="@bind(vm.expPasprt)"></label></cell>
+				
+				<label value="Residence Expiry :"></label>
+				<cell colspan="1"><label value="@bind(vm.residanceExpiry)" ></label><space></space>
+				<label value="@bind(vm.expResidanceMSg)" style="color:red" visible="@bind(vm.expResidance)"></label></cell>
+				
+				<label value="Labor Card Expiry : "></label>
+				<cell colspan="1"><label value="@bind(vm.labourCradExpiry)" ></label><space></space>
+				<label value="@bind(vm.expLbrCrdMsg)" style="color:red" visible="@bind(vm.expLbrCrd)"></label></cell>
+				
+			</row>
+			
+			
+			</rows>
+			
+			</grid>
+			
+		<tabbox width="100%" sclass="nav_tabs" visible="@bind(vm.selectedCompEmployee.employeeKey gt 0)">
+        <tabs id="tabs">
+            <tab label="Request Info" />          
+        </tabs>
+        
+        <tabpanels>
+            <tabpanel>
+               <grid>
+               <columns>
+               <column width="200px"></column>
+                <column width="250px"></column>
+                <column width="250px"></column>
+               </columns>
+               <rows>
+               
+                <row>
+               <label value="Start From:"></label>
+               <datebox  value="@bind(vm.fromDate)" format="dd/MM/yyyy" hflex="1" constraint="no empty" ></datebox>
+               </row>
+               
+              
+               
+                <row>
+               <label value="To:"></label>
+               <datebox value="@bind(vm.toDate)" format="dd/MM/yyyy" hflex="1" constraint="no empty" ></datebox>
+               </row>
+               
+                   <row>
+                <label value="Type of Leave:"></label>
+               <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstType)" selectedItem="@bind(vm.selectedType)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enDescription)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<checkbox label="Encash Leave" disabled="@bind(vm.useEncashLeave)" checked="@bind(vm.checkUseEncash)"></checkbox>
+               </row>
+               
+                <row>
+                <label value="Reason For Request:"></label>
+               <vlayout>
+               <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstReason)" selectedItem="@bind(vm.selectedReason)">
+				<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enDescription)"></listcell>
+					</listitem>
+				</template>
+				</listbox>
+				  <textbox  visible="@bind(vm.selectedReason.enDescription eq 'Other')" hflex="1" value="@bind(vm.otherReason)"></textbox>
+				  </vlayout>
+               </row>
+               
+                 <row visible="true">
+                <label value="Total Leave Balance Available:"></label>
+                <hbox>
+                <intbox readonly="true" value="@bind(vm.totalDays)"></intbox>
+                <button label="Calculate" onClick="@command('calculateCommand')"></button>
+                </hbox>
+              	
+               </row>
+               
+                <row>
+                <label value="No. Of Leave Days To Be Taken:"></label>
+              	<intbox value="@bind(vm.leaveDays)" constraint="no negative,no zero"></intbox>
+              	<label value="@bind(vm.lblMaxLeaveDays)" ></label>
+               </row>
+              
+               
+             <row>
+             <label value="Notes"></label>
+             <cell colspan="2">
+             <textbox multiline="true" rows="3" hflex="1" value="@bind(vm.note)"></textbox>
+             </cell>
+             </row>
+             
+             <row>
+             <label value="Attachment"></label>
+             <cell colspan="2">
+            <button label="Choose File" upload="true,maxsize=-1" visible="true" onUpload="@command('attachFileCommand')" ></button>
+            	<label value="@bind(vm.attFileName)" />
+             </cell>
+             </row>
+             	
+             	<row>
+             	<cell colspan="3">
+             	<hbox align="center" pack="center" hflex="1">			
+
+				<!-- <button  id="btn11" label="Submit" onLongOp="@command('submitCommand')" disabled="@bind(!vm.canSubmit)" visible="@bind(vm.companyRole.canAdd)"></button> -->	
+				<button  id="btn1" label="Submit" onLongOp="@command('submitCommand')" disabled="@bind(!vm.canSubmit)" visible="@bind(vm.companyRole.canAdd)"></button>	
+		<button  id="btn2" label="Clear" onClick="@command('clearData')"/>		
+				</hbox>	
+
+		
+		
+
+             	</cell>
+             	</row>
+               </rows>
+               </grid>
+               
+            </tabpanel>
+                                                                  
+        </tabpanels>
+       </tabbox>
+		
+		
+					
+			</scrollview>
+			</vlayout>
+</zk>

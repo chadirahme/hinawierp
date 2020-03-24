@@ -1,0 +1,75 @@
+<?page title="Hinawi Software" contentType="text/html;charset=UTF-8" onLoad="win.doOverlapped();"?>
+
+
+<window id="win" style="background:#2C6F99;margin:20px"
+		border="normal"  position="center,center" mode="overlapped"
+		onOK="@command('loginClicked')" apply="org.zkoss.bind.BindComposer" width="800px"
+  	viewModel="@id('vm') @init('login.AuthenticateViewModel')">
+
+
+	<groupbox>
+		<caption>Login</caption>
+	<grid>
+		<columns sizable="false">
+			<column width="30%" />
+			<column width="70%" />
+		</columns>
+
+	<rows>
+
+		<row>
+	<cell colspan="2" style="background:#2C6F99;margin:20px">
+	<label value="Hinawi Software" style="font-size:18px;font-weight:bold;line-height:32px;color:white;text-decoration:none;text-align:center"></label>
+	</cell>
+	</row>
+
+		<row>
+			<cell>
+				Company Name
+			</cell>
+			<cell>
+				<textbox hflex="1" value="@bind(vm.objLoginModel.companyName)"></textbox>
+			</cell>
+		</row>
+
+		<row>
+			<cell>
+				User Name
+			</cell>
+			<cell>
+				<textbox hflex="1" value="@bind(vm.objLoginModel.username)"></textbox>
+			</cell>
+
+		</row>
+		<row>
+			<cell>
+				Password
+			</cell>
+			<cell>
+				<textbox type="password" hflex="1" value="@bind(vm.objLoginModel.userpwd)"></textbox>
+			</cell>
+		</row>
+
+		<row>
+			<cell>
+			</cell>
+			<cell align="right">
+				<button label="Submit" onClick="@command('loginClicked')"   style="background:rgb(44, 111, 153);color:white;font-weight:bold"></button>
+
+			</cell>
+		</row>
+
+		<row>
+			<cell colspan="2">
+				<label value="@bind(vm.message)" style="color:red"></label>
+
+			</cell>
+		</row>
+
+
+
+	</rows>
+	</grid>
+	</groupbox>
+
+	</window>

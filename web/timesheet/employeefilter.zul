@@ -1,0 +1,115 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window id="modalDialog" apply="org.zkoss.bind.BindComposer" mode="highlighted" title="Employees Filter" border="normal" position="center,center" closable="true"
+viewModel="@id('vm')  @init('timesheet.EmployeeFilterViewModel',compKey=arg.compKey,type=arg.type)"  sizable="true"
+onCancel="modalDialog.detach()" onOK="@command('searchCommand')"
+ width="800px" height="600px">
+
+<vlayout vflex="1">
+<grid>
+<columns>
+<column width="120px"></column>
+<column></column>
+<column></column>
+</columns>
+
+<rows>
+<row>
+<label value="Employee NO"></label>
+<textbox value="@bind(vm.employeeNo)"></textbox>
+
+<cell rowspan="5" valign="top">
+<vlayout>
+<hbox>
+<button label="Search" onClick="@command('searchCommand')"></button>
+<button label="Clear" onClick="@command('clearCommand')"></button>
+</hbox>
+
+</vlayout>
+</cell>
+</row>
+
+<row>
+<label value="Employee Name"></label>
+<textbox value="@bind(vm.employeeName)"></textbox>
+</row>
+
+
+<row>
+<label value="Employee Type"></label>
+<listbox multiple="false" mold="select" selectedIndex="@bind(vm.selectedEmployeeType)">
+			<listitem label="All"></listitem>
+			<listitem label="Employee"></listitem>
+			<listitem label="Labor"></listitem>
+			</listbox>
+</row>
+
+
+<row>
+<label value="Department"></label>
+<listbox mold="select" hflex="1"
+							model="@load(vm.lstDepartment)"
+							selectedItem="@bind(vm.selectedDepartment)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+</row>
+
+
+<row>
+<label value="Position"></label>
+<listbox mold="select" hflex="1"
+							model="@load(vm.lstPosition)"
+							selectedItem="@bind(vm.selectedPosition)">
+						<template name="model">
+							<listitem label="@load(each.enDescription)" />
+						</template>
+					  </listbox>
+</row>
+
+
+</rows>
+</grid>
+
+<listbox model="@bind(vm.lstEmployees)"  hflex="1" height="350px"
+multiple="true" checkmark="true"  selectedItems="@bind(vm.selectedEntities)" >
+			
+					   <listhead sizable="true">
+						<listheader width="50px"/>
+						<listheader label="Employee No." width="110px" sort="auto('employeeNo')" />
+						<listheader label="Name" sort="auto('fullName')"/>
+						<listheader label="Department" sort="auto('department')"/>
+						<listheader label="Position" sort="auto('position')"/>
+						<listheader label="Nationality" sort="auto('country')"/>						
+												
+					</listhead>
+					<template name="model">
+						<listitem>
+						<listcell></listcell>
+						<listcell>
+								<label value="@bind(each.employeeNo)"/>
+							</listcell>														
+							<listcell>
+								<label value="@bind(each.fullName)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.department)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.position)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.country)"/>
+							</listcell>
+								
+						</listitem>
+					</template>
+				</listbox>
+				<hbox  pack="center" hflex="1">				
+				<button label="OK" onClick="@command('sendData') "/>
+				<button label="Close" onClick="modalDialog.detach()"></button>
+				</hbox>
+</vlayout>
+</window>
+</zk>

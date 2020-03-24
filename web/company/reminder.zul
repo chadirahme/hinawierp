@@ -1,0 +1,282 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk>
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('company.ReminderViewModel',type='timesheet')">
+
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1">
+
+				<!-- <groupbox mold="3d"> <caption> <label style="color:white" value="Task 
+					Reminder"></label> </caption> <grid> <columns> <column width="150px"></column> 
+					<column></column> <column width="150px"></column> <column></column> </columns> 
+					<rows> <row> <label value="Reminder Type"></label> <radiogroup selectedItem="@bind(vm.compTaskReminder.remindertype)"> 
+					<radio label="All Tasks" value="1" tooltiptext="Send reminder upon this settings"></radio> 
+					<radio label="Each Task" value="2" tooltiptext="Send by Reminder settings 
+					for each task"></radio> </radiogroup> </row> <row> <cell colspan="2"> <hlayout> 
+					<label value="Start Date :" /> <datebox width="100px" value="@bind(vm.compTaskReminder.startdate)" 
+					format="dd/MM/yyyy" /> <label value="Time :" /> <timebox value="@bind(vm.compTaskReminder.remindertime)" 
+					width="100px" cols="16" format="a hh:mm" /> </hlayout> </cell> </row> <row> 
+					<label value="Settings"></label> <radiogroup id="rbnSettings" selectedItem="@bind(vm.compTaskReminder.remindersetting)" 
+					onCheck="row1.setVisible(self.getSelectedIndex() ==0); row2.setVisible(self.getSelectedIndex() 
+					==1);row3.setVisible(self.getSelectedIndex() ==2);"> <radio label="Daily" 
+					value="1" /> <radio label="Weekly" value="2" /> <radio label="Monthly" value="3" 
+					/> </radiogroup> </row> <row id="row1" visible="@bind(vm.compTaskReminder.remindersetting 
+					eq '1')"> <cell colspan="2"> <hbox> <label value="Repeate every"></label> 
+					<intbox value="@bind(vm.compTaskReminder.repeatedays)"></intbox> <label value="Days"></label> 
+					</hbox> </cell> </row> <row id="row2" visible="@bind(vm.compTaskReminder.remindersetting 
+					eq '2')"> <cell colspan="4"> <hlayout> <label value="${c:cat('Days of ', 
+					'week')}"></label> <chosenbox model="@load(vm.lstWeekDays)" width="200px" 
+					selectedObjects="@bind(vm.selectedTaskWeekDays)"> <template name="model"> 
+					<label value="@load(each)"></label> </template> </chosenbox> </hlayout> </cell> 
+					</row> <row id="row3" visible="@bind(vm.compTaskReminder.remindersetting 
+					eq '3')"> <cell colspan="3"> <vlayout> <hbox> <label value="Months"></label> 
+					<chosenbox model="@load(vm.lstMonths)" width="200px" selectedObjects="@bind(vm.selectedMonths)"> 
+					<template name="model"> <label value="@load(each)"></label> </template> </chosenbox> 
+					</hbox> <hbox> <label value="Days"></label> <chosenbox model="@load(vm.lstTaskDays)" 
+					width="200px" selectedObjects="@bind(vm.selectedTaskDays)"> <template name="model"> 
+					<label value="@load(each)"></label> </template> </chosenbox> </hbox> </vlayout> 
+					</cell> </row> <row> <label value="Expired"></label> <datebox width="100px" 
+					value="@bind(vm.compTaskReminder.expireddate)" format="dd/MM/yyyy" /> </row> 
+					<row> <label value="CC Email"></label> <textbox width="200px" value="@bind(vm.compTaskReminder.ccemail)"></textbox> 
+					</row> <row> <checkbox label="Enabled" checked="@bind(vm.compTaskReminder.enablereminder)"></checkbox> 
+					</row> <row> <cell colspan="4"> <hbox hflex="1" pack="center"> <button label="Save" 
+					onClick="@command('saveCommand')"></button> </hbox> </cell> </row> </rows> 
+					</grid> </groupbox> -->
+
+				<!-- ############### Quotation ############### -->
+				<groupbox mold="3d">
+					<caption>
+						<label style="color:white" value="Set Company General Reminders"></label>
+					</caption>
+					<grid>
+						<columns>
+							<column width="150px"></column>
+							<column></column>
+							<column width="150px"></column>
+							<column></column>
+						</columns>
+
+						<rows>
+
+							<row>
+								<label value="Reminder Type"></label>
+								<cell colspan="2">
+								<listbox mold="select" model="@load(vm.listReminderTypes)"
+									width="300px" selectedItem="@bind(vm.selectedReminderTypes)">
+									<template name="model" var="item">
+										<listitem>
+											<listcell label="@load(item.remindername)"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+								</cell>
+							</row>
+
+							<!-- <row visible="@bind(vm.selectedReminderTypes.hideOtherfileds)">
+								<label value="Reminder For"></label>
+								<radiogroup selectedItem="@bind(vm.selectedReminderTypes.remindertype)">
+									<radio label="All (Customer/prospective)" value="1"
+										tooltiptext="Send reminder upon this settings"></radio>
+									<radio label="Each (Customer/prospective)" value="2"
+										tooltiptext="Send by Reminder settings for each quotation"></radio>
+								</radiogroup>
+							</row> -->
+
+							<row>
+								<cell colspan="2">
+									<hlayout>
+										<label value="Start Date :" />
+										<datebox width="100px"
+											value="@bind(vm.selectedReminderTypes.startdate)" format="dd/MM/yyyy" />
+										<space></space>
+										<space></space>
+										<!-- <label value="Time :" /> <timebox value="@bind(vm.compQuotationReminder.remindertime)" 
+											width="100px" cols="16" format="a hh:mm" /> -->
+										<label value="Expired"></label>
+										<datebox width="100px"
+											value="@bind(vm.selectedReminderTypes.expireddate)" format="dd/MM/yyyy" />
+
+
+									</hlayout>
+								</cell>
+							</row>
+							<row>
+								<cell  colspan="2">
+									<hlayout>
+										<button label="Select the Customers" onClick="@command('selectCustomerPopUp')"
+											visible="@bind(vm.selectedReminderTypes.hideCustomer)" style="background:#A3FFA3"></button>
+										<button label="Select the Prospective" onClick="@command('selectProspectivePopUp')"
+											visible="@bind(vm.selectedReminderTypes.hideProspective)" style="background:#A3FFA3"></button>
+									<label value="@bind(vm.selectedContractCount)" style="color:#0000FF;text-align:left"></label>
+									</hlayout>
+								</cell>
+								<cell>
+								<checkbox label="All Customers" 
+									checked="@bind(vm.allcustomers)"></checkbox>
+								</cell>
+
+							</row>
+
+							<row>
+								<label value="Settings"></label>
+								<radiogroup selectedItem="@bind(vm.selectedReminderTypes.remindersetting)">
+									<radio label="Daily" value="1" />
+									<radio label="Weekly" value="2" />
+									<radio label="Monthly" value="3" />
+								</radiogroup>
+							</row>
+
+
+							<row visible="@bind(vm.selectedReminderTypes.remindersetting eq '1')">
+								<cell colspan="2">
+									<!-- <hbox> <label value="Repeate every"></label> <intbox value="@bind(vm.compQuotationReminder.repeatedays)"></intbox> 
+										<label value="Days"></label> </hbox> -->
+								</cell>
+							</row>
+
+							<row visible="@bind(vm.selectedReminderTypes.remindersetting eq '2')">
+								<cell colspan="4">
+									<hlayout>
+										<label value="${c:cat('Days of ', 'week')}"></label>
+										<chosenbox model="@load(vm.lstQuotationWeekDays)"
+											width="400px" selectedObjects="@bind(vm.selectedQuotationWeekDays)">
+											<template name="model">
+												<label value="@load(each)"></label>
+											</template>
+										</chosenbox>
+
+
+									</hlayout>
+								</cell>
+							</row>
+
+							<row visible="@bind(vm.selectedReminderTypes.remindersetting eq '3')">
+								<cell colspan="3">
+									<vlayout>
+										<hbox>
+											<label value="Months"></label>
+											<chosenbox model="@load(vm.lstQuotationMonths)"
+												width="400px" selectedObjects="@bind(vm.selectedQuotationMonths)">
+												<template name="model">
+													<label value="@load(each)"></label>
+												</template>
+											</chosenbox>
+										</hbox>
+
+										<hbox>
+											<label value="Days"></label>
+											<chosenbox model="@load(vm.lstQuotationDays)"
+												width="400px" selectedObjects="@bind(vm.selectedQuotationDays)">
+												<template name="model">
+													<label value="@load(each)"></label>
+												</template>
+											</chosenbox>
+										</hbox>
+									</vlayout>
+								</cell>
+							</row>
+
+							<row visible="@bind(vm.selectedReminderTypes.hideOtherfileds)">
+								<label value="Send To"></label>
+								<cell colspan="2">
+								<radiogroup selectedItem="@bind(vm.selectedReminderTypes.sendtotype)">
+									<radio label="Sales Representatives" value="1" />
+									<radio label="Customers" value="2" />
+									<radio label="Prospectives" value="3" visible="@bind(vm.selectedReminderTypes.hideProspective)"/>
+									<radio label="Customers&amp;Prospectives" value="4" visible="@bind(vm.selectedReminderTypes.hideProspective)"/>
+									<radio label="All" value="5" />
+								</radiogroup>
+		</cell>	
+							</row>
+
+							<row visible="@bind(vm.selectedReminderTypes.hideOtherfileds)">
+								<label value="Template"></label>
+								<cell colspan="2">
+								<listbox mold="select" model="@load(vm.lstTemplates)"
+									width="300px" selectedItem="@bind(vm.selectedTemplate)">
+									<template name="model" var="item">
+										<listitem>
+											<listcell label="@load(item.enDescription)"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+								</cell>
+							</row>
+							<row>
+							<cell>
+							<a style="color:#0000FF;text-align:left" onClick="@command('setUpEmailSignature')">Set Up Signature.</a>
+							</cell>
+							</row>
+
+							<row>
+								<label value="CC Email"></label>
+								<textbox width="200px" value="@bind(vm.selectedReminderTypes.ccemail)"></textbox>
+								<button label="Send Test E-mail " onClick="@command('SendTestEmailCommand')"
+												visible="true"></button>
+							</row>
+
+
+							<row>
+								<checkbox label="Enabled"
+									checked="@bind(vm.selectedReminderTypes.enablereminder)"></checkbox>
+							</row>
+
+							<row>
+								<cell colspan="3">
+									<hbox hflex="1" pack="center">
+										<button label="Save Schedule" onClick="@command('saveQuotationCommand')"></button>
+										<label value=" " width="100px"></label>
+										<button label="Send Now" onClick="@command('sendNowCommand')" ></button>
+										
+										
+									</hbox>
+								</cell>
+							</row>
+						</rows>
+					</grid>
+				</groupbox>
+
+				<!-- ############### Customer Balance Reminder ############### -->
+
+				<!-- <groupbox mold="3d"> <caption style="color:white"> <label style="color:white" 
+					value="Customer Balance Reminder"></label> </caption> <grid> <columns> <column 
+					width="150px"></column> <column></column> <column width="150px"></column> 
+					<column></column> </columns> <rows> <row> <label value="Reminder Type"></label> 
+					<radiogroup selectedItem="@bind(vm.customerBalanceReminder.remindertype)"> 
+					<radio label="All Balances" value="1" tooltiptext="Send reminder upon this 
+					settings"></radio> <radio label="Each Quotation" value="2" tooltiptext="Send 
+					by Reminder settings for each quotation"></radio> </radiogroup> </row> <row> 
+					<cell colspan="2"> <hlayout> <label value="Start Date :" /> <datebox width="100px" 
+					value="@bind(vm.customerBalanceReminder.startdate)" format="dd/MM/yyyy" /> 
+					<label value="Time :" /> <timebox value="@bind(vm.customerBalanceReminder.remindertime)" 
+					width="100px" cols="16" format="a hh:mm" /> </hlayout> </cell> </row> <row> 
+					<label value="Settings"></label> <radiogroup selectedItem="@bind(vm.customerBalanceReminder.remindersetting)"> 
+					<radio label="Daily" value="1" /> <radio label="Weekly" value="2" /> <radio 
+					label="Monthly" value="3" /> </radiogroup> </row> <row visible="@bind(vm.customerBalanceReminder.remindersetting 
+					eq '1')"> <cell colspan="2"> <hbox> <label value="Repeate every"></label> 
+					<intbox value="@bind(vm.customerBalanceReminder.repeatedays)"></intbox> <label 
+					value="Days"></label> </hbox> </cell> </row> <row visible="@bind(vm.customerBalanceReminder.remindersetting 
+					eq '2')"> <cell colspan="4"> <hlayout> <label value="${c:cat('Days of ', 
+					'week')}"></label> <chosenbox model="@load(vm.lstCustomerBalanceWeekDays)" 
+					width="400px" selectedObjects="@bind(vm.selectedCustomerBalanceWeekDays)"> 
+					<template name="model"> <label value="@load(each)"></label> </template> </chosenbox> 
+					</hlayout> </cell> </row> <row visible="@bind(vm.customerBalanceReminder.remindersetting 
+					eq '3')"> <cell colspan="3"> <vlayout> <hbox> <label value="Months"></label> 
+					<chosenbox model="@load(vm.lstCustomerBalanceMonths)" width="400px" selectedObjects="@bind(vm.selectedCustomerBalanceMonths)"> 
+					<template name="model"> <label value="@load(each)"></label> </template> </chosenbox> 
+					</hbox> <hbox> <label value="Days"></label> <chosenbox model="@load(vm.lstCustomerBalanceDays)" 
+					width="400px" selectedObjects="@bind(vm.selectedCustomerBalanceDays)"> <template 
+					name="model"> <label value="@load(each)"></label> </template> </chosenbox> 
+					</hbox> </vlayout> </cell> </row> <row> <label value="Expired"></label> <datebox 
+					width="100px" value="@bind(vm.customerBalanceReminder.expireddate)" format="dd/MM/yyyy" 
+					/> </row> <row> <label value="CC Email"></label> <textbox width="200px" value="@bind(vm.customerBalanceReminder.ccemail)"></textbox> 
+					</row> <row> <checkbox label="Enabled" checked="@bind(vm.customerBalanceReminder.enablereminder)"></checkbox> 
+					</row> <row> <cell colspan="4"> <hbox hflex="1" pack="center"> <button label="Save" 
+					onClick="@command('saveCustomerBalanceCommand')"></button> </hbox> </cell> 
+					</row> </rows> </grid> </groupbox> -->
+
+
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

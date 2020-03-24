@@ -1,0 +1,534 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+
+<zk xmlns:w="client">
+
+	<!-- <zscript> void closeNorth(){ westSup.setOpen(false); } function openNorth(){ 
+		westSup.setOpen(true); } </zscript> -->
+	<style>
+		.z-datebox-text-disd {
+		background:transparent;
+		}
+		.z-datebox-disd
+		.z-datebox-inp {
+		color:black !important;
+		}
+		.z-textbox-disd,
+		.z-textbox-disd * { background: #FFFFFF;}
+
+		.z-combobox-rounded-disd,
+		.z-combobox-rounded-disd *, .z-comboitem-disd, .z-comboitem-disd *,
+		.z-combobox-disd, .z-combobox-disd * {
+		color: #000000 !important;
+		cursor: default !important;
+		}
+	</style>
+	<window id="taskModalDialog" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Add/Edit Customer" border="normal" position="center,center"
+		closable="true" sizable="true" onCancel="taskModalDialog.detach()"
+		width="85%" height="85%">
+		<borderlayout apply="org.zkoss.bind.BindComposer" id="printIddummy"
+			viewModel="@id('vm')  @init('hba.EditTaskListViewModel')">
+			<center autoscroll="true" border="none">
+				<vlayout>
+					<vbox id="uploadWindow2">
+						<panel collapsible="true" id="westSup" hflex="1">
+							<caption>
+								<div align="left">
+									<hbox>
+										<button hoverImage="/images/arrow-left-Green.png" src="/images/grrn-left-arrow.png"
+											onClick="@command('navigationTask',cmp='prev')" label="Previous"
+											width="100px" height="50px"></button>
+										<button hoverImage="/images/arrow-right-green.png"
+											onClick="@command('navigationTask',cmp='next')" width="100px"
+											height="50px" label="Next" src="/images/green-right-arrow.png"></button>
+										<image style="cursor: help" tooltip="isSupervisorHint"
+											src="/images/hint-icon.png"></image>
+										<popup id="isSupervisorHint" width="400px">
+											<html><![CDATA[Browsing is displaying transaction created by current user.]]></html>
+										</popup>
+										<space></space>
+										<space></space>
+										<space></space>
+										<space></space>
+										<space></space>
+										<space></space>
+										<space></space>
+										<space></space>
+										<label value="@bind(vm.labelStatus)"
+											style="color:#0AA0AB;text-align: right;font-weight: bold;font-size:18px"></label>
+									</hbox>
+
+								</div>
+
+							</caption>
+
+							<panelchildren>
+								<grid>
+									<columns>
+										<column width="160px"></column>
+										<column></column>
+										<column  width="160px"></column>
+										<column></column>
+										<column  width="160px"></column>
+										<column></column>
+
+									</columns>
+
+									<rows>
+										<!-- <row> <label value="Company"></label> <cell colspan="2"> <listbox 
+											multiple="false" hflex="1" mold="select" model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)"> 
+											<template name="model" var="item"> <listitem> <listcell label="@load(item.enCompanyName)"></listcell> 
+											</listitem> </template> </listbox> </cell> </row> -->
+
+			<row>
+			<cell sclass="">Task Number <label value="" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
+														<cell colspan="1">
+			
+															<textbox value="@bind(vm.taskNumber)" maxlength="6"
+																readonly="true" hflex="1" />
+																
+																	<button visible="@bind(vm.refreshTaskNumber)" label="Refresh" onClick="@command('getLatestTaskNumber')"/>
+														</cell>
+														<cell sclass="">Task Name <label value="*" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
+			
+														<cell colspan="1">
+															<textbox value="@bind(vm.taskName)" maxlength="60" hflex="1"
+																disabled="@bind(vm.disableTaskCreatorPanel)" />
+														</cell>
+															<cell sclass="">Task Date <label value="*" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
+
+											<cell colspan="1">
+												<datebox value="@bind(vm.taskDate)" format="dd/MM/yyyy" hflex="1"
+													disabled="@bind(vm.disableTaskCreatorPanel)" />
+											</cell>
+			</row>
+
+										<row>
+											
+											<cell sclass="">Expected Finish Date <label value="*" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
+
+											<cell colspan="1">
+												<datebox value="@bind(vm.expectedDateTofinish)" hflex="1"
+													format="dd/MM/yyyy" disabled="@bind(vm.disableTaskCreatorPanel)" />
+											</cell>
+
+											<cell sclass="">Hours/Days <label value="*" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
+
+											<cell>
+												<listbox multiple="false" mold="select" hflex="1"
+													disabled="false" model="@load(vm.hourOrDaysList)"
+													selectedItem="@bind(vm.selectedHoursOrDays)">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item)"></listcell>
+														</listitem>
+													</template>
+												</listbox>
+											</cell>
+											
+											<cell sclass="">Estimated Time <label value="*" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
+
+											<cell colspan="1">
+												<doublebox value="@bind(vm.estimatedEffort)"
+													hflex="1" disabled="@bind(vm.disableTaskCreatorPanel)"
+													maxlength="4" />
+												<space></space>
+												<space></space>
+												<label value="@bind(vm.selectedHoursOrDays)">
+												</label>
+											</cell>
+
+										</row>
+						
+										<row>
+											<cell sclass="">Task Priority <label value="*" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
+
+											<cell colspan="1">
+												<listbox hflex="1" mold="select" model="@load(vm.lstTaskPriority)"
+													selectedItem="@bind(vm.selectedTaskPriority)" disabled="@bind(vm.disableTaskCreatorPanel)">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item.enDescription)"></listcell>
+														</listitem>
+													</template>
+												</listbox>
+											</cell>
+
+											<cell sclass="">Task Status <label value="*" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
+
+											<cell colspan="1">
+												<listbox hflex="1" mold="select" model="@load(vm.lstTaskStatus)"
+													selectedItem="@bind(vm.selectedTaskStatus)" disabled="false">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item.enDescription)"></listcell>
+														</listitem>
+													</template>
+												</listbox>
+											</cell>
+											
+											<cell sclass="">Task Type <label value="" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
+
+											<cell>
+												<listbox multiple="false" mold="select" hflex="1"
+													disabled="@bind(vm.disableTaskCreatorPanel)" model="@load(vm.lstTaskType)"
+													selectedItem="@bind(vm.selectedTaskType)">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item.enDescription)"></listcell>
+														</listitem>
+													</template>
+												</listbox>
+											</cell>
+
+
+										</row>
+										
+										<row>
+										<cell>Client Type</cell>
+										<listbox hflex="1" mold="select" model="@load(vm.listClientType)"
+													selectedItem="@bind(vm.selectedClientType)" disabled="false">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item)"></listcell>
+														</listitem>
+													</template>
+												</listbox>
+												
+									    <cell>Client Job <label value="*" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
+										<combobox constraint="no empty:Select An Existing 'Customer Name' !!!"
+														hflex="1" disabled="@bind(vm.disableTaskCreatorPanel)"
+														autodrop="true" mold="rounded" buttonVisible="true"
+														model="@load(vm.lstCustomerJob)" selectedItem="@bind(vm.lstSelectedCustomerJob)">
+														<template name="model" var="option">
+															<comboitem label="${option.name}" description="@bind(option.listType)"
+																style="@bind(option.subLevel eq 0 ? 'color:black;font-weight:bold;' : option.subLevel eq 1 ? 'text-indent:30px' : option.subLevel eq 2 ? 'text-indent:60px' : option.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
+														</template>
+
+													</combobox>
+									
+											<cell sclass="">
+												Customer Info  <space></space>
+												<a href=""
+													style="color:blue;text-decoration:underline;cursor: hand;"
+													onClick="@command('customerInfoInEachEditTask')" width="150px">Info</a>
+											</cell>
+										
+										</row>
+										
+										<row>
+										<label value="Contratct Expires On" />
+										<cell>
+										<hbox>
+
+														<label value="@bind(vm.cutomerContractExipryDate)"
+															style="color:red;" />
+														<image style="cursor: help" tooltip="feedbackCusotmerExpiry"
+															src="/images/hint-icon.png" visible="@bind(vm.visbaleCustomerNAmefromFeedback)"></image>
+													</hbox>
+													</cell>	
+																				
+											<label value="Recent Customer Status" />											
+												
+														<cell colspan="3">
+													<hbox>
+														<label value="@bind(vm.customerStatusStr)" />
+														<space></space>
+														<a style="color:#0000FF;text-align:left" onClick="@command('viewCustomerStatusHistroy')">See
+															more.</a>
+													</hbox>
+												</cell>											
+										</row>
+
+
+								<row>
+								<cell sclass="">Project <label value="" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
+
+											<cell colspan="1">
+												<listbox hflex="1" mold="select" model="@load(vm.lstProject)"
+													selectedItem="@bind(vm.lstSelectedProject)" disabled="@bind(vm.disableTaskCreatorPanel)">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item.projectName)"></listcell>
+														</listitem>
+													</template>
+												</listbox>
+											</cell>
+											
+											<cell sclass="">Service Type <label value="" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
+
+											<cell colspan="1">
+												<listbox hflex="1" mold="select" model="@load(vm.lstService)"
+													selectedItem="@bind(vm.lstSelectedService)" disabled="@bind(vm.disableTaskCreatorPanel)">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item.enDescription)"></listcell>
+														</listitem>
+													</template>
+												</listbox>
+											</cell>
+								
+								
+								</row>
+										
+										<row>							
+											<cell colspan="1">
+												<vbox>
+													<hbox>
+														<label value="@bind(vm.cutomerNamefromFeedBack)"
+															visible="@bind(vm.visbaleCustomerNAmefromFeedback)" />
+														<image style="cursor: help" tooltip="feedbackCusotmerText"
+															src="/images/hint-icon.png" visible="@bind(vm.visbaleCustomerNAmefromFeedback)"></image>
+													</hbox>
+
+													<popup id="feedbackCusotmerText">
+														<html><![CDATA[Is Displaying Name Of The Customer From Feedback Recived.]]></html>
+													</popup>
+																										
+
+													<popup id="feedbackCusotmerExpiry">
+														<html><![CDATA[Do Not Make Support If Contract Expires.]]></html>
+													</popup>
+
+
+
+												</vbox>
+											</cell>
+
+										</row>
+																										
+										
+										<row>
+											
+
+											<cell sclass="">Assigned To Employee<label value="*" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
+
+											<cell colspan="1">
+												<listbox hflex="1" mold="select"
+													model="@load(vm.lstAssignToEmployees)" selectedItem="@bind(vm.selectedAssignToEmployee)"
+													>
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item.fullName)"></listcell>
+														</listitem>
+													</template>
+												</listbox>
+											</cell>
+											
+											<cell sclass="">CC To Employee </cell>
+
+											<cell colspan="1">
+												<listbox hflex="1" mold="select" model="@load(vm.lstCCToEmployees)"
+													disabled="@bind(vm.disableTaskCreatorPanel)" selectedItem="@bind(vm.selectedCCToEmployee)">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item.fullName)"></listcell>
+														</listitem>
+													</template>
+												</listbox>
+											</cell>
+											
+											<cell colspan="2">
+												<button visible="@bind(vm.feedbackKeyForTaskRelation ne 0)" style="background:#A3FFA3" label="View Feedback" onClick="@command('openFeedback',feedBackId=vm.feedbackKeyForTaskRelation)"/><space></space><space></space>
+												<button  label="Send E-mail" onClick="@command('replyFeedbackByEmail',taskKey=vm.taskKey)" style="background:#A3FFA3"/>
+											</cell>
+											
+																																
+											
+
+										</row>
+
+										<row>
+											<!-- <cell sclass="">Link To Previous Task:</cell>
+
+											<cell colspan="1">
+												<listbox hflex="1" mold="select"
+													model="@load(vm.lstLinkToPriviousTask)" selectedItem="@bind(vm.selectedLinkToPreviousTask)"
+													disabled="false">
+													<template name="model" var="item">
+														<listitem>
+															<listcell label="@load(item.taskName)"></listcell>
+														</listitem>
+													</template>
+												</listbox>
+											</cell> -->
+
+											
+											<cell>
+											Task Created By 
+											</cell>
+											<cell>
+											<label value="@bind(vm.createdBy)" />
+											</cell>
+																																
+											 <cell align="center">
+											Latest Updated By 
+											</cell>
+											<cell>
+											<label value="@bind(vm.lastUpdatedBy)" />
+											</cell>
+											<!--	<cell sclass="">
+												<vbox>
+													<label value="" />
+												</vbox>
+											</cell> -->
+												
+
+										</row>
+										<row>
+											<cell sclass="">Memo </cell>
+
+											<cell colspan="3">
+												<textbox value="@bind(vm.memo)" hflex="1" multiline="true"
+													readonly="@bind(vm.disableTaskCreatorPanel)" rows="6" />
+											</cell>
+											<cell align="left" colspan="2">
+												<button label="Copy Memo To Comments" onClick="@command('moveMemoTocomments')"
+													visible="true" />
+											</cell>
+
+										</row>
+										<row>
+											<cell sclass="">Comments <label value="*" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
+
+											<cell colspan="3">
+												<textbox value="@bind(vm.comments)" hflex="1"
+													multiline="true" rows="6" />
+											</cell>
+										</row>
+										<row>
+
+											<cell sclass="">Actual Time <label value="*" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
+
+											<cell colspan="2">
+												<doublebox value="@bind(vm.actualEffort)"
+													maxlength="4" width="60px" />
+												<space></space>
+												<space></space>
+												<label value="@bind(vm.selectedHoursOrDays)">
+												</label>
+												<space></space>
+												<label value=" ( Actual time took to finish the task )">
+												</label>
+											</cell>
+
+										</row>
+									</rows>
+
+								</grid>
+							</panelchildren>
+						</panel>
+						<!-- <attribute name="onClick"> westSup.setWidgetOverride("doClick_", 
+							"function (evt) {alert(evt);}"); </attribute> -->
+						<!-- <panel title="Additional Details" collapsible="true" open="false" 
+							hflex="1"> <panelchildren> <grid> <columns> <column width="120px"></column> 
+							<column width="120px"></column> <column width="100px"></column> <column width="120px"></column> 
+							<column width="120px"></column> <column width="120px"></column> </columns> 
+							<rows> <row> <cell sclass="">Actual Time *:</cell> <cell colspan="2"> <doublebox 
+							value="@bind(vm.actualEffort)" maxlength="4" width="60px"/><space></space><space></space> 
+							<label value="@bind(vm.selectedHoursOrDays)"> </label> </cell> </row> <row> 
+							<cell sclass="">Steps to Reproduce :</cell> <cell colspan="4"> <textbox value="@bind(vm.taskStep)" 
+							hflex="1" disabled="@bind(vm.disableTaskCreatorPanel)" multiline="true" rows="4" 
+							/> </cell> </row> </rows> </grid> </panelchildren> </panel> -->
+
+						<panel  collapsible="true" open="false">
+						<caption  label="Task Attachments" style="float:left; border-style: none;color:green;font-size:150%;font-weight: bold;"/>
+							<panelchildren>
+								<vbox id="uploadWindow1">
+									<listbox model="@bind(vm.lstAtt)" 
+										emptyMessage="No data found" selectedItem="@bind(vm.selectedAttchemnets)"
+										mold="paging">
+
+										<listhead menupopup="auto" sizable="true">
+											<listheader label="Delete" width="50px" />
+											<listheader label="Attachments" />
+										</listhead>
+										<template name="model">
+											<listitem>
+												<listcell>
+													<button image="/images/cross.png"
+														onClick="@command('deleteFromAttchamentList', row=each)" />
+												</listcell>
+												<listcell onDoubleClick="@command('download', row=each)">
+													<label value="@bind(each.filename)" />
+												</listcell>
+											</listitem>
+										</template>
+									</listbox>
+									<button label="Choose File" upload="true,maxsize=-1"
+										onUpload="@command('uploadFile',attId=4)"></button>
+								</vbox>
+							</panelchildren>
+						</panel>
+
+						<panel collapsible="true" open="false" >
+						<caption  label="Task History" style="float:left; border-style: none;color:green;font-size:150%;font-weight: bold;"/>
+							<panelchildren>
+								<listbox model="@bind(vm.taskHistory)" 
+									emptyMessage="No data found" mold="paging">
+
+									<listhead menupopup="auto" sizable="true">
+										<listheader label="Date" />
+										<listheader label="Status" />
+										<listheader label="User" />
+										<listheader label="Comments" />
+									</listhead>
+									<template name="model">
+										<listitem>
+											<listcell>
+												<label value="@bind(each.creationDateStr)" />
+											</listcell>
+											<listcell>
+												<label value="@bind(each.statusName)" />
+											</listcell>
+											<listcell>
+												<label value="@bind(each.createdUserName)" />
+											</listcell>
+											<listcell>
+												<label value="@bind(each.comments)" />
+											</listcell>
+
+
+										</listitem>
+									</template>
+								</listbox>
+
+							</panelchildren>
+						</panel>
+
+						<grid>
+							<columns>
+								<column width="120px"></column>
+								<column width="120px"></column>
+								<column width="100px"></column>
+								<column width="120px"></column>
+								<column width="120px"></column>
+								<column width="120px"></column>
+							</columns>
+
+							<rows>
+
+								<row>
+									<cell colspan="7">
+										<hbox pack="center" hflex="1">
+											<button label="Save"
+												onClick="@command('saveTask',cmp=taskModalDialog,cmp1=false)" autodisable="self"
+												visible="@bind(vm.canSave)"></button>
+											<button label="Save &amp; E-mail"
+												onClick="@command('saveTask',cmp=taskModalDialog,cmp1=true)" autodisable="self"
+												visible="@bind(vm.canSave)"></button>
+											<button label="Copy" onClick="@command('copyFunctinality')"
+												visible="@bind(vm.canSave)"></button>
+											<!-- <button label="Clear" onClick="taskModalDialog.detach()"></button> -->
+											<button label="Close" onClick="taskModalDialog.detach()"></button>
+										</hbox>
+									</cell>
+								</row>
+							</rows>
+						</grid>
+					</vbox>
+				</vlayout>
+			</center>
+		</borderlayout>
+	</window>
+</zk>

@@ -1,0 +1,163 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/css/style.css"?>
+<?link rel="stylesheet" type="text/css" href="/css/hstyle.css"?>
+
+<zk>
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('timesheet.TimeSheetHistoryViewModel')" vflex="1">
+	 		
+	 <label value="Approve Time Sheet" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	 
+	 
+	  <grid>
+			<columns>		
+			<column  width="100px"></column>
+			<column  width="180px"></column>
+			<column  width="140px"></column>
+			<column  width="150px"></column>
+									
+			</columns>
+			<rows>
+			
+			<row>
+			<label value="Company"></label>
+			<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enCompanyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			
+			<cell colspan="2">
+			<hbox>
+			<label value="Approve "></label>
+			<radiogroup selectedIndex="@bind(vm.selectedDateType)" hflex="1">
+			 <radio label="By Month" value="1"  />
+            <radio label="By Employee" value="2" />
+			</radiogroup>				
+			</hbox>
+			</cell>
+			
+			
+			</row>
+			
+			<row>
+			<label value="Month &amp; Year"></label>
+			<hbox>
+			<listbox multiple="false" mold="select" model="@load(vm.lstMonths)" selectedItem="@bind(vm.selectedMonth)">
+				<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+				</listbox>
+			
+			 <listbox multiple="false" mold="select" model="@load(vm.lstYears)" selectedItem="@bind(vm.selectedYear)">
+				<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+				</listbox>
+			</hbox>
+			<cell>
+			<label value="Status  "></label>
+			<listbox multiple="false" mold="select" selectedIndex="@bind(vm.selectedStatus)">
+			<listitem  label="Created"></listitem>
+			<listitem  label="Approved"></listitem>
+			<listitem  label="All"></listitem>			
+			</listbox>
+			</cell>
+		 	<button label="Search"  onClick="@command('searchCommand')"></button>	
+			<button label="Approve"  onClick="@command('approveAllCommand')" visible="@bind(vm.companyRole.canAdd)"></button>
+			</row>
+			</rows>
+			</grid>
+			
+			<listbox model="@bind(vm.lstHistory)" hflex="1"  width="620px" vflex="1" emptyMessage="No data found"
+			multiple="true" checkmark="true" selectedItems="@bind(vm.selectedEntities)" visible="@bind(!vm.showMonth)">
+			<listhead sizable="true">
+						<listheader width="50px"/>
+						<listheader label="Employee No." width="110px" sort="auto('empNo')" />
+						<listheader label="Name" sort="auto('enFullName')" width="200px"/>	
+							<listheader width="150px" label="Month" sort="auto('tsMonth')"/>	
+							<listheader width="150px" label="No. of Days" sort="auto('dayNo')"/>
+								<listheader width="150px" label="Present Days" sort="auto('presentDays')"/>
+									<listheader width="150px" label="Off Days" sort="auto('holidays')"/>
+							<listheader width="150px" label="Status" sort="auto('tsStatus')"/>
+								<listheader width="150px" label="Approve" visible="false"/>						
+					</listhead>
+					<template name="model">
+						<listitem>	
+							<listcell></listcell>					
+						<listcell>
+								<label value="@bind(each.empNo)"/>
+							</listcell>														
+							<listcell>
+								<label value="@bind(each.enFullName)"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.tsMonth)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.dayNo)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.presentDays)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.holidays)"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.tsStatus)"/>
+							</listcell>
+							<listcell visible="false">
+								<button
+                        image="/images/approve.png"
+                        onClick="@command('approveCommand', row=each)" />
+							</listcell>
+						</listitem>
+					</template>
+		</listbox>
+		
+		<listbox model="@bind(vm.lstMonthlyHistory)" hflex="1"  width="620px" vflex="1" emptyMessage="No data found"
+			multiple="true" checkmark="true" selectedItems="@bind(vm.selectedMonths)" visible="@bind(vm.showMonth)">
+			<listhead sizable="true">
+						<listheader width="50px"/>					
+							<listheader width="150px" label="Month" sort="auto('tsMonth')"/>	
+								<listheader width="150px" label="No. of Employees" sort="auto('tsMonth')"/>
+								
+							<listheader width="150px" label="No. of Days" sort="auto('dayNo')"/>
+								<listheader width="150px" label="Present Days" sort="auto('presentDays')"/>
+									<listheader width="150px" label="Off Days" sort="auto('holidays')"/>
+						
+												
+					</listhead>
+					<template name="model">
+						<listitem>	
+							<listcell></listcell>											
+							<listcell>
+								<label value="@bind(each.tsMonth)"/>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.totalEmployees)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.dayNo)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.presentDays)"/>
+							</listcell>
+								<listcell>
+								<label value="@bind(each.holidays)"/>
+							</listcell>
+							
+						
+						</listitem>
+					</template>
+		</listbox>
+	 </vlayout>
+</zk>

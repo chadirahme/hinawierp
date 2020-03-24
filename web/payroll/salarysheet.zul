@@ -1,0 +1,151 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('payroll.SalarySheetViewModel' ,compKey=0)" vflex="1">
+	 	
+	 <label value="Create Salary Sheet (Detailed)" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	 
+			<grid >
+			<columns>		
+			<column  width="130px"></column>
+			<column  width="120px"></column>
+			<column  width="100px"></column>
+			<column  width="100px"></column>
+			<column  width="130px"></column>
+			<column  width="150px"></column>
+			<column  width="150px"></column>		
+			</columns>
+			<rows>
+			
+			<row>
+			<label value="Company"></label>
+			<cell colspan="4">
+			<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enCompanyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			</cell>
+			</row>
+			
+			<row>
+			<label value="Salary Month &amp; Year"></label>
+			<listbox multiple="false" mold="select" model="@load(vm.lstMonths)" hflex="1"
+								selectedIndex="@bind(vm.selectedMonth)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+							
+							<listbox multiple="false" mold="select" model="@load(vm.lstYears)" hflex="1"
+								selectedItem="@bind(vm.selectedYear)">
+								<template name="model" var="item">
+									<listitem>
+										<listcell label="@load(item)"></listcell>
+									</listitem>
+								</template>
+							</listbox>
+							
+							
+							<button label="View" hflex="1" onClick="@command('viewSalaryCommand')"></button>
+							<button label="Filter Employee" onClick="@command('filterCommand')"></button>
+			</row>
+			
+			</rows>
+			
+			</grid>
+			
+			 
+			<vlayout id="pnlList"  vflex="1">
+			<!-- <listbox id="lstReport"  model="@bind(vm.lstEmployeeDraftSalary)" 
+						 vflex="1" emptyMessage="No data found">
+						<listhead menupopup="auto" sizable="true">
+							<listheader label="Sr.No." width="50px" sort="auto('srNO')" />
+							<listheader label="Employee No." width="100px" sort="auto('empNo')" />
+							<listheader label="Name" sort="auto('enFullName')" width="200px" />
+							<listheader width="200px" label="Department" sort="auto('department')" />	
+							<listheader label="Position" sort="auto('position')" width="150px" />
+							<listheader label="Joining Date" sort="auto('employeementDate')" width="100px" />
+							<listheader width="100px" label="Total Salary"></listheader>
+							<listheader width="100px" label="Basic Salary"></listheader>
+							<listheader width="100px" label="Allowances"></listheader>	
+													
+							<listheader width="50px" label="Days" sort="auto('totalDays')" />
+							<listheader width="100px" label="Tot. Work Units" sort="auto('totalPresentDays')" />						
+							
+							
+								<listheader forEach="${vm.columnUnitList}" label="${each}" width="100px"></listheader> 
+							<listheader forEach="${vm.columnAmountList}" label="${each}" width="100px"></listheader> 
+												
+							<listheader width="100px" label="Total O.T"></listheader>
+							<listheader width="100px" label="Sub Total"></listheader>
+							
+							<listheader width="100px" label="Loan"></listheader>
+							<listheader width="100px" label="Addition"></listheader>
+							<listheader width="100px" label="Deduction"></listheader>
+							
+							<listheader width="100px" label="Actual Salary"></listheader>
+							<listheader width="100px" label="Net. Pay"></listheader>
+							<listheader width="100px" label="Paid Amount"></listheader>
+							<listheader width="100px" label="Balance"></listheader>
+							
+							<listheader width="100px" label="Remarks"></listheader>
+						</listhead>
+						
+							<template name="model" var="r">
+							<listitem>
+							<listcell label="@bind(r.srNO)"/>
+								<listcell label="@bind(r.empNo)">
+									
+								</listcell>
+								<listcell label="@bind(r.enFullName)">									
+								</listcell>
+									<listcell label="@bind(r.department)">									
+								</listcell>
+								<listcell label="@bind(r.position)">									
+								</listcell>
+								<listcell label="@bind(r.employeementDate)">									
+								</listcell>
+								
+								<listcell label="@bind(r.totalSalary)"></listcell>
+								<listcell label="@bind(r.basicSalary)"></listcell>
+								<listcell label="@bind(r.totalAllowance)"></listcell>
+								
+								
+								<listcell label="@bind(r.totalDays)">									
+								</listcell>
+								
+								<listcell label="@bind(r.totalWorkingUnits)">									
+								</listcell>
+								
+								 <listcell forEach="${vm.columnUnitList}" label="${r.otArrayUnits[forEachStatus.index]}" ></listcell> 
+								 <listcell forEach="${vm.columnAmountList}" label="${r.otArrayAmount[forEachStatus.index]}" ></listcell> 
+								  
+								
+								<listcell label="@bind(r.otAmount)"></listcell>
+								<listcell label="@bind(r.subTotal)"></listcell>
+								<listcell label="@bind(r.loans)"></listcell>
+								<listcell label="@bind(r.additions)"></listcell>
+								<listcell label="@bind(r.deductions)"></listcell>
+								<listcell label="@bind(r.actualSalary)"></listcell>																						
+								<listcell label="@bind(r.netToPay)"></listcell>
+								<listcell label="@bind(r.paidAmount)"></listcell>
+								<listcell label="@bind(r.balance)"></listcell>
+								<listcell label="@bind(r.remarks)"></listcell>
+							</listitem>
+						</template>
+						
+						</listbox> -->
+						
+						</vlayout>
+	 
+	 
+	 </vlayout>
+	 
+</zk>

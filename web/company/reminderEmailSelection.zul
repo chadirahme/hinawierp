@@ -1,0 +1,114 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+	<window id="customersEmailSelection" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Select Customers E-mails" border="normal"
+		position="center,center" closable="true" sizable="true"
+		onCancel="customersEmailSelection.detach()" width="50%" height="55%">
+
+		<borderlayout apply="org.zkoss.bind.BindComposer"
+			viewModel="@id('vm') @init('company.ReminderEmailSelection',type='customer')">
+			<center autoscroll="true" border="none">
+				<vlayout hflex="1" vflex="1">
+					<hlayout>
+						<panel collapsible="true">
+							<panelchildren>
+								<grid>
+									<columns>
+										<column width="120px"></column>
+										<column width="150px"></column>
+										<column width="150px"></column>
+										<column width="150px"></column>
+										<column width="150px"></column>
+										<column width="150px"></column>
+										<column width="250px"></column>
+										<column width="150px"></column>
+									</columns>
+								</grid>
+							</panelchildren>
+						</panel>
+					</hlayout>
+					<listbox model="@bind(vm.emailSelectionPopUpList)" vflex="1"
+						hflex="1" width="900px" mold="paging"
+						selectedItems="@bind(vm.selectedEmailSelectionPopUp)" checkmark="true"
+						multiple="true">
+
+						<auxhead sclass="category-center">
+							<auxheader colspan="1" label="" width="50px">
+
+							</auxheader>
+							<auxheader colspan="1" label="" width="50px">
+								<checkbox checked="@bind(vm.selectAllTo)"></checkbox>
+							</auxheader>
+							<auxheader colspan="1" label="" width="50px">
+								<checkbox checked="@bind(vm.selectedAllCc)"></checkbox>
+							</auxheader>
+							<auxheader colspan="1" label="" width="50px">
+								<checkbox checked="@bind(vm.selectedAllBcc)"></checkbox>
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<!-- <textbox instant="true" width="100px" value="@bind(vm.filter.name)" 
+									onChange="@command('changeFilter')" /> -->
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<!-- <textbox instant="true" width="100px" value="@bind(vm.filter.name)" 
+									onChange="@command('changeFilter')" /> -->
+							</auxheader>
+						</auxhead>
+						<listhead menupopup="auto" sizable="true">
+							<listheader label="" width="60px" />
+							<listheader label="To" width="60px" />
+							<listheader label="CC" width="60px" />
+							<listheader label="BCC" width="60px" />
+							<listheader label="Email" sort="auto('arName')" width="250px" />
+							<listheader label="Customer Name" sort="auto('arName')"
+								width="250px" />
+						</listhead>
+						<template name="model">
+							<listitem selected="@bind(each.selectedEmail)">
+								<listcell>
+								</listcell>
+								<listcell>
+									<checkbox checked="@bind(each.to)"></checkbox>
+								</listcell>
+								<listcell>
+									<checkbox checked="@bind(each.cc)"></checkbox>
+								</listcell>
+								<listcell>
+									<checkbox checked="@bind(each.bcc)"></checkbox>
+								</listcell>
+								<listcell>
+									<label value="@bind(each.email)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.customerName)"></label>
+								</listcell>
+							</listitem>
+						</template>
+					</listbox>
+					<hlayout hflex="1" style="text-align: right">
+						<!-- <label value="@load(vm.footer)" style="color:#2c6f99;text-align: 
+							right;font-weight: bold;"></label> -->
+						<space></space>
+						<space></space>
+						<space></space>
+						<space></space>
+					</hlayout>
+
+					<hbox></hbox>
+					<hbox></hbox>
+					<hbox pack="center" hflex="1">
+						<button label="OK"
+							onClick="@command('getSelectedEmails',cmp=customersEmailSelection)" />
+						<button label="Close" onClick="customersEmailSelection.detach()"></button>
+						<button label="Set Default" onClick="@command('setDefault')"></button>
+					</hbox>
+				</vlayout>
+
+			</center>
+
+		</borderlayout>
+	</window>
+</zk>

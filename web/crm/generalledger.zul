@@ -1,0 +1,32 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+ <window apply="crm.PivotBaseController" hflex="max">
+        <hlayout id="preDef" spacing="5px" sclass="z-valign-middle">Predefined scenario :</hlayout>
+        <separator height="20px" />
+        <pivottable id="pivot" hflex="max">
+            <div></div>
+            <div>Columns</div>
+            <div>Rows</div>
+        </pivottable>
+        
+        <separator height="20px" />
+        <groupbox closable="false" mold="3d">
+            <caption label="Field Control" />
+            <vlayout style="padding: 10px">
+                <pivot-field-control id="pfc" height="300px" />
+                <separator />
+                <hlayout spacing="10px" sclass="z-valign-middle">
+                    Data field orientation :
+                    <radiogroup id="dataOrient">
+                        <vlayout>
+                            <radio id="colOrient" label="column" />
+                            <radio id="rowOrient" label="row" />
+                        </vlayout>
+                    </radiogroup>
+                    <checkbox id="colGrandTotal" label="Enable grand total for columns" />
+                    <checkbox id="rowGrandTotal" label="Enable grand total for rows" />
+                </hlayout>
+            </vlayout>
+        </groupbox>
+    </window>
+</zk>

@@ -1,0 +1,53 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('payroll.DraftSalarySheetViewModel',SalaryFlag='D' ,compKey=0)" vflex="1">
+	 	
+	 <label value="Select Company for Draft Salary Sheet" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	
+					<listbox  model="@bind(vm.lstDraftSalary)" selectedItem="@bind(vm.selectedDraftCompany)"
+						hflex="1" vflex="1" emptyMessage="No data found">
+						
+						<listhead menupopup="auto" sizable="true">
+						<listheader label="S.No" width="70px" sort="auto('srNO')" />
+						<listheader label="Name of Company" sort="auto('enCompanyName')" width="200px" />
+						<listheader label="Create Date" sort="auto('createDate')" width="100px" />
+						<listheader label="Last S. Created" sort="auto('lastSalaryCreated')" width="100px" />
+						<listheader label="Last S. Approved" sort="auto('lastSalaryApproved')" width="120px" />
+						<listheader label="Last S. Paid" sort="auto('lastSalaryPaid')" width="100px" />
+						<listheader label="Dep. Nos." sort="auto('totalDepartment')" width="100px" />
+						<listheader label="Pos Nos." sort="auto('totalPositions')" width="100px" />
+						<listheader label="Total Emp." sort="auto('totalEmployees')" width="100px" />
+								
+						</listhead>
+							<template name="model">
+							<listitem>
+								<listcell label="@load(each.srNO)" />					
+								
+								<listcell label="@load(each.enCompanyName)" />					
+								
+								<listcell label="@load(each.createDate)" />					
+								
+								<listcell label="@load(each.lastSalaryCreated)" />					
+								
+								<listcell label="@load(each.lastSalaryApproved)" />					
+								
+								<listcell label="@load(each.lastSalaryPaid)" />					
+								
+								<listcell label="@load(each.totalDepartment)" />					
+								
+								<listcell label="@load(each.totalPositions)" />					
+								
+								<listcell label="@load(each.totalEmployees)" />					
+								</listitem>
+								</template>
+																											
+						</listbox>
+						
+						<hbox hflex="1" pack="center">
+						<button label="Draft Salary Sheet" onClick="@command('openDraftCommand')"></button>
+						</hbox>
+	</vlayout>
+	</zk>

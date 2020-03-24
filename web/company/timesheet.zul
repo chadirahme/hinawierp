@@ -1,0 +1,128 @@
+<zk>
+
+<borderlayout apply="org.zkoss.bind.BindComposer" 
+	viewModel="@id('vm') @init('company.TimesheetViewModel',type='timesheet')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+			<grid>
+			<columns>
+			<column width="150px"></column>
+			<column></column>
+			</columns>
+			
+			<rows>
+			<row>
+			<label value="Calculate Column"></label>
+			<checkbox label="Hide Calculate Column" checked="@bind(vm.hideCalculate)"></checkbox>
+			</row>
+			
+			<row>
+			<label value="Customer Job Column"></label>
+			<hbox>
+			<checkbox label="Hide Customer Job Column" checked="@bind(vm.hideCustomerJob)"></checkbox>
+			<checkbox label="Is mandatory" checked="@bind(vm.mandatoryCustomerJob)" disabled="@bind(vm.hideCustomerJob)"></checkbox>
+				</hbox>
+			</row>
+			
+			<row>
+			<label value="Customer Task Column"></label>
+			<hbox>
+			<checkbox label="Hide Customer Task Column" checked="@bind(vm.hideCustomerTask)" disabled="@bind(vm.hideCustomerJob)"></checkbox>
+			<checkbox label="Is mandatory" checked="@bind(vm.mandatoryCustomerTask)" disabled="@bind(vm.hideCustomerTask)"></checkbox>
+				</hbox>
+			</row>
+			
+			<row>
+			<label value="Service Column"></label>
+			<hbox>
+			<checkbox label="Hide Service Column" checked="@bind(vm.hideService)"></checkbox>
+			<checkbox label="Is mandatory" checked="@bind(vm.mandatoryService)" disabled="@bind(vm.hideService)"></checkbox>
+			</hbox>
+			</row>
+			
+			<row>
+			<label value="Over Time"></label>
+			<checkbox label="Hide Over Time" checked="@bind(vm.hideOverTime)"></checkbox>
+			</row>
+			
+			<row>
+			<label value="From Time / To Time"></label>
+			<checkbox label="Hide Time" checked="@bind(vm.hideTime)"></checkbox>
+			</row>
+			
+			
+			<row>
+			<label value="Auto Approve"></label>
+			<checkbox label="Approve the previous week time sheets every Saturday" checked="@bind(vm.autoApprove)"></checkbox>
+			</row>
+			
+			
+			<row>
+			<label value="Project Column"></label>
+			<radiogroup selectedItem="@bind(vm.selectedProject)">
+			<radio label="Show Project Code" value="1"></radio>
+			<radio label="Show Project Name" value="2"></radio>
+			<radio label="Show Name and Code" value="3"></radio>
+			</radiogroup>
+			</row>
+			
+			<row>
+			<label value="Date Controll"></label>
+			<radiogroup selectedItem="@bind(vm.dateType)">
+			<radio label="By Date" value="1"></radio>
+			<radio label="By Month" value="2"></radio>
+			<radio label="By Date and Month" value="3"></radio>
+			
+			<radio label="Today only" value="4"></radio>
+			<radio label="Today and Prev. week" value="5"></radio>
+			<radio label="Today and next day" value="6"></radio>
+			</radiogroup>
+			</row>
+			
+			<row>
+			<label value="Tomorrow Plan"></label>
+			<hbox>
+			<checkbox label="Hide Tomorrow Plan" checked="@bind(vm.hideTomorrowPlan)"></checkbox>
+			<checkbox label="Is mandatory" checked="@bind(vm.mandatoryTomorrowPlan)" disabled="@bind(vm.hideTomorrowPlan)"></checkbox>
+			</hbox>
+			</row>
+			
+			<row>
+			<label value="Attachment"></label>
+			<hbox>
+			<checkbox label="Hide Attachment" checked="@bind(vm.hideAttachment)"></checkbox>
+			<checkbox label="Is mandatory" checked="@bind(vm.mandatoryAttachment)" disabled="@bind(vm.hideAttachment)"></checkbox>
+			</hbox>
+			</row>
+			
+			<row>
+			<label value="FTP Credential"></label>
+			<hbox>
+			<label value="Server"></label>
+			<textbox value="@bind(vm.ftpHost)"></textbox>
+			<label value="Port"></label>
+			<intbox value="@bind(vm.ftpPort)"></intbox>
+			<label value="User"></label>
+			<textbox value="@bind(vm.ftpUser)"></textbox>
+			<label value="Password"></label>
+			<textbox value="@bind(vm.ftpPassword)"></textbox>
+			</hbox>
+			</row>
+			
+			<row>
+			<label value="FTP Directory"></label>
+			<textbox value="@bind(vm.ftpDirectory)"></textbox>
+			</row>
+			
+			</rows>
+			</grid>
+			
+			
+			
+			<hbox hflex="1" pack="center">
+			<button label="Save" onClick="@command('saveCommand')" visible="@bind(vm.companyRole.canAdd)"></button>
+			</hbox>
+			</vlayout>
+			</center>
+			</borderlayout>
+</zk>

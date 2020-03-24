@@ -1,0 +1,269 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('hba.ReceiptVoucherReportViewModel')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<label value="Receipt Vouchers"
+					style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+				<grid>
+					<columns>
+						<column width="200px"></column>
+						<column width="200px"></column>
+						<column width="200px"></column>
+						<column width="200px"></column>
+					</columns>
+					<rows>
+						<row>
+							<cell>
+								<button id="btn1" label="View" width="100px" visible="@bind(vm.companyRole.canView)" onClick="@command('searchCommand')"></button>
+							</cell>
+							<cell>
+								<button id="btn2" label="Reset" width="100px" onClick="@command('resetCashInvoiceReport')"></button>
+							</cell>
+							<!-- <cell>
+								<button label="PDF Summary" onClick="@command('exportCommand',ref=recieptVoucherReport)"></button>
+							</cell> -->
+							<cell>
+								<button label="Excel Summary" visible="@bind(vm.companyRole.canExport)" onClick="@command('exportToExcel',ref=recieptVoucherReport)"></button>
+							</cell>
+							<cell>
+								<button label="Create Receipt Voucher" onClick="@command('createReceiptVoucher')" visible="@bind(vm.companyRole.canAdd)"></button>
+							</cell>
+						</row>
+						<row>
+							<cell>
+								<label value="Date Range :"></label>
+							</cell>
+							<cell>
+								<hbox>
+									<label value="From"></label>
+									<datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy"></datebox>
+								</hbox>
+							</cell>
+							<cell>
+								<hbox>
+									<label value="To"></label>
+									<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy"></datebox>
+								</hbox>
+							</cell>
+						</row>
+					</rows>
+				</grid>
+				<listbox id="recieptVoucherReport" model="@load(vm.invoiceSalesReport)" hflex="1" width="620px" vflex="1" emptyMessage="No data found">
+					<auxhead sclass="category-center">
+						<auxheader colspan="1">
+							 
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="50px" value="@bind(vm.filter.rvNumber)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<!-- <image src="/images/funnel.png" />
+							<textbox instant="true" width="60px" value="@bind(vm.filter.rvDate)" onChange="@command('changeFilter')" /> -->
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="220px" value="@bind(vm.filter.customerName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="220px" value="@bind(vm.filter.receiptName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<!-- <auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="100px" value="@bind(vm.filter.arAccountName)" onChange="@command('changeFilter')" />
+						</auxheader> -->
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="120px" value="@bind(vm.filter.paymenentMethod)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="220px" value="@bind(vm.filter.bankName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<!-- <auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.checkNUmber)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.checkDate)" onChange="@command('changeFilter')" />
+						</auxheader>
+							<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.bulidingName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.unitNumber)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.depositeToAccountName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.cucAccountName)" onChange="@command('changeFilter')" />
+						</auxheader> -->
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="50px" value="@bind(vm.filter.amount)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="50px" value="@bind(vm.filter.status)" onChange="@command('changeFilter')" />
+						</auxheader>
+							<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="120px" value="@bind(vm.filter.postQbBy)" onChange="@command('changeFilter')" />	
+						</auxheader>
+							<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="50px" value="@bind(vm.filter.userName)" onChange="@command('changeFilter')" />			
+						</auxheader>
+					</auxhead>
+					<listhead menupopup="auto" sizable="true">
+						<listheader label=" " width="110px"/>
+						<listheader label="RV No. " sort="auto('rvNumber')" width="80px" />
+						<listheader label="RV Date" sort="auto('rvDate')" width="100px" />
+						<listheader label="Name" sort="auto('customerName')" width="250px" />
+						<listheader label="Print On Receipt" sort="auto('receiptName')" width="250px" />
+						<!-- <listheader label="Ar. Account" sort="auto('arAccountName')" width="150px" /> -->
+						<listheader label="Payment Method" sort="auto('paymenentMethod')" width="150px" />
+						<listheader label="Bank" sort="auto('bankName')" width="250px" />
+						<!-- <listheader label="Cheque No." sort="auto('checkNUmber')" width="120px" />
+						<listheader label="Cheque Date" sort="auto('checkDate')" width="120px" />
+						<listheader label="Building Name " sort="auto('bulidingName')" width="200px" />
+						<listheader label="Unit NO. " sort="auto('unitNumber')" width="100px" />
+						<listheader label="Deposit to" sort="auto('depositeToAccountName')" width="120px" />
+						<listheader label="CUC Account" sort="auto('cucAccountName')" width="120px" /> -->
+						<listheader label="Amount" sort="auto('ammount')" width="80px" />
+						<listheader label="Status" sort="auto('status')" width="80px" />
+						<listheader label="Rv/Jv" sort="auto('postQbBy')" width="150px" />
+						<listheader label="Created by" sort="auto('userName')" width="80px" />
+					</listhead>
+					<template name="model">
+						<listitem>
+						<listcell>
+								<menubar sclass="logoutbanner">
+									<menu label="Activities" image="/images/dropMenuLogo.png">
+										<menupopup>
+											<menuitem label="Edit" image="/images/rowedit.png" onClick="@command('editReciptVoucher', row=each)"></menuitem>
+											<menuitem label="View" image="/images/view.png" onClick="@command('viewReciptVoucher', row=each)"></menuitem>
+											<menuitem label="Print" image="/images/print.png" onClick="@command('printInvoice', row=each)"></menuitem>
+										</menupopup>		
+									</menu>
+								</menubar>
+							</listcell>					
+							<listcell>
+								<label value="@bind(each.rvNumber)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.rvDate)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.customerName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.receiptName)" />
+							</listcell>
+							<!-- <listcell>
+								<label value="@bind(each.arAccountName)" />
+							</listcell> -->
+							<listcell>
+								<label value="@bind(each.paymenentMethod)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.bankName)" />
+							</listcell>
+							<listcell>								
+								<label value="${c:formatNumber(each.ammount, '###,###,###.00')}" ></label>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.status)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.postQbBy)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.userName)" />
+							</listcell>
+						</listitem>
+					</template>
+					<!-- <template name="model:group">
+						<group>
+							<cell>
+							<button   label="Edit" onClick="@command('editReciptVoucher',row=each)" visible="@bind(vm.companyRole.canModify)"/>
+							<button  label="View" onClick="@command('viewReciptVoucher', row=each)" visible="@bind(vm.companyRole.canView)"/>
+							<button label="Print" onClick="@command('printInvoice', row=each)" 	visible="@bind(vm.companyRole.canPrint)" />
+								<label value="  RV No. : "></label>
+								<label value="@load(each[0])"></label>
+								<label value=" | RV Date : "></label>
+								<label value="@load(each[2])"></label>
+								<label value=" | Receipt Name : "></label>
+								<label value="@load(each[1])"></label>
+								<label value=" | Total Amount : "></label>
+								<label value="@load(each[7])"></label>
+							</cell>
+						</group>
+					</template>
+					<template name="model">
+						<row style="@bind(each.paymenentMethod eq 'Cash' ? 'background:#CCF5EB;' : 'background:#CCF5EB;')">
+						<label value="" />
+							<label value="@bind(each.rvNumber)" />
+							<label value="@bind(each.rvDate)" />
+							<label value="@bind(each.customerName)" />
+							<label value="@bind(each.receiptName)" />
+							<label value="@bind(each.arAccountName)" />
+							<label value="@bind(each.paymenentMethod)" style="@bind(each.paymenentMethod eq 'Cash' ? 'color:red;' : 'color:green;')"/>
+							<label value="@bind(each.bankName)" />
+							<label value="@bind(each.checkNUmber)" />
+							<label value="@bind(each.checkDate)" />
+							<label value="@bind(each.bulidingName)" />
+							<label value="@bind(each.unitNumber)" />
+							<label value="@bind(each.depositeToAccountName)" />
+							<label value="@bind(each.cucAccountName)" />
+							<label value="${c:formatNumber(each.ammount, '###,###,###.00')}" />
+							<label value="@bind(each.status)" />
+							<label value="@bind(each.postQbBy)" />
+							<label value="@bind(each.userName)" />
+							
+						</row>
+
+					</template> -->
+					<template name="model:groupfoot">
+							<groupfoot style="font-weight:bold;background:#D6E0FF">
+								<cell colspan="15" style="text-align: right; padding-right: 15px">
+								<label value="Total Amount : "></label>
+									<label value="@load(each[1])"></label>
+
+								</cell>
+							</groupfoot>
+						</template>
+				</listbox>
+				<hbox align="right">
+					<label value="Total No. of Records : " style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<label value="@load(vm.totalNoOfInvoice)" style="color:#2c6f99;text-align:right;font-weight:bold;"></label>
+					<space></space>
+					<space></space>
+					<label value="Total Customers : " style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<label value="@load(vm.totalNoOfCustomer)" style="color:#2c6f99;text-align: right;font-weight:bold;"></label>
+					<space></space>
+					<label value="Total Cash Amount	: "	style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<label value="@load(vm.totalAmount) @converter('formatedNumber', format='###,###,###.00')" style="color:#2c6f99;text-align: right;font-weight:bold;"></label>
+					<space></space>
+					<label value="Total Cheque Amount : " style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<label value="@load(vm.totalSale) @converter('formatedNumber', format='###,###,###.00')" style="color:#2c6f99;text-align: right;font-weight:bold;"></label>
+					<!-- <space></space> <label value="Max Invoice Amount : " style="color:#2c6f99;text-align: 
+						right;font-weight: bold;"></label> <label value="@load(vm.maxInvoiceAmount) 
+						@converter('formatedNumber', format='###,###,###.00')" style="color:#2c6f99;text-align: 
+						right;font-weight: bold;"></label> -->
+				</hbox>
+
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

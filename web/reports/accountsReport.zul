@@ -1,0 +1,25 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 		@init('reports.AccountsPivotViewModel')" >
+		
+		<scrollview orient="vertical" hflex="1" vflex="1">
+		
+		
+		<pivottable id="pivottable" model="@bind(vm.pivotModel)" pivotRenderer="@bind(vm.render)"
+		      pageSize="20" width="1000px" >
+			
+			</pivottable>
+			
+		<!-- <pivot-field-control id="pfc" model="@bind(vm.pivotModel)" height="150px" width="400px" layout="">
+		</pivot-field-control> -->
+		
+		<pivot-field-control id="pfc" height="0px" model="@bind(vm.pivotModel)"/>
+		
+		
+		
+		</scrollview>
+		</vlayout>
+		
+</zk>

@@ -1,0 +1,324 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('home.CustomerFeedBackList',type='customer')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<hlayout>
+					<panel collapsible="true">
+						<panelchildren>
+							<grid>
+								<columns>
+									<column width="120px"></column>
+									<column width="180px"></column>
+									<column width="150px"></column>
+									<column width="250px"></column>
+									<column width="150px"></column>
+									<column width="150px"></column>
+								</columns>
+								<rows>
+									<row>
+
+										<cell>
+											<label value="No. of Records"></label>
+										</cell>
+										<cell>
+											<listbox multiple="false" width="120px" mold="select"
+												model="@load(vm.lstAllPageSize)" selectedItem="@bind(vm.selectedAllPageSize)">
+												<template name="model" var="item">
+													<listitem>
+														<listcell label="@load(item)"></listcell>
+													</listitem>
+												</template>
+
+
+											</listbox>
+										</cell>
+									</row>
+									
+									<row>
+										<cell>
+											<label value="Date Range :"></label>
+										</cell>
+										<cell>
+											<hbox>
+												<label value="From"></label>
+												<datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy"></datebox>
+											</hbox>
+										</cell>
+										<cell>
+											<hbox>
+												<label value="To"></label>
+												<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy"></datebox>
+											</hbox>
+										</cell>
+										<cell>
+											<checkbox checked="@bind(vm.notMappedFeedback)" label="Not Mapped Feedbacks" onClick="@command('getNotMappedTocustomerTasks')"
+												visible="true"></checkbox></cell>	
+
+
+									</row>
+									<row>
+									
+									<cell>
+											<button label="View Feedback" onClick="@command('searchFeedBack')"
+												visible="true"></button>
+										</cell>
+										
+										<cell>
+											<button label="Reset" onClick="@command('resetCustomerFeedBack')"
+												visible="true"></button>
+										</cell>
+									</row>
+									<!-- <row> <cell> <label value="Sort By"></label> </cell> <cell> 
+										<listbox multiple="false" width="120px" mold="select" model="@load(vm.lstAllPageSize)" 
+										selectedItem="@bind(vm.selectedAllPageSize)"> <template name="model" var="item"> 
+										<listitem> <listcell label="@load(item)"></listcell> </listitem> </template> 
+										</listbox> </cell> </row> -->
+								</rows>
+							</grid>
+						</panelchildren>
+					</panel>
+
+
+				</hlayout>
+				<listbox model="@bind(vm.lstCustomerFeedback)" vflex="1"
+					hflex="1" selectedItem="@bind(vm.selectedCustomerFeedBack)" width="900px"
+					mold="paging" emptyMessage="No data found">
+
+					<auxhead sclass="category-center">
+						<auxheader colspan="1" label="" width="50px">
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px"
+								value="@bind(vm.filter.feedbackNUmber)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px"
+								value="@bind(vm.filter.companyName)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px"
+								value="@bind(vm.filter.intialName)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px"
+								value="@bind(vm.filter.contactPersonName)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px"
+								value="@bind(vm.filter.customerType)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px"
+								value="@bind(vm.filter.customerName)" onChange="@command('changeFilter')" />
+						</auxheader>
+							<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px"
+								value="@bind(vm.filter.selectedSoftwareType)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.mobile1)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px"
+								value="@bind(vm.filter.telphone1)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.memo)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px"
+								value="@bind(vm.filter.createdDateStr)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px"
+								value="@bind(vm.filter.modifeldDateStr)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+
+						</auxheader>
+
+					</auxhead>
+					<listhead menupopup="auto" sizable="true">
+						<listheader label="Edit" width="150px" />
+						<listheader label="FeedBack Number" sort="auto('feedbackNUmber')"
+							width="120px" />
+						<listheader label="Company Name" sort="auto('companyName')"
+							width="120px" />
+						<listheader label="Person Intial" sort="auto('intialName')"
+							width="130px" />
+						<listheader label="Contact Person Name" sort="auto('contactPersonName')"
+							width="140px" />
+						<listheader label="Customer Type" sort="auto('customerType')"
+							width="120px" />
+						<listheader label="Customer Name" sort="auto('customerName')"
+							width="120px" />
+						<listheader label="Task details" width="320px" />
+						<listheader label="FeedBack Type(s)" width="180px" />
+						<listheader label="Software Type" sort="auto('selectedSoftwareType')"
+							width="150px" />
+						<listheader label="Mobile" sort="auto('mobile1')"
+							width="120px" />
+						<listheader label="Telephone" sort="auto('telphone1')"
+							width="120px" />
+						<listheader label="Memo" sort="auto('memo')" width="200px" />
+						<listheader label="Created Date" sort="auto('createdDateStr')"
+							width="120px" />
+						<listheader label="Updated Date" sort="auto('modifeldDateStr')"
+							width="120px" />
+						<listheader label="Download Attachment" width="180px" />
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell >
+							<vbox >
+								<button label="Edit/Map Customer"
+									onClick="@command('editCustomerFeedBack', row=each)" style="@bind(each.customerRefKey ne '0' ? 'background:#A3FFA3;font-weight: bold;' : 'background:#FF8B8B;font-weight: bold;')" tooltip="colrTip" autodisable="self"/>
+									<button label="Link More Task" onClick="@command('addTask', row=each)"  tooltip="moreTask" autodisable="self"/>
+									<!-- <button label="Edit Task" onClick="@command('editTask', row=each)" /> -->
+									</vbox>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.feedbackNUmber)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.companyName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.intialName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.contactPersonName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.customerType)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.customerName)" />
+							</listcell>
+							<listcell>
+								<listbox model="@load(each.taskRelationlist)" multiple="true" height="200px">
+									<listhead sizable="true">
+										<listheader label="Task Number" width="100px" align="center"/>
+										<listheader label=" Task Status" width="100px" />
+									 <listheader label=" Status Update By" width="100px" /> 
+									</listhead>
+									<template name="model" var="item">
+										<listitem >
+											<listcell style="@bind(item.taskStatus eq 'Done' ? 'background:#A3FFA3;' : item.taskStatus eq 'Closed' ? 'background:#A3FFA3;' : 'background:#FF8B8B;')">
+												<label value="@bind(item.taskNo)" style="font-weight: bold;"/><space></space>
+												<button label="view" onClick="@command('openTask',taskId=item.taskID)"/>
+											</listcell>
+											<listcell>
+												<label value="@bind(item.taskStatus)" />
+											</listcell>
+											 <listcell>
+												<label value="@bind(item.userName)" />
+											</listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</listcell>
+							<listcell>
+								<listbox model="@load(each.selectedFeedBackType)" width="300px"
+									multiple="true">
+									<listhead sizable="true">
+										<listheader label="Name" width="200px" />
+									</listhead>
+									<template name="model" var="item">
+										<listitem>
+											<listcell>
+												<label value="@bind(item.enDescription)" />
+											</listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.selectedSoftwareType)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.mobile1)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.telphone1)" />
+							</listcell>
+							<listcell>
+								<textbox multiline="true" rows="7" readonly="true"
+									hflex="1" value="@bind(each.memo)" style="color:#008FD2;"></textbox>
+							</listcell>
+							<listcell>
+								<label value="@bind(each.createdDateStr)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.modifeldDateStr)" />
+							</listcell>
+							<listcell>
+								<listbox model="@bind(each.lstAtt)" height="100px"
+									hflex="1" onDoubleClick="@command('download', row=each)"
+									selectedItem="@bind(each.selectedAttchemnets)">
+
+									<listhead menupopup="auto" sizable="true">
+										<listheader label="" />
+									</listhead>
+									<template name="model">
+										<listitem>
+											<listcell>
+												<label value="@bind(each.filename)" />
+											</listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</listcell>
+						</listitem>
+					</template>
+				</listbox>
+
+				<hlayout hflex="1" style="text-align: right">
+					<label value="@load(vm.footer)"
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<space></space>
+					<space></space>
+					<space></space>
+					<space></space>
+				</hlayout>
+				 <popup id="colrTip" width="400px">
+       			 					 <html><![CDATA[Green Indicates Customer Mapped FeedBacks And Red Indicataes Not Customer Mapped FeedBacks.]]></html>        				
+				   					 </popup>	
+				   					 
+				   					  <popup id="moreTask" width="300px">
+       			 					 <html><![CDATA[Link more than one task for same feedback.]]></html>        				
+				   					 </popup>	
+
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

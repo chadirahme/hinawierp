@@ -1,0 +1,221 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window id="bulkEmailDialog" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Send Bulk Email" border="normal"
+		position="center,center" closable="true" sizable="true"
+		onCancel="bulkEmailDialog.detach()" width="90%" height="95%">
+		
+<borderlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm') @init('crm.ContactEmailViewModel',type='bulkEmail') " validationMessages="@id('vmsgs')">
+		<center autoscroll="true" border="none">
+		
+		<vlayout hflex="1" >
+		<grid id="formdiv" form="@id('fx') @load(vm.objBulkEmailModel) @save(vm.objBulkEmailModel, before={'SendNewEmailCommand','SendTestEmailCommand'}) @validator(vm.todoValidator)">
+								<columns>
+									<column width="150px"></column>
+									<column width="300px"></column>
+									<column width="150px"></column>
+									<column width="250px"></column>
+									<column hflex="1"></column>									
+								</columns>
+								
+								<rows>
+								
+								<row>
+								<label value="Description"></label>								
+								 <textbox placeholder="Description of this bulk" hflex="1" value="@bind(fx.descreption)"></textbox>
+								<label value="Add Unsubscribe"></label>
+								<checkbox checked="@bind(fx.unsubscribe)"></checkbox>
+								
+								<cell rowspan="5">
+			<grid id="msggrid" model="@bind(vmsgs.texts[formdiv])" visible="@bind(not empty vmsgs.texts[formdiv])">
+    	<template name="model" var="msg">
+        <row>
+            <label value="@bind(msg)" style="color: red;" />
+        </row>
+    	</template>
+		</grid>
+								</cell>
+								
+								
+								</row>
+								
+								<row>
+								
+								<label value="Select E-mails"></label>
+								
+									<cell>
+										<listbox mold="select" model="@load(vm.selectionTYpe)"
+											selectedItem="@bind(vm.selectedType)" hflex="1">
+											<template name="model" var="item">
+												<listitem>
+													<listcell label="@load(item)"></listcell>
+												</listitem>
+											</template>
+										</listbox>
+									</cell>
+									<label value="No of Emails"></label>
+									<label value="@bind(vm.emailCount)"></label>
+								</row>
+								
+								<row>
+								<label value="Emails Group"></label>
+								<hbox>
+								 
+						<!-- <textbox placeholder="ex: @hotmail or leave blank" hflex="1" value="@bind(vm.emailContains)"></textbox> -->
+								<listbox mold="select" model="@load(vm.bulkGroups)" disabled="@bind(!vm.enableBulkGroup)"								
+											width="200px" selectedItem="@bind(vm.selectBulkGroup)">
+											<template name="model" var="item">
+												<listitem>
+													<listcell label="@load(item)"></listcell>
+												</listitem>
+											</template>
+										</listbox> 
+								 
+								 
+								 <button label="Count" onClick="@command('CountEmailsContainsCommand')" visible="false"></button>								 
+								 </hbox>
+								 <label value="Number of Emails"></label>
+								 <intbox placeholder="Number of Emails to send" hflex="1" value="@bind(vm.countSelectedEmails)"></intbox>
+								</row>
+								
+								<row>
+								<label value="Industry Group"></label>
+								<listbox mold="select" model="@load(vm.industryGroups)" disabled="true"
+											width="200px" selectedItem="@bind(vm.selectedIndustryGroup)">
+											<template name="model" var="item">
+												<listitem>
+													<listcell label="@load(item)"></listcell>
+												</listitem>
+											</template>
+										</listbox> 
+								</row>
+								
+								<row>
+								<label value="Subject"></label>
+								 <textbox placeholder="Subject of this Email" hflex="1" value="@bind(fx.subject)"></textbox>
+								 
+								 <label value="Image Url"></label>
+								 <textbox value="http://gdriv.es/erpemail/" hflex="1"></textbox>
+								</row>
+								
+								<row>
+								<label value="Template"></label>
+								<listbox mold="select" model="@load(vm.lstTemplates)"
+											width="200px" selectedItem="@bind(vm.selectedTemplate)">
+											<template name="model" var="item">
+												<listitem>
+													<listcell label="@load(item.enDescription)"></listcell>
+												</listitem>
+											</template>
+										</listbox>
+										
+							<cell>
+							<a style="color:#0000FF;text-align:left" onClick="@command('addEmailSignature')">Add Signature.</a>
+							</cell>
+								
+								
+							<cell>
+							<a style="color:#0000FF;text-align:left" onClick="@command('setUpEmailSignature')">Set Up Signature.</a>
+							</cell>
+							
+								</row>
+								
+								<row>
+								<checkbox label="With Reminder" checked="@bind(vm.withReminder)"></checkbox>
+								</row>
+								
+								<row visible="@bind(vm.withReminder)">
+								<cell colspan="4">														
+							<radiogroup selectedItem="@bind(vm.selectedReminderTypes.remindersetting)">
+									<radio label="Daily" value="1" />
+									<radio label="Weekly" value="2" />
+									<radio label="Monthly" value="3" />
+								</radiogroup>
+																								
+										<chosenbox visible="@bind(vm.selectedReminderTypes.remindersetting eq '2')"
+										model="@load(vm.lstQuotationWeekDays)" selectedObjects="@bind(vm.selectedQuotationWeekDays)"
+											width="400px">
+											<template name="model">
+												<label value="@load(each)"></label>
+											</template>
+										</chosenbox>
+
+
+									
+							
+								</cell>
+								</row>
+								
+								<row visible="@bind(vm.selectedReminderTypes.remindersetting eq '3')">
+								<cell colspan="3">
+									<vlayout>
+										<hbox>
+											<label value="Months"></label>
+											<chosenbox model="@load(vm.lstQuotationMonths)"
+												width="400px" selectedObjects="@bind(vm.selectedQuotationMonths)">
+												<template name="model">
+													<label value="@load(each)"></label>
+												</template>
+											</chosenbox>
+										</hbox>
+
+										<hbox>
+											<label value="Days"></label>
+											<chosenbox model="@load(vm.lstQuotationDays)"
+												width="400px" selectedObjects="@bind(vm.selectedQuotationDays)">
+												<template name="model">
+													<label value="@load(each)"></label>
+												</template>
+											</chosenbox>
+										</hbox>
+									</vlayout>
+								</cell>
+							</row>
+								
+					
+								<row>
+								<cell colspan="5" align="left">
+								<ckeditor hflex="1" value="@bind(vm.emailBody)" height="200px"></ckeditor>
+								</cell>
+								</row>
+																
+								
+								<row>	
+								<cell colspan="4" align="center">
+								<hbox hflex="1" pack="center">
+								<button label="Save Bulk E-mail " onClick="@command('SendNewEmailCommand')"
+												visible="true"></button>
+																																		
+																
+							<button label="Close" onClick="bulkEmailDialog.detach()"
+							visible="true"></button>
+								</hbox>
+								</cell>	
+								
+								<cell>
+								<hbox hflex="1" pack="center">
+							<!-- 	<label value="Enter your email"></label> -->
+							
+								<textbox placeholder="Enter your email" value="@bind(vm.emailTo)" hflex="1"></textbox>
+								<button label="Send Test E-mail " onClick="@command('SendTestEmailCommand')"
+												visible="true"></button>
+								
+								</hbox>
+								</cell>						
+								
+								</row>
+								
+							
+								</rows>
+								</grid>
+								
+		
+		
+		</vlayout>
+		
+		</center>
+		
+		</borderlayout>
+		</window>
+</zk>

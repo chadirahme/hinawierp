@@ -1,0 +1,128 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('hba.CustomerStatusHistory')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<label value="Customer Status History Report"
+					style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+				<grid>
+					<columns>
+						<column width="200px"></column>
+						<column width="200px"></column>
+						<column width="270px"></column>
+						<column width="200px"></column>
+						<column width="270px"></column>
+						<column width="200px"></column>
+					</columns>
+					<rows>
+						<row>
+							<cell>
+								<button id="btn1" label="View" width="100px" onClick="@command('searchCommand')"></button>
+							</cell>
+							<cell>
+								<button id="btn2" label="Reset" width="100px" onClick="@command('resetCustomerSummaryReport')"></button>
+							</cell>
+							<cell> 
+					 			<label value="Date Range :"></label> 
+					 		</cell> 
+							 <cell> 
+								<hbox> 
+									<label value="From"></label>
+									<datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy"></datebox> 
+								</hbox> 
+							</cell> 
+							<cell> 
+								<hbox> 
+								<label value="To"></label> 
+								<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy"></datebox> 
+								</hbox> 
+							</cell>
+							
+							
+							<!-- <cell> <button label="Excel Summary" onClick="@command('exportToExcel',ref=customerSummaryReport)"></button> 
+								</cell> <cell> <button label="Excel Detailed" onClick="@command('exportToExcelDeatiled',ref=customerDeatiledReport)"></button> 
+								</cell> -->
+
+
+
+
+						</row>
+						<!-- <row> <cell> <label value="Period :"></label> </cell> <cell> <label 
+							value="@bind(vm.period)" /> </cell> <cell> <label value="Hide Customers with 
+							balances Zero" /> <checkbox checked="@bind(vm.hideZero)" width="15px" visible="true" 
+							/> </cell> </row> -->
+
+						<!-- <row> <cell> <label value="Date Range :"></label> </cell> <cell> 
+							<hbox> <label value="From"></label> <datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy"></datebox> 
+							</hbox> </cell> <cell> <hbox> <label value="To"></label> <datebox value="@bind(vm.toDate)" 
+							format="dd/MM/yyyy"></datebox> </hbox> </cell> </row> -->
+					</rows>
+				</grid>
+
+				<listbox model="@load(vm.customerHistroyStatusReport)" mold="paging" pageSize="500" vflex="1" id="customerStatusHistroyReport"
+					emptyMessage="No data found">
+					<auxhead sclass="category-center">
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="150px" value="@bind(vm.filter.customerName)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+					</auxhead>
+					<listhead menupopup="auto" sizable="true">
+						<listheader label="Customer NAme " sort="auto('customerName')" width="200px" />
+						<listheader label="Type" sort="auto('type')" width="120px" />
+						<listheader label="Action Date " sort="auto('actionDatstr')" width="150px" />
+						<listheader label="Status Description " sort="auto('statusDescription')" width="300px" />
+						<listheader label="Created From" sort="auto('createdFrom')" width="120px" />
+						<listheader label="Created By" sort="auto('createdBy')" width="120px" />
+						<listheader label="Txn Ref Number" sort="auto('txnRefNumber')" width="200px" />
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell>
+								<label value="@bind(each.customerName)" />
+							</listcell>
+							<!-- <listcell> <label value="@bind(each.enityNameAr)" /> </listcell> -->
+							<listcell>
+								<label value="@bind(each.type)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.actionDatstr)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.statusDescription)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.createdFrom)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.createdBy)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.txnRefNumber)" />
+							</listcell>
+						</listitem>
+					</template>
+
+				</listbox>
+
+				<hbox align="right">
+					<space></space>
+					<space></space>
+					<label value="Total Customers
+					: "
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<label value="@load(vm.totalNoOfCustomer)"
+						style="color:#2c6f99;text-align: right;font-weight: 
+					bold;"></label>
+					<space></space><!-- <label value="Total Amount : " style="color:#2c6f99;text-align: 
+						right;font-weight: bold;"></label> <label value="@load(vm.totalAmountStr)" 
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label><space></space> -->
+				</hbox>
+
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

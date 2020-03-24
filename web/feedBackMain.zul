@@ -1,0 +1,70 @@
+<?page title="Hinawi Software- Services" contentType="text/html;charset=UTF-8"?>
+<zk:zk xmlns="http://www.zkoss.org/2005/zk/native"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:zk="http://www.zkoss.org/2005/zul">
+	
+
+<zk:borderlayout hflex="1" style="background:none" >
+ 
+  
+  
+  <zk:center margins="1,115,1,1" border="none" hflex="1" autoscroll="true">
+<zk:vlayout>
+
+
+				<table style="font-size: 14px;color:#424242;margin-left:25px" width="95%">
+    		 <tr>
+    		 <td>
+    		 
+    		<br/><br/>
+	 	<a href="quotationContactUsLayout.zul">
+			<zk:label hflex="1"
+				value=" Contact Us \ Request for Quotation " style="color:#2c6f99;font-weight:bold;font-size:16px;">
+				</zk:label>
+									</a>
+									<br/><br/>
+
+ </td>
+    		 </tr>	
+    		 
+    		  <tr>
+    		 <td>
+    		 
+    		
+	 	<a href="customerFeedbackLayout.zul">
+										<zk:label value=" Feedback Form"
+											style="color:#2c6f99;font-weight:bold;font-size:16px;"></zk:label>
+									</a>
+<br/><br/>
+ </td>
+    		 </tr>	
+    		 
+    		  <tr>
+    		 <td>
+    		 
+    		
+	 	<a href="contactus.zul">
+										<zk:label value="Company Address "
+											style="color:#2c6f99;font-weight:bold;font-size:16px;"></zk:label>
+									</a>
+
+ </td>
+    		 </tr>	
+    		 
+    		 </table>
+
+			
+
+</zk:vlayout>
+
+</zk:center>
+
+  <zk:east title="Contacts" size="18%"  margins="1,1,45,1" border="none">
+		<zk:include src="rightmenu.zul"></zk:include>
+</zk:east>
+      
+      
+  </zk:borderlayout>
+	
+	</zk:zk>
+	

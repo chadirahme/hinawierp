@@ -1,0 +1,18 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window id="modalDialog" apply="org.zkoss.bind.BindComposer" mode="highlighted" title="Add Email" 
+border="none" position="center,center" closable="true" contentStyle="overflow:auto;" 
+viewModel="@id('vm')  @init('hr.EditEmployeeViewModel')"  sizable="true"
+onCancel="modalDialog.detach()" onOK="@command('saveEmployeeEmailCommand')" 
+ width="300px" height="200px">
+
+<vlayout>
+<hbox>
+<label value="Email"></label>
+<textbox value="@bind(vm.employeeEmail)"></textbox>
+</hbox>
+
+<button label="Save" onClick="@command('saveEmployeeEmailCommand')"></button>
+</vlayout>
+</window>
+</zk>

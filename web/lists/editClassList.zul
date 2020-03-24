@@ -1,0 +1,67 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="classModalDialog" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Add/Edit Customer" border="normal" position="center,center"
+		closable="true" viewModel="@id('vm')  @init('hba.EditClassViewModel')"
+		sizable="true" onCancel="classModalDialog.detach()" width="700px"
+		height="200px">
+
+		<grid
+			form="@id('fx') @load(vm.selectedClass) @save(vm.selectedClass, before='updateClassList')">
+			<columns>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="150px"></column>
+				<column width="60px"></column>
+				<column width="150px"></column>
+			</columns>
+
+			<rows>
+				<row>
+					<cell sclass="">Class Name *</cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.name)" hflex="1" maxlength="31" />
+					</cell>
+					<cell sclass="">InActive</cell>
+
+					<cell colspan="2">
+						<checkbox checked="@bind(vm.statusActive)"></checkbox>
+					</cell>
+				</row>
+				<row>
+
+					<cell>
+						Sub Of
+					</cell>
+					<cell colspan="2">
+						<checkbox label="" onCheck="@command('doCheckedClass')"
+							checked="@bind(vm.selectedCheckBox)" width="15px" />
+						<space></space>
+						<combobox autodrop="true" mold="rounded" buttonVisible="true"
+							hflex="1" readonly="true" model="@load(vm.fillsubOfClass)"
+							disabled="@bind(vm.disableSubOf)" selectedItem="@bind(fx.slectedSubOfClass)">
+							<template name="model" var="option">
+								<comboitem label="${option.name}"
+									style="@bind(option.sublevel eq 0 ? 'color:black;font-weight:bold;' : option.sublevel eq 1 ? 'text-indent:10px' : option.sublevel eq 2 ? 'text-indent:25px': option.sublevel eq 3 ? 'text-indent:40px' : option.sublevel eq 4 ? 'text-indent:60px' : 'text-indent:65px')" />
+							</template>
+
+						</combobox>
+					</cell>
+
+				</row>
+				<row>
+					<cell colspan="4">
+						<hbox pack="center" hflex="1">
+							<button label="Save" onClick="@command('updateClassList',cmp=classModalDialog)"
+								visible="@bind(vm.canSave)"></button>
+							<button label="Close" onClick="classModalDialog.detach()"></button>
+						</hbox>
+					</cell>
+				</row>
+
+			</rows>
+
+		</grid>
+
+	</window>
+</zk>

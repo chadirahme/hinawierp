@@ -1,0 +1,158 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="selectItemReceiptPopUp" apply="org.zkoss.bind.BindComposer" mode="highlighted" title="Select Item Receipt" border="normal"
+		position="center,center" closable="true" sizable="true" onCancel="selectItemReceiptPopUp.detach()" width="1400px" height="800px">
+
+		<borderlayout apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('hba.SelectItemReceipt')">
+			<center autoscroll="true" border="none">
+				<vlayout hflex="1" vflex="1">
+					<grid>
+						<columns>
+							<column width="200px"></column>
+							<column width="200px"></column>
+							<column width="150px"></column>
+							<column width="200px"></column>
+							<column width="200px"></column>
+							<column width="250px"></column>
+						</columns>
+						<rows>
+							<row>
+								<cell>
+									<label value="Type Filter"></label>
+								</cell>
+								<cell>
+									<combobox autodrop="true" mold="rounded" buttonVisible="true" model="@load(vm.fromType)" selectedItem="@bind(vm.selelctedFromType)" hflex="1">
+										<template name="model" var="option">
+											<comboitem label="@load(option)" />
+										</template>
+									</combobox>
+								</cell>
+								<cell>
+									<label value="Date Range :"></label>
+								</cell>
+								<cell>
+									<hbox>
+										<label value="From"></label>
+										<datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy"></datebox>
+									</hbox>
+								</cell>
+								<cell>
+									<hbox>
+										<label value="To"></label>
+										<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy"></datebox>
+									</hbox>
+								</cell>
+								<cell>
+									<button id="btn1" label="View" width="100px" onClick="@command('searchApproved')"></button>
+									<button id="btn2" label="Reset" width="100px" onClick="@command('resetItemReceiptReport')"></button>
+								</cell>
+							</row>
+
+						</rows>
+					</grid>
+
+					<listbox model="@load(vm.invoiceSalesReport)" vflex="1"	id="selectPurchaseOrder" emptyMessage="No data found" hflex="1" width="920px" selectedItems="@bind(vm.lstIR)" checkmark="true" multiple="true">
+						<auxhead sclass="category-center">
+							<auxheader colspan="1" label="" width="50px">
+							</auxheader>
+							<auxheader colspan="1" label="" width="50px">
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="100px" value="@bind(vm.filter.txnDate)" onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="80px" value="@bind(vm.filter.memo)" onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="80px" value="@bind(vm.filter.itemName)" onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="80px" value="@bind(vm.filter.description)" onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="80px" value="@bind(vm.filter.quantity)" onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="80px" value="@bind(vm.filter.billedQuantity)" onChange="@command('changeFilter')" />
+							</auxheader>
+							<auxheader colspan="1">
+								<image src="/images/funnel.png" />
+								<textbox instant="true" width="80px" value="@bind(vm.filter.remainingQuantity)" onChange="@command('changeFilter')" />
+							</auxheader>
+						</auxhead>
+						<listhead menupopup="auto" sizable="true">
+							<listheader label="" width="50px" />
+							<listheader label="" width="50px" />
+							<listheader label="I.R. No." width="100px" />
+							<listheader label="Date " sort="auto('txnDate')" width="80px" />
+							<listheader label="Memo" sort="auto('memo')" width="250px" />
+							<listheader label="Item Name" sort="auto('itemName')" width="120px" />
+							<listheader label="Item Description" sort="auto('description')" width="350px" />
+							<listheader label="Quantity" sort="auto('rcvdQuantity')" width="120px" />
+							<listheader label="Billed Quantity" sort="auto('rcvdQuantity')" width="120px" />
+							<listheader label="Remaining Quantity" sort="auto('remainingQuantity')" width="120px" />
+						</listhead>
+						<template name="model">
+							<listitem>
+								<listcell>
+								</listcell>
+								<listcell>
+								</listcell>
+								<listcell>
+									<label value="@bind(each.pORecNo)" visible="@bind(!each.show)"/>
+								</listcell>
+								<listcell>
+									<label value="@bind(each.txnDate)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.memo)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.itemName)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.description)" />
+								</listcell>
+								<listcell>
+									<label value="@bind(each.quantity)" visible="@bind(each.show)"/>
+								</listcell>
+								<listcell>
+									<label value="@bind(each.billedQuantity)" visible="@bind(each.show)"/>
+								</listcell>
+								<listcell>
+									<label value="@bind(each.remainingQuantity)" visible="@bind(each.show)"/>
+								</listcell>
+							</listitem>
+						</template>
+					</listbox>
+					<div>
+						<grid>
+							<columns>
+								<column></column>
+								<column></column>
+							</columns>
+							<rows>
+								<row>
+									<cell align="right">
+										<button label="Ok" onClick="@command('selectItemReceipt',cmp=selectItemReceiptPopUp)"></button>
+										<button label="Close" onClick="selectItemReceiptPopUp.detach()"></button>
+									</cell>
+								</row>
+							</rows>
+						</grid>
+					</div>
+				</vlayout>
+			</center>
+		</borderlayout>
+	</window>
+</zk>
+
+
+

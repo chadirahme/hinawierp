@@ -1,0 +1,123 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="Setup School" border="normal"
+apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('school.SchoolViewModel' , type='school' )">
+
+<grid >
+<rows>
+
+<row>
+<cell hflex="1">
+<label value="Select School"></label>
+</cell>
+<cell hflex="1">
+<listbox multiple="false" width="120px" mold="select" model="@load(vm.lstSchool)" selectedItem="@bind(vm.selectedSchool)">
+<template name="model" var="item">
+					<listitem>
+						<listcell label="@load(item.enschoolname)"></listcell>
+					</listitem>
+				</template>
+
+</listbox>
+</cell>
+<cell hflex="1">
+<button label="Add New School" onClick="@command('addNewSchoolCommand')"></button>
+
+</cell>
+<cell></cell>
+</row>
+
+<row>
+<cell hflex="1">
+<label value="English School Name *"></label>
+</cell>
+<cell hflex="1">
+<textbox value="@bind(vm.objSchool.enschoolname)" constraint="no empty: *"></textbox>
+</cell>
+<cell hflex="1">
+<label value="Arabic School Name *"></label>
+</cell>
+<cell hflex="1">
+<textbox value="@bind(vm.objSchool.arschoolname)" constraint="no empty: *"></textbox>
+</cell>
+</row>
+
+
+<row>
+<cell hflex="1">
+<label value="Address (English)"></label>
+</cell>
+<cell hflex="1">
+<textbox value="@bind(vm.objSchool.enaddress)"></textbox>
+</cell>
+<cell hflex="1">
+<label value="Address (Arabic)"></label>
+</cell>
+<cell hflex="1">
+<textbox value="@bind(vm.objSchool.araddress)"></textbox>
+</cell>
+</row>
+
+
+<row>
+<cell hflex="1">
+<label value="Website"></label>
+</cell>
+<cell hflex="1">
+<textbox value="@bind(vm.objSchool.website)"></textbox>
+</cell>
+<cell hflex="1">
+<label value="Email"></label>
+</cell>
+<cell hflex="1">
+<textbox value="@bind(vm.objSchool.email)"></textbox>
+</cell>
+</row>
+
+
+<row>
+<cell hflex="1">
+<label value="Phone"></label>
+</cell>
+<cell hflex="1">
+<textbox value="@bind(vm.objSchool.phoneno)"></textbox>
+</cell>
+<cell hflex="1">
+<label value="Mobile"></label>
+</cell>
+<cell hflex="1">
+<textbox value="@bind(vm.objSchool.mobile)"></textbox>
+</cell>
+</row>
+
+
+<row>
+<cell hflex="1">
+<label value="Fax No."></label>
+</cell>
+<cell hflex="1">
+<textbox value="@bind(vm.objSchool.faxno)"></textbox>
+</cell>
+<cell hflex="1">
+<label value="P.O.Box"></label>
+</cell>
+<cell hflex="1">
+<textbox value="@bind(vm.objSchool.pobox)"></textbox>
+</cell>
+</row>
+
+
+<row>
+<cell colspan="4" align="center">
+<button label="Save" onClick="@command('saveSchoolCommand')"> </button>
+</cell>
+</row>
+
+</rows>
+</grid>
+
+
+
+</window>
+</zk>

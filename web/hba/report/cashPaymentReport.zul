@@ -1,0 +1,180 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<vlayout apply="org.zkoss.bind.BindComposer" vflex="1" hflex="1"
+		viewModel="@id('vm') @init('hba.CashPaymentReportViewModel')">
+		
+	<borderlayout vflex="1" hflex="1">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+				<label value="Cash Payments"
+					style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+				<grid>
+					<columns>
+						<column width="200px"></column>
+						<column width="200px"></column>
+						<column width="200px"></column>
+						<column width="200px"></column>
+						<column width="200px"></column>
+					</columns>
+					<rows>
+						<row>
+							<cell>
+								<button id="btn1" label="View" width="100px"
+									onClick="@command('searchCommand')" visible="@bind(vm.companyRole.canView)"></button>
+							</cell>
+							<cell>
+								<button id="btn2" label="Reset" width="100px"
+									onClick="@command('resetCashPaymentsReport')"></button>
+							</cell>
+						
+							<cell>
+								<button label="Excel Summary" visible="@bind(vm.companyRole.canExport)"
+									onClick="@command('exportToExcel',ref=customerSummaryReport)"></button>
+							</cell>
+							<cell>
+								<button label="Create New Cash Payment" onClick="@command('createCashPayment')"
+									visible="@bind(vm.companyRole.canAdd)"></button>
+							</cell>
+							<cell>
+							 <checkbox label="POS" checked="@bind(vm.posItems)"></checkbox>
+							</cell>
+
+
+
+						</row>
+						<row>
+							<cell>
+								<label value="Date Range :"></label>
+							</cell>
+							<cell>
+								<hbox>
+									<label value="From"></label>
+									<datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy"></datebox>
+								</hbox>
+							</cell>
+							<cell>
+								<hbox>
+									<label value="To"></label>
+									<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy"></datebox>
+								</hbox>
+							</cell>
+								<cell>
+														
+							 </cell>
+
+						</row>
+					</rows>
+				</grid>
+
+
+				<listbox model="@load(vm.lstCashPayment)" vflex="1"
+					id="customerSummaryReport" emptyMessage="No data found" hflex="1"
+					width="920px">
+					<auxhead sclass="category-center">						
+						<auxheader colspan="1" label="" width="110px"></auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="60px"
+								value="@bind(vm.filter.invoiceNumber)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px"
+								value="@bind(vm.filter.invoiceDate)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.paymentType)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.customerName)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px"
+								value="@bind(vm.filter.invoiceAmount)" onChange="@command('changeFilter')" />
+						</auxheader>
+						
+
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.status)"
+								onChange="@command('changeFilter')" />
+						</auxheader>
+						
+					</auxhead>
+
+					<listhead menupopup="auto" sizable="true">						
+							<listheader label="Activities" width="110px"/>
+						<listheader label="PV No. " sort="auto('pvNo')"
+							width="100px" />
+						<listheader label="PV Date" sort="auto('pvDateStr')"
+							width="120px" />
+						<listheader label="payee Type" sort="auto('payeeType')"
+							width="120px" />						
+						<listheader label="Payee Name" sort="auto('printName')"
+							width="200px" />
+													
+						<listheader label="Invoice Amount " sort="auto('invoiceAmount')"
+							width="120px" />
+						
+						<listheader label="Status" sort="auto('status')" width="200px" />						
+					</listhead>
+					<template name="model">
+						<listitem>							
+							<listcell>
+							<menubar sclass="logoutbanner">
+									<menu label="Activities" image="/images/dropMenuLogo.png">
+										<menupopup>
+											<menuitem label="Edit" image="/images/rowedit.png"
+												onClick="@command('editCashPayment', row=each)"></menuitem>
+											<menuitem label="View" image="/images/view.png"
+												onClick="@command('viewCreditInvoice', row=each)"></menuitem>
+											<menuitem label="Print" image="/images/print.png"
+												onClick="@command('printCredit', row=each)"></menuitem>
+												<menuitem label="E-mail" image="/images/email.gif"
+												onClick="@command('CustomerSendEmail',row=each)"></menuitem>	
+											</menupopup>
+									</menu>
+								</menubar>
+								
+							</listcell>
+							<listcell>
+								<label value="@bind(each.pvNo)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.pvDateStr)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.payeeType)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.printName)" />
+							</listcell>
+							<listcell>
+								<label value="${c:formatNumber(each.amount, '###,###,###.00')}" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.status)" />
+							</listcell>
+							
+							
+							
+						</listitem>
+					</template>
+
+				</listbox>
+				
+
+			</vlayout>
+		</center>
+	</borderlayout>
+	
+		
+	</vlayout>
+</zk>

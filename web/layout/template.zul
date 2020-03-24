@@ -1,0 +1,32 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>	
+<html>
+<head>
+			<link rel="shortcut icon" href="http://hinawi2.dyndns.org:8181/sata/images/favicon.ico" type="image/x-icon"  />
+		
+		</head>
+</html>
+ 	
+
+    
+		<borderlayout hflex="1" vflex="1">
+	
+			<north  border="none" height="155px">		
+				<include src="/layout/header.zul"></include>					
+			</north>
+		
+		<center id="mainContent" autoscroll="true"  border="none" self="@insert(content)" style="margin-left:0px;">
+		</center>
+		
+		<south height="30px" border="none" hflex="1">
+	
+	 	<div id="footer" style="position : absolute; bottom : 0; height : 20px;margin-top : 40px;background:gray;width: 100%;align:center;color:white">
+	  	© 2014  Explorer Computer . All Rights Reserved.
+		</div>
+		 
+		
+		</south>
+	</borderlayout>
+
+	
+</zk>

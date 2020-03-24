@@ -1,0 +1,256 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('hr.PassportRequestViewModel',type='passport')" vflex="1">
+	 
+	 		<scrollview orient="vertical" vflex="1">
+	 		
+	 		<label value="Passport Request" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	 		
+	 		<grid>
+			<columns>
+			<column width="150px"></column>
+			<column width="250px"></column>
+			<column></column>
+			<column></column>
+			
+			</columns>
+			<rows>
+			<row>
+			<label value="Company"></label>
+			<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enCompanyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+								
+			</row>
+			
+			<row>
+			<label value="Employee"></label>
+		    <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstCompEmployees)" selectedItem="@bind(vm.selectedCompEmployee)"
+		    disabled="@bind(vm.employeeKey gt 0)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.fullName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			
+				<hbox>
+			<label value="Employee No."></label>
+			<textbox value="@bind(vm.employeeNumber)" width="100px"  disabled="@bind(vm.employeeKey gt 0)"></textbox>
+			<button label="Search" onClick="@command('searchCommand')" visible="@bind(vm.employeeKey eq 0)"></button>
+			</hbox>
+			
+			</row>
+			
+			</rows>
+			
+			</grid>
+			
+			<grid>
+			<columns>
+			<column width="150px"></column>
+			<column width="250px"></column>
+			<column width="150px"></column>
+			<column width="200px"></column>
+			<column width="150px"></column>
+			<column width="200px"></column>
+			<column hflex="1"></column>
+			</columns>
+			
+			<rows>
+			<row>
+				<label value="Employee Name: "></label>
+				<label value="@bind(vm.selectedCompEmployee.fullName)" style="color:black;font-weight:bold" visible="@bind(vm.selectedCompEmployee.employeeKey gt 0)"></label>
+				<label value="Arabic Name: "></label>
+				<label value="@bind(vm.selectedCompEmployee.arabicName)"></label>
+				<label value="Employee No.: "></label>
+				<label value="@bind(vm.selectedCompEmployee.employeeNo)"></label>
+				
+			</row>
+			
+				<row>
+				<label value="Nationality: "></label>
+				<label value="@bind(vm.selectedCompEmployee.country)"></label>
+				<label value="Sex: "></label>
+				<label value="@bind(vm.selectedCompEmployee.gender)"></label>
+				<label value="Marital Status: "></label>
+				<label value="@bind(vm.selectedCompEmployee.marital)"></label>
+				
+			</row>
+			
+			<row>
+				<label value="Department: "></label>
+				<label value="@bind(vm.selectedCompEmployee.department)"></label>
+				<label value="Position: "></label>
+				<label value="@bind(vm.selectedCompEmployee.position)"></label>
+				<label value="Joining Date: "></label>
+				<label value="@bind(vm.selectedCompEmployee.employeementDate)"></label>		
+			</row>
+			
+			
+			<row>
+				<label value="Status: "></label>
+				<label value="@bind(vm.employeePassport.status)" style="color:red"></label>
+				<label value="Passport Status: "></label>
+				<label value="@bind(vm.employeePassport.passportLocation)" ></label>
+				
+				<label value="Outstanding Loans: "></label>			
+				 <label value="@bind(vm.empOSL)" />
+			</row>
+			</rows>
+			
+			</grid>
+			
+			<tabbox width="100%" sclass="nav_tabs">
+        <tabs id="tabs">
+            <tab label="Request Info" />
+            <tab label="Passport Details"/>
+            <tab label="Contact Info"/>
+            <tab label="Sponsor Name"/>
+        </tabs>
+        
+        <tabpanels>
+            <tabpanel>
+               <grid>
+               <columns>
+               <column width="150px"></column>
+                <column width="250px"></column>
+               </columns>
+               <rows>
+               <row>
+               <label value="Request Date:"></label>
+               <datebox  value="@bind(vm.requestDate)" format="dd/MM/yyyy" hflex="1" constraint="no past,no empty"></datebox>
+               </row>
+               <row>
+                <label value="No. of Days:"></label>
+               <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstNoDays)" selectedItem="@bind(vm.selectedNoDays)">
+				<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item)"></listcell>
+					</listitem>
+				</template>
+				</listbox>
+               </row>
+               
+                <row>
+               <label value="Expected Return Date:"></label>
+               <datebox value="@bind(vm.returnDate)" format="dd/MM/yyyy" hflex="1" constraint="no today,no past,no empty"></datebox>
+               </row>
+               
+               <row>
+                <label value="Reason For Request:"></label>
+               <listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstReason)" selectedItem="@bind(vm.selectedReason)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enDescription)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+               </row>
+               
+               </rows>
+               </grid>
+               
+            </tabpanel>
+            <tabpanel>
+               <grid>
+               <columns>
+               <column width="150px"></column>
+                <column width="250px"></column>
+                  <column width="150px"></column>
+                <column width="250px"></column>
+               </columns>
+               <rows>
+               <row>
+               <label value="Passport No.:"></label>
+               <label value="@bind(vm.employeePassport.passportNumber)"></label>
+               
+                <label value="Issue Place:"></label>
+               <label value="@bind(vm.employeePassport.issueCountry)"></label>                             
+               </row>
+             
+               <row>
+               <label value="Issue Date:"></label>
+               <label value="@bind(vm.employeePassport.issueDate)"></label>
+               
+               <label value="Expiry Date:"></label>
+               <label value="@bind(vm.employeePassport.expiryDate)"></label>
+               
+               
+               </row>
+               
+               </rows>
+               </grid>
+               
+               
+            </tabpanel>
+            <tabpanel>
+           <grid   emptyMessage="There is no data found for this employee"
+            model="@bind(vm.lstContacts)">
+              <columns>           
+            <column label="Contact Type" hflex="1" />
+            <column label="Contact Details" hflex="1" />
+            <column label="Notes" hflex="1" />
+            </columns>
+                <template name="model" var="item">
+              <row>              
+              <label value="@bind(item.description)"/>
+              <label value="@bind(item.details)"/>
+              <label value="@bind(item.notes)"/>
+              </row>
+              </template>
+              
+              </grid>
+            </tabpanel>
+            
+             <tabpanel>
+               <grid>
+               <columns>
+               <column width="150px"></column>
+                <column width="250px"></column>
+                  <column width="150px"></column>
+                <column width="250px"></column>
+               </columns>
+               <rows>
+               <row>
+               <label value="Company Name:"></label>
+               <label value="@bind(vm.employeeSponsor.companyName)"></label>
+               
+                <label value="Sponsor:"></label>
+               <label value="@bind(vm.employeeSponsor.sponsorName)"></label>                             
+               </row>
+             
+               <row>
+               <label value="Visa Type:"></label>
+               <label value="@bind(vm.employeeSponsor.visaType)"></label>
+               
+               <label value="Expiry Date:"></label>
+               <label value="@bind(vm.employeeSponsor.visaExpiryDate)"></label>
+               
+               
+               </row>
+                            
+               </rows>
+               </grid>
+               
+               
+            </tabpanel>
+            
+        </tabpanels>
+       </tabbox>
+		<label value="Notes"></label>
+		<textbox multiline="true" rows="3" hflex="1" value="@bind(vm.note)"></textbox>	
+		<hbox align="center" pack="center" hflex="1">			
+		<button  id="btn1" label="Submit" onLongOp="@command('submitCommand')" disabled="@bind(!vm.canSubmit)"  visible="@bind(vm.companyRole.canAdd)"></button>		
+		</hbox>	
+						
+			</scrollview>
+			</vlayout>
+</zk>

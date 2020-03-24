@@ -1,0 +1,281 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<borderlayout apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('hr.AssignEmployeeToShift')">
+		<center autoscroll="true" border="none">
+			<vlayout hflex="1" vflex="1">
+			 <label value="View assigned employees to shift" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+				<grid>
+					<columns>
+						<column width="100px"></column>
+						<column width="200px"></column>
+						<column width="100px"></column>
+						<column width="120px"></column>
+						<column width="120px"></column>
+						<column width="180px"></column>
+						<column width="80px"></column>
+					</columns>
+					<rows>
+						<row>
+							<cell colspan="2">
+								<label value="Company"></label>
+								<space></space>
+								<listbox multiple="false" hflex="1" mold="select"
+									model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+									<template name="model" var="item">
+										<listitem>
+											<listcell label="@load(item.enCompanyName)"></listcell>
+										</listitem>
+									</template>
+								</listbox>
+							</cell>
+
+						</row>
+						<row>
+							<label value="Date"></label>
+							<cell colspan="1">
+								<hbox>
+									<radiogroup selectedIndex="@bind(vm.selectedDateType)"
+										hflex="1">
+										 
+										<radio label="By Month" value="1" />
+										            
+										<radio label="By Dates" value="2" />
+									</radiogroup>
+								</hbox>
+							</cell>
+
+							<cell colspan="3">
+								<hbox visible="@bind(vm.showMonth)">
+									<listbox multiple="false" mold="select" model="@load(vm.lstMonths)"
+										selectedItem="@bind(vm.selectedMonth)">
+										<template name="model" var="item">
+											<listitem>
+												<listcell label="@load(item)"></listcell>
+											</listitem>
+										</template>
+									</listbox>
+
+									<listbox multiple="false" mold="select" model="@load(vm.lstYears)"
+										selectedItem="@bind(vm.selectedYear)">
+										<template name="model" var="item">
+											<listitem>
+												<listcell label="@load(item)"></listcell>
+											</listitem>
+										</template>
+									</listbox>
+								</hbox>
+
+								<hbox visible="@bind(!vm.showMonth)">
+									<label value="Between"></label>
+									<datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy"></datebox>
+									<label value="And"></label>
+									<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy"></datebox>
+								</hbox>
+							</cell>
+
+
+							<button id="btn1" label="View" width="100px"
+								onClick="@command('viewShiftEmployees')"></button>
+
+							<!-- <cell colspan="2"> <hbox> <textbox placeholder="Search by Emp 
+								No. or Name" value="@bind(vm.searchText)"></textbox> <button label="Search" 
+								onClick="@command('searchforEmployeeCommand')"></button> <button label="Add 
+								Employees" onClick="@command('findEmployeeCommand')" visible="false"></button> 
+								</hbox> </cell> -->
+						</row>
+					</rows>
+				</grid>
+
+
+				<listbox model="@load(vm.lstAssignedEmployees)" vflex="1"
+					hflex="1" width="920px">
+					<auxhead sclass="category-center">
+						<auxheader colspan="1" width="50px">
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="../images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.employeeNo)" onChange="@command('changeFilter')" />
+						</auxheader>
+
+						<auxheader colspan="1">
+							<image src="../images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.fullName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="../images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.shiftFromDate)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="../images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.shiftToDate)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="../images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.shiftName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="../images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.shiftType)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="../images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.department)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="../images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.position)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="../images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.country)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="../images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.supervisorName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="../images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.groupName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="../images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.projectName)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" 
+								value="@bind(vm.employeeFilter.status)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.employeeStatus)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+						<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1"
+								value="@bind(vm.employeeFilter.statusDescription)" onChange="@command('changeFilter')" />
+						</auxheader>
+					</auxhead>
+
+					<listhead  menupopup="auto" sizable="true">
+						<listheader width="50px" label="SI No." sort="auto('lineNo')"/>
+						<listheader label="Employee No." width="110px"
+							sort="auto('employeeNo')" />
+						<listheader label="Name" sort="auto('fullName')" width="150px" />
+
+						<listheader label="Shift From Date" sort="auto('shiftFromDate')"
+							width="150px" />
+						<listheader label="Shift To Date" sort="auto('shiftToDate')"
+							width="150px" />
+						<listheader label="Shift Name" sort="auto('shiftName')"
+							width="150px" />
+							
+						<listheader label="Shift Type" sort="auto('shiftType')"
+							width="150px" />
+
+						<listheader label="Department" sort="auto('department')"
+							width="150px" />
+						<listheader label="Position" sort="auto('position')"
+							width="150px" />
+						<listheader label="Nationality" sort="auto('country')"
+							width="150px" />
+						<listheader label="Supervisor Name" sort="auto('supervisorName')"
+							width="150px" />
+						<listheader label="Team Name" sort="auto('workGroupName')"
+							width="150px" />
+						<listheader label="Location/Project Name" sort="auto('projectName')"
+							width="150px" />
+						<listheader label="Status" sort="auto('status')" width="150px" />
+						<listheader label="Status Description 1" sort="auto('employeeStatus')"
+							width="150px" />
+						<listheader label="Status Description 2" sort="auto('statusDescription')"
+							width="150px" />
+
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell>
+								<label value="@bind(each.lineNo)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.employeeNo)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.fullName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.shiftFromDate)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.shiftToDate)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.shiftName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.shiftType)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.department)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.position)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.country)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.supervisorName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.workGroupName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.projectName)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.status)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.employeeStatus)" />
+							</listcell>
+							<listcell>
+								<label value="@bind(each.statusDescription)" />
+							</listcell>
+
+
+						</listitem>
+					</template>
+
+				</listbox>
+				<hbox align="right">
+					<space></space>
+					<space></space>
+					<label value="Total Employees : "
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<label value="@load(vm.footer)"
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<space></space>
+					<space></space>
+
+				</hbox>
+
+			</vlayout>
+		</center>
+	</borderlayout>
+</zk>

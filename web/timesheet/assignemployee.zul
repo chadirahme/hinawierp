@@ -1,0 +1,78 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<borderlayout id="mainlayout2">
+	
+<center autoscroll="true" >
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('timesheet.TransferViewModel')" vflex="1" >
+	 
+	
+	 
+	 <label value="Assign Employees to Timesheet" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	 
+	  <grid>
+			<columns>		
+			<column  width="100px"></column>
+			<column  width="200px"></column>
+			<column  width="100px"></column>
+			<column  width="100px"></column>				
+			</columns>
+			<rows>
+			
+			<row>						
+	<label value="Company"></label>
+	<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enCompanyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			
+			
+	<button label="View" onClick="@command('findTimesheetEmployeeCommand')"></button>
+	
+	<button label="Save" onClick="@command('saveAssignedTimesheetToEmployeeCommand')" visible="@bind(vm.companyRole.canAdd)"></button>
+	</row>
+	</rows>
+	</grid>
+	
+	
+		<grid vflex="1"  emptyMessage="There is no data found for this criteria" model="@load(vm.lstAssignEmployee)">
+        	<columns sizable="true">
+        	  <column  label="SNO." width="50px"/>
+        	    <column  label="Emp No."  width="100px" sort="auto(employeeNo)" />
+        	      <column  label="Name" hflex="1" sort="auto(fullName)"/>
+        	        <column  label="Department" width="200px" sort="auto(lastTransferDate)"/>
+        	          <column  label="Posotion" hflex="1" sort="auto(projectName)"/>      
+        	           <column  label="Start Work" width="100px" sort="auto(projectName)"/>
+        	           <column  label="Generate Salary Sheet from HR" hflex="1" sort="auto(projectName)" visible="false"/>
+        	            <column  label="Generate Salary Sheet from Time Sheet" hflex="1"/>
+        	           <column  label="Last Salary Sheet" hflex="1" sort="auto(projectName)" visible="false"/>  
+        	            <column  label="Status" hflex="1" sort="auto(projectName)" visible="false"/>      	         
+        	</columns>
+        	
+        	
+        	  <template name="model">
+        	<row>
+        	<label value="@bind(forEachStatus.index+1)"></label>
+        	<label value="@bind(each.employeeNo)"></label>
+        	<label value="@bind(each.fullName)"></label>        
+        	<label value="@bind(each.department)" />
+        	<label value="@bind(each.position)"></label>
+        	<label value="@bind(each.employeementDate)"></label>
+        	<checkbox checked="@bind(each.hrSalary)"></checkbox>
+        	<checkbox checked="@bind(each.timesheetSalary)"></checkbox>
+        	<label value="1" ></label>
+        	<label value="2" ></label>
+        	</row>
+        	
+        	  
+        	  </template>
+        	</grid>
+</vlayout>
+</center>
+</borderlayout>
+</zk>

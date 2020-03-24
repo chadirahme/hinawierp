@@ -1,0 +1,32 @@
+
+<zk>
+<html>
+<head>
+			<link rel="shortcut icon" href="http://hinawi2.dyndns.org:8181/sata/images/favicon.ico" />
+			<link rel="icon" href="http://hinawi2.dyndns.org:8181/sata/images/favicon.ico" type="image/x-icon" />
+
+
+</head>
+</html>
+
+		<borderlayout id="mainlayout1" hflex="1" vflex="1">
+	
+				<north border="none" height="105px">
+				
+				<include src="/layout/topnav.zul" hflex="1"></include>
+								
+			</north>
+			
+           
+            <center id="mainContent" autoscroll="true" hflex="1" vflex="1"  border="none" self="@insert(content)" style="margin-left:0px;">
+			</center>
+           
+           
+           <south size="5%">
+			
+		<include src="/layout/footer.zul" if="${sessionScope.Authentication.userid eq 1}"></include>
+		<include src="/layout/companyfooter.zul" if="${sessionScope.Authentication.userid gt 1}"></include>
+	</south>
+	
+        </borderlayout>
+        </zk>

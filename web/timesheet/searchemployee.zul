@@ -1,0 +1,222 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window id="modalDialog" apply="org.zkoss.bind.BindComposer"
+		mode="highlighted" title="Employees List" border="normal" position="center,center"
+		closable="true"
+		viewModel="@id('vm')  @init('timesheet.SearchEmployeeViewModel',compKey=arg.compKey,type=arg.type,teamName=arg.teamName,viewType=arg.viewType)"
+		sizable="true" onCancel="modalDialog.detach()" onOK="@command('sendData')"
+		width="1100px" height="650px">
+
+		<vlayout>
+
+			<listbox model="@bind(vm.lstEmployees)" vflex="1" hflex="1"
+				width="920px" height="500px" multiple="true" checkmark="true"
+				selectedItems="@bind(vm.selectedEntities)">
+				<auxhead>
+					<auxheader label="Find Employee" colspan="3"
+						style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"
+						align="center" />
+					<auxheader colspan="4" align="right">
+						 <checkbox label="" checked="@bind(vm.all)" onCheck="@command('AllEmployeesEmployees')"
+									width="15px" />
+									<label value="All"
+					style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<space></space>
+						<checkbox label="" onCheck="@command('assignedEmployees')" checked="@bind(vm.assigned)"
+									width="15px" />
+									<label value="Assigned To Supervisor"
+						style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<space></space>
+						 
+						  <checkbox label="" checked="@bind(vm.notAssigned)" onCheck="@command('NotassignedEmployees')"
+									width="15px" />
+									<label value="Not Assigned To Supervisor" 
+					style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<space></space><space></space>
+					<!-- <label value="Team List"></label>
+			<listbox multiple="false" width="100px" mold="select" model="@load(vm.lstWorkGroup)" selectedItem="@bind(vm.selectedWorkGroup)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.groupName)"></listcell>
+					</listitem>
+				</template>
+			</listbox> -->
+					
+					
+						 
+						 </auxheader>
+				</auxhead>
+
+				<auxhead sclass="category-center">
+					<auxheader colspan="1" width="50px">
+					</auxheader>
+
+					<auxheader colspan="1">
+						<image src="/images/funnel.png" />
+						<textbox instant="true" width="60px"
+							value="@bind(vm.employeeFilter.employeeNo)" onChange="@command('changeFilter')" />
+					</auxheader>
+
+					<auxheader colspan="1">
+						<image src="/images/funnel.png" />
+						<textbox instant="true" width="100px"
+							value="@bind(vm.employeeFilter.fullName)" onChange="@command('changeFilter')" />
+					</auxheader>
+					<auxheader colspan="1">
+						<image src="/images/funnel.png" />
+						<textbox instant="true" width="100px"
+							value="@bind(vm.employeeFilter.department)" onChange="@command('changeFilter')" />
+					</auxheader>
+					<auxheader colspan="1">
+						<image src="/images/funnel.png" />
+						<textbox instant="true" width="100px"
+							value="@bind(vm.employeeFilter.position)" onChange="@command('changeFilter')" />
+					</auxheader>
+					<auxheader colspan="1">
+						<image src="/images/funnel.png" />
+						<textbox instant="true" width="100px"
+							value="@bind(vm.employeeFilter.country)" onChange="@command('changeFilter')" />
+					</auxheader>
+					<auxheader colspan="1">
+						<image src="/images/funnel.png" />
+						<textbox instant="true" width="150px"
+							value="@bind(vm.employeeFilter.supervisorName)" onChange="@command('changeFilter')" />
+					</auxheader>
+					<auxheader colspan="1">
+						<image src="/images/funnel.png" />
+						<textbox instant="true" width="150px"
+							value="@bind(vm.employeeFilter.super_supervisorName)" onChange="@command('changeFilter')" />
+					</auxheader>
+					<auxheader colspan="1">
+						<image src="/images/funnel.png" />
+						<textbox instant="true" width="100px"
+							value="@bind(vm.employeeFilter.groupName)" onChange="@command('changeFilter')" />
+					</auxheader>
+					<auxheader colspan="1">
+						<image src="/images/funnel.png" />
+						<textbox instant="true" width="100px"
+							value="@bind(vm.employeeFilter.projectName)" onChange="@command('changeFilter')" />
+					</auxheader>
+					<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" width="100px"
+								value="@bind(vm.employeeFilter.status)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" width="100px"
+								value="@bind(vm.employeeFilter.employeeStatus)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+						<image src="/images/funnel.png" />
+							<textbox instant="true" hflex="1" width="100px"
+								value="@bind(vm.employeeFilter.statusDescription)" onChange="@command('changeFilter')" />
+							</auxheader>
+					
+
+				</auxhead>
+
+				<listhead sizable="true">
+					<listheader width="50px" />
+					<listheader label="Employee No." width="110px"
+						sort="auto('employeeNo')" />
+					<listheader label="Name" sort="auto('fullName')" width="150px" />
+					<listheader label="Department" sort="auto('department')"
+						width="150px" />
+					<listheader label="Position" sort="auto('position')"
+						width="150px" />
+					<listheader label="Nationality" sort="auto('country')"
+						width="150px" />
+					<listheader label="Supervisor Name" sort="auto('supervisorName')"
+						width="150px" />
+						<listheader label="Super -Supervisor Name" sort="auto('super_supervisorName')"
+						width="150px" />
+					<listheader label="Team Name" sort="auto('workGroupName')"
+						width="150px" />
+						<listheader label="Location/Project Name" sort="auto('projectName')"
+						width="150px" />
+						 <listheader label="Status" sort="auto('status')" width="150px" />
+						<listheader label="Status Description 1" sort="auto('employeeStatus')" width="150px" />
+						<listheader label="Status Description 2" sort="auto('statusDescription')" width="150px" /> 
+
+				</listhead>
+				
+				<template name="model">
+					<listitem
+						style="@bind(each.supervisorId > 0 ? 'background:#B5F0CD;' : '')">
+						<listcell></listcell>
+						<listcell>
+							<label value="@bind(each.employeeNo)" />
+						</listcell>
+						<listcell>
+							<label value="@bind(each.fullName)" />
+						</listcell>
+						<listcell>
+							<label value="@bind(each.department)" />
+						</listcell>
+						<listcell>
+							<label value="@bind(each.position)" />
+						</listcell>
+						<listcell>
+							<label value="@bind(each.country)" />
+						</listcell>
+						<listcell>
+							<label value="@bind(each.supervisorName)" />
+						</listcell>
+						<listcell>
+							<label value="@bind(each.super_supervisorName)" />
+						</listcell>
+						<listcell>
+							<label value="@bind(each.workGroupName)" />
+						</listcell>
+						<listcell>
+							<label value="@bind(each.projectName)" />
+						</listcell>
+						<listcell onClick="@command('viewEmployeeCommand', row=each)">
+								<label value="@bind(each.status)" />
+							</listcell>
+							<listcell onClick="@command('viewEmployeeCommand', row=each)">
+								<label value="@bind(each.employeeStatus)" />
+							</listcell>
+							<listcell onClick="@command('viewEmployeeCommand', row=each)">
+								<label value="@bind(each.statusDescription)" />
+							</listcell> 
+
+					</listitem>
+				</template>
+
+			</listbox>
+			<hbox></hbox>
+			<hbox align="right"><space></space><space></space>
+				<label value="Total Employees : "
+					style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+				<label value="@load(vm.footer)"
+					style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<space></space><space></space>
+					<label value="Assigned : "
+					style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+				<label value="@load(vm.footerAssigned)"
+					style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					<space></space><space></space>
+					<label value="Not Assigned : "
+					style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+				<label value="@load(vm.footerNotAssigned)"
+					style="color:#2c6f99;text-align: right;font-weight: bold;"></label>
+					
+					
+				<space></space><space></space><space></space><space></space><space></space><space></space>
+					<label 
+						value="The employees in the Green indicates that,they are already been assigned to supervisor"
+						style="color:#2c6f99;font-weight:bold;margin:15px;font-size:13px;"
+						/>
+
+			</hbox>
+			<hbox></hbox>
+			<hbox></hbox>
+			<hbox pack="center" hflex="1">
+				<button label="OK" onClick="@command('sendData') " />
+				<button label="Close" onClick="modalDialog.detach()"></button>
+			</hbox>
+		</vlayout>
+	</window>
+</zk>

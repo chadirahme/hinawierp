@@ -1,0 +1,20 @@
+<zk>
+		<borderlayout id="mainlayout1" hflex="1" vflex="1" style="direction: rtl;">
+	
+				<north border="none" height="90px">
+		
+				<include src="/layout/topnav.zul"></include>
+									
+			</north>
+		
+		<center id="mainContent" autoscroll="true" hflex="1" vflex="1"  border="none" self="@insert(content)" style="margin-left:0px;direction: rtl;">
+		</center>
+		
+			<south size="5%">
+			
+		<include src="/layout/footer.zul" if="${sessionScope.Authentication.userid eq 1}"></include>
+		<include src="/layout/companyfooter.zul" if="${sessionScope.Authentication.userid gt 1}"></include>
+	</south>
+	</borderlayout>
+
+</zk>

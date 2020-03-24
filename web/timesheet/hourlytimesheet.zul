@@ -1,0 +1,185 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<vlayout apply="org.zkoss.bind.BindComposer,common.LongOperationComposer"
+		viewModel="@id('vm')
+	 @init('timesheet.DailyTimeSheetViewModel')" height="100%">
+	 
+	 <label value="Time Sheet" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	 
+	 <grid>
+			<columns>		
+			<column  width="100px"></column>
+			<column  width="180px"></column>
+			<column  width="50px"></column>
+			<column  width="120px"></column>
+			<column  width="120px"></column>
+			<column  width="120px"></column>
+			<column  width="180px"></column>							
+			</columns>
+			<rows>
+			
+			<row>
+			<label value="Company"></label>
+			<listbox multiple="false" hflex="1" mold="select" model="@load(vm.lstComapnies)" selectedItem="@bind(vm.selectedCompany)">
+			<template name="model" var="item">
+					<listitem>
+					<listcell label="@load(item.enCompanyName)"></listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<cell colspan="4">
+			<label value="@bind(vm.lastTimeSheet)" style="color:green"></label>
+			</cell>
+			</row>
+			
+			<row>
+			<label value="Date Between"></label>
+			<datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy" ></datebox>
+			<label value="And"></label>
+			<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy" ></datebox>
+			
+			<button  id="btn1" label="View" width="100px"  onLongOp="@command('searchCommand')"></button>	
+			<button label="Export" width="100px" onClick="@command('exportGrid',ref=resultgrid)"></button>	
+			
+			<button label="Export" width="100px" onClick="@command('exportByDataModel')"></button>	
+			
+			</row>
+			</rows>
+			
+			</grid>
+			
+		<grid id="resultgrid"  vflex="true"  emptyMessage="There is no data found for this criteria" 
+        model="@load(vm.tsGroupModel)" >
+        	<columns >
+            <column width="50px"></column>
+            <column  label="Date" hflex="1" />
+            <column  label="Day" hflex="1"/>
+            <column  label="Status" hflex="1"/>
+             <column  label="Calculate" />
+            <column  label="Unit Type" />
+            <column label="From Time" visible="@bind(vm.timingFlag)"></column>
+            <column label="To Time"  visible="@bind(vm.timingFlag)"></column>
+             <column  label="Units" />
+              <column  label="Total" />
+               <column  label="OT Unit 1.25" />
+               <column  label="OT Unit 1.5" />
+               <column  label="OT Unit 2" />
+                <column  label="Total" />              
+              <column  label="Project" />       
+               <column  label="Service Type" />       
+                <column  label="Notes" /> 
+            
+        </columns>
+        <!-- template for group -->
+        <template name="model:group">
+        
+            <group >
+            <cell>
+             <label value="@load(each[3])" ></label>
+             <label value="  Emp NO. : " ></label>
+            <label value="@load(each[0])" ></label>
+              <label value=" | Name : " ></label>
+            <label value="@load(each[1])" ></label>
+              <label value=" | Status : " ></label>
+            <label value="@load(each[4])" ></label>
+            </cell>
+            </group>         
+        </template>
+         
+        <!-- template for each element in model -->
+        <template name="model">
+            <row style="@bind(each.holiday eq true ? 'background:#D3D3D3;' : '')" >  
+           		 
+           		 <cell rowspan="2" if="${each.firstOfRecord}"> 
+           		 <label value="@load(each.holidayDesc)" />
+           		 </cell>
+           		 
+				 <cell rowspan="1" if="${!each.timingFlag}"> 
+           		 <label value="@load(each.holidayDesc)" />
+           		 </cell>
+
+           		 
+           		 <cell rowspan="2" if="${each.firstOfRecord}">        
+                	<label value="${c:formatDate(each.tsDate, 'dd/MM/yyyy')}" />
+                 </cell>
+                  <cell rowspan="1" if="${!each.timingFlag}">           
+                	<label value="${c:formatDate(each.tsDate, 'dd/MM/yyyy')}" />
+                 </cell>
+                 
+              
+                  <cell rowspan="2" if="${each.firstOfRecord}">       
+	                	<label value="@load(each.dayName)" />
+	                 </cell>
+	                  <cell rowspan="1" if="${!each.timingFlag}">           
+	                	<label value="@load(each.dayName)" />
+                 </cell>
+                                  
+                 <cell>              
+                 <label  value="@load(each.status)" />
+                 </cell>      
+                 
+                		 <cell>
+		                  <label value="@load(each.calculate)" />
+		                  </cell>
+		                  <cell>
+		                   <label value="@load(each.unitType)" />
+		                   </cell>
+		                   <cell>
+		                    <label value="@load(each.fromTime)" />
+		                    </cell>
+		                    <cell>
+		                     <label value="@load(each.toTime)" />
+		                   </cell>
+		                   <cell>
+		                    <label value="@load(each.units)" />
+		                    </cell>
+		                    
+		                    <cell rowspan="2" if="${each.firstOfRecord}">
+		                     <label value="@load(each.totals)" />
+		                     </cell>
+		                     <cell rowspan="1" if="${!each.timingFlag}"> 
+           					 <label value="@load(each.totals)" />
+           					 </cell>
+           		 
+           		 
+		                     <cell>
+		                      <label value="@load(each.otUnit1 gt 0 ? each.otUnit1 : '')" />
+		                      </cell>
+		                      <cell>
+		                       <label value="@load(each.otUnit2 gt 0 ? each.otUnit2 : '' )" />
+		                       </cell>
+		                       <cell>
+		                        <label value="@load(each.otUnit3 gt 0 ? each.otUnit3 : '')" />
+		                        </cell>
+		                        <cell>
+		                         <label value="@load(each.totalOT gt 0 ? each.totalOT : '')" />
+		                         </cell>
+		                         <cell>
+		                          <label value="@load(each.projectName)" />
+		                          </cell>
+		                          <cell>
+		                           <label value="@load(each.serviceName)" />
+		                           </cell>
+		                           <cell>
+		                            <label value="@load(each.notes)" />
+                            </cell>
+                 
+                                                                                                                        
+            </row>
+        </template>
+             
+        <!-- template for footer -->
+        <template name="model:groupfoot">
+            <groupfoot>
+                <cell colspan="3" style="text-align: right; padding-right: 15px">
+                    <label value="@load(each[0])" style="font-weight:bold;" />
+                </cell>                               
+            </groupfoot>
+        </template>
+    </grid>
+			
+			
+	 </vlayout>
+</zk>
