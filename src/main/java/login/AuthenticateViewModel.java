@@ -48,7 +48,7 @@ public class AuthenticateViewModel
 		String comapnyName=cookieController.getCookie("CompanyName");
 		
 		objLoginModel.setCompanyName(comapnyName);
-		objLoginModel.setCompanyName("DEMO");
+		//objLoginModel.setCompanyName("DEMO");
 		//objLoginModel.setUsername("chadi");
 		//objLoginModel.setUserpwd("123456");
 		
