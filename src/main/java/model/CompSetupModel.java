@@ -2,6 +2,8 @@ package model;
 
 import org.zkoss.bind.annotation.DependsOn;
 
+import java.util.Date;
+
 public class CompSetupModel 
 {
 
@@ -97,6 +99,9 @@ public class CompSetupModel
 	private String useSalesFlow;
 	private String allowToSkip;
 	private String AllowToSkipPurchaseWorkFlow;
+
+	private String dontSaveWithOutMemo;
+	private Date ClosingDate;
 	
 	
 	public String getPvSerialNos() {
@@ -676,8 +681,21 @@ public class CompSetupModel
 			String allowToSkipPurchaseWorkFlow) {
 		AllowToSkipPurchaseWorkFlow = allowToSkipPurchaseWorkFlow;
 	}
-	
-	
-	
-	
+
+	public Date getClosingDate() {
+		return ClosingDate;
+	}
+
+	public void setClosingDate(Date closingDate) {
+		ClosingDate = closingDate;
+	}
+	public String getDontSaveWithOutMemo() {
+		return dontSaveWithOutMemo;
+	}
+
+	public void setDontSaveWithOutMemo(String dontSaveWithOutMemo) {
+		this.dontSaveWithOutMemo = dontSaveWithOutMemo;
+	}
+
+
 }

@@ -14,4 +14,21 @@ public class FormatDateText
 		res=df.format(value);		
 		return res;
 	}
+
+	public static boolean notEmpty(String str) {
+
+		if (str != null && str.length()>0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static boolean isEmpty(String str) {
+		if (str == null || str.length()==0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

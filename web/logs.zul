@@ -1,0 +1,41 @@
+<?page title="Hinawi-ERP Logs" contentType="text/html;charset=UTF-8"?>
+<zk>
+    <window title="Logs" border="normal" apply="org.zkoss.bind.BindComposer"
+            viewModel="@id('vm') @init('home.TestViewModel')">
+
+        <grid>
+        <columns sizable="false">
+            <column width="200px" />
+            <column width="200px" />
+            <column  />
+        </columns>
+
+        <rows>
+
+        <row>
+            <cell>
+                Number of Lines
+            </cell>
+            <cell>
+                <intbox hflex="1" value="@bind(vm.noOfLines)"></intbox>
+            </cell>
+            <cell>
+                <button label="Read Logs" onClick="@command('readLogsCommand')"></button>
+            </cell>
+        </row>
+
+            <row>
+                <cell colspan="3">
+                    <textbox style="font-size:14px;" rows="100" vflex="=1" hflex="1" value="@bind(vm.logsLines)">
+
+                    </textbox>
+                </cell>
+            </row>
+
+        </rows>
+        </grid>
+
+
+
+    </window>
+</zk>

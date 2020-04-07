@@ -1,10 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk xmlns:w="client">
-<window id="cashPaymentPopUp" apply="org.zkoss.bind.BindComposer"
-		mode="highlighted" title="Add/Edit Cash Payment" border="normal" position="center,center"
-		closable="true" sizable="true" onCancel="cashPaymentPopUp.detach()"
-		width="1200px" height="550px">
-		
+
 	<zscript>
 		void openContexMenu(Integer type)
 		{
@@ -68,8 +64,8 @@
 										<label value="No."></label>
 									</cell>
 									<cell>
-										<intbox hflex="1" value="@bind(fx.pvNo)"
-											constraint="no empty: Please enter transaction no !!!"></intbox>
+										<textbox hflex="1" value="@bind(fx.pvNo)" readonly="true"
+											constraint="no empty: Please enter transaction no !!!"></textbox>
 									</cell>
 									<cell>
 										<hlayout>
@@ -84,6 +80,7 @@
 									</cell>
 									<cell colspan="2">
 										<combobox model="@load(vm.lstaccounts)" selectedItem="@bind(vm.selectedAccount)"
+												  onSelect="@command('selectMainAccount' , type=vm.selectedAccount)"
 											hflex="1" autodrop="true" mold="rounded">
 											<template name="model" var="item">
 												<comboitem label="${item.accountName} : ${item.accountType}"
@@ -587,5 +584,5 @@
 			</vlayout>
 		</center>
 	</borderlayout>
-	</window>
+
 </zk>

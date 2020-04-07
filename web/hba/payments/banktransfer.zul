@@ -56,16 +56,24 @@
 											<label value="Account Number"></label>
 										</cell>
 										<cell colspan="2">
-											<listbox mold="select" model="@load(vm.lstaccounts)"
-												selectedItem="@bind(vm.selectedAccount)" hflex="1">
-
+											<combobox model="@load(vm.lstaccounts)" selectedItem="@bind(vm.selectedAccount)"
+													  hflex="1" autodrop="true" mold="rounded">
 												<template name="model" var="item">
-													<listitem>
-														<listcell label="${item.accountName} : ${item.accountType}">
-														</listcell>
-													</listitem>
+													<comboitem label="${item.accountName} : ${item.accountType}"
+															   style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
 												</template>
-											</listbox>
+											</combobox>
+
+											<!--<listbox mold="select" model="@load(vm.lstaccounts)"-->
+												<!--selectedItem="@bind(vm.selectedAccount)" hflex="1">-->
+
+												<!--<template name="model" var="item">-->
+													<!--<listitem>-->
+														<!--<listcell label="${item.accountName} : ${item.accountType}">-->
+														<!--</listcell>-->
+													<!--</listitem>-->
+												<!--</template>-->
+											<!--</listbox>-->
 										</cell>
 										<cell>
 											<hlayout>
@@ -334,16 +342,31 @@
 												</listcell>
 
 												<listcell>
-													<listbox mold="select" model="@load(vm.lstGridBankAccounts) " selectedItem="@bind(each.selectedAccount)" hflex="1" onSelect="@command('selectExpenseAccount' , type=each)">
+													<combobox autodrop="true" mold="rounded"
+															  model="@load(vm.lstGridBankAccounts) " selectedItem="@bind(each.selectedAccount)"
+															  hflex="1" onSelect="@command('selectExpenseAccount' , type=each)">
 
 														<template name="model" var="itemx">
-															<listitem style="@bind(itemx.subLevel eq 0 ? 'color:black;font-weight:bold;' : itemx.subLevel eq 1 ? 'margin-left:10px' : 'margin-left:20px')">
-																<listcell label="${itemx.accountName} : ${itemx.accountType}">
-																</listcell>
-															</listitem>
+															<comboitem label="${itemx.accountName} : ${itemx.accountType}"
+																	   style="@bind(itemx.subLevel eq 0 ? 'color:black;font-weight:bold;' : itemx.subLevel eq 1 ? 'text-indent:30px' : itemx.subLevel eq 2 ? 'text-indent:60px' : itemx.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') ">
+															</comboitem>
 														</template>
 
-													</listbox>
+													</combobox>
+
+													<!--<listbox mold="select" model="@load(vm.lstGridBankAccounts) " selectedItem="@bind(each.selectedAccount)" -->
+															 <!--hflex="1" onSelect="@command('selectExpenseAccount' , type=each)">-->
+
+														<!--<template name="model" var="itemx">-->
+															<!--<listitem style="@bind(itemx.subLevel eq 0 ? 'color:black;font-weight:bold;' : itemx.subLevel eq 1 ? 'margin-left:10px' : 'margin-left:20px')">-->
+																<!--<listcell label="${itemx.accountName} : ${itemx.accountType}">-->
+																<!--</listcell>-->
+															<!--</listitem>-->
+														<!--</template>-->
+
+													<!--</listbox>-->
+
+
 												</listcell>
 
 												<listcell>
@@ -371,15 +394,17 @@
 													</listbox>
 												</listcell>
 												<listcell>
-													<listbox mold="select" model="@load(vm.lstGridClass)" hflex="1" selectedItem="@bind(each.selectedClass)" onSelect="@command('selectExpenseClass' , type=each)">
-														<template name="model" var="item">
-															<listitem style="@bind(item.sublevel eq 0 ? 'color:black;font-weight:bold;' : item.sublevel eq 1 ? 'margin-left:10px' : item.sublevel eq 2 ? 'margin-left:20px' : 'margin-left:30px')">
-																<listcell label="${item.name}">
-																</listcell>
-															</listitem>
-														</template>
+													<combobox autodrop="true" mold="rounded"
+															  model="@load(vm.lstGridClass)" selectedItem="@bind(each.selectedClass)"
+															  hflex="1" onSelect="@command('selectExpenseClass' , type=each)">
 
-													</listbox>
+														<template name="model" var="item">
+															<comboitem label="${item.name}"
+																	   style="@bind(item.sublevel eq 0 ? 'color:black;font-weight:bold;' : item.sublevel eq 1 ? 'text-indent:30px' : item.sublevel eq 2 ? 'text-indent:60px' : item.sublevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') ">
+															</comboitem>
+														</template>
+													</combobox>
+
 												</listcell>
 												<listcell>
 													<listbox mold="select" model="@load(vm.lstGridFixedAssetItems)"
@@ -429,14 +454,26 @@
 												</listcell>
 
 												<listcell>
-													<listbox mold="select" model="@load(vm.lstGridQBItems)" selectedItem="@bind(each.selectedItems)" hflex="1" onSelect="@command('selectCheckItems' , type=each)">
+													<combobox autodrop="true" mold="rounded"
+															  model="@load(vm.lstGridQBItems)" selectedItem="@bind(each.selectedItems)"
+															  hflex="1" onSelect="@command('selectCheckItems' , type=each)">
+
 														<template name="model" var="item">
-															<listitem>
-																<listcell label="@load(item.fullName)">
-																</listcell>
-															</listitem>
+															<comboitem label="${item.fullName}: ${item.listType}"
+																	   style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') ">
+															</comboitem>
 														</template>
-													</listbox>
+
+													</combobox>
+
+													<!--<listbox mold="select" model="@load(vm.lstGridQBItems)" selectedItem="@bind(each.selectedItems)" hflex="1" onSelect="@command('selectCheckItems' , type=each)">-->
+														<!--<template name="model" var="item">-->
+															<!--<listitem>-->
+																<!--<listcell label="@load(item.fullName)">-->
+																<!--</listcell>-->
+															<!--</listitem>-->
+														<!--</template>-->
+													<!--</listbox>-->
 												</listcell>
 												<listcell>
 
@@ -469,17 +506,27 @@
 													</listbox>
 												</listcell>
 												<listcell>
-													<listbox mold="select" model="@load(vm.lstGridClass)" hflex="1" selectedItem="@bind(each.selectedClass)" onSelect="@command('selectItemClass' , type=each)">
+													<combobox autodrop="true" mold="rounded"
+															  model="@load(vm.lstGridClass)" selectedItem="@bind(each.selectedClass)"
+															  hflex="1" onSelect="@command('selectItemClass' , type=each)">
 														<template name="model" var="item">
-															<listitem
-															style="@bind(item.sublevel eq 0 ? 'color:black;font-weight:bold;' : item.sublevel eq 1 ? 'margin-left:10px' : item.sublevel eq 2 ? 'margin-left:20px' : 'margin-left:30px')">
-																<listcell label="${item.name}">
-
-																</listcell>
-															</listitem>
+															<comboitem label="${item.name}"
+																	   style="@bind(item.sublevel eq 0 ? 'color:black;font-weight:bold;' : item.sublevel eq 1 ? 'text-indent:30px' : item.sublevel eq 2 ? 'text-indent:60px' : item.sublevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') ">
+															</comboitem>
 														</template>
+													</combobox>
 
-													</listbox>
+													<!--<listbox mold="select" model="@load(vm.lstGridClass)" hflex="1" selectedItem="@bind(each.selectedClass)" onSelect="@command('selectItemClass' , type=each)">-->
+														<!--<template name="model" var="item">-->
+															<!--<listitem-->
+															<!--style="@bind(item.sublevel eq 0 ? 'color:black;font-weight:bold;' : item.sublevel eq 1 ? 'margin-left:10px' : item.sublevel eq 2 ? 'margin-left:20px' : 'margin-left:30px')">-->
+																<!--<listcell label="${item.name}">-->
+
+																<!--</listcell>-->
+															<!--</listitem>-->
+														<!--</template>-->
+
+													<!--</listbox>-->
 												</listcell>
 												<listcell>
 													<listbox mold="select" model="@load(vm.lstGridFixedAssetItems)" hflex="1" selectedItem="@bind(each.selectedFixedAsset)">

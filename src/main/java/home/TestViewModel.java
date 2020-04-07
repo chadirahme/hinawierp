@@ -1,9 +1,17 @@
 package home;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
+import java.nio.charset.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Key;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -14,6 +22,7 @@ import javax.mail.Session;
 import javax.mail.Store;
 //import javax.websocket.RemoteEndpoint;
 
+import config.DevelopmentConfig;
 import model.ContentGCM;
 
 import org.apache.log4j.Logger;
@@ -38,7 +47,8 @@ public class TestViewModel
 	private String emailTo;
 //	ZKWebSocketServer test;
 	private String msg;
-	
+	int noOfLines=10;
+	private String logsLines;
 	public TestViewModel()
 	{
 		try
@@ -314,5 +324,95 @@ public class TestViewModel
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
-	
+
+
+	@Command
+	@NotifyChange("logsLines")
+	public void readLogsCommand()
+	{
+
+		List<String> lines = null;
+		StringBuilder contentBuilder = new StringBuilder();
+		try {
+			String logFilePath= DevelopmentConfig.getLogFilesPath();
+			//lines = tailFile(Paths.get("//Library//Tomcat//bin//my-logs//satalogs.log"), noOfLines);
+			lines = tailFile(Paths.get(logFilePath), noOfLines,logFilePath);
+			//lines.forEach(line -> System.out.println(line));
+			lines.forEach(s -> contentBuilder.append(s).append("\n"));
+			logsLines=contentBuilder.toString();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.info("readLogsCommand >> " + e.getMessage());
+		}
+	}
+
+	private List<String> tailFile(final Path source, final int noOfLines,final String logFilePath) throws IOException {
+		//String result = null;
+		List<String> lines=new ArrayList<>();
+		CharsetDecoder decoder = Charset.forName("UTF-8").newDecoder();
+		decoder.onMalformedInput(CodingErrorAction.IGNORE);
+		try {
+			FileInputStream input;
+			input = new FileInputStream(new File(logFilePath));
+			InputStreamReader reader = new InputStreamReader(input, decoder);
+			BufferedReader bufferedReader = new BufferedReader(reader);
+			//StringBuilder sb = new StringBuilder();
+			String line = bufferedReader.readLine();
+			while (line != null) {
+				//sb.append(line);
+				lines.add(line);
+				line = bufferedReader.readLine();
+			}
+			bufferedReader.close();
+			//result = sb.toString();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		FileBuffer fileBuffer = new FileBuffer(noOfLines);
+		lines.stream().forEach(line -> fileBuffer.collect(line));
+		return fileBuffer.getLines();
+
+//		try (Stream<String> stream = Files.lines(source,StandardCharsets.UTF_8)) {
+//			FileBuffer fileBuffer = new FileBuffer(noOfLines);
+//			stream.forEach(line -> fileBuffer.collect(line));
+//			return fileBuffer.getLines();
+//		}
+		//catch(MalformedInputException mie){
+//			// ignore or do something
+//		}
+	}
+	private static final class FileBuffer {
+		private int offset = 0;
+		private final int noOfLines;
+		private final String[] lines;
+		public FileBuffer(int noOfLines) {
+			this.noOfLines = noOfLines;
+			this.lines = new String[noOfLines];
+		}
+		public void collect(String line) {
+			lines[offset++ % noOfLines] = line;
+		}
+		public List<String> getLines() {
+			return IntStream.range(offset < noOfLines ? 0 : offset - noOfLines, offset)
+					.mapToObj(idx -> lines[idx % noOfLines]).collect(Collectors.toList());
+		}
+	}
+	public int getNoOfLines() {
+		return noOfLines;
+	}
+
+	public void setNoOfLines(int noOfLines) {
+		this.noOfLines = noOfLines;
+	}
+
+	public String getLogsLines() {
+		return logsLines;
+	}
+
+	public void setLogsLines(String logsLines) {
+		this.logsLines = logsLines;
+	}
 }

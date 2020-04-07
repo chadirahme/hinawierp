@@ -3,6 +3,7 @@
  */
 package hba;
 
+import common.FormatDateText;
 import home.QuotationAttachmentModel;
 import hr.HRData;
 
@@ -645,6 +646,20 @@ public class EditReceiptVoucher {
 	private boolean validateData(boolean Printflag) {
 		boolean isValid = true;
 
+		if(compSetup.getClosingDate()!=null){
+			if(rvDate.compareTo(compSetup.getClosingDate())<=0){
+				Messagebox.show("Transaction Date must be Higher than the QuickBooks Closing Date.!","Cheque payment",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
+		if(compSetup.getDontSaveWithOutMemo().equals("Y")){
+			if(FormatDateText.isEmpty(memo)){
+				Messagebox.show("You must fill the transaction Memo according to company settings!","Cheque payment",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
 		if (selectedReceivedFrom == null) {
 			Messagebox.show("Select a value for Recived From!",
 					"Reciept Voucher", Messagebox.OK, Messagebox.INFORMATION);
@@ -1111,8 +1126,9 @@ public class EditReceiptVoucher {
 
 				if (selectedPostToQbBy != null
 						&& !"".equalsIgnoreCase(selectedPostToQbBy)
-						&& selectedPostToQbBy
-						.equalsIgnoreCase("Receipt Voucher")) {
+						&& selectedPostToQbBy.equalsIgnoreCase("Receipt Voucher")
+						&& type.getSeletedDepositeTo() != null)
+				{
 					if (type.getSeletedDepositeTo().getAccountType()
 							.equalsIgnoreCase("Cash")
 							|| type.getSeletedDepositeTo().getAccountType()
@@ -2145,6 +2161,9 @@ public class EditReceiptVoucher {
 								.getRecNo());
 				customerBalance = 0.0;
 			}
+			if(FormatDateText.isEmpty(printOnReciptVoucher)){
+				printOnReciptVoucher=selectedReceivedFrom.getFullName();
+			}
 			if (selectedPostToQbBy != null && selectedAccountCr != null) {
 				if ((!selectedReceivedFrom.getListType().equalsIgnoreCase(
 						"Customer") || !selectedAccountCr.getAccountType()
@@ -2181,7 +2200,7 @@ public class EditReceiptVoucher {
 					&& selectedPostToQbBy.equalsIgnoreCase("Receipt Voucher")) {
 				Messagebox.show(
 						"You cannot select Post to Qb as Receipt Voucher !",
-						"Reciept Voucher", Messagebox.OK,
+						"Receipt Voucher", Messagebox.OK,
 						Messagebox.INFORMATION);
 				this.selectedPostToQbBy = postToQbBy.get(1);
 			}
@@ -2211,6 +2230,60 @@ public class EditReceiptVoucher {
 	"makeAsDeferedIncomeVisible" })
 	public void onselectOfAccountCr() {
 
+		if (selectedAccountCr == null || selectedAccountCr.getRec_No()==0) {
+			Messagebox.show("Select An Existing Cr. Account!!!",
+					"Receipt Voucher", Messagebox.OK, Messagebox.INFORMATION);
+			return;
+		}
+
+		if(selectedAccountCr!=null) {
+			boolean hasSubAccount = data.checkIfBankAccountsHasSub(selectedAccountCr.getFullName() + ":");
+			if (hasSubAccount) {
+				if (compSetup.getPostOnMainAccount().equals("Y")) {
+
+					Messagebox
+							.show("Selected account have sub accounts. Do you want to continue?",
+									"Receipt Voucher", Messagebox.YES | Messagebox.NO,
+									Messagebox.QUESTION,
+									new org.zkoss.zk.ui.event.EventListener() {
+
+										public void onEvent(Event evt)
+												throws InterruptedException {
+											if (evt.getName().equals("onYes")) {
+												continueOnselectOfAccountCr();
+											} else {
+												setSelectedAccountCr(null);
+												BindUtils
+														.postNotifyChange(
+																null,
+																null,
+																EditReceiptVoucher.this,
+																"selectedAccountCr");
+												return;
+											}
+										}
+
+									});
+
+				} else {
+					Messagebox
+							.show("Selected account have sub accounts. You cannot continue !!",
+									"Account", Messagebox.OK,
+									Messagebox.INFORMATION);
+					setSelectedAccountCr(null);
+					BindUtils.postNotifyChange(null, null,
+							EditReceiptVoucher.this, "selectedAccountCr");
+					return;
+				}
+			}else {
+				continueOnselectOfAccountCr();
+			}
+		}
+
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void continueOnselectOfAccountCr() {
 		if (selectedAccountCr != null && selectedReceivedFrom != null) {
 			if (selectedPostToQbBy != null && selectedAccountCr != null) {
 
@@ -2245,38 +2318,38 @@ public class EditReceiptVoucher {
 					if (selectedAccountCr.getAccountType().equalsIgnoreCase(
 							"AccountsPayable")) {
 						Messagebox
-						.show("You can't use Accounts Payable account for Customer !",
-								"Reciept Voucher", Messagebox.OK,
-								Messagebox.INFORMATION);
+								.show("You can't use Accounts Payable account for Customer !",
+										"Reciept Voucher", Messagebox.OK,
+										Messagebox.INFORMATION);
 						this.selectedAccountCr = null;
 						BindUtils.postNotifyChange(null, null,
 								EditReceiptVoucher.this, "selectedAccountCr");
 						return;
 					} else {
 						Messagebox
-						.show("You have selected Non Accounts Receivable Type for a name with Customer Type ! Are you sure ?",
-								"Reciept Voucher",
-								Messagebox.YES | Messagebox.NO,
-								Messagebox.QUESTION,
-								new org.zkoss.zk.ui.event.EventListener() {
-							@SuppressWarnings("unused")
-							public void onEvent(Event evt)
-									throws InterruptedException {
-								if (evt.getName().equals(
-										"onYes")) {
-									Map args = new HashMap();
-								} else {
-									selectedAccountCr = null;
-									BindUtils
-									.postNotifyChange(
-											null,
-											null,
-											EditReceiptVoucher.this,
-											"selectedAccountCr");
-								}
-							}
+								.show("You have selected Non Accounts Receivable Type for a name with Customer Type ! Are you sure ?",
+										"Reciept Voucher",
+										Messagebox.YES | Messagebox.NO,
+										Messagebox.QUESTION,
+										new org.zkoss.zk.ui.event.EventListener() {
+											@SuppressWarnings("unused")
+											public void onEvent(Event evt)
+													throws InterruptedException {
+												if (evt.getName().equals(
+														"onYes")) {
+													Map args = new HashMap();
+												} else {
+													selectedAccountCr = null;
+													BindUtils
+															.postNotifyChange(
+																	null,
+																	null,
+																	EditReceiptVoucher.this,
+																	"selectedAccountCr");
+												}
+											}
 
-						});
+										});
 
 					}
 
@@ -2288,47 +2361,47 @@ public class EditReceiptVoucher {
 					if (selectedAccountCr.getAccountType().equalsIgnoreCase(
 							"AccountsReceivable")) {
 						Messagebox
-						.show("You can't use Accounts Payable account for Vendor !",
-								"Reciept Voucher", Messagebox.OK,
-								Messagebox.INFORMATION);
+								.show("You can't use Accounts Payable account for Vendor !",
+										"Reciept Voucher", Messagebox.OK,
+										Messagebox.INFORMATION);
 						this.selectedAccountCr = null;
 						return;
 					} else {
 						Messagebox
-						.show("You have selected Non Accounts Receivable Type for a name with Vendor Type ! Are you sure ?",
-								"Reciept Voucher",
-								Messagebox.YES | Messagebox.NO,
-								Messagebox.QUESTION,
-								new org.zkoss.zk.ui.event.EventListener() {
-							@SuppressWarnings("unused")
-							public void onEvent(Event evt)
-									throws InterruptedException {
-								if (evt.getName().equals(
-										"onYes")) {
-									Map args = new HashMap();
-								} else {
-									selectedAccountCr = null;
-									BindUtils
-									.postNotifyChange(
-											null,
-											null,
-											EditReceiptVoucher.this,
-											"selectedAccountCr");
-								}
-							}
+								.show("You have selected Non Accounts Receivable Type for a name with Vendor Type ! Are you sure ?",
+										"Reciept Voucher",
+										Messagebox.YES | Messagebox.NO,
+										Messagebox.QUESTION,
+										new org.zkoss.zk.ui.event.EventListener() {
+											@SuppressWarnings("unused")
+											public void onEvent(Event evt)
+													throws InterruptedException {
+												if (evt.getName().equals(
+														"onYes")) {
+													Map args = new HashMap();
+												} else {
+													selectedAccountCr = null;
+													BindUtils
+															.postNotifyChange(
+																	null,
+																	null,
+																	EditReceiptVoucher.this,
+																	"selectedAccountCr");
+												}
+											}
 
-						});
+										});
 					}
 
 				}
 			} else if (selectedAccountCr.getAccountType().equalsIgnoreCase(
 					"AccountsReceivable")
 					|| selectedAccountCr.getAccountType().equalsIgnoreCase(
-							"AccountsPayable")) {
+					"AccountsPayable")) {
 				Messagebox
-				.show("You can't use AccountsReceivable or AccountsPayable Account!",
-						"Reciept Voucher", Messagebox.OK,
-						Messagebox.INFORMATION);
+						.show("You can't use AccountsReceivable or AccountsPayable Account!",
+								"Reciept Voucher", Messagebox.OK,
+								Messagebox.INFORMATION);
 				this.selectedAccountCr = null;
 				BindUtils.postNotifyChange(null, null, EditReceiptVoucher.this,
 						"selectedAccountCr");
@@ -2336,7 +2409,6 @@ public class EditReceiptVoucher {
 
 		}
 	}
-
 	@NotifyChange({ "customerBalance" })
 	@Command
 	public void refreshCustomerBalance() {

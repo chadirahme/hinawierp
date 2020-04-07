@@ -405,6 +405,9 @@ public class PurchaseRequestViewModel
 		{
 			refNUmber=data.GetSaleNumber(SerialFields.PurchaseRequest.toString());
 		}
+		else{
+			refNUmber=data.GetSerialNumber(SerialFields.PaymentSerial.toString());
+		}
 	}
 	private void getCompanyRolePermessions(int companyRoleId,int parentId)
 	{
@@ -1070,11 +1073,11 @@ public class PurchaseRequestViewModel
 	public void setSelectedPaytoOrder(QbListsModel selectedPaytoOrder) 
 	{
 		this.selectedPaytoOrder = selectedPaytoOrder;
-		if(selectedPaytoOrder!=null)
+		if (selectedPaytoOrder != null && selectedPaytoOrder.getRecNo()>0)
 		{
 			PayToOrderModel obj=data.getPayToOrderInfo(selectedPaytoOrder.getListType(), selectedPaytoOrder.getRecNo());		
-			//String address="";	
-
+			//String address="";
+			address="";
 			if(obj.getBillAddress1().length()>0)			
 				address=obj.getBillAddress1();		
 			if(obj.getBillAddress2().length()>0)
@@ -1087,6 +1090,7 @@ public class PurchaseRequestViewModel
 				address+="\n" + obj.getPhone();
 			if(obj.getFax().length()>0)
 				address+="\n" + obj.getFax();
+			address=address.replaceAll("null"," ");
 			if(address.equalsIgnoreCase(""))
 			{
 				address=selectedPaytoOrder.getFullName();
@@ -1095,7 +1099,7 @@ public class PurchaseRequestViewModel
 		}
 		else
 		{
-			Messagebox.show("Invlaid Name.");			
+			Messagebox.show("Invalid Name !!","Purchase Request",Messagebox.OK,Messagebox.INFORMATION);
 		}
 	}
 

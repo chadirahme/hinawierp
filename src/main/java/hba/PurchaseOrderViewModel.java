@@ -413,6 +413,9 @@ public class PurchaseOrderViewModel
 		{
 			refNUmber=data.GetSaleNumber(SerialFields.PurchaseOrder.toString());
 		}
+		else{
+			refNUmber=data.GetSerialNumber(SerialFields.PaymentSerial.toString());
+		}
 	}
 	private void getCompanyRolePermessions(int companyRoleId,int parentId)
 	{
@@ -978,12 +981,14 @@ public class PurchaseOrderViewModel
 		return selectedPaytoOrder;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@NotifyChange({"address","showMaterial"})
 	public void setSelectedPaytoOrder(QbListsModel selectedPaytoOrder) 
 	{
 		this.selectedPaytoOrder = selectedPaytoOrder;
 		isSkip=false;
-		if(selectedPaytoOrder!=null)
+		address="";
+		if(selectedPaytoOrder!=null && selectedPaytoOrder.getRecNo()>0)
 		{
 			PayToOrderModel obj=data.getPayToOrderInfo(selectedPaytoOrder.getListType(), selectedPaytoOrder.getRecNo());		
 			//String address="";	
@@ -1000,6 +1005,7 @@ public class PurchaseOrderViewModel
 				address+="\n" + obj.getPhone();
 			if(obj.getFax().length()>0)
 				address+="\n" + obj.getFax();
+			address=address.replaceAll("null"," ");
 			if(address.equalsIgnoreCase(""))
 			{
 				address=selectedPaytoOrder.getFullName();
@@ -1007,9 +1013,9 @@ public class PurchaseOrderViewModel
 		}
 		else
 		{
-			Messagebox.show("Invlaid Name.");			
+			Messagebox.show("Invalid Name !!","Purchase Order",Messagebox.OK,Messagebox.INFORMATION);
 		}
-		if(selectedPaytoOrder!=null ){
+		if(selectedPaytoOrder!=null && selectedPaytoOrder.getRecNo()>0){
 			if(!data.checkMR(selectedPaytoOrder.getRecNo())){
 				showMaterial=false;
 			}else{

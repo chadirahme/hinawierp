@@ -128,7 +128,8 @@ public class Pagecomposer extends SelectorComposer
 		Borderlayout bl = (Borderlayout) Path.getComponent("/hbaSideBar");
 		Center center = bl.getCenter();
 					
-		center.getChildren().clear();	
+		center.getChildren().clear();
+		center.setStyle("");//remove the background image
 		if(!item.getHref().equals(""))
 		Executions.createComponents(item.getHref(), center, null);
 		

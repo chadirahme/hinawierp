@@ -60,7 +60,8 @@ public class CustomerQuerries {
 				+ ",AltContact='" + obj.getAltcontact() + "',AltPhone='"
 				+ obj.getMobile() + "',Cc='" + obj.getcC() + "',WebSite='"
 				+ obj.getWebsite() + "',SkypeID='" + obj.getSkypeId()
-				+ "',shipto='" + obj.getShipTo() +"' ,VAT_REGNO='" + obj.getVatRegNo() 
+				+ "',shipto='" + obj.getShipTo() +"' ,VAT_REGNO='" + obj.getVatRegNo()
+				+ "',PrintChequeAs='"+obj.getPrintChequeAs()
 				+ "',TimeModified=getdate()");
 				
 		if (null != obj.getNote()) {

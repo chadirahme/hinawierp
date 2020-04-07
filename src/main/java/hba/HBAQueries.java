@@ -275,7 +275,7 @@ public class HBAQueries {
 	public String GetDefaultSetupInfoQuery() {
 		query = new StringBuffer();
 		query.append(" Select RVSERIALNOS,PVSERIALNOS,Post2MainAccount,PostOnMainClass,ChangeClass_Account,postItem2Main,PostJVWithOutName,usepurchaseflow,ChangePrice_ConvertPO,");
-		query.append(" BuyItemWithHighCost,UseMinPurchasePrice,MinPurchasePriceRatio,MaxPurchasePriceRatio,UseMaxPurchasePrice,address,companyName,AllowToAddInvSite,countrykey,citykey,telephone,ccemail,fax,usebillable,AllowToSkipPurchaseWorkFlow");
+		query.append(" BuyItemWithHighCost,UseMinPurchasePrice,MinPurchasePriceRatio,MaxPurchasePriceRatio,UseMaxPurchasePrice,address,companyName,AllowToAddInvSite,countrykey,citykey,telephone,ccemail,fax,usebillable,AllowToSkipPurchaseWorkFlow,ClosingDate,DontSaveWithOutMemo ");
 		if (dbUser.getMergedDatabse().equalsIgnoreCase("Yes")) {
 			query.append(" From companySettings");
 		} else {
@@ -289,7 +289,7 @@ public class HBAQueries {
 		query = new StringBuffer();
 		query.append("SELECT AccountType.SRL_No , AccountName ,AccountType    ,   SubLevel    ,   Rec_No , ListID ,ACTLEVELSwithNO,FullName ");
 		query.append(" FROM Accounts Inner join AccountType on AccountType.TypeName = Accounts.AccountType");
-		query.append(" where IsActive='Y' ");
+		query.append(" where IsActive='Y' And IsNull(IsSystemAccount,'')<>'Y' ");
 		if (!accountType.equals("")) {
 			query.append(" and AccountType in (" + accountType + ") ");
 		}
@@ -370,7 +370,7 @@ public class HBAQueries {
 
 	public String getFixedAssetItemQuery() {
 		query = new StringBuffer();
-		query.append(" Select AssetID,ASsetCode,AssetName, CAse WHEN isnull(AssetCode,'') = '' THen AssetName Else AssetCode + '·' + AssetName END as ASSETNAMECode ");
+		query.append(" Select AssetID,ASsetCode,AssetName, CAse WHEN isnull(AssetCode,'') = '' THen AssetName Else AssetCode + 'ï¿½' + AssetName END as ASSETNAMECode ");
 		query.append(" FROM ASSETMASTER Where STatusID NOT IN (1,2) ");
 		query.append(" order by ASsetCode,AssetName ");
 		query.append(" ");
@@ -741,7 +741,8 @@ public class HBAQueries {
 		//add this to not go again to database when select item
 		query.append(" DescriptionAR, QuantityOnHand,SalesPrice,averagecost,ClassKey");
 		query.append(" FROM QBItems ");
-		query.append(" where isnull(PricePercent,0)=0 and IsActive='Y' order by ItemType desc,FullName ");
+		query.append(" where isnull(PricePercent,0)=0 and IsActive='Y' and IsNull(ISVAT_Item,'')<>'Y' And IsNull(ISDefault_Item,'')<>'Y'  ");
+		query.append("  order by ItemType desc,FullName ");
 		return query.toString();
 	}
 
@@ -805,7 +806,7 @@ public class HBAQueries {
 	// Fixed Asset Items
 	public String getVendorFixedAssetItemQuery(int vendorID) {
 		query = new StringBuffer();
-		query.append(" Select AssetID,ASsetCode,AssetName, CAse WHEN isnull(AssetCode,'') = '' THen AssetName Else AssetCode + '·' + AssetName END as ASSETNAMECode ");
+		query.append(" Select AssetID,ASsetCode,AssetName, CAse WHEN isnull(AssetCode,'') = '' THen AssetName Else AssetCode + 'ï¿½' + AssetName END as ASSETNAMECode ");
 		query.append(" FROM ASSETMASTER Where STatusID NOT IN (1,2) and USED = 'NEW' AND BILLED = 0");
 		query.append(" AND ASSETMASTER.VendorID = " + vendorID);
 		query.append(" order by ASsetCode,AssetName ");

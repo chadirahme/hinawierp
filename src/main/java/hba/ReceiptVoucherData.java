@@ -215,7 +215,7 @@ public class ReceiptVoucherData {
 				obj.setRec_No(rs.getInt("Rec_No"));
 				obj.setSubLevel(rs.getInt("SubLevel"));
 				obj.setListID(rs.getString("ListID"));
-			//	obj.setFullName(rs.getString("FullName"));
+				obj.setFullName(rs.getString("FullName"));
 				lst.add(obj);
 			}
 		}

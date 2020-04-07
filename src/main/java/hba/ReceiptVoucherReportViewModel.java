@@ -429,10 +429,12 @@ public class ReceiptVoucherReportViewModel {
 			}
 
 		}
+		if(incremnetor==0)
+			incremnetor=invoiceSalesReport.size();
 		totalNoOfCustomer=incremnetor;
 		totalAmountStr=formatter.format(totalAmount);
 		totalSaleStr=formatter.format(totalSale);
-
+		totalNoOfInvoice=invoiceSalesReport.size();
 
 	}
 
@@ -755,7 +757,7 @@ public class ReceiptVoucherReportViewModel {
 			exporter.setInterceptor(new Interceptor<XSSFWorkbook>() {
 
 				@SuppressWarnings("static-access")
-				@Override
+				//@Override
 				public void beforeRendering(XSSFWorkbook target) {
 					ExportContext context = exporter.getExportContext();
 
@@ -775,7 +777,7 @@ public class ReceiptVoucherReportViewModel {
 				}
 
 				@SuppressWarnings("static-access")
-				@Override
+				//@Override
 				public void afterRendering(XSSFWorkbook target) {
 
 					ExportContext context = exporter.getExportContext();
@@ -803,7 +805,7 @@ public class ReceiptVoucherReportViewModel {
 
 			exporter.export(headers.length, invoiceSalesReport, new RowRenderer<Row, RecieptVoucherReportModel>() {
 				@SuppressWarnings("static-access")
-				@Override
+				//@Override
 				public void render(Row table, RecieptVoucherReportModel item, boolean isOddRow) 
 				{
 					ExportContext context = exporter.getExportContext();

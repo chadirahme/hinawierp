@@ -1,6 +1,6 @@
 package model;
 
-public  enum SerialFields 
+public enum SerialFields
 {
 	CashPV,
 	ChequePV,
@@ -21,6 +21,7 @@ public  enum SerialFields
 	FeedBack,
 	feedBackSend,
 	delivery,
+	PaymentSerial
 	
 }
 

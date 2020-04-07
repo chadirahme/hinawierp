@@ -1,5 +1,6 @@
 package hba;
 
+import common.FormatDateText;
 import home.QuotationAttachmentModel;
 import hr.HRData;
 
@@ -244,14 +245,15 @@ public class CashPaymentViewModel {
 			lstCheckFAItems.add(objFAItems);
 			lblCheckFAItems = "Fixed Assets Items 0.00";
 			lstGridCustody = data.fillQbList("'Employee'");
-			List<ExpensesModel> expenseGrid = data
-					.getCashPaymentGridDataExpenseById(cashPyamentKey);
-			List<CheckItemsModel> itemsGrid = data
-					.getCashPaymentGridDataItemById(cashPyamentKey);
-			List<CheckFAItemsModel> itemsFixedAssetGrid = data
-					.getCashPaymentGridDataFAById(cashPyamentKey);
 
 			if (cashPyamentKey > 0) {
+
+				List<ExpensesModel> expenseGrid = data
+						.getCashPaymentGridDataExpenseById(cashPyamentKey);
+				List<CheckItemsModel> itemsGrid = data
+						.getCashPaymentGridDataItemById(cashPyamentKey);
+				List<CheckFAItemsModel> itemsFixedAssetGrid = data
+						.getCashPaymentGridDataFAById(cashPyamentKey);
 
 				labelStatus = "Edit";
 				objCash = data.getCashPaymentById(cashPyamentKey, webUserID,seeTrasction);
@@ -476,11 +478,56 @@ public class CashPaymentViewModel {
 	private void ClearData() {
 		if (compSetup.getPvSerialNos().equals("S")) {
 			objCash.setPvNo(data.GetSerialNumber(SerialFields.CashPV.toString()));
+		}else{
+			objCash.setPvNo(data.GetSerialNumber(SerialFields.PaymentSerial.toString()));
 		}
 	}
 
 	/********* Contorl Events ********************/
+	@Command
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@NotifyChange({ "selectedAccount" })
+	public void selectMainAccount(@BindingParam("type") final AccountsModel type){
+		boolean hasSubAccount = data.checkIfBankAccountsHasSub(type.getFullName() + ":");
+		if (hasSubAccount) {
+			if (compSetup.getPostOnMainAccount().equals("Y")) {
 
+				Messagebox
+						.show("Selected account have sub accounts. Do you want to continue?",
+								"Account", Messagebox.YES | Messagebox.NO,
+								Messagebox.QUESTION,
+								new org.zkoss.zk.ui.event.EventListener() {
+
+									public void onEvent(Event evt)
+											throws InterruptedException {
+										if (evt.getName().equals("onYes")) {
+										} else {
+											setSelectedAccount(null);
+											BindUtils
+													.postNotifyChange(
+															null,
+															null,
+															CashPaymentViewModel.this,
+															"selectedAccount");
+											return;
+										}
+									}
+
+								});
+
+			} else {
+				Messagebox
+						.show("Selected account have sub accounts. You cannot continue !!",
+								"Account", Messagebox.OK,
+								Messagebox.INFORMATION);
+				setSelectedAccount(null);
+				BindUtils.postNotifyChange(null, null,
+						CashPaymentViewModel.this, "selectedAccount");
+				return;
+			}
+		}
+
+	}
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Command
 	@NotifyChange({ "totalAmount", "lblExpenses", "lstExpenses" })
@@ -701,7 +748,7 @@ public class CashPaymentViewModel {
 				if (compSetup.getPostItem2Main().equals("Y")) {
 					Messagebox
 					.show("Selected Item have sub Sub Item(s). Do you want to continue?",
-							"Quotation",
+							"Cash Payment",
 							Messagebox.YES | Messagebox.NO,
 							Messagebox.QUESTION,
 							new org.zkoss.zk.ui.event.EventListener() {
@@ -729,7 +776,7 @@ public class CashPaymentViewModel {
 										null,
 										null,
 										CashPaymentViewModel.this,
-										"lstCashInvoiceCheckItems");
+										"lstCheckItems");
 								BindUtils
 								.postNotifyChange(
 										null,
@@ -743,7 +790,7 @@ public class CashPaymentViewModel {
 				} else {
 					Messagebox
 					.show("Selected Item have sub Items(s). You cannot continue!",
-							"Quotation", Messagebox.OK,
+							"Cash Payment", Messagebox.OK,
 							Messagebox.INFORMATION);
 					type.setSelectedItems(null);
 					type.setQuantity(0);
@@ -755,7 +802,7 @@ public class CashPaymentViewModel {
 					getNewTotalAmount();
 					BindUtils.postNotifyChange(null, null,
 							CashPaymentViewModel.this,
-							"lstCashInvoiceCheckItems");
+							"lstCheckItems");
 					BindUtils.postNotifyChange(null, null,
 							CashPaymentViewModel.this, "toatlAmount");
 				}
@@ -1414,6 +1461,23 @@ public class CashPaymentViewModel {
 	private boolean validateData(boolean flag) {
 		boolean isValid = true;
 
+		if(compSetup.getClosingDate()!=null){
+			logger.info("compSetup.getClosingDate()" + compSetup.getClosingDate());
+			logger.info("creationdate" + creationdate);
+			if(creationdate.compareTo(compSetup.getClosingDate())<=0){
+				Messagebox.show("Transaction Date must be Higher than the QuickBooks Closing Date.!","Cheque payment",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
+		if(compSetup.getDontSaveWithOutMemo().equals("Y")){
+			if(FormatDateText.isEmpty(objCash.getMemo())){
+				Messagebox.show("You must fill the transaction Memo according to company settings!","Cheque payment",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
+
 		if (selectedAccount == null) {
 			Messagebox.show("You Must Assign an Account For This Transaction!",
 					"Cash payment", Messagebox.OK, Messagebox.INFORMATION);
@@ -1646,10 +1710,12 @@ public class CashPaymentViewModel {
 
 			if (result > 0) {
 				// Generate New Serail Number
-
-				if (compSetup.getPvSerialNos().equals("S")
-						&& cashPyamentKey == 0) {
-					data.ConfigSerialNumberCashInvoice(SerialFields.CashPV,objCash.getPvNo(), 0);
+				if (cashPyamentKey == 0) {
+					if (compSetup.getPvSerialNos().equals("S")) {
+						data.ConfigSerialNumberCashInvoice(SerialFields.CashPV, objCash.getPvNo(), 0);
+					}else {
+						data.ConfigSerialNumberCashInvoice(SerialFields.PaymentSerial, objCash.getPvNo(), 0);
+					}
 				}
 				
 
@@ -1809,8 +1875,14 @@ public class CashPaymentViewModel {
 		return selectedAccount;
 	}
 
+	@NotifyChange({ "selectedAccount", "objCash" })
 	public void setSelectedAccount(AccountsModel selectedAccount) {
 		this.selectedAccount = selectedAccount;
+		if (selectedAccount == null || selectedAccount.getRec_No()==0) {
+			Messagebox.show("Select An Existing Bank Account!!!",
+					"Cash payment", Messagebox.OK, Messagebox.INFORMATION);
+			selectedAccount=null;
+		}
 
 	}
 
@@ -1829,11 +1901,12 @@ public class CashPaymentViewModel {
 	@NotifyChange({ "payToOrderAddress", "objCash", "lstVendorFAItems" })
 	public void setSelectedPaytoOrder(QbListsModel selectedPaytoOrder) {
 		this.selectedPaytoOrder = selectedPaytoOrder;
-		if (selectedPaytoOrder != null) {
+		payToOrderAddress = "";
+		if (selectedPaytoOrder != null && selectedPaytoOrder.getRecNo()>0) {
 			PayToOrderModel obj = data.getPayToOrderInfo(
 					selectedPaytoOrder.getListType(),
 					selectedPaytoOrder.getRecNo());
-			payToOrderAddress = "";
+			//payToOrderAddress = "";
 			if (obj.getBillAddress1().length() > 0)
 				payToOrderAddress = obj.getBillAddress1() + "\n";
 			if (obj.getBillAddress2().length() > 0)
@@ -1846,12 +1919,13 @@ public class CashPaymentViewModel {
 				payToOrderAddress += obj.getPhone() + "\n";
 			if (obj.getFax().length() > 0)
 				payToOrderAddress += obj.getFax();
+			payToOrderAddress=payToOrderAddress.replaceAll("null"," ");
 			objCash.setAddress(payToOrderAddress);
 			// fill FixedItems ListBox
 			lstVendorFAItems = data.getVendorFixedAssetItem(selectedPaytoOrder
 					.getRecNo());
 		} else {
-			Messagebox.show("Invlaid Name.");
+			Messagebox.show("Invalid Name !!","Cash payment",Messagebox.OK,Messagebox.INFORMATION);
 		}
 	}
 

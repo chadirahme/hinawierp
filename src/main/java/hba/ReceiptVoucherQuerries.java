@@ -50,7 +50,8 @@ public class ReceiptVoucherQuerries {
 	public String getAccountCr()
 	{
 		query=new StringBuffer();
-		query.append("SELECT Accounts.AccountName As [Name],AccountType,SubLevel,Rec_No,ListID FROM Accounts Inner join AccountType on AccountType.TypeName = Accounts.AccountType where isActive='Y' order by AccountType.SRL_No,Accounts.ACTLEVELSwithNO");
+		query.append("SELECT Accounts.AccountName As [Name],AccountType,SubLevel,Rec_No,ListID,FullName " +
+				"FROM Accounts Inner join AccountType on AccountType.TypeName = Accounts.AccountType where isActive='Y' order by AccountType.SRL_No,Accounts.ACTLEVELSwithNO");
 		return query.toString();	
 	}
 	

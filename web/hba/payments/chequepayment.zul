@@ -98,7 +98,7 @@
 									<cell>
 										<textbox hflex="1" value="@bind(fx.pvNo)"
 											constraint="no empty: Please enter transaction no !!!"
-											readonly="true"></textbox>
+											readonly="false"></textbox>
 									</cell>
 									<cell>
 										<checkbox checked="@bind(vm.chkPvNo)"></checkbox>
@@ -138,10 +138,17 @@
 										<combobox id="combo" autodrop="true" mold="rounded"
 											buttonVisible="true" model="@load(vm.lstBankAccounts)" hflex="1"
 											visible="@bind(vm.showBankAccount)" selectedItem="@bind(vm.selectedBankAccount)">
+
 											<template name="model" var="item">
-												<comboitem label="@load(item.accountName)">
-												</comboitem>
+												<comboitem label="${item.accountName} : ${item.accountType}"
+														   style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
 											</template>
+
+
+											<!--<template name="model" var="item">-->
+												<!--<comboitem label="@load(item.accountName)">-->
+												<!--</comboitem>-->
+											<!--</template>-->
 										</combobox>
 									</cell>
 								</row>

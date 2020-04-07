@@ -1,5 +1,6 @@
 package hba;
 
+import common.FormatDateText;
 import home.QuotationAttachmentModel;
 import hr.HRData;
 
@@ -253,11 +254,11 @@ public class ChequePaymentViewModel
 			lstCheckFAItems.add(objFAItems);
 			lblCheckFAItems="Fixed Assets Items 0.00";
 			lstGridCustody=data.fillQbList("'Employee'");
-			List<ExpensesModel> expenseGrid = data.getCashPaymentGridDataExpenseById(chequePyamentKey);
-			List<CheckItemsModel> itemsGrid = data.getCashPaymentGridDataItemById(chequePyamentKey);
-			List<CheckFAItemsModel> itemsFixedAssetGrid = data.getCashPaymentGridDataFAById(chequePyamentKey);
-			if(chequePyamentKey>0){
 
+			if(chequePyamentKey>0){
+				List<ExpensesModel> expenseGrid = data.getCashPaymentGridDataExpenseById(chequePyamentKey);
+				List<CheckItemsModel> itemsGrid = data.getCashPaymentGridDataItemById(chequePyamentKey);
+				List<CheckFAItemsModel> itemsFixedAssetGrid = data.getCashPaymentGridDataFAById(chequePyamentKey);
 				labelStatus="Edit";
 				objCheque=data.getCashPaymentById(chequePyamentKey, webUserID,seeTrasction);
 				for (AccountsModel apAcounts : lstaccounts) {
@@ -488,7 +489,7 @@ public class ChequePaymentViewModel
 			public void validate(ValidationContext ctx) 
 			{
 				String enprogramname = (String)ctx.getProperties("enprogramname")[0].getValue();
-				if (enprogramname == null || enprogramname.isEmpty()) 
+				if (enprogramname == null ||  enprogramname.equals(""))
 				{
 					// put error message into validationMessages map
 					addInvalidMessage(ctx, "enprogramnameContentError", "English program name is required ");
@@ -501,9 +502,10 @@ public class ChequePaymentViewModel
 
 	private void ClearData()
 	{
-		if(compSetup.getPvSerialNos().equals("S"))
-		{
+		if (compSetup.getPvSerialNos().equals("S")) {
 			objCheque.setPvNo(data.GetSerialNumber(SerialFields.ChequePV.toString()));
+		}else{
+			objCheque.setPvNo(data.GetSerialNumber(SerialFields.PaymentSerial.toString()));
 		}
 	}
 
@@ -1086,101 +1088,87 @@ public class ChequePaymentViewModel
 	@NotifyChange({"totalAmount","lblExpenses","lstExpenses"})
 	public void selectExpenseAccount(@BindingParam("type")  final ExpensesModel type)
 	{
-		int count=0;
-		if(type.getSelectedAccount()!=null)
-		{
-			if(type.getSelectedAccount().getAccountType().equals("AccountsReceivable") || type.getSelectedAccount().getAccountType().equals("AccountsPayable"))
-			{
-				for (ExpensesModel item : lstExpenses) 
-				{
-					if(item.getSelectedAccount()!=null)
-					{
-						if(item.getSelectedAccount().getAccountType().equals("AccountsReceivable") || item.getSelectedAccount().getAccountType().equals("AccountsPayable"))
-						{
-							count++;
+		try {
+			int count = 0;
+			if (type.getSelectedAccount() != null) {
+				if (type.getSelectedAccount().getAccountType().equals("AccountsReceivable") || type.getSelectedAccount().getAccountType().equals("AccountsPayable")) {
+					for (ExpensesModel item : lstExpenses) {
+						if (item.getSelectedAccount() != null) {
+							if (item.getSelectedAccount().getAccountType().equals("AccountsReceivable") || item.getSelectedAccount().getAccountType().equals("AccountsPayable")) {
+								count++;
+
+							}
 
 						}
+					}
+
+					if (count > 1) {
+						Messagebox.show("You can't use more than 1 a/r or a/p in one Cheque Payment", "Account", Messagebox.OK, Messagebox.INFORMATION);
+						type.setSelectedAccount(null);
+						return;
+					}
+				}
+
+				//check if account has sub account
+				boolean hasSubAccount = data.checkIfBankAccountsHasSub(type.getSelectedAccount().getFullName() + ":");
+				if (hasSubAccount) {
+					if (compSetup.getPostOnMainAccount().equals("Y")) {
+
+						Messagebox.show("Selected account have sub accounts. Do you want to continue?", "Account", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION,
+								new org.zkoss.zk.ui.event.EventListener() {
+									public void onEvent(Event evt) throws InterruptedException {
+										if (evt.getName().equals("onYes")) {
+											Map args = new HashMap();
+											args.put("result", "1");
+											BindUtils.postGlobalCommand(null, null, "resetGrid", args);
+										} else {
+											Map args = new HashMap();
+											args.put("result", "2");
+											BindUtils.postGlobalCommand(null, null, "resetGrid", args);
+											type.setSelectedAccount(null);
+										}
+									}
+
+								});
+
+
+					} else {
+						Messagebox.show("Selected account have sub accounts. You cannot continue !!", "Account", Messagebox.OK, Messagebox.INFORMATION);
+						type.setSelectedAccount(null);
+					}
+				} else {
+
+					ExpensesModel lastItem = lstExpenses.get(lstExpenses.size() - 1);
+					if (lastItem.getSelectedAccount() != null) {
+						ExpensesModel objExp = new ExpensesModel();
+						objExp.setSrNO(lstExpenses.size() + 1);
+						lstExpenses.add(objExp);
 
 					}
 				}
 
-				if(count>1)
-				{
-					Messagebox.show("You can't use more than 1 a/r or a/p in one Cheque Payment","Account", Messagebox.OK , Messagebox.INFORMATION);
-					type.setSelectedAccount(null);
-					return;
-				}
-			}
+				if (type.getSelectedAccount().getAccountType().equals("Expense") || type.getSelectedAccount().getAccountType().equals("CostofGoodsSold") || type.getSelectedAccount().getAccountType().equals("OtherExpense") || type.getSelectedAccount().getAccountType().equals("OtherCurrentAsset")) {
+					if (type.getSelectedCustomer() != null && type.getSelectedCustomer().getRecNo() > 0) {
+						type.setBillableChked(true);
+					} else {
+						type.setBillableChked(false);
+					}
+					if (compSetup != null && compSetup.getUsebillable() != null && compSetup.getUsebillable().equalsIgnoreCase("Y")) {
+						type.setShowBillable(true);
+					}
 
-			//check if account has sub account		
-			boolean hasSubAccount=data.checkIfBankAccountsHasSub(type.getSelectedAccount().getFullName()+":");
-			if(hasSubAccount)
-			{
-				if(compSetup.getPostOnMainAccount().equals("Y"))
-				{
-
-					Messagebox.show("Selected account have sub accounts. Do you want to continue?","Account", Messagebox.YES | Messagebox.NO  , Messagebox.QUESTION,
-							new org.zkoss.zk.ui.event.EventListener() {						
-						public void onEvent(Event evt) throws InterruptedException {
-							if (evt.getName().equals("onYes")) 
-							{	 				        	
-								Map args = new HashMap();
-								args.put("result", "1");
-								BindUtils.postGlobalCommand(null, null, "resetGrid", args);
-							}
-							else 
-							{	
-								Map args = new HashMap();
-								args.put("result", "2");
-								BindUtils.postGlobalCommand(null, null, "resetGrid", args);
-								type.setSelectedAccount(null);
-							}
-						}
-
-					});
-
-
-				}
-				else
-				{
-					Messagebox.show("Selected account have sub accounts. You cannot continue !!","Account", Messagebox.OK , Messagebox.INFORMATION);
-					type.setSelectedAccount(null);						
-				}				
-			}					
-			else
-			{
-
-				ExpensesModel lastItem=lstExpenses.get(lstExpenses.size()-1);
-				if(lastItem.getSelectedAccount()!=null)
-				{
-					ExpensesModel objExp=new ExpensesModel();
-					objExp.setSrNO(lstExpenses.size()+1);
-					lstExpenses.add(objExp);
-
-				}
-			}
-
-			if(type.getSelectedAccount().getAccountType().equals("Expense") ||type.getSelectedAccount().getAccountType().equals("CostofGoodsSold") || type.getSelectedAccount().getAccountType().equals("OtherExpense")|| type.getSelectedAccount().getAccountType().equals("OtherCurrentAsset"))
-			{
-				if(type.getSelectedCustomer()!=null && type.getSelectedCustomer().getRecNo()>0)
-				{
-					type.setBillableChked(true);
-				}
-				else
-				{
+				} else {
 					type.setBillableChked(false);
+					//make hide
 				}
-				if(compSetup!=null && compSetup.getUsebillable()!=null && compSetup.getUsebillable().equalsIgnoreCase("Y"))
-				{
-					type.setShowBillable(true);
-				}
-
 			}
-			else
-			{
-				type.setBillableChked(false);
-				//make hide
-			}
+		}
+		catch (Exception ex)
+		{
+			StringWriter sw = null;
+			sw = new StringWriter();
+			ex.printStackTrace(new PrintWriter(sw));
+			logger.info("error at selectExpenseAccount>>> " + sw.toString());
 		}
 	}
 
@@ -1329,10 +1317,81 @@ public class ChequePaymentViewModel
 			}
 		}
 	}
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Command
 	@NotifyChange({"lstCheckItems","lblCheckItems","totalAmount"})
 	public void selectCheckItems(@BindingParam("type") CheckItemsModel type)
 	{
+		if (type.getSelectedItems() != null) {
+
+			boolean hasSubAccount = data.checkIfItemHasSubQuery(type.getSelectedItems().getName() + ":");
+			if (hasSubAccount) {
+				if (compSetup.getPostItem2Main().equals("Y")) {
+					Messagebox
+							.show("Selected Item have sub Sub Item(s). Do you want to continue?",
+									"Cheque Payment",
+									Messagebox.YES | Messagebox.NO,
+									Messagebox.QUESTION,
+									new org.zkoss.zk.ui.event.EventListener() {
+										public void onEvent(Event evt)
+												throws InterruptedException {
+											if (evt.getName().equals("onYes")) {
+												selectInvoiceItemOnfuction(type);
+
+											} else {
+												Map args = new HashMap();
+												args.put("result", "1");
+												BindUtils.postGlobalCommand(
+														null, null,
+														"resetGrid", args);
+												type.setSelectedItems(null);
+												type.setQuantity(0);
+												type.setDescription("");
+												type.setSelectedInvcCutomerGridInvrtySiteNew(null);
+												type.setSelectedClass(null);
+												type.setCost(0);
+												type.setAmount(0);
+												getNewTotalAmount();
+												BindUtils
+														.postNotifyChange(
+																null,
+																null,
+																ChequePaymentViewModel.this,
+																"lstCheckItems");
+												BindUtils
+														.postNotifyChange(
+																null,
+																null,
+																ChequePaymentViewModel.this,
+																"toatlAmount");
+											}
+										}
+
+									});
+				} else {
+					Messagebox
+							.show("Selected Item have sub Items(s). You cannot continue!",
+									"Cheque Payment", Messagebox.OK,
+									Messagebox.INFORMATION);
+					type.setSelectedItems(null);
+					type.setQuantity(0);
+					type.setDescription("");
+					type.setSelectedInvcCutomerGridInvrtySiteNew(null);
+					type.setSelectedClass(null);
+					type.setCost(0);
+					type.setAmount(0);
+					getNewTotalAmount();
+					BindUtils.postNotifyChange(null, null,
+							ChequePaymentViewModel.this,
+							"lstCheckItems");
+					BindUtils.postNotifyChange(null, null,
+							ChequePaymentViewModel.this, "toatlAmount");
+				}
+			} else {
+				selectInvoiceItemOnfuction(type);
+			}
+
+		}
 		if(type.getSelectedItems()!=null)
 		{
 			QbListsModel objItems=data.getQbItemsData(type.getSelectedItems().getRecNo());
@@ -1379,6 +1438,46 @@ public class ChequePaymentViewModel
 				type.setShowBillable(true);
 			}
 		}
+	}
+
+	public void selectInvoiceItemOnfuction(final CheckItemsModel type) {
+		if ((compSetup.getAllowToAddInventorySite() != null && compSetup
+				.getAllowToAddInventorySite().equalsIgnoreCase("Y"))
+				&& (type.getSelectedItems().getListType()
+				.equalsIgnoreCase("InventoryItem") || type
+				.getSelectedItems().getListType()
+				.equalsIgnoreCase("Inventory Assembly")))
+
+		{
+			type.setHideSite(true);
+			innerFuction(type);
+		} else {
+			innerFuction(type);
+			type.setHideSite(false);
+		}
+
+	}
+	public void innerFuction(CheckItemsModel type) {
+		CheckItemsModel objItems = data.getItemData(type.getSelectedItems()
+				.getRecNo());
+		if (objItems != null) {
+			type.setRecNo(objItems.getRecNo());
+			type.setItemType(objItems.getItemType());
+			type.setDescription(objItems.getDescription());
+			type.setQuantity(1);
+			type.setCost(objItems.getCost());
+			type.setAmount(type.getCost() * type.getQuantity());
+			type.setInvoiceDate(creationdate);// dummy
+//			for (ClassModel gridClass : lstInvcCustomerGridClass) {
+//				if (gridClass.getClass_Key() == objItems.getSelectedClassKey()) {
+//					type.setSelectedClass(gridClass);
+//					break;
+//				}
+//
+//			}
+			setLabelCheckItems();
+		}
+
 	}
 
 	private void setLabelCheckItems()
@@ -1633,6 +1732,22 @@ public class ChequePaymentViewModel
 	{
 		boolean isValid=true;
 
+		if(compSetup.getClosingDate()!=null){
+			logger.info("compSetup.getClosingDate()" + compSetup.getClosingDate());
+			logger.info("creationdate" + creationdate);
+				if(creationdate.compareTo(compSetup.getClosingDate())<=0){
+				Messagebox.show("Transaction Date must be Higher than the QuickBooks Closing Date.!","Cheque payment",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
+		if(compSetup.getDontSaveWithOutMemo().equals("Y")){
+			if(FormatDateText.isEmpty(objCheque.getMemo())){
+				Messagebox.show("You must fill the transaction Memo according to company settings!","Cheque payment",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
 		if(selectedAccount==null)
 		{
 			Messagebox.show("You Must Assign an Account For This Transaction!","Cheque payment",Messagebox.OK,Messagebox.INFORMATION);
@@ -1830,10 +1945,58 @@ public class ChequePaymentViewModel
 		this.selectedAccount = selectedAccount;
 	}
 
-	@NotifyChange({"showBankAccount"})
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@NotifyChange({"showBankAccount","selectedAccount"})
 	public void setSelectedAccount(AccountsModel selectedAccount) 
 	{	
 		this.selectedAccount = selectedAccount;
+		if (selectedAccount == null || selectedAccount.getRec_No()==0) {
+			Messagebox.show("Select An Existing Bank Account!!!",
+					"Cheque payment", Messagebox.OK, Messagebox.INFORMATION);
+			selectedAccount=null;
+		}
+
+		if(selectedAccount!=null) {
+			boolean hasSubAccount = data.checkIfBankAccountsHasSub(selectedAccount.getFullName() + ":");
+			if (hasSubAccount) {
+				if (compSetup.getPostOnMainAccount().equals("Y")) {
+
+					Messagebox
+							.show("Selected account have sub accounts. Do you want to continue?",
+									"Cheque payment", Messagebox.YES | Messagebox.NO,
+									Messagebox.QUESTION,
+									new org.zkoss.zk.ui.event.EventListener() {
+
+										public void onEvent(Event evt)
+												throws InterruptedException {
+											if (evt.getName().equals("onYes")) {
+											} else {
+												setSelectedAccount(null);
+												BindUtils
+														.postNotifyChange(
+																null,
+																null,
+																ChequePaymentViewModel.this,
+																"selectedAccount");
+												return;
+											}
+										}
+
+									});
+
+				} else {
+					Messagebox
+							.show("Selected account have sub accounts. You cannot continue !!",
+									"Account", Messagebox.OK,
+									Messagebox.INFORMATION);
+					setSelectedAccount(null);
+					BindUtils.postNotifyChange(null, null,
+							ChequePaymentViewModel.this, "selectedAccount");
+					return;
+				}
+			}
+		}
+
 		if(selectedAccount!=null)
 			showBankAccount=selectedAccount.getAccountType().equals("Post Dated Cheque");
 	}
@@ -1947,13 +2110,15 @@ public class ChequePaymentViewModel
 		return selectedPaytoOrder;
 	}
 
-	@NotifyChange({"objCheque","lstVendorFAItems"})
+	@NotifyChange({"objCheque","lstVendorFAItems","payToOrderAddress"})
 	public void setSelectedPaytoOrder(QbListsModel selectedPaytoOrder) 
 	{
 		this.selectedPaytoOrder = selectedPaytoOrder;
-		if(selectedPaytoOrder!=null)
+		payToOrderAddress = "";
+		if(selectedPaytoOrder!=null && selectedPaytoOrder.getRecNo()>0)
 		{
 			PayToOrderModel obj=data.getPayToOrderInfo(selectedPaytoOrder.getListType(), selectedPaytoOrder.getRecNo());
+			objCheque.setPrintName(obj.getName());
 			if(selectedPaytoOrder.getListType().equals("Employee") || selectedPaytoOrder.getListType().equals("Vendor") || selectedPaytoOrder.getListType().equals("Customer"))
 			{
 				if(obj.getPrintChequeAs().length()>0)
@@ -1974,6 +2139,7 @@ public class ChequePaymentViewModel
 				address+="\n" + obj.getPhone();
 			if(obj.getFax().length()>0)
 				address+="\n" + obj.getFax();
+			payToOrderAddress=address.replaceAll("null"," ");
 			objCheque.setAddress(address);
 
 			//fill FixedItems ListBox
@@ -1982,7 +2148,7 @@ public class ChequePaymentViewModel
 		}
 		else
 		{
-			Messagebox.show("Invlaid Name !!","Cheque payment",Messagebox.OK,Messagebox.INFORMATION);		
+			Messagebox.show("Invalid Name !!","Cheque payment",Messagebox.OK,Messagebox.INFORMATION);
 		}
 	}
 
@@ -2051,8 +2217,53 @@ public class ChequePaymentViewModel
 	public AccountsModel getSelectedBankAccount() {
 		return selectedBankAccount;
 	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@NotifyChange({"selectedBankAccount"})
 	public void setSelectedBankAccount(AccountsModel selectedBankAccount) {
 		this.selectedBankAccount = selectedBankAccount;
+
+		if(selectedBankAccount!=null) {
+			boolean hasSubAccount = data.checkIfBankAccountsHasSub(selectedBankAccount.getFullName() + ":");
+			if (hasSubAccount) {
+				if (compSetup.getPostOnMainAccount().equals("Y")) {
+
+					Messagebox
+							.show("Selected bank account have sub accounts. Do you want to continue?",
+									"Cheque payment", Messagebox.YES | Messagebox.NO,
+									Messagebox.QUESTION,
+									new org.zkoss.zk.ui.event.EventListener() {
+
+										public void onEvent(Event evt)
+												throws InterruptedException {
+											if (evt.getName().equals("onYes")) {
+											} else {
+												setSelectedBankAccount(null);
+												BindUtils
+														.postNotifyChange(
+																null,
+																null,
+																ChequePaymentViewModel.this,
+																"selectedBankAccount");
+												return;
+											}
+										}
+
+									});
+
+				} else {
+					Messagebox
+							.show("Selected bank account have sub accounts. You cannot continue !!",
+									"Account", Messagebox.OK,
+									Messagebox.INFORMATION);
+					setSelectedBankAccount(null);
+					BindUtils.postNotifyChange(null, null,
+							ChequePaymentViewModel.this, "selectedBankAccount");
+					return;
+				}
+			}
+		}
+
 	}
 	public BanksModel getSelectedBanks() {
 		return selectedBanks;

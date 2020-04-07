@@ -656,7 +656,8 @@ public class HBAData {
 						: rs.getString("usePurchaseFlow"));
 				obj.setChangePrice_ConvertPO(rs.getString("ChangePrice_ConvertPO") == null ? "": rs.getString("ChangePrice_ConvertPO"));				
 				obj.setAllowToSkipPurchaseWorkFlow(rs.getString("AllowToSkipPurchaseWorkFlow") == null ? "": rs.getString("AllowToSkipPurchaseWorkFlow"));
-				
+				obj.setClosingDate(rs.getDate("ClosingDate"));
+				obj.setDontSaveWithOutMemo(rs.getString("DontSaveWithOutMemo") == null ? "N": rs.getString("DontSaveWithOutMemo"));
 
 			}
 		} catch (Exception ex) {
@@ -2650,6 +2651,59 @@ public class HBAData {
 		}
 		return result;
 
+	}
+
+	public String ConfigSerialNumber(SerialFields field,String SerialNumber, int keyID) {
+
+		String tmpConfigSerailNum = "";
+		String tmpField;
+		try
+		{
+			if (keyID == 0)
+				tmpField = field.toString();
+			else
+				tmpField = field.toString() + "-" + String.valueOf(keyID);
+
+			tmpConfigSerailNum = GenerateSerialNumber(field, SerialNumber, keyID);
+
+		}
+		catch (Exception ex) {
+			logger.error("error in HBAData---ConfigSerialNumber-->", ex);
+		}
+		return tmpConfigSerailNum;
+	}
+	public String GenerateSerialNumber(SerialFields field,String SerialNumber, int keyID) {
+		String tmpConfigSerailNum = "";
+		try {
+			Integer tmpX;
+			String tmpFindLastIdx;
+			Boolean tmpStartInt = false;
+			double tmpRightPos = 0.0;
+			double tmpLeftPos = 0.0;
+			String tmpFindNos = "";
+
+			for (tmpX = SerialNumber.length(); tmpX >= 1; tmpX--) {
+				tmpFindLastIdx = SerialNumber.substring(tmpX - 1, tmpX);
+				if ("1234567890".indexOf(tmpFindLastIdx) != -1) {
+					if (tmpStartInt == false) {
+						tmpStartInt = true;
+						tmpRightPos = tmpX;
+					}
+					tmpFindNos = tmpFindLastIdx + tmpFindNos;
+
+				} else if (tmpStartInt == true) {
+					tmpLeftPos = tmpX + 1;
+					break;
+
+				}
+			}
+
+		}
+		catch (Exception ex) {
+			logger.error("error in HBAData---GenerateSerialNumber-->",
+					ex);
+		}
+		return tmpConfigSerailNum;
 	}
 
 	// by iqbal for calculating next serial number

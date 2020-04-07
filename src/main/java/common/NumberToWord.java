@@ -121,249 +121,249 @@ public class NumberToWord {
     public String  GetFigToWord(double Value)
     {
         StringBuffer  stringwordBuff =new StringBuffer("");
-//        StoreWordsInArray();
-//
-//        StringBuffer  stringwordBuff =new StringBuffer("");
-//        if(iArabic == false)
-//        {
-//        	String Decimalstring ="";
-//        	long NumberArray[];
-//    		//MEMORY ALLOCATION FOR LONG ARRAY
-//        	NumberArray = new long[0];
-//            NumberArray=new long[2];
-//            String tmpstringValue ="";
-//            String[] TotalWord=new String[4];
-//            DecimalFormat df = new DecimalFormat("0.00");
-//            String formatted = df.format(Value);
-//            tmpstringValue = formatted;
-//            Value = Double.parseDouble(tmpstringValue);
-//            Long IntegerPart;
-//            Long DecimalPart;
-//            IntegerPart = (long) Value;
-//            Decimalstring = tmpstringValue.substring(tmpstringValue.indexOf(".") + 1, tmpstringValue.length());
-//            DecimalPart =	Long.valueOf(Decimalstring).longValue();
-//            NumberArray[0] = IntegerPart;
-//            NumberArray[1] = DecimalPart;
-//            Integer tmpX,r1,s1,t1 ;
-//            long r,s,t;
-//            String Stringword  = "";
-//
-//
-//            for(tmpX=0 ; tmpX<=1;tmpX++)
-//            {
-//               // 'Billion
-//                if(IntegerPart > 9999999999l)
-//                {
-//                    r = (IntegerPart / 1000000000l);
-//                    if(r > 10 && r < 20)
-//                    {
-//                        r = r % 10;
-//                        Stringword = Stringword + TeenTable[r] +" Billion ";
-//                    }
-//                    else
-//                    {
-//                        s = (r / 10);
-//                        t = r % 10;
-//                        Stringword = Stringword + " " + TensTable[s] + " " + SingleTable[t] + " Billion ";
-//                    }
-//                    IntegerPart = IntegerPart % 1000000000;
-//                }
-//                if( IntegerPart > 999999999)
-//                {
-//                    r = (IntegerPart / 1000000000);
-//                    Stringword = Stringword + SingleTable[r] + " Billion ";
-//                    IntegerPart = IntegerPart % 1000000000;
-//                }
-//                //'Million
-//                if( IntegerPart > 99999999 )
-//                {
-//                    r = (IntegerPart / 10000000);
-//                    if (r > 10 && r < 20)
-//                    {
-//                        r = (r / 10);
-//                        Stringword = Stringword + " " + SingleTable[r] + " Hundred ";
-//                        IntegerPart = IntegerPart % 100000000;
-//
-//                    }else if (r < 100 && r > 20)
-//                    {
-//                        r = (r / 10);
-//                       Stringword = Stringword + SingleTable[r] + " Hundred ";
-//                      //  s = (r / 10);
-//                      //  t = r % 10;
-//                     //   Stringword = Stringword + " " + TensTable[s] + SingleTable[t] + " Hundred";
-//                        IntegerPart = IntegerPart % 100000000;
-//                        if(IntegerPart <= 999999 )
-//                        {
-//                            Stringword = Stringword + " Million ";
-//                        }
-//                    }
-//                    else
-//                    {
-//                        r = (r / 10);
-//                        if(r > 10 && r < 20)
-//                        {
-//                            r = r % 10;
-//                            Stringword = Stringword + " " + TeenTable[r] + " Hundred ";
-//                        }
-//                        else
-//                        {
-//                            s =(r / 10);
-//                            t = r % 10;
-//                            Stringword = Stringword + " " + TensTable[s] + SingleTable[t] + " Hundred ";
-//                        }
-//                        IntegerPart = IntegerPart % 10000000;
-//                        if( IntegerPart <= 999999)
-//                        {
-//                            Stringword = Stringword + " Million ";
-//                        }
-//
-//                    }
-//                  //  r = (IntegerPart / 10000);
-//                  //  Stringword = Stringword + SingleTable[r] + " Hundred ";
-//                  //  IntegerPart = IntegerPart % 100000;
-//                }
-//                if(IntegerPart > 9999999)
-//                {
-//                    r = (IntegerPart / 1000000);
-//                    if( r > 10 && r < 20)
-//                    {
-//                        r = r % 10;
-//                        Stringword = Stringword + TeenTable[r] + " Million ";
-//                    }
-//                    else
-//                    {
-//                        s = (r / 10);
-//                        t = r % 10;
-//                        Stringword = Stringword + " " + TensTable[s] + " " + SingleTable[t] + " Million ";
-//                    }
-//                        IntegerPart = IntegerPart % 1000000;
-//                }
-//                if( IntegerPart > 999999 )
-//                {
-//                    r = (IntegerPart / 1000000);
-//                    Stringword = Stringword + SingleTable[r] + " Million ";
-//                    IntegerPart = IntegerPart % 1000000;
-//                }
-//               // 'Thousand
-//                if (IntegerPart > 99999 )
-//                {
-//                    r = (IntegerPart / 10000);
-//                    if(r > 10 && r < 20 )
-//                    {
-//                        r = (r / 10);
-//                        Stringword = Stringword + " " + SingleTable[r] + " Hundred ";
-//                        IntegerPart = IntegerPart % 100000;
-//                    }
-//
-//                    else if( r < 100 && r > 20 )
-//                    {
-//                        r = (r / 10);
-//                        Stringword = Stringword + SingleTable[r] + " Hundred ";
-//                      //  s = (r / 10);
-//                      //  t = r % 10;
-//                      //  Stringword = Stringword + " " + TensTable[s] + SingleTable[t] + " Hundred";
-//                        IntegerPart = IntegerPart % 100000;
-//                        if( IntegerPart < 1000 )
-//                        {
-//                            Stringword = Stringword + " Thousand ";
-//                        }
-//
-//                    }
-//                    else
-//                    {
-//                        r = (r / 10);
-//                        if(r > 10 && r < 20 )
-//                        {
-//                            r = r % 10;
-//                            Stringword = Stringword + " " + TeenTable[r] + " Hundred ";
-//                        }
-//                        else
-//                        {
-//                            s = (r / 10);
-//                            t = r % 10;
-//                            Stringword = Stringword + " " + TensTable[s] + SingleTable[t] + " Hundred ";
-//                        }
-//                        IntegerPart = IntegerPart % 100000;
-//                        if( IntegerPart < 1000 )
-//                        {
-//                            Stringword = Stringword + " Thousand ";
-//                        }
-//                    }
-//                   // 'r = Int(IntegerPart / 10000)
-//                   // 'Stringword = Stringword & SingleTable(r) & " Hundred "
-//                   // 'IntegerPart = IntegerPart Mod 100000
-//                }
-//                if( IntegerPart > 9999)
-//                {
-//                    r = (IntegerPart / 1000);
-//                    if( r > 10 && r < 20 )
-//                    {
-//                        r = r % 10;
-//                        Stringword = Stringword + " " + TeenTable[r] + " Thousand ";
-//                    }
-//                    else
-//                    {
-//                    	s = (r / 10);
-//                        t = r % 10;
-//                        Stringword = Stringword + " " + TensTable[s] + " " + SingleTable[t] + " Thousand ";
-//
-//                    }
-//                    IntegerPart = IntegerPart % 1000;
-//                }
-//                if(IntegerPart >= 1000)
-//                {
-//                    r = (IntegerPart / 1000);
-//                    Stringword = Stringword + " " + SingleTable[r] + " Thousand ";
-//                    IntegerPart = IntegerPart % 1000;
-//                }
-//                //'Hundred
-//                if( IntegerPart >= 100 )
-//                {
-//                    r = (IntegerPart / 100);
-//                    Stringword = Stringword + " " + SingleTable[r] + " Hundred ";
-//                    IntegerPart = IntegerPart % 100;
-//                }
-//                //'Ten
-//                if(IntegerPart > 19 && IntegerPart < 100)
-//                {
-//                    r = (IntegerPart / 10);
-//                    Stringword = Stringword + " " + TensTable[r];
-//                    IntegerPart = IntegerPart % 10;
-//                }
-//                //'Teen
-//                if( IntegerPart > 10 && IntegerPart < 20 )
-//                {
-//                    r =  (IntegerPart % 10);
-//                    Stringword = Stringword + " " + TeenTable[r];
-//                }
-//                //'One
-//                if(IntegerPart > 0 && IntegerPart <= 10)
-//                {
-//                    Stringword = Stringword + " " + SingleTable[IntegerPart.intValue()];
-//                }
-//                IntegerPart = NumberArray[1];
-//                TotalWord[tmpX] = Stringword;
-//                Stringword = "";
-//            }
-//            if (TotalWord[0].length() > 0 || TotalWord[1].length() > 0 )
-//            {
-//
-//                if(TotalWord[0].length() > 0)
-//                	stringwordBuff.append("Dirhams" + " " + TotalWord[0]+" "); //need to get currency format from table
-//                	else
-//                		stringwordBuff.append("");
-//                	if(TotalWord[0].length() > 0 && TotalWord[1].length() > 0)
-//                		stringwordBuff.append("And ");
-//                	else
-//                		stringwordBuff.append("");
-//
-//                	if(TotalWord[1].length() > 0)
-//                		stringwordBuff.append(TotalWord[1] + "" + " Fills " + ""); //need to get currency format from table
-//                	else
-//                		stringwordBuff.append("");
-//                	stringwordBuff.append("Only");
-//            }
-//        }
+        StoreWordsInArray();
+
+        //StringBuffer  stringwordBuff =new StringBuffer("");
+        if(iArabic == false)
+        {
+        	String Decimalstring ="";
+        	long NumberArray[];
+    		//MEMORY ALLOCATION FOR LONG ARRAY
+        	NumberArray = new long[0];
+            NumberArray=new long[2];
+            String tmpstringValue ="";
+            String[] TotalWord=new String[4];
+            DecimalFormat df = new DecimalFormat("0.00");
+            String formatted = df.format(Value);
+            tmpstringValue = formatted;
+            Value = Double.parseDouble(tmpstringValue);
+            Long IntegerPart;
+            Long DecimalPart;
+            IntegerPart = (long) Value;
+            Decimalstring = tmpstringValue.substring(tmpstringValue.indexOf(".") + 1, tmpstringValue.length());
+            DecimalPart =	Long.valueOf(Decimalstring).longValue();
+            NumberArray[0] = IntegerPart;
+            NumberArray[1] = DecimalPart;
+            Integer tmpX,r1,s1,t1 ;
+            long r,s,t;
+            String Stringword  = "";
+
+
+            for(tmpX=0 ; tmpX<=1;tmpX++)
+            {
+               // 'Billion
+                if(IntegerPart > 9999999999l)
+                {
+                    r = (IntegerPart / 1000000000l);
+                    if(r > 10 && r < 20)
+                    {
+                        r = r % 10;
+                        Stringword = Stringword + TeenTable[Math.toIntExact(r)] +" Billion ";
+                    }
+                    else
+                    {
+                        s = (r / 10);
+                        t = r % 10;
+                        Stringword = Stringword + " " + TensTable[Math.toIntExact(s)] + " " + SingleTable[Math.toIntExact(t)] + " Billion ";
+                    }
+                    IntegerPart = IntegerPart % 1000000000;
+                }
+                if( IntegerPart > 999999999)
+                {
+                    r = (IntegerPart / 1000000000);
+                    Stringword = Stringword + SingleTable[Math.toIntExact(r)] + " Billion ";
+                    IntegerPart = IntegerPart % 1000000000;
+                }
+                //'Million
+                if( IntegerPart > 99999999 )
+                {
+                    r = (IntegerPart / 10000000);
+                    if (r > 10 && r < 20)
+                    {
+                        r = (r / 10);
+                        Stringword = Stringword + " " + SingleTable[Math.toIntExact(r)] + " Hundred ";
+                        IntegerPart = IntegerPart % 100000000;
+
+                    }else if (r < 100 && r > 20)
+                    {
+                        r = (r / 10);
+                       Stringword = Stringword + SingleTable[Math.toIntExact(r)] + " Hundred ";
+                      //  s = (r / 10);
+                      //  t = r % 10;
+                     //   Stringword = Stringword + " " + TensTable[s] + SingleTable[t] + " Hundred";
+                        IntegerPart = IntegerPart % 100000000;
+                        if(IntegerPart <= 999999 )
+                        {
+                            Stringword = Stringword + " Million ";
+                        }
+                    }
+                    else
+                    {
+                        r = (r / 10);
+                        if(r > 10 && r < 20)
+                        {
+                            r = r % 10;
+                            Stringword = Stringword + " " + TeenTable[Math.toIntExact(r)] + " Hundred ";
+                        }
+                        else
+                        {
+                            s =(r / 10);
+                            t = r % 10;
+                            Stringword = Stringword + " " + TensTable[Math.toIntExact(s)] + SingleTable[Math.toIntExact(t)] + " Hundred ";
+                        }
+                        IntegerPart = IntegerPart % 10000000;
+                        if( IntegerPart <= 999999)
+                        {
+                            Stringword = Stringword + " Million ";
+                        }
+
+                    }
+                  //  r = (IntegerPart / 10000);
+                  //  Stringword = Stringword + SingleTable[r] + " Hundred ";
+                  //  IntegerPart = IntegerPart % 100000;
+                }
+                if(IntegerPart > 9999999)
+                {
+                    r = (IntegerPart / 1000000);
+                    if( r > 10 && r < 20)
+                    {
+                        r = r % 10;
+                        Stringword = Stringword + TeenTable[Math.toIntExact(r)] + " Million ";
+                    }
+                    else
+                    {
+                        s = (r / 10);
+                        t = r % 10;
+                        Stringword = Stringword + " " + TensTable[Math.toIntExact(s)] + " " + SingleTable[Math.toIntExact(t)] + " Million ";
+                    }
+                        IntegerPart = IntegerPart % 1000000;
+                }
+                if( IntegerPart > 999999 )
+                {
+                    r = (IntegerPart / 1000000);
+                    Stringword = Stringword + SingleTable[Math.toIntExact(r)] + " Million ";
+                    IntegerPart = IntegerPart % 1000000;
+                }
+               // 'Thousand
+                if (IntegerPart > 99999 )
+                {
+                    r = (IntegerPart / 10000);
+                    if(r > 10 && r < 20 )
+                    {
+                        r = (r / 10);
+                        Stringword = Stringword + " " + SingleTable[Math.toIntExact(r)] + " Hundred ";
+                        IntegerPart = IntegerPart % 100000;
+                    }
+
+                    else if( r < 100 && r > 20 )
+                    {
+                        r = (r / 10);
+                        Stringword = Stringword + SingleTable[Math.toIntExact(r)] + " Hundred ";
+                      //  s = (r / 10);
+                      //  t = r % 10;
+                      //  Stringword = Stringword + " " + TensTable[s] + SingleTable[t] + " Hundred";
+                        IntegerPart = IntegerPart % 100000;
+                        if( IntegerPart < 1000 )
+                        {
+                            Stringword = Stringword + " Thousand ";
+                        }
+
+                    }
+                    else
+                    {
+                        r = (r / 10);
+                        if(r > 10 && r < 20 )
+                        {
+                            r = r % 10;
+                            Stringword = Stringword + " " + TeenTable[Math.toIntExact(r)] + " Hundred ";
+                        }
+                        else
+                        {
+                            s = (r / 10);
+                            t = r % 10;
+                            Stringword = Stringword + " " + TensTable[Math.toIntExact(s)] + SingleTable[Math.toIntExact(t)] + " Hundred ";
+                        }
+                        IntegerPart = IntegerPart % 100000;
+                        if( IntegerPart < 1000 )
+                        {
+                            Stringword = Stringword + " Thousand ";
+                        }
+                    }
+                   // 'r = Int(IntegerPart / 10000)
+                   // 'Stringword = Stringword & SingleTable(r) & " Hundred "
+                   // 'IntegerPart = IntegerPart Mod 100000
+                }
+                if( IntegerPart > 9999)
+                {
+                    r = (IntegerPart / 1000);
+                    if( r > 10 && r < 20 )
+                    {
+                        r = r % 10;
+                        Stringword = Stringword + " " + TeenTable[Math.toIntExact(r)] + " Thousand ";
+                    }
+                    else
+                    {
+                    	s = (r / 10);
+                        t = r % 10;
+                        Stringword = Stringword + " " + TensTable[Math.toIntExact(s)] + " " + SingleTable[Math.toIntExact(t)] + " Thousand ";
+
+                    }
+                    IntegerPart = IntegerPart % 1000;
+                }
+                if(IntegerPart >= 1000)
+                {
+                    r = (IntegerPart / 1000);
+                    Stringword = Stringword + " " + SingleTable[Math.toIntExact(r)] + " Thousand ";
+                    IntegerPart = IntegerPart % 1000;
+                }
+                //'Hundred
+                if( IntegerPart >= 100 )
+                {
+                    r = (IntegerPart / 100);
+                    Stringword = Stringword + " " + SingleTable[Math.toIntExact(r)] + " Hundred ";
+                    IntegerPart = IntegerPart % 100;
+                }
+                //'Ten
+                if(IntegerPart > 19 && IntegerPart < 100)
+                {
+                    r = (IntegerPart / 10);
+                    Stringword = Stringword + " " + TensTable[Math.toIntExact(r)];
+                    IntegerPart = IntegerPart % 10;
+                }
+                //'Teen
+                if( IntegerPart > 10 && IntegerPart < 20 )
+                {
+                    r =  (IntegerPart % 10);
+                    Stringword = Stringword + " " + TeenTable[Math.toIntExact(r)];
+                }
+                //'One
+                if(IntegerPart > 0 && IntegerPart <= 10)
+                {
+                    Stringword = Stringword + " " + SingleTable[IntegerPart.intValue()];
+                }
+                IntegerPart = NumberArray[1];
+                TotalWord[tmpX] = Stringword;
+                Stringword = "";
+            }
+            if (TotalWord[0].length() > 0 || TotalWord[1].length() > 0 )
+            {
+
+                if(TotalWord[0].length() > 0)
+                	stringwordBuff.append("Dirhams" + " " + TotalWord[0]+" "); //need to get currency format from table
+                	else
+                		stringwordBuff.append("");
+                	if(TotalWord[0].length() > 0 && TotalWord[1].length() > 0)
+                		stringwordBuff.append("And ");
+                	else
+                		stringwordBuff.append("");
+
+                	if(TotalWord[1].length() > 0)
+                		stringwordBuff.append(TotalWord[1] + "" + " Fills " + ""); //need to get currency format from table
+                	else
+                		stringwordBuff.append("");
+                	stringwordBuff.append("Only");
+            }
+        }
 		return stringwordBuff.toString();
        
     }

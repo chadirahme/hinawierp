@@ -1,5 +1,6 @@
 package hba;
 
+import common.FormatDateText;
 import home.QuotationAttachmentModel;
 import hr.HRData;
 
@@ -261,6 +262,9 @@ public class BankTransferViewModel
 		if(compSetup.getPvSerialNos().equals("S"))
 		{
 			objBank.setPvNo(data.GetSerialNumber(SerialFields.BankTransferPV.toString()));
+		}
+		else{
+			objBank.setPvNo(data.GetSerialNumber(SerialFields.PaymentSerial.toString()));
 		}
 	}
 
@@ -582,7 +586,7 @@ public class BankTransferViewModel
 	public void setSelectedBanks(BanksModel selectedBanks) 
 	{
 		this.selectedBanks = selectedBanks;
-		if(selectedBanks!=null)
+		if(selectedBanks!=null && selectedBanks.getRecno()>0)
 		{
 			BanksModel objBankDetail=data.getBanksDetail(selectedBanks.getRecno());
 			objBank.setAttnName(objBankDetail.getBankName());
@@ -598,7 +602,7 @@ public class BankTransferViewModel
 		}
 		else
 		{
-			Messagebox.show("Invlaid Bank Name !!","Bank Transfer", Messagebox.OK , Messagebox.INFORMATION);	
+			Messagebox.show("Invalid Bank Name !!","Bank Transfer", Messagebox.OK , Messagebox.INFORMATION);
 		}
 	}
 
@@ -607,7 +611,7 @@ public class BankTransferViewModel
 	public void setSelectedPaytoOrder(QbListsModel selectedPaytoOrder) 
 	{
 		this.selectedPaytoOrder = selectedPaytoOrder;
-		if(selectedPaytoOrder!=null)
+		if(selectedPaytoOrder!=null && selectedPaytoOrder.getRecNo()>0)
 		{
 			PayToOrderModel obj=data.getPayToOrderInfo(selectedPaytoOrder.getListType(), selectedPaytoOrder.getRecNo());		
 			objBank.setToActName(selectedPaytoOrder.getFullName());
@@ -618,7 +622,7 @@ public class BankTransferViewModel
 		}
 		else
 		{
-			Messagebox.show("Invlaid Name !!");			
+			Messagebox.show("Invalid Name !!","Bank Transfer",Messagebox.OK,Messagebox.INFORMATION);
 		}
 	}
 
@@ -675,6 +679,21 @@ public class BankTransferViewModel
 								args.put("result", "2");
 								BindUtils.postGlobalCommand(null, null, "resetGrid", args);
 								type.setSelectedAccount(null);
+								BindUtils
+										.postNotifyChange(
+												null,
+												null,
+												BankTransferViewModel.this,
+												"lstExpenses");
+								BindUtils
+										.postNotifyChange(
+												null,
+												null,
+												BankTransferViewModel.this,
+												"totalAmount");
+								BindUtils
+										.postNotifyChange(null,	null,BankTransferViewModel.this,"lblExpenses");
+								return;
 							}
 						}
 
@@ -684,7 +703,11 @@ public class BankTransferViewModel
 				else
 				{
 					Messagebox.show("Selected account have sub accounts. You cannot continue !!","Account", Messagebox.OK , Messagebox.INFORMATION);
-					type.setSelectedAccount(null);						
+					type.setSelectedAccount(null);
+					BindUtils.postNotifyChange(null, null,
+							BankTransferViewModel.this, "lstExpenses");
+					BindUtils.postNotifyChange(null, null,
+							BankTransferViewModel.this, "totalAmount");
 				}				
 			}					
 			else
@@ -749,6 +772,12 @@ public class BankTransferViewModel
 								args.put("result", "3");
 								BindUtils.postGlobalCommand(null, null, "resetGrid", args);
 								type.setSelectedClass(null);
+								BindUtils
+										.postNotifyChange(
+												null,
+												null,
+												BankTransferViewModel.this,
+												"lstExpenses");
 							}
 						}
 
@@ -757,7 +786,13 @@ public class BankTransferViewModel
 				else
 				{
 					Messagebox.show("Selected Class have sub Class(s). You cannot continue!","Class", Messagebox.OK , Messagebox.INFORMATION);
-					type.setSelectedClass(null);						
+					type.setSelectedClass(null);
+					BindUtils
+							.postNotifyChange(
+									null,
+									null,
+									BankTransferViewModel.this,
+									"lstExpenses");
 				}	
 			}
 		}
@@ -786,10 +821,83 @@ public class BankTransferViewModel
 
 
 	//Check Items Grid
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Command
 	@NotifyChange({"lstCheckItems","lblCheckItems","totalAmount"})
 	public void selectCheckItems(@BindingParam("type") CheckItemsModel type)
 	{
+		if (type.getSelectedItems() != null) {
+
+			boolean hasSubAccount = data.checkIfItemHasSubQuery(type
+					.getSelectedItems().getName() + ":");
+			if (hasSubAccount) {
+				if (compSetup.getPostItem2Main().equals("Y")) {
+					Messagebox
+							.show("Selected Item have sub Sub Item(s). Do you want to continue?",
+									"Bank Transfer",
+									Messagebox.YES | Messagebox.NO,
+									Messagebox.QUESTION,
+									new org.zkoss.zk.ui.event.EventListener() {
+										public void onEvent(Event evt)
+												throws InterruptedException {
+											if (evt.getName().equals("onYes")) {
+												//selectInvoiceItemOnfuction(type);
+
+											} else {
+												Map args = new HashMap();
+												args.put("result", "1");
+												BindUtils.postGlobalCommand(
+														null, null,
+														"resetGrid", args);
+												type.setSelectedItems(null);
+												type.setQuantity(0);
+												type.setDescription("");
+												type.setSelectedInvcCutomerGridInvrtySiteNew(null);
+												type.setSelectedClass(null);
+												type.setCost(0);
+												type.setAmount(0);
+												getNewTotalAmount();
+												BindUtils
+														.postNotifyChange(
+																null,
+																null,
+																BankTransferViewModel.this,
+																"lstCheckItems");
+												BindUtils
+														.postNotifyChange(
+																null,
+																null,
+																BankTransferViewModel.this,
+																"toatlAmount");
+											}
+										}
+
+									});
+				} else {
+					Messagebox
+							.show("Selected Item have sub Items(s). You cannot continue!",
+									"Cash Payment", Messagebox.OK,
+									Messagebox.INFORMATION);
+					type.setSelectedItems(null);
+					type.setQuantity(0);
+					type.setDescription("");
+					type.setSelectedInvcCutomerGridInvrtySiteNew(null);
+					type.setSelectedClass(null);
+					type.setCost(0);
+					type.setAmount(0);
+					getNewTotalAmount();
+					BindUtils.postNotifyChange(null, null,
+							BankTransferViewModel.this,
+							"lstCheckItems");
+					BindUtils.postNotifyChange(null, null,
+							BankTransferViewModel.this, "toatlAmount");
+				}
+			} else {
+				//selectInvoiceItemOnfuction(type);
+			}
+
+		}
+
 		if(type.getSelectedItems()!=null)
 		{
 			QbListsModel objItems=data.getQbItemsData(type.getSelectedItems().getRecNo());
@@ -988,6 +1096,12 @@ public class BankTransferViewModel
 								args.put("result", "3");
 								BindUtils.postGlobalCommand(null, null, "resetGrid", args);
 								type.setSelectedClass(null);
+								BindUtils
+										.postNotifyChange(
+												null,
+												null,
+												BankTransferViewModel.this,
+												"lstCheckItems");
 							}
 						}
 
@@ -996,7 +1110,14 @@ public class BankTransferViewModel
 				else
 				{
 					Messagebox.show("Selected Class have sub Class(s). You cannot continue!","Class", Messagebox.OK , Messagebox.INFORMATION);
-					type.setSelectedClass(null);						
+					type.setSelectedClass(null);
+					BindUtils
+							.postNotifyChange(
+									null,
+									null,
+									BankTransferViewModel.this,
+									"lstCheckItems");
+
 				}	
 			}
 		}
@@ -1326,6 +1447,21 @@ public class BankTransferViewModel
 	private boolean validateData()
 	{
 		boolean isValid=true;
+		if(compSetup.getClosingDate()!=null){
+			logger.info("compSetup.getClosingDate()" + compSetup.getClosingDate());
+			logger.info("creationdate" + creationdate);
+			if(creationdate.compareTo(compSetup.getClosingDate())<=0){
+				Messagebox.show("Transaction Date must be Higher than the QuickBooks Closing Date.!","Cheque payment",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
+		if(compSetup.getDontSaveWithOutMemo().equals("Y")){
+			if(FormatDateText.isEmpty(objBank.getMemo())){
+				Messagebox.show("You must fill the transaction Memo according to company settings!","Cheque payment",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
 		if(selectedAccount==null)
 		{		
 			Messagebox.show("You Must Assign an Account For This Transaction!","Bank Transfer",Messagebox.OK,Messagebox.INFORMATION);
@@ -1626,8 +1762,51 @@ public class BankTransferViewModel
 	public AccountsModel getSelectedAccount() {
 		return selectedAccount;
 	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@NotifyChange({"selectedAccount"})
 	public void setSelectedAccount(AccountsModel selectedAccount) {
 		this.selectedAccount = selectedAccount;
+		if(selectedAccount!=null) {
+			boolean hasSubAccount = data.checkIfBankAccountsHasSub(selectedAccount.getFullName() + ":");
+			if (hasSubAccount) {
+				if (compSetup.getPostOnMainAccount().equals("Y")) {
+
+					Messagebox
+							.show("Selected account have sub accounts. Do you want to continue?",
+									"Bank Transfer", Messagebox.YES | Messagebox.NO,
+									Messagebox.QUESTION,
+									new org.zkoss.zk.ui.event.EventListener() {
+
+										public void onEvent(Event evt)
+												throws InterruptedException {
+											if (evt.getName().equals("onYes")) {
+											} else {
+												setSelectedAccount(null);
+												BindUtils
+														.postNotifyChange(
+																null,
+																null,
+																BankTransferViewModel.this,
+																"selectedAccount");
+												return;
+											}
+										}
+
+									});
+
+				} else {
+					Messagebox
+							.show("Selected account have sub accounts. You cannot continue !!",
+									"Bank Transfer", Messagebox.OK,
+									Messagebox.INFORMATION);
+					setSelectedAccount(null);
+					BindUtils.postNotifyChange(null, null,
+							BankTransferViewModel.this, "selectedAccount");
+					return;
+				}
+			}
+		}
 	}
 	public List<QbListsModel> getLstPayToOrder() {
 		return lstPayToOrder;

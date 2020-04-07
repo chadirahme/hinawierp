@@ -81,9 +81,9 @@
 												<label value="No."></label>
 											</cell>
 											<cell>
-												<intbox hflex="1" value="@bind(vm.refNUmber)"
+												<textbox hflex="1" value="@bind(vm.refNUmber)"
 													constraint="no empty: Please enter transaction no !!!"
-													readonly="false"></intbox>
+													readonly="false"></textbox>
 											</cell>
 
 											<cell colspan="3">

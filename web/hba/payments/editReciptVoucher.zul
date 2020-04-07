@@ -3,7 +3,7 @@
 <window id="receiptVoucherPopUp" apply="org.zkoss.bind.BindComposer"
 		mode="highlighted" title="Add/Edit Customer" border="normal" position="center,center"
 		closable="true" sizable="true" onCancel="receiptVoucherPopUp.detach()"
-		width="1100px" height="650px">
+		width="1300px" height="650px">
 	<zscript>
 		void openContexMenu(Integer type) { if(type==1)
 		editPopupCashInvoice.open(lstReceiptVoucherGrid);
