@@ -152,6 +152,7 @@ public class Pagecomposer extends SelectorComposer
 		
 		Borderlayout bl = (Borderlayout) Path.getComponent("/hbaSideBar");
 		Center center = bl.getCenter();
+		center.setStyle("");
 		
 		Tabbox tabbox=(Tabbox)center.getFellow("mainContentTabbox");
 				

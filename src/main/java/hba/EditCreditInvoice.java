@@ -3,6 +3,7 @@
  */
 package hba;
 
+import common.FormatDateText;
 import home.QuotationAttachmentModel;
 import hr.HRData;
 
@@ -946,6 +947,19 @@ public class EditCreditInvoice {
 	{
 		boolean isValid=true;
 
+		if(compSetup.getClosingDate()!=null){
+			if(creationdate.compareTo(compSetup.getClosingDate())<=0){
+				Messagebox.show("Invoice Date must be Higher than the QuickBooks Closing Date.!","Cash Invoice",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
+		if(compSetup.getDontSaveWithOutMemo().equals("Y")){
+			if(FormatDateText.isEmpty(objCashInvoice.getInvoiceMemo())){
+				Messagebox.show("You must fill the transaction Memo according to company settings!","Cash Invoice",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
 
 		if(compSetup.getUseSalesFlow().equalsIgnoreCase("Y") && objCashInvoice.getTransformD().equalsIgnoreCase("N") && isSkip==false)
 		{
@@ -953,13 +967,13 @@ public class EditCreditInvoice {
 			return false;
 		}
 
-		if(selectedInvcCutomerName==null)
+		if(selectedInvcCutomerName==null || selectedInvcCutomerName.getRecNo()==0)
 		{		
 			Messagebox.show("Select an existing Name For This Transaction!","Credit Invoice",Messagebox.OK,Messagebox.INFORMATION);
 			return false;
 		}
 
-		if(selectedCreditinvAcount==null)
+		if(selectedCreditinvAcount==null || selectedCreditinvAcount.getRec_No()==0)
 		{		
 			Messagebox.show("Select an existing Account For This Transaction!","Credit Invoice",Messagebox.OK,Messagebox.INFORMATION);
 			return false;
@@ -1248,6 +1262,7 @@ public class EditCreditInvoice {
 								args.put("result", "1");
 								BindUtils.postGlobalCommand(null, null, "resetGrid", args);
 								type.setSelectedInvcCutomerGridInvrtyClassNew(null);
+								BindUtils.postNotifyChange(null, null, EditCreditInvoice.this, "lstCashInvoiceCheckItems");
 							}
 						}
 
@@ -1256,7 +1271,8 @@ public class EditCreditInvoice {
 				else
 				{
 					Messagebox.show("Selected Class have sub Class(s). You cannot continue!","Credit Invoice", Messagebox.OK , Messagebox.INFORMATION);
-					type.setSelectedInvcCutomerGridInvrtyClassNew(null);						
+					type.setSelectedInvcCutomerGridInvrtyClassNew(null);
+					BindUtils.postNotifyChange(null, null, EditCreditInvoice.this, "lstCashInvoiceCheckItems");
 				}	
 			}
 		}
@@ -2316,13 +2332,17 @@ public class EditCreditInvoice {
 	/**
 	 * @param selectedInvcCutomerName the selectedInvcCutomerName to set
 	 */
-	@SuppressWarnings("unused")
-	@NotifyChange({"objCashInvoice","invoiceNewBillToAddress","showDelivery"})
+	@SuppressWarnings({ "unused", "unchecked" })
+	@NotifyChange({"objCashInvoice","invoiceNewBillToAddress","showDelivery","selectedInvcCutomerName"})
 	public void setSelectedInvcCutomerName(QbListsModel selectedInvcCutomerName) {
 		this.selectedInvcCutomerName = selectedInvcCutomerName;
 		isSkip=false;
+		invoiceNewBillToAddress="";
 		if(selectedInvcCutomerName!=null)
 		{
+			if (selectedInvcCutomerName.getRecNo() == 0)
+				return;
+
 			CashInvoiceModel obj=data.getCashInvoiceCusomerInfo(selectedInvcCutomerName.getListType(), selectedInvcCutomerName.getRecNo());		
 			StringBuffer address =new StringBuffer();	
 			if(obj.getBillAddress5()!=null && !obj.getBillAddress5().equalsIgnoreCase(""))
@@ -2389,7 +2409,8 @@ public class EditCreditInvoice {
 		}
 		else
 		{
-			Messagebox.show("Invlaid Customer Name !!");			
+			Messagebox.show("Invalid Customer Name !!","Credit Invoice",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedInvcCutomerName(lstInvcCustomerName.get(0));
 		}
 	}
 
@@ -2539,8 +2560,41 @@ public class EditCreditInvoice {
 	/**
 	 * @param selectedInvcCutomerClass the selectedInvcCutomerClass to set
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@NotifyChange({ "selectedInvcCutomerClass" })
 	public void setSelectedInvcCutomerClass(QbListsModel selectedInvcCutomerClass) {
 		this.selectedInvcCutomerClass = selectedInvcCutomerClass;
+		if (selectedInvcCutomerClass!=null) {
+			if (selectedInvcCutomerClass.getRecNo() == 0)
+				return;
+
+			boolean hasSubAccount = data.checkIfClassHasSub(selectedInvcCutomerClass.getName() + ":");
+			if (hasSubAccount) {
+				if (compSetup.getPostOnMainClass().equals("Y")) {
+					Messagebox.show("Selected Class have Sub Class(s). Do you want to continue?","Class", Messagebox.YES | Messagebox.NO,Messagebox.QUESTION,new org.zkoss.zk.ui.event.EventListener() {
+						public void onEvent(Event evt) throws InterruptedException {
+							if (evt.getName().equals("onYes")) {
+							} else {
+								setSelectedInvcCutomerClass(lstInvcCustomerClass.get(0));
+								BindUtils.postNotifyChange(null,null,EditCreditInvoice.this,"selectedInvcCutomerClass");
+							}
+						}
+
+					});
+				} else
+
+				{
+					Messagebox.show("Selected Class have sub Class(s). You cannot continue!","Class", Messagebox.OK,Messagebox.INFORMATION);
+					setSelectedInvcCutomerClass(lstInvcCustomerClass.get(0));
+				}
+			}
+		}
+
+		else
+		{
+			Messagebox.show("Invalid Class Name !!","Credit Invoice",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedInvcCutomerClass(lstInvcCustomerClass.get(0));
+		}
 	}
 
 
@@ -3173,9 +3227,42 @@ public class EditCreditInvoice {
 	public AccountsModel getSelectedCreditinvAcount() {
 		return selectedCreditinvAcount;
 	}
-
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@NotifyChange({ "selectedCreditinvAcount" })
 	public void setSelectedCreditinvAcount(AccountsModel selectedCreditinvAcount) {
 		this.selectedCreditinvAcount = selectedCreditinvAcount;
+		if (selectedCreditinvAcount!=null) {
+			if (selectedCreditinvAcount.getRec_No() == 0)
+				return;
+
+			boolean hasSubAccount = data.checkIfBankAccountsHasSub(selectedCreditinvAcount.getFullName() + ":");
+			if (hasSubAccount) {
+				if (compSetup.getPostOnMainClass().equals("Y")) {
+					Messagebox.show("Selected Account have Sub Account(s). Do you want to continue?","Credit Invoice", Messagebox.YES | Messagebox.NO,Messagebox.QUESTION,new org.zkoss.zk.ui.event.EventListener() {
+						public void onEvent(Event evt) throws InterruptedException {
+							if (evt.getName().equals("onYes")) {
+							} else {
+								setSelectedCreditinvAcount(ltnCreditinvcAccount.get(0));
+								BindUtils.postNotifyChange(null,null,EditCreditInvoice.this,"selectedCreditinvAcount");
+							}
+						}
+
+					});
+				} else
+
+				{
+					Messagebox.show("Selected Account have sub Account(s). You cannot continue!","Credit Invoice", Messagebox.OK,Messagebox.INFORMATION);
+					setSelectedCreditinvAcount(ltnCreditinvcAccount.get(0));
+				}
+			}
+		}
+
+		else
+		{
+			Messagebox.show("Invalid Account Name !!","Credit Invoice",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedCreditinvAcount(ltnCreditinvcAccount.get(0));
+		}
+
 	}
 
 

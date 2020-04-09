@@ -2,6 +2,7 @@ package hba;
 
 
 
+import common.FormatDateText;
 import home.QuotationAttachmentModel;
 import hr.HRData;
 
@@ -50,14 +51,7 @@ import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Borderlayout;
-import org.zkoss.zul.Center;
-import org.zkoss.zul.ListModelList;
-import org.zkoss.zul.Messagebox;
-import org.zkoss.zul.Tab;
-import org.zkoss.zul.Tabbox;
-import org.zkoss.zul.Tabs;
-import org.zkoss.zul.Window;
+import org.zkoss.zul.*;
 
 import setup.users.WebusersModel;
 
@@ -120,6 +114,16 @@ public class EditQuotationHbaViewModel {
 
 	// to the form
 	private List<QbListsModel> lstInvcCustomerName;
+
+//	public ListModelList<QbListsModel> getSearchedCustomer() {
+//		return searchedCustomer;
+//	}
+//
+//	public void setSearchedCustomer(ListModelList<QbListsModel> searchedCustomer) {
+//		this.searchedCustomer = searchedCustomer;
+//	}
+
+//	private ListModelList<QbListsModel> searchedCustomer = new ListModelList<>();
 	private QbListsModel selectedInvcCutomerName;
 
 	private List<QbListsModel> lstInvcCustomerClass;
@@ -351,6 +355,11 @@ public class EditQuotationHbaViewModel {
 					lstInvcCustomerName = data.quotationCustomerList();
 				}
 			}
+			QbListsModel clearItem=new QbListsModel();
+			clearItem.setFullName(("--Select--"));
+			lstInvcCustomerName.add(0,clearItem);
+
+			//searchedCustomer = new ListModelList<>(lstInvcCustomerName, true);
 			countries = hrData.getHRListValues(2, "");
 			cities = hrData.getHRListValues(3, "");
 			lstCashInvoiceGridItem = data.fillQbItemsList();
@@ -364,6 +373,8 @@ public class EditQuotationHbaViewModel {
 			}
 
 			lstInvcCustomerClass = data.GetMasterData("Class");
+			lstInvcCustomerClass.add(0,clearItem);
+
 			lstInvcCustomerSalsRep = data.GetMasterData("SalesRep");
 			lstInvcCustomerTemplate = data.GetMasterData("Template");
 			lstInvcCustomerSendVia = data.GetMasterData("SendVia");
@@ -674,8 +685,7 @@ public class EditQuotationHbaViewModel {
 
 		if (type.getSelectedItems() != null) {
 
-			boolean hasSubAccount = data.checkIfItemHasSubQuery(type
-					.getSelectedItems().getName() + ":");
+			boolean hasSubAccount = data.checkIfItemHasSubQuery(type.getSelectedItems().getName() + ":");
 			if (hasSubAccount) {
 				if (compSetup.getPostItem2Main().equals("Y")) {
 					Messagebox
@@ -906,7 +916,8 @@ public class EditQuotationHbaViewModel {
 			selectedRow.setSelectedItems(selectedItem);
 			if(selectedRow.getSelectedItems()!=null)
 			{
-				boolean hasSubAccount =type.getSelectedItems().getSubItemsCount()>0; //data.checkIfItemHasSubQuery(type.getSelectedItems().getName() + ":");
+				boolean hasSubAccount = data.checkIfItemHasSubQuery(type.getSelectedItems().getName() + ":");
+				//boolean hasSubAccount =type.getSelectedItems().getSubItemsCount()>0; //data.checkIfItemHasSubQuery(type.getSelectedItems().getName() + ":");
 				if (hasSubAccount) 
 				{
 					if (compSetup.getPostItem2Main().equals("Y")) {
@@ -1302,11 +1313,18 @@ public class EditQuotationHbaViewModel {
 			return false;
 		}
 
-		if (selectedInvcCutomerName == null) {
+		if (selectedInvcCutomerName == null || selectedInvcCutomerName.getRecNo()==0) {
 			Messagebox.show(
 					"Select an existing Customer Name For This Transaction!",
 					"Quotation", Messagebox.OK, Messagebox.INFORMATION);
 			return false;
+		}
+
+		if(compSetup.getDontSaveWithOutMemo().equals("Y")){
+			if(FormatDateText.isEmpty(objCashInvoice.getInvoiceMemo())){
+				Messagebox.show("You must fill the transaction Memo according to company settings!","Cheque payment",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
 		}
 
 		/*
@@ -1670,6 +1688,11 @@ public class EditQuotationHbaViewModel {
 							"selectedInvcCutomerClass");
 				}
 			}
+		}
+		else
+		{
+			Messagebox.show("Invalid Class Name !!","Quotation",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedInvcCutomerName(lstInvcCustomerName.get(0));
 		}
 	}
 
@@ -2659,10 +2682,13 @@ public class EditQuotationHbaViewModel {
 	 *            the selectedInvcCutomerName to set
 	 */
 	@SuppressWarnings("unused")
-	@NotifyChange({ "objCashInvoice", "invoiceNewBillToAddress" })
+	@NotifyChange({ "objCashInvoice", "invoiceNewBillToAddress","selectedInvcCutomerName" })
 	public void setSelectedInvcCutomerName(QbListsModel selectedInvcCutomerName) {
 		this.selectedInvcCutomerName = selectedInvcCutomerName;
-		if (selectedInvcCutomerName != null) {
+		if (selectedInvcCutomerName != null ) {
+
+			if(selectedInvcCutomerName.getRecNo()==0)
+				return;
 
 			if (selectedClientType != null) {
 				if (selectedClientType.equalsIgnoreCase("Prospective Client")) {
@@ -2674,7 +2700,7 @@ public class EditQuotationHbaViewModel {
 						invoiceNewBillToAddress = obj.getShipToAddress();
 					else
 						invoiceNewBillToAddress = selectedInvcCutomerName
-						.getFullName();
+								.getFullName();
 				} else {
 					CashInvoiceModel obj = data.getCashInvoiceCusomerInfo(
 							selectedInvcCutomerName.getListType(),
@@ -2731,7 +2757,26 @@ public class EditQuotationHbaViewModel {
 			}
 
 		} else {
-			Messagebox.show("Invlaid Customer Name !!");
+			Messagebox.show("Invalid Customer Name !!","Quotation",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedInvcCutomerName(lstInvcCustomerName.get(0));
+
+			//selectCustomerName(null);
+			//searchedCustomer.clear();
+//			BindUtils
+//					.postNotifyChange(
+//							null,
+//							null,
+//							EditQuotationHbaViewModel.this,
+//							"selectedInvcCutomerName");
+
+		}
+	}
+
+	@Command
+	@NotifyChange({ "objCashInvoice", "invoiceNewBillToAddress","selectedInvcCutomerName" })
+	public void selectCustomerName(@BindingParam("target")Component targetComponent){
+		if (selectedInvcCutomerName == null ) {
+			((Combobox) targetComponent).setSelectedItem(null);
 		}
 	}
 
@@ -2855,9 +2900,21 @@ public class EditQuotationHbaViewModel {
 	 * @param selectedInvcCutomerClass
 	 *            the selectedInvcCutomerClass to set
 	 */
+	@NotifyChange({ "selectedInvcCutomerClass" })
 	public void setSelectedInvcCutomerClass(
 			QbListsModel selectedInvcCutomerClass) {
 		this.selectedInvcCutomerClass = selectedInvcCutomerClass;
+
+		if (selectedInvcCutomerClass!=null) {
+			if (selectedInvcCutomerClass.getRecNo() == 0)
+				return;
+		}
+
+		else
+		{
+			Messagebox.show("Invalid Class Name !!","Quotation",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedInvcCutomerClass(lstInvcCustomerClass.get(0));
+		}
 	}
 
 	public List<QbListsModel> getLstInvcCustomerSendVia() {
@@ -3919,7 +3976,8 @@ public class EditQuotationHbaViewModel {
 					selectedInvcCutomerName.getRecNo());
 			objCashInvoice.setInvoiceProfileNumber(obj.getTotalBalance());
 		} else {
-			Messagebox.show("Invlaid Customer Name !!");
+			Messagebox.show("Invalid Customer Name !!","Quotation",Messagebox.OK,Messagebox.INFORMATION);
+
 		}
 	}
 

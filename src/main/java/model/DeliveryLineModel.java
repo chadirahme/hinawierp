@@ -1,5 +1,8 @@
 package model;
 
+import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zul.Messagebox;
+
 import java.util.Date;
 
 public class DeliveryLineModel {
@@ -257,9 +260,24 @@ public class DeliveryLineModel {
 	public QbListsModel getSelectedInvcCutomerGridInvrtyClassNew() {
 		return selectedInvcCutomerGridInvrtyClassNew;
 	}
+
+	//@NotifyChange({ "selectedInvcCutomerGridInvrtyClassNew","lstDeliveryCheckItems" ,"selectedGridItems"})
 	public void setSelectedInvcCutomerGridInvrtyClassNew(
 			QbListsModel selectedInvcCutomerGridInvrtyClassNew) {
 		this.selectedInvcCutomerGridInvrtyClassNew = selectedInvcCutomerGridInvrtyClassNew;
+//		if (selectedInvcCutomerGridInvrtyClassNew!=null) {
+//			if (selectedInvcCutomerGridInvrtyClassNew.getRecNo() == 0)
+//				return;
+//		}
+//
+//		else
+//		{
+//			Messagebox.show("Invalid Class Name !!","Delivery",Messagebox.OK,Messagebox.INFORMATION);
+//			QbListsModel clearItem=new QbListsModel();
+//			clearItem.setFullName(("--Select--"));
+//			clearItem.setName(("--Select--"));
+//			setSelectedInvcCutomerGridInvrtyClassNew(clearItem);
+//		}
 	}
 	public boolean isShowCheck() {
 		return showCheck;

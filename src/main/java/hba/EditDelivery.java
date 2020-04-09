@@ -1,5 +1,6 @@
 package hba;
 
+import common.FormatDateText;
 import home.QuotationAttachmentModel;
 import hr.HRData;
 
@@ -231,8 +232,15 @@ public class EditDelivery {
 			}
 			deliveryModel=new DeliveryModel();
 			lstInvcCustomerName=data.fillQbList("'Customer'");
-			lstDeliveryGridItem=new ArrayList<QbListsModel>(); 
+			lstDeliveryGridItem=new ArrayList<QbListsModel>();
+
+			QbListsModel clearItem=new QbListsModel();
+			clearItem.setFullName(("--Select--"));
+			lstInvcCustomerName.add(0,clearItem);
 			lstInvcCustomerClass=data.GetMasterData("Class");
+			lstInvcCustomerClass.add(0,clearItem);
+
+
 			lstInvcCustomerSalsRep=data.GetMasterData("SalesRep");
 			compSetup=data.getDefaultSetUpInfoForCashInvoice();
 
@@ -891,9 +899,11 @@ public class EditDelivery {
 		{
 			final DeliveryLineModel type=selectedRow;
 			selectedRow.setSelectedItems(selectedItem);
+			selectedRow.setDescription(selectedItem.getInvoiceDescription());
 			if(selectedRow.getSelectedItems()!=null)
 			{
-				boolean hasSubAccount =type.getSelectedItems().getSubItemsCount()>0; // data.checkIfItemHasSubQuery(type.getSelectedItems().getName() + ":");
+				boolean hasSubAccount = data.checkIfItemHasSubQuery(type.getSelectedItems().getName() + ":");
+				//boolean hasSubAccount =type.getSelectedItems().getSubItemsCount()>0; // data.checkIfItemHasSubQuery(type.getSelectedItems().getName() + ":");
 				if (hasSubAccount)
 				{
 					if (compSetup.getPostItem2Main().equals("Y")) 
@@ -1101,7 +1111,7 @@ public class EditDelivery {
 			type.setRecNo(objItems.getRecNo());
 			type.setItemType(objItems.getItemType());
 			type.setAvgCost(objItems.getAvgCost());
-			type.setDescription(objItems.getInvoicearabicDescription());
+			type.setDescription(objItems.getInvoiceDescription());
 			type.setQuantityInvoice(objItems.getInvoiceQtyOnHand());
 			type.setRate(objItems.getInvoiceRate());
 			type.setQuantity(1);
@@ -1162,7 +1172,7 @@ public class EditDelivery {
 	@Command
 	@NotifyChange({ "selectedInvcCutomerClass", "lstInvcCustomerClass" })
 	public void selectDeliveryClass() {
-		if (selectedInvcCutomerClass != null) {
+		if (selectedInvcCutomerClass != null && selectedInvcCutomerClass.getRecNo()>0) {
 			// check if class has sub class
 			boolean hasSubAccount = data.checkIfClassHasSub(selectedInvcCutomerClass.getName() + ":");
 			if (hasSubAccount) {
@@ -1313,10 +1323,26 @@ public class EditDelivery {
 	@SuppressWarnings("unused")
 	private boolean validateData(boolean Printflag) {
 		final boolean isValid = true;
-		if (selectedInvcCutomerName == null) {
+
+		if(compSetup.getClosingDate()!=null){
+			if(creationdate.compareTo(compSetup.getClosingDate())<=0){
+				Messagebox.show("Delivery Date must be Higher than the QuickBooks Closing Date.!","Delivery",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
+			if (selectedInvcCutomerName == null || selectedInvcCutomerName.getRecNo()==0) {
 			Messagebox.show("Select an existing Customer Name For This Transaction!", "Delivery", Messagebox.OK, Messagebox.INFORMATION);
 			return false;
 		}
+
+		if(compSetup.getDontSaveWithOutMemo().equals("Y")){
+			if(FormatDateText.isEmpty(deliveryModel.getMemo())){
+				Messagebox.show("You must fill the transaction Memo according to company settings!","Delivery",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
 		if (lstDeliveryCheckItems.size() <= 0) {
 			Messagebox.show("You Connot Continue.Please Add atleast one grid Item !!!","Delivery", Messagebox.OK, Messagebox.INFORMATION);
 			return false;
@@ -1562,12 +1588,16 @@ public class EditDelivery {
 
 
 	@SuppressWarnings("unchecked")
-	@NotifyChange({"deliveryModel","deliveryAddress","showQuotation"})
+	@NotifyChange({"deliveryModel","deliveryAddress","showQuotation","selectedInvcCutomerName"})
 	public void setSelectedInvcCutomerName(QbListsModel selectedInvcCutomerName) {
 		this.selectedInvcCutomerName = selectedInvcCutomerName;
 		isSkip=false;
+		deliveryAddress="";
 		if(selectedInvcCutomerName!=null)
 		{
+			if (selectedInvcCutomerName.getRecNo() == 0)
+				return;
+
 			CashInvoiceModel obj=data.getCashInvoiceCusomerInfo(selectedInvcCutomerName.getListType(), selectedInvcCutomerName.getRecNo());		
 			if(obj.getBillAddress5()!=null && !obj.getBillAddress5().equalsIgnoreCase(""))
 				deliveryAddress=obj.getBillAddress5();
@@ -1631,7 +1661,8 @@ public class EditDelivery {
 		}
 		else
 		{
-			Messagebox.show("Invlaid Customer Name !!");			
+			Messagebox.show("Invalid Customer Name !!","Delivery",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedInvcCutomerName(lstInvcCustomerName.get(0));
 		}
 	}
 	public List<QbListsModel> getLstInvcCustomerClass() {
@@ -1643,8 +1674,20 @@ public class EditDelivery {
 	public QbListsModel getSelectedInvcCutomerClass() {
 		return selectedInvcCutomerClass;
 	}
+	@NotifyChange({ "selectedInvcCutomerClass" })
 	public void setSelectedInvcCutomerClass(QbListsModel selectedInvcCutomerClass) {
 		this.selectedInvcCutomerClass = selectedInvcCutomerClass;
+		if (selectedInvcCutomerClass!=null) {
+			if (selectedInvcCutomerClass.getRecNo() == 0)
+				return;
+		}
+
+		else
+		{
+			Messagebox.show("Invalid Class Name !!","Delivery",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedInvcCutomerClass(lstInvcCustomerClass.get(0));
+		}
+
 	}
 
 	public List<QbListsModel> getLstInvcCustomerSalsRep() {

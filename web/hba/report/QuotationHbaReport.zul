@@ -23,7 +23,7 @@
 					<rows>
 					
 					 <row> 
-					 <cell> <label value="Quotation Date :"></label> </cell> 
+					 <cell> <label value="Quotation Date"></label> </cell>
 					 <cell> 
 							<hbox> <label value="From"></label> <datebox value="@bind(vm.fromDate)" format="dd/MM/yyyy"></datebox> 
 							</hbox> </cell>

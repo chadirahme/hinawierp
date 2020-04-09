@@ -3,7 +3,7 @@
 	<window id="deliveryPopUp" apply="org.zkoss.bind.BindComposer"
 		mode="highlighted" title="Add/Edit " border="normal" position="center,center"
 		closable="true" sizable="true" onCancel="deliveryPopUp.detach()"
-		width="1200px" height="650px">
+		width="1400px" height="650px">
 
 		<zscript>
 			void openContexMenu(Integer type) { if(type==1)
@@ -48,7 +48,7 @@
 						</caption>
 						<panelchildren>
 							<grid
-								form="@id('fx') @load(vm.deliveryModel) @save(vm.deliveryModel, before='addNewDeliveryModel') ">
+								form="@id('fx') @load(vm.deliveryModel) @save(vm.deliveryModel, before='addNewDelivery') ">
 								<columns>
 									<column width="120px"></column>
 									<column width="120px"></column>

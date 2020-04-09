@@ -3,6 +3,7 @@
  */
 package hba;
 
+import common.FormatDateText;
 import home.QuotationAttachmentModel;
 import hr.HRData;
 
@@ -1191,6 +1192,20 @@ public class EditCashInvoice {
 	{
 		boolean isValid=true;
 
+		if(compSetup.getClosingDate()!=null){
+			if(creationdate.compareTo(compSetup.getClosingDate())<=0){
+				Messagebox.show("Invoice Date must be Higher than the QuickBooks Closing Date.!","Cash Invoice",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
+		if(compSetup.getDontSaveWithOutMemo().equals("Y")){
+			if(FormatDateText.isEmpty(objCashInvoice.getInvoiceMemo())){
+				Messagebox.show("You must fill the transaction Memo according to company settings!","Cash Invoice",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
 		if(compSetup.getUseSalesFlow().equalsIgnoreCase("Y") && objCashInvoice.getTransformD().equalsIgnoreCase("N") && isSkip==false)
 		{
 			Messagebox.show("Work Flow Is Activate, Please Select Delivery To Create Cash Invoice","Cash Invoice",Messagebox.OK,Messagebox.INFORMATION);
@@ -1198,7 +1213,7 @@ public class EditCashInvoice {
 		}
 
 
-		if(selectedInvcCutomerName==null)
+		if (selectedInvcCutomerName == null || selectedInvcCutomerName.getRecNo()==0)
 		{		
 			Messagebox.show("Select an existing Name For This Transaction!","Cash Invoice",Messagebox.OK,Messagebox.INFORMATION);
 			return false;
@@ -1210,7 +1225,7 @@ public class EditCashInvoice {
 			return false;
 		}
 
-		if(selectedInvcCutomerDepositeTo==null)
+		if(selectedInvcCutomerDepositeTo==null || selectedInvcCutomerDepositeTo.getRecNo()==0)
 		{		
 			Messagebox.show("Select an existing Deposite To for This Transaction!","Cash Invoice",Messagebox.OK,Messagebox.INFORMATION);
 			return false;
@@ -2000,12 +2015,16 @@ public class EditCashInvoice {
 	 * @param selectedInvcCutomerName the selectedInvcCutomerName to set
 	 */
 	@SuppressWarnings({ "unused", "unchecked" })
-	@NotifyChange({"objCashInvoice","invoiceNewBillToAddress","showDelivery"})
+	@NotifyChange({"objCashInvoice","invoiceNewBillToAddress","showDelivery","selectedInvcCutomerName"})
 	public void setSelectedInvcCutomerName(QbListsModel selectedInvcCutomerName) {
 		this.selectedInvcCutomerName = selectedInvcCutomerName;
 		isSkip=false;
+		invoiceNewBillToAddress="";
 		if(selectedInvcCutomerName!=null)
 		{
+			if (selectedInvcCutomerName.getRecNo() == 0)
+				return;
+
 			CashInvoiceModel obj=data.getCashInvoiceCusomerInfo(selectedInvcCutomerName.getListType(), selectedInvcCutomerName.getRecNo());		
 			StringBuffer address =new StringBuffer();	
 			if(obj.getBillAddress5()!=null && !obj.getBillAddress5().equalsIgnoreCase(""))
@@ -2073,7 +2092,8 @@ public class EditCashInvoice {
 		}
 		else
 		{
-			Messagebox.show("Invlaid Customer Name !!");			
+			Messagebox.show("Invalid Customer Name !!","Cash Invoice",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedInvcCutomerName(lstInvcCustomerName.get(0));
 		}
 	}
 
@@ -2096,9 +2116,43 @@ public class EditCashInvoice {
 	/**
 	 * @param selectedInvcCutomerDepositeTo the selectedInvcCutomerDepositeTo to set
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@NotifyChange({ "selectedInvcCutomerDepositeTo" })
 	public void setSelectedInvcCutomerDepositeTo(
 			QbListsModel selectedInvcCutomerDepositeTo) {
 		this.selectedInvcCutomerDepositeTo = selectedInvcCutomerDepositeTo;
+		if (selectedInvcCutomerDepositeTo!=null) {
+			if (selectedInvcCutomerDepositeTo.getRecNo() == 0)
+				return;
+
+			boolean hasSubAccount = data.checkIfBankAccountsHasSub(selectedInvcCutomerDepositeTo.getFullName() + ":");
+			if (hasSubAccount) {
+				if (compSetup.getPostOnMainClass().equals("Y")) {
+					Messagebox.show("Selected Deposit Account have Sub Account(s). Do you want to continue?","Cash Invoice", Messagebox.YES | Messagebox.NO,Messagebox.QUESTION,new org.zkoss.zk.ui.event.EventListener() {
+						public void onEvent(Event evt) throws InterruptedException {
+							if (evt.getName().equals("onYes")) {
+							} else {
+								setSelectedInvcCutomerDepositeTo(lstInvcCustomerDepositTo.get(0));
+								BindUtils.postNotifyChange(null,null,EditCashInvoice.this,"selectedInvcCutomerDepositeTo");
+							}
+						}
+
+					});
+				} else
+
+				{
+					Messagebox.show("Selected Deposit Account have sub Account(s). You cannot continue!","Cash Invoice", Messagebox.OK,Messagebox.INFORMATION);
+					setSelectedInvcCutomerDepositeTo(lstInvcCustomerDepositTo.get(0));
+				}
+			}
+		}
+
+		else
+		{
+			Messagebox.show("Invalid Deposit Account Name !!","Cash Invoice",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedInvcCutomerDepositeTo(lstInvcCustomerDepositTo.get(0));
+		}
+
 	}
 
 
@@ -2226,8 +2280,42 @@ public class EditCashInvoice {
 	/**
 	 * @param selectedInvcCutomerClass the selectedInvcCutomerClass to set
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@NotifyChange({ "selectedInvcCutomerClass" })
 	public void setSelectedInvcCutomerClass(QbListsModel selectedInvcCutomerClass) {
 		this.selectedInvcCutomerClass = selectedInvcCutomerClass;
+		if (selectedInvcCutomerClass!=null) {
+			if (selectedInvcCutomerClass.getRecNo() == 0)
+				return;
+
+			boolean hasSubAccount = data.checkIfClassHasSub(selectedInvcCutomerClass.getName() + ":");
+			if (hasSubAccount) {
+				if (compSetup.getPostOnMainClass().equals("Y")) {
+					Messagebox.show("Selected Class have Sub Class(s). Do you want to continue?","Class", Messagebox.YES | Messagebox.NO,Messagebox.QUESTION,new org.zkoss.zk.ui.event.EventListener() {
+						public void onEvent(Event evt) throws InterruptedException {
+							if (evt.getName().equals("onYes")) {
+							} else {
+								setSelectedInvcCutomerClass(lstInvcCustomerClass.get(0));
+								BindUtils.postNotifyChange(null,null,EditCashInvoice.this,"selectedInvcCutomerClass");
+							}
+						}
+
+					});
+				} else
+
+				{
+					Messagebox.show("Selected Class have sub Class(s). You cannot continue!","Class", Messagebox.OK,Messagebox.INFORMATION);
+					setSelectedInvcCutomerClass(lstInvcCustomerClass.get(0));
+					//BindUtils.postNotifyChange(null, null,EditCashInvoice.this,"selectedInvcCutomerClass");
+				}
+			}
+		}
+
+		else
+		{
+			Messagebox.show("Invalid Class Name !!","Cash Invoice",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedInvcCutomerClass(lstInvcCustomerClass.get(0));
+		}
 	}
 
 

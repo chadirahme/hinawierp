@@ -275,12 +275,11 @@
 												onClick='mailPop.open(self)'>Profile</label>
 										</cell>
 										<cell colspan="2">
-
-
 											<combobox constraint="no empty:Select An Existing 'Customer Name' !!!"
 												autodrop="true" mold="rounded" buttonVisible="true"
 												model="@load(vm.lstInvcCustomerName)" hflex="1"
-												selectedItem="@bind(vm.selectedInvcCutomerName)" disabled="@bind(!vm.statusFalg)">
+												selectedItem="@bind(vm.selectedInvcCutomerName)"
+													  disabled="@bind(!vm.statusFalg)">
 												<template name="model" var="option">
 													<comboitem label="${option.fullName}"
 														description="@bind(option.listType)" />

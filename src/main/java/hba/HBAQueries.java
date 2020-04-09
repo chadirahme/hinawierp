@@ -1019,7 +1019,12 @@ public class HBAQueries {
 
 	public String getCustomerDepositeTo() {
 		query = new StringBuffer();
-		query.append("select Accounts.AccountName As[Name],AccountType,SubLevel,Rec_No,ListID from Accounts inner join accountType on accountType.Typename = Accounts.AccountType where accounttype in('Cash','Bank','OtherCurrentasset') and isactive='Y' order by AccountType.SRL_NO,Accounts.ACTLEVELSwithNo");
+		query.append("select Accounts.AccountName As[Name],AccountType,SubLevel,Rec_No,ListID,FullName from Accounts inner join accountType on accountType.Typename = Accounts.AccountType " +
+				"where accounttype in('Cash','Bank','OtherCurrentasset')  ");
+
+		query.append(" and IsActive='Y' And IsNull(IsSystemAccount,'')<>'Y' ");
+		query.append(" order by AccountType.SRL_NO,Accounts.ACTLEVELSwithNo ");
+
 		return query.toString();
 	}
 
@@ -1027,7 +1032,7 @@ public class HBAQueries {
 		query = new StringBuffer();
 		query.append("Select PostOnMainClass,PostItem2Main,SellStockWithZero,postOnMainClass,AllowSavingAvgCost,UseSellItemWithLowerSP,UseMinSellingPrice,");
 		query.append("MinSellingPriceRatio,UseMaxSellingPrice,MaxSellingPriceRatio,ShowAvgCost,SaveINVQty,UseSalesRepCommission,canExceedCreditLimit,address,companyName,AllowToAddInvSite,countrykey,citykey,telephone,ccemail,fax,PVSERIALNOS,"
-				+ "UseSalesFlow,usePurchaseFlow,AllowToSkipSalesWorkFlow,AllowToSkipPurchaseWorkFlow");
+				+ "UseSalesFlow,usePurchaseFlow,AllowToSkipSalesWorkFlow,AllowToSkipPurchaseWorkFlow,ClosingDate,DontSaveWithOutMemo");
 		if (dbUser.getMergedDatabse().equalsIgnoreCase("Yes")) {
 			query.append(" From companySettings");
 		} else {
@@ -1989,7 +1994,10 @@ public class HBAQueries {
 
 	public String getAccountsForCreditInvoice() {
 		query = new StringBuffer();
-		query.append("SELECT Accounts.AccountName As [Name], AccountType ,   SubLevel  ,   Rec_No , ListID FROM Accounts Inner join   AccountType on AccountType.TypeName = Accounts.AccountType where accounttype = 'AccountsReceivable' and  isActive='Y' order by AccountType.SRL_No, Accounts.ACTLEVELSwithNO");
+		query.append("SELECT Accounts.AccountName As [Name], AccountType ,   SubLevel  ,   Rec_No , ListID,FullName FROM Accounts Inner join   AccountType on AccountType.TypeName = Accounts.AccountType " +
+				" where accounttype = 'AccountsReceivable' ");
+		query.append(" and IsActive='Y' And IsNull(IsSystemAccount,'')<>'Y' ");
+		query.append(" order by AccountType.SRL_NO,Accounts.ACTLEVELSwithNo ");
 		return query.toString();
 	}
 

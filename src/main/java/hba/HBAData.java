@@ -2349,7 +2349,8 @@ public class HBAData {
 				obj.setUsePurchaseFlow(rs.getString("usePurchaseFlow") == null ? "N": rs.getString("usePurchaseFlow"));	
 				obj.setAllowToSkip(rs.getString("AllowToSkipSalesWorkFlow") == null ? "": rs.getString("AllowToSkipSalesWorkFlow"));
 				obj.setAllowToSkipPurchaseWorkFlow(rs.getString("AllowToSkipPurchaseWorkFlow") == null ? "": rs.getString("AllowToSkipPurchaseWorkFlow"));
-				
+				obj.setClosingDate(rs.getDate("ClosingDate"));
+				obj.setDontSaveWithOutMemo(rs.getString("DontSaveWithOutMemo") == null ? "N": rs.getString("DontSaveWithOutMemo"));
 								
 				if (rs.getString("PVSERIALNOS") == null
 						|| rs.getString("PVSERIALNOS").equals(""))
@@ -2362,7 +2363,7 @@ public class HBAData {
 					"error in HBAData---GetDefaultSetupInfoForCashInvoice-->",
 					ex);
 		}
-		return obj;
+		 return obj;
 	}
 
 	public int addNewCashInvoice(CashInvoiceModel obj, int webUserID) {
@@ -2475,6 +2476,7 @@ public class HBAData {
 					obj = new QbListsModel();
 					obj.setRecNo(rs.getInt("Rec_No"));
 					obj.setName(rs.getString("Name"));
+					obj.setFullName(rs.getString("FullName"));
 					obj.setSubLevel(rs.getInt("SubLevel"));
 					obj.setListID(rs.getString("ListID"));
 					obj.setItemType("AccountType");
@@ -3721,10 +3723,15 @@ public class HBAData {
 
 		HBAQueries query = new HBAQueries();
 		ResultSet rs = null;
+		AccountsModel obj = new AccountsModel();
+		obj.setRec_No(0);
+		obj.setFullName("Select");
+		obj.setAccountName("Select");
+		lst.add(obj);
 		try {
 			rs = db.executeNonQuery(query.getAccountsForCreditInvoice());
 			while (rs.next()) {
-				AccountsModel obj = new AccountsModel();
+				obj = new AccountsModel();
 				// obj.setsRL_No(rs.getInt("SRL_No"));
 				obj.setAccountName(rs.getString("name"));
 				obj.setAccountType(rs.getString("AccountType"));
@@ -3732,7 +3739,7 @@ public class HBAData {
 				obj.setRec_No(rs.getInt("Rec_No"));
 				obj.setSubLevel(rs.getInt("SubLevel"));
 				obj.setListID(rs.getString("ListID"));
-				// obj.setFullName(rs.getString("FullName"));
+				obj.setFullName(rs.getString("FullName"));
 				lst.add(obj);
 			}
 		} catch (Exception ex) {

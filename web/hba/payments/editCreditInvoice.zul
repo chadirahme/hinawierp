@@ -226,7 +226,7 @@
 										</cell>
 										<cell colspan="2">
 											<combobox autodrop="true" mold="rounded" hflex="1" buttonVisible="true" model="@load(vm.lstInvcCustomerClass)" 
-													  onSelect="@command('selectCashInvoiceClass')" selectedItem="@bind(vm.selectedInvcCutomerClass)">
+													   selectedItem="@bind(vm.selectedInvcCutomerClass)">
 												<template name="model" var="item">
 													<comboitem label="${item.name}"
 														style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
@@ -245,8 +245,13 @@
 													buttonVisible="true" model="@load(vm.ltnCreditinvcAccount)"
 													selectedItem="@bind(vm.selectedCreditinvAcount)">
 													<template name="model" var="item">
-														<comboitem label="${item.accountName}" />
+														<comboitem label="${item.accountName}"
+																   style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
 													</template>
+
+													<!--<template name="model" var="item">-->
+														<!--<comboitem label="${item.accountName}" />-->
+													<!--</template>-->
 
 												</combobox>
 											</vlayout>

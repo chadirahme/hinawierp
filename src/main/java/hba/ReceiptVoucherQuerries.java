@@ -60,8 +60,9 @@ public class ReceiptVoucherQuerries {
 		query=new StringBuffer();
 		query.append("SELECT Accounts.AccountName As [Name],AccountType,SubLevel,Rec_No,ListID FROM Accounts Inner join ");
 		query.append("AccountType on AccountType.TypeName = Accounts.AccountType where ");
-		query.append("Not AccountType in ('AccountsPayable','AccountsReceivable') ");
-		query.append("and isActive='Y' order by AccountType.SRL_No, Accounts.ACTLEVELSwithNO");
+		query.append(" Not AccountType in ('AccountsPayable','AccountsReceivable') ");
+		query.append(" and IsActive='Y' And IsNull(IsSystemAccount,'')<>'Y' ");
+		query.append(" order by AccountType.SRL_No, Accounts.ACTLEVELSwithNO");
 		return query.toString();	
 	}
 	
@@ -70,7 +71,8 @@ public class ReceiptVoucherQuerries {
 		query=new StringBuffer();
 		query.append("SELECT Accounts.AccountName As [Name],Accounts.fullname,AccountType,SubLevel,Rec_No,ListID FROM Accounts Inner join ");
 		query.append("AccountType on AccountType.TypeName = Accounts.AccountType where Not AccountType in ('AccountsPayable','AccountsReceivable') ");
-		query.append("and isActive='Y' order by AccountType.SRL_No,  Accounts.ACTLEVELSwithNO");
+		query.append(" and IsActive='Y' And IsNull(IsSystemAccount,'')<>'Y' ");
+		query.append(" order by AccountType.SRL_No,  Accounts.ACTLEVELSwithNO");
 		return query.toString();	
 	}
 	

@@ -5,7 +5,7 @@
 	<window id="cashInvoicePopUp" apply="org.zkoss.bind.BindComposer"
 		mode="highlighted" title="Add/Edit Customer" border="normal" position="center,center"
 		closable="true" sizable="true" onCancel="cashInvoicePopUp.detach()"
-		width="1200px" height="550px">
+		width="1400px" height="550px">
 		<zscript>
 			void openContexMenu(Integer type) {
 			if(type==1)
@@ -230,7 +230,7 @@
 											<label value="Class"></label>
 										</cell>
 										<cell colspan="2">
-											<combobox autodrop="true" mold="rounded" hflex="1" onSelect="@command('selectCashInvoiceClass')"
+											<combobox autodrop="true" mold="rounded" hflex="1"
 												buttonVisible="true" model="@load(vm.lstInvcCustomerClass)"
 												selectedItem="@bind(vm.selectedInvcCutomerClass)">
 												<template name="model" var="item">
