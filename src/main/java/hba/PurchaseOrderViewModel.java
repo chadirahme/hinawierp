@@ -1,5 +1,6 @@
 package hba;
 
+import common.FormatDateText;
 import home.QuotationAttachmentModel;
 import hr.HRData;
 
@@ -409,13 +410,14 @@ public class PurchaseOrderViewModel
 
 	private void ClearData()
 	{
-		if(compSetup.getPvSerialNos().equals("S"))
-		{
-			refNUmber=data.GetSaleNumber(SerialFields.PurchaseOrder.toString());
-		}
-		else{
-			refNUmber=data.GetSerialNumber(SerialFields.PaymentSerial.toString());
-		}
+		refNUmber=data.GetSaleNumber(SerialFields.PurchaseOrder.toString());
+//		if(compSetup.getPvSerialNos().equals("S"))
+//		{
+//			refNUmber=data.GetSaleNumber(SerialFields.PurchaseOrder.toString());
+//		}
+//		else{
+//			refNUmber=data.GetSerialNumber(SerialFields.PaymentSerial.toString());
+//		}
 	}
 	private void getCompanyRolePermessions(int companyRoleId,int parentId)
 	{
@@ -477,6 +479,8 @@ public class PurchaseOrderViewModel
 									type.setQuantity(type.getQuantity());
 									type.setAmount(type.getRate() * type.getQuantity());
 									getNewTotalAmount();
+									BindUtils.postNotifyChange(null, null, PurchaseOrderViewModel.this, "lstCheckItems");
+									BindUtils.postNotifyChange(null, null, PurchaseOrderViewModel.this, "totalAmount");
 								}
 							}
 							else 
@@ -526,46 +530,46 @@ public class PurchaseOrderViewModel
 	}
 
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Command
-	@NotifyChange({"selectedLstClass"})
-	public void selectedClass()
-	{
-		if(selectedLstClass!=null)
-		{
-			//check if class has sub class		
-			boolean hasSubAccount=data.checkIfClassHasSub(selectedLstClass.getName()+":");
-			if(hasSubAccount)
-			{
-				if(compSetup.getPostOnMainClass().equals("Y"))
-				{
-					Messagebox.show("Selected Class have Sub Class(s). Do you want to continue?","Class", Messagebox.YES | Messagebox.NO  , Messagebox.QUESTION,
-							new org.zkoss.zk.ui.event.EventListener() {						
-						public void onEvent(Event evt) throws InterruptedException {
-							if (evt.getName().equals("onYes")){	 				        		 				        	
-							}
-							else 
-							{		 
-								Map args = new HashMap();
-								args.put("result", "1");
-								BindUtils.postGlobalCommand(null, null, "resetGrid", args);
-								selectedLstClass=null;
-								BindUtils.postNotifyChange(null, null, PurchaseOrderViewModel.this, "selectedLstClass");
-							}
-						}
-
-					});
-				}
-				else
-
-				{
-					Messagebox.show("Selected Class have sub Class(s). You cannot continue!","Class", Messagebox.OK , Messagebox.INFORMATION);
-					selectedLstClass=null;
-					BindUtils.postNotifyChange(null, null, PurchaseOrderViewModel.this, "selectedLstClass");
-				}	
-			}
-		}
-	}
+//	@SuppressWarnings({ "unchecked", "rawtypes" })
+//	@Command
+//	@NotifyChange({"selectedLstClass"})
+//	public void selectedClass()
+//	{
+//		if(selectedLstClass!=null)
+//		{
+//			//check if class has sub class
+//			boolean hasSubAccount=data.checkIfClassHasSub(selectedLstClass.getName()+":");
+//			if(hasSubAccount)
+//			{
+//				if(compSetup.getPostOnMainClass().equals("Y"))
+//				{
+//					Messagebox.show("Selected Class have Sub Class(s). Do you want to continue?","Class", Messagebox.YES | Messagebox.NO  , Messagebox.QUESTION,
+//							new org.zkoss.zk.ui.event.EventListener() {
+//						public void onEvent(Event evt) throws InterruptedException {
+//							if (evt.getName().equals("onYes")){
+//							}
+//							else
+//							{
+//								Map args = new HashMap();
+//								args.put("result", "1");
+//								BindUtils.postGlobalCommand(null, null, "resetGrid", args);
+//								selectedLstClass=null;
+//								BindUtils.postNotifyChange(null, null, PurchaseOrderViewModel.this, "selectedLstClass");
+//							}
+//						}
+//
+//					});
+//				}
+//				else
+//
+//				{
+//					Messagebox.show("Selected Class have sub Class(s). You cannot continue!","Class", Messagebox.OK , Messagebox.INFORMATION);
+//					selectedLstClass=null;
+//					BindUtils.postNotifyChange(null, null, PurchaseOrderViewModel.this, "selectedLstClass");
+//				}
+//			}
+//		}
+//	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Command
@@ -733,6 +737,31 @@ public class PurchaseOrderViewModel
 	{
 		boolean isValid=true;
 
+		if(compSetup.getClosingDate()!=null){
+			if(creationdate.compareTo(compSetup.getClosingDate())<=0){
+				Messagebox.show("Purchase Date must be Higher than the QuickBooks Closing Date.!","Purchase Order",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
+		if(compSetup.getDontSaveWithOutMemo().equals("Y")){
+			if(FormatDateText.isEmpty(getMemo())){
+				Messagebox.show("You must fill the transaction Memo according to company settings!","Purchase Order",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+		if(selectedPaytoOrder==null || selectedPaytoOrder.getRecNo()==0)
+		{
+			Messagebox.show("You Must Select A 'Vendor ' !!!","Purchase Order",Messagebox.OK,Messagebox.INFORMATION);
+			return false;
+		}
+
+		if(selectedDropShipTo==null || selectedDropShipTo.getRecNo()==0)
+		{
+			Messagebox.show("You Must Select the Drop Ship to !!!","Purchase Order",Messagebox.OK,Messagebox.INFORMATION);
+			return false;
+		}
+
 		/*	if(selectedAccount==null)
 		{		
 			Messagebox.show("You Must Assign an A/P Account For This Transaction!","Item Receipt",Messagebox.OK,Messagebox.INFORMATION);
@@ -743,17 +772,7 @@ public class PurchaseOrderViewModel
 			return false;
 		}
 		
-		if(selectedPaytoOrder==null)
-		{		
-			Messagebox.show("You Must Select A 'Vendor ' !!!","Purchase Order",Messagebox.OK,Messagebox.INFORMATION);
-			return false;
-		}
 
-		if(selectedPaytoOrder.getRecNo()==0)
-		{			
-			Messagebox.show("Select An Existing 'Vendor' !!!","Purchase Order",Messagebox.OK,Messagebox.INFORMATION);
-			return false;
-		}
 
 		/*if(selectedDropShipTo==null)
 		{		
@@ -892,7 +911,7 @@ public class PurchaseOrderViewModel
 			{
 				if(purchaseRequestKey==0)//Only on create
 				{
-					data.ConfigSerialNumberCashInvoice(SerialFields.PurchaseOrder, obj.getRefNUmber(),0);
+					data.ConfigSerialNumberPurchaseRequest(SerialFields.PurchaseOrder, obj.getRefNUmber(),0);
 				}
 				data.deleteGridDataPurchaseOrder(tmpRecNo);
 				for (PurchaseRequestGridData item : lstCheckItems) 
@@ -964,8 +983,51 @@ public class PurchaseOrderViewModel
 		return selectedLstClass;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@NotifyChange({ "selectedLstClass" })
 	public void setSelectedLstClass(ClassModel selectedLstClass) {
 		this.selectedLstClass = selectedLstClass;
+		if(selectedLstClass!=null)
+		{
+			if (selectedLstClass.getClass_Key() == 0)
+				return;
+
+			//check if class has sub class
+			boolean hasSubAccount=data.checkIfClassHasSub(selectedLstClass.getName()+":");
+			if(hasSubAccount)
+			{
+				if(compSetup.getPostOnMainClass().equals("Y"))
+				{
+					Messagebox.show("Selected Class have Sub Class(s). Do you want to continue?","Class", Messagebox.YES | Messagebox.NO  , Messagebox.QUESTION,
+							new org.zkoss.zk.ui.event.EventListener() {
+								public void onEvent(Event evt) throws InterruptedException {
+									if (evt.getName().equals("onYes"))
+									{
+									}
+									else
+									{
+										setSelectedLstClass(lstClass.get(0));
+										BindUtils.postNotifyChange(null, null, PurchaseOrderViewModel.this, "selectedLstClass");
+									}
+								}
+
+							});
+				}
+				else
+
+				{
+					Messagebox.show("Selected Class have sub Class(s). You cannot continue!","Class", Messagebox.OK , Messagebox.INFORMATION);
+					setSelectedLstClass(lstClass.get(0));
+				}
+			}
+		}
+		else
+		{
+			Messagebox.show("Invalid Class Name !!","Class",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedLstClass(lstClass.get(0));
+		}
+
+
 	}
 
 	public List <QbListsModel> getLstPayToOrder() {
@@ -982,14 +1044,17 @@ public class PurchaseOrderViewModel
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@NotifyChange({"address","showMaterial"})
+	@NotifyChange({"address","showMaterial","selectedPaytoOrder"})
 	public void setSelectedPaytoOrder(QbListsModel selectedPaytoOrder) 
 	{
 		this.selectedPaytoOrder = selectedPaytoOrder;
 		isSkip=false;
 		address="";
-		if(selectedPaytoOrder!=null && selectedPaytoOrder.getRecNo()>0)
+		if(selectedPaytoOrder!=null)
 		{
+			if (selectedPaytoOrder.getRecNo() == 0)
+				return;
+
 			PayToOrderModel obj=data.getPayToOrderInfo(selectedPaytoOrder.getListType(), selectedPaytoOrder.getRecNo());		
 			//String address="";	
 
@@ -1013,7 +1078,8 @@ public class PurchaseOrderViewModel
 		}
 		else
 		{
-			Messagebox.show("Invalid Name !!","Purchase Order",Messagebox.OK,Messagebox.INFORMATION);
+			Messagebox.show("Invalid Vendor Name !!","Purchase Order",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedPaytoOrder(lstPayToOrder.get(0));
 		}
 		if(selectedPaytoOrder!=null && selectedPaytoOrder.getRecNo()>0){
 			if(!data.checkMR(selectedPaytoOrder.getRecNo())){
@@ -1569,11 +1635,15 @@ public class PurchaseOrderViewModel
 		return selectedDropShipTo;
 	}
 
-	@NotifyChange({"shipTo"})
+	@NotifyChange({"shipTo","selectedDropShipTo"})
 	public void setSelectedDropShipTo(QbListsModel selectedDropShipTo) {
 		this.selectedDropShipTo = selectedDropShipTo;
+		shipTo="";
 		if(selectedDropShipTo!=null)
 		{
+			if(selectedDropShipTo.getRecNo()==0)
+				return;
+
 			PayToOrderModel obj=data.getPayToOrderInfo(selectedDropShipTo.getListType(), selectedDropShipTo.getRecNo());		
 			String address="";	
 
@@ -1597,7 +1667,8 @@ public class PurchaseOrderViewModel
 		}
 		else
 		{
-			Messagebox.show("Invlaid Name.");			
+			Messagebox.show("Invalid Drop Ship To Name !!","Purchase Order",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedDropShipTo(lstDropShipTo.get(0));
 		}
 	}
 

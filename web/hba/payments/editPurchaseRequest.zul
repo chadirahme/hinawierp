@@ -45,7 +45,7 @@
 								</hbox>
 
 								<grid
-									form="@id('fx') @load(vm.objCash) @save(vm.objCash, before='addNewCashPayment') ">
+									form="@id('fx') @load(vm.objCash) @save(vm.objCash, before='addPurchaseRquest') ">
 									<columns>
 										<column width="120px"></column>
 										<column width="150px"></column>
@@ -66,14 +66,14 @@
 												<label value="Date"></label>
 											</cell>
 											<cell>
-												<datebox hflex="1" value="@bind(vm.creationdate)"
+												<datebox hflex="1" value="@bind(vm.creationdate)" constraint="no empty: Please enter Date !"
 													format="dd/MM/yyyy"></datebox>
 											</cell>
 											<cell>
 												<label value="Required Date"></label>
 											</cell>
 											<cell>
-												<datebox hflex="1" value="@bind(vm.requiredDate)"
+												<datebox hflex="1" value="@bind(vm.requiredDate)" constraint="no empty: Please enter Date !"
 													format="dd/MM/yyyy"></datebox>
 											</cell>
 
@@ -174,7 +174,7 @@
 											</cell>
 											<cell colspan="2">
 												<combobox model="@load(vm.lstClass)" selectedItem="@bind(vm.selectedLstClass)"
-													onSelect="@command('selectedClass')" hflex="1" autodrop="true"
+													 hflex="1" autodrop="true"
 													mold="rounded" disabled="@bind(vm.approveFlag)">
 
 													<template name="model" var="item">
@@ -313,11 +313,11 @@
 									<row>
 										<cell align="center">
 											<hlayout>
-												<a href="" style="color:blue;text-decoration:underline;"
-													onClick="@command('goToRelatedReport')">Go To Item Purchase Request Report List</a>
-												<label value="" onClick="@command('goToRelatedReport')"></label>
-												<label value=""></label>
-												<label value=""></label>
+												<!--<a href="" style="color:blue;text-decoration:underline;"-->
+													<!--onClick="@command('goToRelatedReport')">Go To Item Purchase Request Report List</a>-->
+												<!--<label value="" onClick="@command('goToRelatedReport')"></label>-->
+												<!--<label value=""></label>-->
+												<!--<label value=""></label>-->
 											</hlayout>
 										</cell>
 										<cell align="right">

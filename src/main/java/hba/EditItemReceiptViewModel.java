@@ -1,5 +1,6 @@
 package hba;
 
+import common.FormatDateText;
 import home.QuotationAttachmentModel;
 import hr.HRData;
 
@@ -477,11 +478,18 @@ public class EditItemReceiptViewModel
 
 	private void ClearData()
 	{
-		if(compSetup.getPvSerialNos().equals("S"))
-		{
-			objCash.setIrNo(data.GetSaleNumber(SerialFields.ItemReceipt.toString()));
-			objCash.setIrNoLocal(data.GetSaleNumber(SerialFields.ItemReceiptLocal.toString()));
-		}
+		objCash.setIrNo(data.GetSaleNumber(SerialFields.ItemReceipt.toString()));
+		objCash.setIrNoLocal(data.GetSaleNumber(SerialFields.ItemReceiptLocal.toString()));
+
+//		if(compSetup.getPvSerialNos().equals("S"))
+//		{
+//			objCash.setIrNo(data.GetSaleNumber(SerialFields.ItemReceipt.toString()));
+//			objCash.setIrNoLocal(data.GetSaleNumber(SerialFields.ItemReceiptLocal.toString()));
+//		}
+//		else{
+//			objCash.setIrNo(data.GetSaleNumber(SerialFields.PaymentSerial.toString()));
+//			objCash.setIrNoLocal(data.GetSaleNumber(SerialFields.PaymentSerial.toString()));
+//		}
 	}
 	private void getCompanyRolePermessions(int companyRoleId,int parentId)
 	{
@@ -1068,27 +1076,38 @@ public class EditItemReceiptViewModel
 	private boolean validateData(boolean Printflag)
 	{
 		boolean isValid=true;
+
+		if(compSetup.getClosingDate()!=null){
+			if(creationdate.compareTo(compSetup.getClosingDate())<=0){
+				Messagebox.show("Purchase Date must be Higher than the QuickBooks Closing Date.!","Item Receipt",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
+		if(compSetup.getDontSaveWithOutMemo().equals("Y")){
+			if(FormatDateText.isEmpty(getMemo())){
+				Messagebox.show("You must fill the transaction Memo according to company settings!","Item Receipt",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+		if(selectedPaytoOrder==null || selectedPaytoOrder.getRecNo()==0)
+		{
+			Messagebox.show("You Must Select A 'Vendor ' !!!","Item Receipt",Messagebox.OK,Messagebox.INFORMATION);
+			return false;
+		}
+
+
+		if(selectedAccount==null || selectedAccount.getRec_No()==0)
+		{
+			Messagebox.show("You Must Assign an A/P Account For This Transaction!","Item Receipt",Messagebox.OK,Messagebox.INFORMATION);
+			return false;
+		}
+
 		if(compSetup.getUsePurchaseFlow().equalsIgnoreCase("Y") && objCash.getTransformPO().equalsIgnoreCase("N")){
 			Messagebox.show("Work Flow Is Activate, Please Select Material Request To Create Purchase Order","Purchase Order",Messagebox.OK,Messagebox.INFORMATION);
 			return false;
 		}
 
-		if(selectedAccount==null)
-		{		
-			Messagebox.show("You Must Assign an A/P Account For This Transaction!","Item Receipt",Messagebox.OK,Messagebox.INFORMATION);
-			return false;
-		}
-		if(selectedPaytoOrder==null)
-		{		
-			Messagebox.show("You Must Select A 'Vendor ' !!!","Item Receipt",Messagebox.OK,Messagebox.INFORMATION);
-			return false;
-		}
-
-		if(selectedPaytoOrder.getRecNo()==0)
-		{			
-			Messagebox.show("Select An Existing 'Vendor' !!!","Item Receipt",Messagebox.OK,Messagebox.INFORMATION);
-			return false;
-		}
 
 		if(lstExpenses!=null)
 		{	
@@ -1306,8 +1325,8 @@ public class EditItemReceiptViewModel
 			{
 				if(itemReceiptKey==0)//Only on create
 				{
-					data.ConfigSerialNumberCashInvoice(SerialFields.ItemReceipt, obj.getIrNo(),0);
-					data.ConfigSerialNumberCashInvoice(SerialFields.ItemReceiptLocal, obj.getIrNo(),0);
+					data.ConfigSerialNumberPurchaseRequest(SerialFields.ItemReceipt, obj.getIrNo(),0);
+					data.ConfigSerialNumberPurchaseRequest(SerialFields.ItemReceiptLocal, obj.getIrNoLocal(),0);
 				}
 				data.deleteCheckItemsItemReceipt(tmpRecNo);
 				for (CheckItemsModel item : lstCheckItems) 
@@ -1393,8 +1412,61 @@ public class EditItemReceiptViewModel
 		return selectedAccount;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@NotifyChange({"selectedAccount"})
 	public void setSelectedAccount(AccountsModel selectedAccount) {
 		this.selectedAccount = selectedAccount;
+
+		if(selectedAccount!=null)
+		{
+			if (selectedAccount.getRec_No() == 0)
+				return;
+
+				boolean hasSubAccount = data.checkIfBankAccountsHasSub(selectedAccount.getFullName() + ":");
+				if (hasSubAccount) {
+					if (compSetup.getPostOnMainAccount().equals("Y")) {
+
+						Messagebox
+								.show("Selected account have sub accounts. Do you want to continue?",
+										"Item Receipt", Messagebox.YES | Messagebox.NO,
+										Messagebox.QUESTION,
+										new org.zkoss.zk.ui.event.EventListener() {
+
+											public void onEvent(Event evt)
+													throws InterruptedException {
+												if (evt.getName().equals("onYes")) {
+												} else {
+													setSelectedAccount(lstaccounts.get(0));
+													BindUtils
+															.postNotifyChange(
+																	null,
+																	null,
+																	EditItemReceiptViewModel.this,
+																	"selectedAccount");
+													return;
+												}
+											}
+
+										});
+
+					} else {
+						Messagebox
+								.show("Selected account have sub accounts. You cannot continue !!",
+										"A/P Account", Messagebox.OK,
+										Messagebox.INFORMATION);
+						setSelectedAccount(lstaccounts.get(0));
+						return;
+					}
+				}
+
+		}else
+		{
+			Messagebox.show("Select An Existing A/P Account!!!",
+					"Item Receipt", Messagebox.OK, Messagebox.INFORMATION);
+			setSelectedAccount(lstaccounts.get(0));
+
+		}
+
 	}
 
 	public List <QbListsModel> getLstPayToOrder() {
@@ -1409,12 +1481,16 @@ public class EditItemReceiptViewModel
 		return selectedPaytoOrder;
 	}
 
-	@NotifyChange({"objCash","lstVendorFAItems","showOrder"})
+	@NotifyChange({"objCash","lstVendorFAItems","showOrder","selectedPaytoOrder"})
 	public void setSelectedPaytoOrder(QbListsModel selectedPaytoOrder) 
 	{
 		this.selectedPaytoOrder = selectedPaytoOrder;
+		objCash.setAddress("");
 		if(selectedPaytoOrder!=null)
 		{
+			if (selectedPaytoOrder.getRecNo() == 0)
+				return;
+
 			PayToOrderModel obj=data.getPayToOrderInfo(selectedPaytoOrder.getListType(), selectedPaytoOrder.getRecNo());		
 			String address="";	
 
@@ -1430,6 +1506,7 @@ public class EditItemReceiptViewModel
 				address+="\n" + obj.getPhone();
 			if(obj.getFax().length()>0)
 				address+="\n" + obj.getFax();
+			address=address.replaceAll("null"," ");
 			if(address.equalsIgnoreCase(""))
 			{
 				address=obj.getFullName();
@@ -1438,8 +1515,10 @@ public class EditItemReceiptViewModel
 		}
 		else
 		{
-			Messagebox.show("Invlaid Name.");			
+			Messagebox.show("Invalid Vendor Name !!","Item Receipt",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedPaytoOrder(lstPayToOrder.get(0));
 		}
+
 		if(selectedPaytoOrder!=null ){
 			if(!data.checkPO(selectedPaytoOrder.getRecNo())){
 				showOrder=false;

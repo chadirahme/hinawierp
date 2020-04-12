@@ -320,7 +320,7 @@
 					<tabs>
 						<tab id="A" label="@bind(vm.lblExpenses)" />
 						<tab id="B" label="@bind(vm.lblCheckItems)" />
-						<tab id="C" label="@bind(vm.lblCheckFAItems)" />
+						<tab id="C" label="@bind(vm.lblCheckFAItems)" visible="false"/>
 
 					</tabs>
 

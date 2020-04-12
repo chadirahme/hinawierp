@@ -1,5 +1,6 @@
 package hba;
 
+import common.FormatDateText;
 import home.QuotationAttachmentModel;
 import hr.HRData;
 
@@ -523,18 +524,17 @@ public class JournalVoucherViewModel {
 
 						public void onEvent(Event evt) throws InterruptedException {
 							if (evt.getName().equals("onYes")) {
-								Map args = new HashMap();
-								args.put("result", "1");
-								BindUtils.postGlobalCommand(null, null,	"resetGrid", args);
+//								Map args = new HashMap();
+//								args.put("result", "1");
+//								BindUtils.postGlobalCommand(null, null,	"resetGrid", args);
 							} else {
-								Map args = new HashMap();
-								args.put("result", "2");
-								BindUtils.postGlobalCommand(null, null,"resetGrid", args);
+//								Map args = new HashMap();
+//								args.put("result", "2");
+//								BindUtils.postGlobalCommand(null, null,"resetGrid", args);
 								type.setSelectedAccount(null);
-								BindUtils.postNotifyChange(	null,null,JournalVoucherViewModel.this,"lstExpenses");
-								BindUtils
-								.postNotifyChange(null,null,JournalVoucherViewModel.this,"totalAmount");
-								BindUtils.postNotifyChange(null,null,JournalVoucherViewModel.this,"lblExpenses");
+								BindUtils.postNotifyChange(	null,null,JournalVoucherViewModel.this,"lstJournalVoucherCheckItems");
+								//BindUtils.postNotifyChange(null,null,JournalVoucherViewModel.this,"totalAmount");
+								//BindUtils.postNotifyChange(null,null,JournalVoucherViewModel.this,"lblExpenses");
 								return;
 							}
 						}
@@ -544,9 +544,9 @@ public class JournalVoucherViewModel {
 				} else {
 					Messagebox.show("Selected account have sub accounts. You cannot continue !!","Account", Messagebox.OK,Messagebox.INFORMATION);
 					type.setSelectedAccount(null);
-					BindUtils.postNotifyChange(null, null,JournalVoucherViewModel.this, "lstJournalVoucherCheckItems");
-					BindUtils.postNotifyChange(null, null,JournalVoucherViewModel.this, "totalCredit");
-					BindUtils.postNotifyChange(null, null,JournalVoucherViewModel.this, "totalDebit");
+					//BindUtils.postNotifyChange(null, null,JournalVoucherViewModel.this, "lstJournalVoucherCheckItems");
+					//BindUtils.postNotifyChange(null, null,JournalVoucherViewModel.this, "totalCredit");
+					//BindUtils.postNotifyChange(null, null,JournalVoucherViewModel.this, "totalDebit");
 					return;
 				}
 			}
@@ -580,6 +580,43 @@ public class JournalVoucherViewModel {
 					return;
 				}
 			}			
+		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Command
+	@NotifyChange({"lstJournalVoucherCheckItems"})
+	public void selectExpenseClass(@BindingParam("type")  final JournalVoucherGridData type)
+	{
+		if(type.getSelectedClass()!=null)
+		{
+			//check if account has sub account
+			boolean hasSubAccount=data.checkIfClassHasSub(type.getSelectedClass().getName()+":");
+			if(hasSubAccount)
+			{
+				if(compSetup.getPostOnMainClass().equals("Y"))
+				{
+					Messagebox.show("Selected Class have sub Sub Class(s). Do you want to continue?","Class", Messagebox.YES | Messagebox.NO  , Messagebox.QUESTION,
+							new org.zkoss.zk.ui.event.EventListener() {
+								public void onEvent(Event evt) throws InterruptedException {
+									if (evt.getName().equals("onYes"))
+									{
+									}
+									else
+									{
+										type.setSelectedClass(null);
+										BindUtils.postNotifyChange(null, null, JournalVoucherViewModel.this, "lstJournalVoucherCheckItems");
+									}
+								}
+
+							});
+				}
+				else
+				{
+					Messagebox.show("Selected Class have sub Class(s). You cannot continue!","Class", Messagebox.OK , Messagebox.INFORMATION);
+					type.setSelectedClass(null);
+				}
+			}
 		}
 	}
 
@@ -652,6 +689,21 @@ public class JournalVoucherViewModel {
 
 	private boolean validateData(boolean flag) {
 		boolean isValid = true;
+
+		if(compSetup.getClosingDate()!=null){
+			if(journalVoucher.getTxnDate().compareTo(compSetup.getClosingDate())<=0){
+				Messagebox.show("Date must be Higher than the QuickBooks Closing Date.!","Journal Voucher",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
+		if(compSetup.getDontSaveWithOutMemo().equals("Y")){
+			if(FormatDateText.isEmpty(journalVoucher.getNotes())){
+				Messagebox.show("You must fill the transaction Memo according to company settings!","Journal Voucher",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
 		if(journalVoucher.getTxnNumber()!=null){
 			if((data.checkJournalVoucherDuplicate(journalVoucher.getTxnNumber(), journalVoucherKey)) && (data.checkRVJournalVoucherDuplicate(journalVoucher.getTxnNumber()))){
 				Messagebox.show("Duplicate JV Number!","Journal Voucher",Messagebox.OK,Messagebox.INFORMATION);
@@ -685,7 +737,7 @@ public class JournalVoucherViewModel {
 					return false;
 				}
 				if(compSetup.getPostJVWithOutName().equalsIgnoreCase("N") && item.getSelectedName()==null){
-					Messagebox.show("Please fill all the name fields to continue!","Journal Voucher",Messagebox.OK,Messagebox.INFORMATION);
+					Messagebox.show("Please fill all the Name fields to continue!","Journal Voucher",Messagebox.OK,Messagebox.INFORMATION);
 					return false;
 				}
 

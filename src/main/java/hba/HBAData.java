@@ -671,10 +671,15 @@ public class HBAData {
 
 		HBAQueries query = new HBAQueries();
 		ResultSet rs = null;
+		AccountsModel obj = new AccountsModel();
+		obj.setRec_No(0);
+		obj.setFullName("Select");
+		obj.setAccountName("Select");
+		lst.add(obj);
 		try {
 			rs = db.executeNonQuery(query.fillBankAccountsQuery(accountType));
 			while (rs.next()) {
-				AccountsModel obj = new AccountsModel();
+				obj = new AccountsModel();
 				obj.setsRL_No(rs.getInt("SRL_No"));
 				obj.setAccountName(rs.getString("AccountName"));
 				obj.setAccountType(rs.getString("AccountType"));
@@ -813,6 +818,12 @@ public class HBAData {
 
 		HBAQueries query = new HBAQueries();
 		ResultSet rs = null;
+		ClassModel obj1 = new ClassModel();
+		obj1.setClass_Key(0);
+		obj1.setName("Select");
+		obj1.setFullName("Select");
+		lst.add(obj1);
+
 		try {
 			rs = db.executeNonQuery(query.getClassQuery(classType));
 			while (rs.next()) {
@@ -2655,18 +2666,26 @@ public class HBAData {
 
 	}
 
-	public String ConfigSerialNumber(SerialFields field,String SerialNumber, int keyID) {
+	private String ConfigSerialNumber(SerialFields field,String SerialNumber, int keyID) {
 
 		String tmpConfigSerailNum = "";
 		String tmpField;
 		try
 		{
-			if (keyID == 0)
-				tmpField = field.toString();
-			else
-				tmpField = field.toString() + "-" + String.valueOf(keyID);
+//			if (keyID == 0)
+//				tmpField = field.toString();
+//			else
+//				tmpField = field.toString() + "-" + String.valueOf(keyID);
 
 			tmpConfigSerailNum = GenerateSerialNumber(field, SerialNumber, keyID);
+
+			//check if new Sr. no exists
+			boolean isRecExists;
+			isRecExists=FindTxnNumber(field,tmpConfigSerailNum,"",0);
+			while(isRecExists) {
+				tmpConfigSerailNum = GenerateSerialNumber(field, SerialNumber, keyID);
+				isRecExists=FindTxnNumber(field,tmpConfigSerailNum,"",0);
+			}
 
 		}
 		catch (Exception ex) {
@@ -2674,9 +2693,12 @@ public class HBAData {
 		}
 		return tmpConfigSerailNum;
 	}
-	public String GenerateSerialNumber(SerialFields field,String SerialNumber, int keyID) {
+
+
+	private String GenerateSerialNumber(SerialFields field,String SerialNumber, int keyID) {
 		String tmpConfigSerailNum = "";
 		try {
+			String tmpSerialNumber = SerialNumber;
 			Integer tmpX;
 			String tmpFindLastIdx;
 			Boolean tmpStartInt = false;
@@ -2700,6 +2722,29 @@ public class HBAData {
 				}
 			}
 
+			if (tmpStartInt) {
+				String tmpSuffix = "";
+				String tmpPrefix = "";
+
+				if (tmpLeftPos > 0)
+					if (((int) (long) Math.round(tmpLeftPos) - 1) <= SerialNumber
+							.length())
+						tmpSuffix = SerialNumber.substring(0,
+								(int) (long) Math.round(tmpLeftPos) - 1);
+				if (tmpRightPos > 0)
+					if (((int) (long) Math.round(tmpRightPos) + 1) <= SerialNumber
+							.length())
+						tmpPrefix = SerialNumber.substring((int) (long) Math
+								.round(tmpRightPos) + 1);
+
+				double tmpLastNumber = Integer.parseInt(tmpFindNos) + 1;
+
+				tmpConfigSerailNum = tmpSuffix
+						+ (int) (long) Math.round(tmpLastNumber) + tmpPrefix;
+			} else {
+				tmpConfigSerailNum = tmpSerialNumber;
+			}
+
 		}
 		catch (Exception ex) {
 			logger.error("error in HBAData---GenerateSerialNumber-->",
@@ -2708,6 +2753,40 @@ public class HBAData {
 		return tmpConfigSerailNum;
 	}
 
+	public String ConfigSerialNumberPurchaseRequest(SerialFields field,	String serialNumber, int keyID) {
+		String tmpConfigSerailNum = "";
+		try {
+			HBAQueries query = new HBAQueries();
+			ResultSet rs = null;
+			String tmpField;
+			if (keyID == 0)
+				tmpField = field.toString();
+			else
+				tmpField = field.toString() + "-" + String.valueOf(keyID);
+
+			//this function will generate uniqurw Serial number
+			tmpConfigSerailNum=ConfigSerialNumber(field,serialNumber,keyID);
+			//tmpConfigSerailNum=GenerateSerialNumber(field,serialNumber,keyID);
+
+			boolean isSerailFound = false;
+			rs = db.executeNonQuery(query.GetSerialNumberQuery(tmpField));
+			while (rs.next()) {
+				isSerailFound = true;
+			}
+			if (isSerailFound)
+				db.executeUpdateQuery(query.updateSystemSerialNosQuery(
+						tmpConfigSerailNum, tmpField));
+			else
+				db.executeUpdateQuery(query.insertSystemSerialNosQuery(
+						tmpConfigSerailNum, tmpField));
+
+		}
+		catch (Exception ex) {
+			logger.error("error in HBAData---ConfigSerialNumberPurchaseRequest-->",
+					ex);
+		}
+		return tmpConfigSerailNum;
+	}
 	// by iqbal for calculating next serial number
 	public String ConfigSerialNumberCashInvoice(SerialFields field,	String SerialNumber, int keyID) {
 		String tmpSerialNumber = SerialNumber;
@@ -2768,7 +2847,7 @@ public class HBAData {
 			HBAQueries query = new HBAQueries();
 			ResultSet rs = null;
 
-			// check if dulicate exist serial number
+			// check if duplicate exist serial number
 			boolean isSerailFound = false;
 			rs = db.executeNonQuery(query.GetSerialNumberQuery(tmpField));
 			while (rs.next()) {
@@ -3754,10 +3833,14 @@ public class HBAData {
 
 		HBAQueries query = new HBAQueries();
 		ResultSet rs = null;
+		TermModel obj = new TermModel();
+		obj.setTermKey(0);
+		obj.setName("Select");
+		lst.add(obj);
 		try {
 			rs = db.executeNonQuery(query.getTermsForCreditInvoice());
 			while (rs.next()) {
-				TermModel obj = new TermModel();
+				obj = new TermModel();
 				obj.setTermKey(rs.getInt("term_key"));
 				obj.setName(rs.getString("name"));
 				obj.setNumberOfDays(rs.getInt("noofdays"));
@@ -5363,6 +5446,14 @@ public class HBAData {
 
 		HBAQueries query = new HBAQueries();
 		ResultSet rs = null;
+		QbListsModel obj1 = new QbListsModel();
+		obj1.setRecNo(0);
+		obj1.setName("Select");
+		obj1.setFullName("Select");
+		obj1.setSubLevel(0);
+		obj1.setIsActive("None");
+		obj1.setListType("None");
+		lst.add(obj1);
 		try {
 			rs = db.executeNonQuery(query.getDropShipTo());
 			while (rs.next()) {

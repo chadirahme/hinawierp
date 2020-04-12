@@ -1,5 +1,6 @@
 package hba;
 
+import common.FormatDateText;
 import home.QuotationAttachmentModel;
 import hr.HRData;
 
@@ -662,10 +663,15 @@ public class EditCreditBillViewModel
 
 	private void ClearData()
 	{
-		if(compSetup.getPvSerialNos().equals("S"))
-		{
-			objCheque.setRefNumber(data.GetSaleNumber(SerialFields.Bill.toString()));
-		}
+		objCheque.setRefNumber(data.GetSaleNumber(SerialFields.Bill.toString()));
+
+//		if(compSetup.getPvSerialNos().equals("S"))
+//		{
+//			objCheque.setRefNumber(data.GetSaleNumber(SerialFields.Bill.toString()));
+//		}
+//		else{
+//			objCheque.setRefNumber(data.GetSerialNumber(SerialFields.PaymentSerial.toString()));
+//		}
 	}
 
 	@Command    
@@ -955,11 +961,8 @@ public class EditCreditBillViewModel
 
 				if(result>0)
 				{
-					//if(compSetup.getPvSerialNos().equals("S"))
-					//{
 					if(editBillKey==0)
-						data.ConfigSerialNumberCashInvoice(SerialFields.Bill, objCheque.getRefNumber(),0);
-					//}
+						data.ConfigSerialNumberPurchaseRequest(SerialFields.Bill, objCheque.getRefNumber(),0);
 
 					//add Expenses
 					billData.deleteBillExpense(tmpRecNo);
@@ -1804,9 +1807,35 @@ public class EditCreditBillViewModel
 	{
 		boolean isValid=true;
 
-		if(selectedPaytoOrder==null)
+		if(compSetup.getClosingDate()!=null){
+			if(creationdate.compareTo(compSetup.getClosingDate())<=0){
+				Messagebox.show("Bill Date must be Higher than the QuickBooks Closing Date.!","Bill",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
+		if(compSetup.getDontSaveWithOutMemo().equals("Y")){
+			if(FormatDateText.isEmpty(objCheque.getMemo())){
+				Messagebox.show("You must fill the transaction Memo according to company settings!","Bill",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+		if(selectedPaytoOrder==null || selectedPaytoOrder.getRecNo()==0)
 		{
-			Messagebox.show("You Must Select A 'Vendor' !!!","Bill",Messagebox.OK,Messagebox.INFORMATION);
+			Messagebox.show("You Must Select A 'Vendor ' !!!","Bill",Messagebox.OK,Messagebox.INFORMATION);
+			return false;
+		}
+
+
+		if(selectedAccount==null || selectedAccount.getRec_No()==0)
+		{
+			Messagebox.show("You Must Assign an Account For This Transaction!","Bill",Messagebox.OK,Messagebox.INFORMATION);
+			return false;
+		}
+
+		if(FormatDateText.isEmpty(billNo))
+		{
+			Messagebox.show("Enter the bill Number !","Bill",Messagebox.OK,Messagebox.INFORMATION);
 			return false;
 		}
 		
@@ -1815,22 +1844,9 @@ public class EditCreditBillViewModel
 			return false;
 		}
 
-		if(selectedPaytoOrder.getRecNo()==0)
-		{
-			Messagebox.show("You Must Select A 'Vendor' !!!","Bill",Messagebox.OK,Messagebox.INFORMATION);
-			return false;
-		}
-
-		if(selectedAccount==null)
-		{
-			Messagebox.show("You Must Assign an Account For This Transaction!","Bill",Messagebox.OK,Messagebox.INFORMATION);
-			return false;
-		}
-
-
 		if(objCheque.getRefNumber()==null)
 		{
-			Messagebox.show("Enter the refrence Number!","Bill",Messagebox.OK,Messagebox.INFORMATION);
+			Messagebox.show("Enter the reference Number!","Bill",Messagebox.OK,Messagebox.INFORMATION);
 			return false; 
 		}
 
@@ -1921,17 +1937,13 @@ public class EditCreditBillViewModel
 
 		}
 
-		if(billNo==null)
-		{
-			Messagebox.show("Enter the bill Number !","Bill",Messagebox.OK,Messagebox.INFORMATION);
-			return false; 
-		}
+
 
 		if(flag)
 		{
 			if((objCheque.getRefNumber()!=null) && (billData.checkIfReferanceNumberIsCreditBill(objCheque.getRefNumber(),objCheque.getRecNo())==true))
 			{
-				Messagebox.show("Duplicate Refreance Number!","Bill",Messagebox.OK,Messagebox.INFORMATION);
+				Messagebox.show("Duplicate Reference Number!","Bill",Messagebox.OK,Messagebox.INFORMATION);
 				return false; 
 			}
 
@@ -1995,21 +2007,71 @@ public class EditCreditBillViewModel
 	}
 
 
-	public void setSelectedAccount1(AccountsModel selectedAccount) {
-		this.selectedAccount = selectedAccount;
-	}
-
-	@NotifyChange({"objCheque","showBankAccount"})
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@NotifyChange({"selectedAccount"})
 	public void setSelectedAccount(AccountsModel selectedAccount) 
 	{	
 		this.selectedAccount = selectedAccount;
-		//get Cheque Serial No
 		if(selectedAccount!=null)
 		{
-			//String tmpSerailField=SerialFields.ChequeNo.toString()+"-"+String.valueOf(selectedAccount.getRec_No());
-			//objCheque.setCheckNo(String.valueOf(data.GetSerialNumber(tmpSerailField)));
-			//showBankAccount=selectedAccount.getAccountType().equals("Post Dated Cheque");
+			if (selectedAccount.getRec_No() == 0)
+				return;
+
+			boolean hasSubAccount = data.checkIfBankAccountsHasSub(selectedAccount.getFullName() + ":");
+			if (hasSubAccount) {
+				if (compSetup.getPostOnMainAccount().equals("Y")) {
+
+					Messagebox
+							.show("Selected account have sub accounts. Do you want to continue?",
+									"Bill", Messagebox.YES | Messagebox.NO,
+									Messagebox.QUESTION,
+									new org.zkoss.zk.ui.event.EventListener() {
+
+										public void onEvent(Event evt)
+												throws InterruptedException {
+											if (evt.getName().equals("onYes")) {
+											} else {
+												setSelectedAccount(lstaccounts.get(0));
+												BindUtils
+														.postNotifyChange(
+																null,
+																null,
+																EditCreditBillViewModel.this,
+																"selectedAccount");
+												return;
+											}
+										}
+
+									});
+
+				} else {
+					Messagebox
+							.show("Selected account have sub accounts. You cannot continue !!",
+									"Account", Messagebox.OK,
+									Messagebox.INFORMATION);
+					setSelectedAccount(lstaccounts.get(0));
+					return;
+				}
+			}
+
+		}else
+		{
+			Messagebox.show("Select An Existing Account!!!",
+					"Item Receipt", Messagebox.OK, Messagebox.INFORMATION);
+			setSelectedAccount(lstaccounts.get(0));
+
 		}
+
+
+
+
+//		//get Cheque Serial No
+//		if(selectedAccount!=null)
+//		{
+//			//String tmpSerailField=SerialFields.ChequeNo.toString()+"-"+String.valueOf(selectedAccount.getRec_No());
+//			//objCheque.setCheckNo(String.valueOf(data.GetSerialNumber(tmpSerailField)));
+//			//showBankAccount=selectedAccount.getAccountType().equals("Post Dated Cheque");
+//		}
 
 	}
 
@@ -2033,12 +2095,18 @@ public class EditCreditBillViewModel
 		return selectedPaytoOrder;
 	}
 
-	@NotifyChange({"objCheque","lstVendorFAItems","showIR"})
+	@NotifyChange({"objCheque","lstVendorFAItems","showIR","selectedPaytoOrder"})
 	public void setSelectedPaytoOrder(QbListsModel selectedPaytoOrder) 
 	{
 		this.selectedPaytoOrder = selectedPaytoOrder;
+		objCheque.setAddress("");
+		vendorKey=0;
+
 		if(selectedPaytoOrder!=null)
 		{
+			if (selectedPaytoOrder.getRecNo() == 0)
+				return;
+
 			PayToOrderModel obj=data.getPayToOrderInfo(selectedPaytoOrder.getListType(), selectedPaytoOrder.getRecNo());
 			if(selectedPaytoOrder.getListType().equals("Employee") || selectedPaytoOrder.getListType().equals("Vendor") || selectedPaytoOrder.getListType().equals("Customer"))
 			{
@@ -2060,11 +2128,11 @@ public class EditCreditBillViewModel
 				address+="\n" + obj.getPhone();
 			if(obj.getFax().length()>0)
 				address+="\n" + obj.getFax();
+			address=address.replaceAll("null"," ");
 			objCheque.setAddress(address);
 
 			//fill FixedItems ListBox
 			lstVendorFAItems=billData.getVendorFixedAssetItemQueryforbill(selectedPaytoOrder.getRecNo());
-
 			vendorKey=selectedPaytoOrder.getRecNo();
 
 			if(!data.checkIR(vendorKey)){
@@ -2076,7 +2144,8 @@ public class EditCreditBillViewModel
 		}
 		else
 		{
-			Messagebox.show("Invlaid Name !!","Bill",Messagebox.OK,Messagebox.INFORMATION);		
+			Messagebox.show("Invalid Vendor Name !!","Bill",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedPaytoOrder(lstPayToOrder.get(0));
 		}
 	}
 
@@ -2284,8 +2353,16 @@ public class EditCreditBillViewModel
 	}
 
 
+	@NotifyChange({"selectedCreditBillTerms"})
 	public void setSelectedCreditBillTerms(TermModel selectedCreditBillTerms) {
 		this.selectedCreditBillTerms = selectedCreditBillTerms;
+		if (selectedCreditBillTerms != null) {
+			if (selectedCreditBillTerms.getTermKey() == 0)
+				return;
+		} else {
+			Messagebox.show("Invalid Term Name !!", "Bill", Messagebox.OK, Messagebox.INFORMATION);
+			setSelectedCreditBillTerms(lstCreditBillTerms.get(0));
+		}
 	}
 
 

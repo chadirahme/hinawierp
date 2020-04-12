@@ -3,7 +3,7 @@
 <window id="editBillPopUp" apply="org.zkoss.bind.BindComposer"
 		mode="highlighted" title="Add/Edit Bill" border="normal" position="center,center"
 		closable="true" sizable="true" onCancel="editBillPopUp.detach()"
-		width="1100px" height="650px">
+		width="1400px" height="650px">
 	<zscript>
 		void openContexMenu(Integer type)
 		{
@@ -60,7 +60,7 @@
 									<label value="Bill Date * "></label>
 								</cell>
 								<cell>
-									<datebox id="sdsd" value="@bind(vm.creationdate)"
+									<datebox id="sdsd" value="@bind(vm.creationdate)" constraint="no empty: Please enter Date !"
 										format="dd/MM/yyyy"></datebox>
 								</cell>
 
@@ -69,7 +69,7 @@
 									<label value="Bill Due Date * "></label>
 								</cell>
 								<cell>
-									<datebox value="@bind(vm.billDueDate)" format="dd/MM/yyyy"
+									<datebox value="@bind(vm.billDueDate)" format="dd/MM/yyyy" constraint="no empty: Please enter Date !"
 										width="130px"></datebox>
 								</cell>
 								<cell>
@@ -96,7 +96,7 @@
 								</cell>
 								<cell>
 									<textbox value="@bind(vm.billNo)" width="130px"
-										constraint="no empty: Please enter bill no !"></textbox>
+										></textbox>
 								</cell>
 							</row>
 
@@ -220,7 +220,7 @@
 						<tabs>
 							<tab id="A" label="@bind(vm.lblExpenses)" />
 							<tab id="B" label="@bind(vm.lblCheckItems)" selected="true" />
-							<tab id="C" label="@bind(vm.lblCheckFAItems)" />
+							<tab id="C" label="@bind(vm.lblCheckFAItems)" visible="false" />
 
 						</tabs>
 

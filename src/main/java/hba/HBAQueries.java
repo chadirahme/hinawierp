@@ -432,7 +432,7 @@ public class HBAQueries {
 		return query.toString();
 	}
 
-	public String GetNewTxnNumberQuery(SerialFields field, String txnNumber, String Condition,long recNo) {
+	public String GetNewTxnNumberQuery(SerialFields field, String txnNumber, String condition,long recNo) {
 		String CheckPV = "'Cheque','Cheque-Preterminate','Cheque-Refund','Bill','Cheque-Opening'";
 		String CashPV = "'Cash','Cash-Preterminate','Cash-Refund','Bill-Cash'";
 
@@ -451,7 +451,7 @@ public class HBAQueries {
 			query.append(" Cheque in (" + CheckPV + ") and ");
 			query.append(" Not Status in ('V') And");
 			query.append(" Not CheckNo is Null");
-			query.append(" and " + Condition+"and recno !=" + recNo);
+			query.append(" and " + condition+"and recno !=" + recNo);
 
 		case CashPV:
 			query.append("Select RecNo from CheckMast where");
@@ -459,6 +459,29 @@ public class HBAQueries {
 			query.append(" Cheque in (" + CashPV + ") and ");
 			query.append(" Not Status in ('V') and recno !=" + recNo);
 			break;
+
+			case PurchaseRequest:
+				query.append("Select RefNumber from PurchaseRequest where");
+				query.append(" RefNumber='" + txnNumber + "'");
+//				if(condition!=null && condition.length()>0)
+//					query.append(" and " + condition);
+				break;
+			case PurchaseOrder:
+				query.append("Select RefNumber from PurchaseOrder where");
+				query.append(" RefNumber='" + txnNumber + "'");
+				break;
+			case ItemReceiptLocal:
+				query.append("Select IRNoLocal from IRmast where");
+				query.append(" IRNoLocal='" + txnNumber + "'");
+				break;
+			case ItemReceipt:
+				query.append("Select IRNo from IRmast where");
+				query.append(" IRNo='" + txnNumber + "'");
+				break;
+			case Bill:
+				query.append("Select RefNumber from Bill where");
+				query.append(" RefNumber='" + txnNumber + "'");
+				break;
 
 		default:
 			break;
@@ -2695,8 +2718,9 @@ public class HBAQueries {
 	public String getItemForPurchaseRequest() {
 		query = new StringBuffer();
 		query.append("SELECT name,item_key,FullName,ItemType,SubLevel,ListID,salesdesc, PurchaseDesc,averageCost,ClassKey,0 as subItemsCount "
-				+ "FROM QBItems   where (PricePercent=0 or PricePercent is Null) and IsActive='Y'  order by ItemType desc,FullName, Name,SubLevel,Item_Key,ListID ");
+				+ " FROM QBItems   where (PricePercent=0 or PricePercent is Null) and IsActive='Y' and IsNull(ISVAT_Item,'')<>'Y' And IsNull(ISDefault_Item,'')<>'Y'  ");
 
+		query.append("  order by ItemType desc,FullName , Name,SubLevel,Item_Key,ListID");
 		//use this instead to get if item has subitem to not go to database when select item
 		/*query.append("SELECT name,item_key,FullName,ItemType,SubLevel,ListID,salesdesc ,   PurchaseDesc,averageCost,ClassKey, ");
 		query.append(" (select count(*) from QBItems as c Where (PricePercent=0 or PricePercent is Null) and IsActive='Y' and CharIndex( QBItems.Name +':' ,FullName)>0 ) as 'subItemsCount'");

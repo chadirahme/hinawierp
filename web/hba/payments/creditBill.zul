@@ -87,7 +87,7 @@
 										</cell>
 										<cell>
 											<textbox value="@bind(vm.billNo)" width="130px"
-												constraint="no empty: Please enter bill no !"></textbox>
+												></textbox>
 										</cell>
 									</row>
 
@@ -213,7 +213,7 @@
 						<tabs>
 							<tab id="A" label="@bind(vm.lblExpenses)" />
 							<tab id="B" label="@bind(vm.lblCheckItems)" />
-							<tab id="C" label="@bind(vm.lblCheckFAItems)" />
+							<tab id="C" label="@bind(vm.lblCheckFAItems)" visible="false" />
 
 						</tabs>
 

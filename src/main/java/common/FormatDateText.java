@@ -25,7 +25,7 @@ public class FormatDateText
 	}
 
 	public static boolean isEmpty(String str) {
-		if (str == null || str.length()==0) {
+		if (str == null || str.length()==0 || str.trim().length()==0) {
 			return true;
 		} else {
 			return false;

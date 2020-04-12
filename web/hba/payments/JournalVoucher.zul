@@ -50,7 +50,7 @@
 							<columns>
 								<column width="100px"></column>
 								<column width="150px"></column>
-								<column width="170px"></column>
+								<column width="220px"></column>
 								<column width="130px"></column>
 								<column width="170px"></column>
 								<column width="170px"></column>
@@ -62,7 +62,7 @@
 										<label value=" JournalVoucher_Date">Date*</label>
 									</cell>
 									<cell>
-										<datebox width="120px" value="@bind(fx.txnDate)"
+										<datebox width="120px" value="@bind(fx.txnDate)" constraint="no empty: Please enter Date !"
 											format="dd/MM/yyyy"></datebox>
 									</cell>
 									<cell>
@@ -70,7 +70,10 @@
 
 										<textbox width="120px" value="@bind(fx.txnNumber)"
 											constraint="no empty: Please enter Sale Number !!!"></textbox>
-											<button label="ADD New JV" onClick="window.open('dashboard.html')"></button>
+
+									</cell>
+									<cell>
+										<!--<button label="ADD New JV" onClick="window.open('dashboard.html')"></button>-->
 									</cell>
 								</row>
 								<row>
@@ -79,7 +82,7 @@
 									</cell>
 									<cell colspan="3">
 										<textbox hflex="1" id="JV_Memo" multiline="true"
-											placeholder="" rows="2" value="@bind(fx.notes)" />
+											placeholder="" rows="3" value="@bind(fx.notes)" />
 									</cell>
 								</row>
 
@@ -198,7 +201,7 @@
 								<listcell>
 									<combobox autodrop="true" mold="rounded"
 										model="@load(vm.lstGridClass)" selectedItem="@bind(each.selectedClass)"
-										hflex="1">
+										hflex="1" onSelect="@command('selectExpenseClass' , type=each)">
 										<template name="model" var="item">
 											<comboitem label="${item.name}"
 												style="@bind(item.sublevel eq 0 ? 'color:black;font-weight:bold;' : item.sublevel eq 1 ? 'text-indent:30px' : item.sublevel eq 2 ? 'text-indent:60px' : item.sublevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') ">

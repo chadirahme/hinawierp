@@ -42,7 +42,7 @@
 					</hbox>
 
 					<grid
-						form="@id('fx') @load(vm.objCash) @save(vm.objCash, before='addNewCashPayment') ">
+						form="@id('fx') @load(vm.objCash) @save(vm.objCash, before='addPurchaseRquest') ">
 						<columns>
 							<column width="120px"></column>
 							<column width="150px"></column>
@@ -104,10 +104,11 @@
 									</combobox>
 								</cell>
 								<cell>
-									<label value="Drop Ship To "></label>
+									<label value="Drop Ship To * "></label>
 								</cell>
 								<cell colspan="3">
-									<combobox autodrop="true" mold="rounded" buttonVisible="true" model="@load(vm.lstDropShipTo)" selectedItem="@bind(vm.selectedDropShipTo)" hflex="1" disabled="@bind(vm.transferedPO || vm.approveFlag)">
+									<combobox autodrop="true" mold="rounded" buttonVisible="true" model="@load(vm.lstDropShipTo)"
+											  selectedItem="@bind(vm.selectedDropShipTo)" hflex="1" disabled="@bind(vm.transferedPO || vm.approveFlag)">
 										<template name="model" var="option">
 											<comboitem label="@load(option.fullName)" description="@bind(option.listType)" />
 										</template>
@@ -138,7 +139,9 @@
 									<label value="Class"></label>
 								</cell>
 								<cell colspan="2">
-									<combobox model="@load(vm.lstClass)" selectedItem="@bind(vm.selectedLstClass)" onSelect="@command('selectedClass')" hflex="1" autodrop="true" mold="rounded" disabled="@bind(vm.transferedPO || vm.approveFlag)">
+									<combobox model="@load(vm.lstClass)" selectedItem="@bind(vm.selectedLstClass)"
+											  hflex="1"
+											  autodrop="true" mold="rounded" disabled="@bind(vm.transferedPO || vm.approveFlag)">
 										<template name="model" var="item">
 											<comboitem label="${item.name}"
 												style="@bind(item.sublevel eq 0 ? 'color:black;font-weight:bold;' : item.sublevel eq 1 ? 'text-indent:30px' : item.sublevel eq 2 ? 'text-indent:60px' : item.sublevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') " />
@@ -198,7 +201,8 @@
 											<image src="/images/edit.png" width="20px" height="20px" context="editCheckITemsPopup" onClick="openContexMenu(1)" />
 										</listcell>
 										<listcell>
-											<combobox autodrop="true" mold="rounded" model="@load(vm.lstGridQBItems)" selectedItem="@bind(each.selectedItem)" hflex="1" onSelect="@command('selectCheckItems' , type=each)" disabled="@bind(each.readOnly || vm.approveFlag)">
+											<combobox autodrop="true" mold="rounded" model="@load(vm.lstGridQBItems)" selectedItem="@bind(each.selectedItem)" hflex="1"
+													  onSelect="@command('selectCheckItems' , type=each)" disabled="@bind(each.readOnly || vm.approveFlag)">
 												<template name="model" var="item">
 													<comboitem label="${item.name}: ${item.listType}" description=" Description : ${item.salesDesc}"
 														style="@bind(item.subLevel eq 0 ? 'color:black;font-weight:bold;' : item.subLevel eq 1 ? 'text-indent:30px' : item.subLevel eq 2 ? 'text-indent:60px' : item.subLevel eq 3 ? 'text-indent:90px' : 'text-indent:120px') ">
@@ -248,10 +252,10 @@
 						<row>
 							 <cell align="center">
 							 <hlayout>
-									<a href="" style="color:blue;text-decoration:underline;" onClick="@command('goToRelatedReport')">Go To Item Purchase Order Report List</a>
-									<label value="" onClick="@command('goToRelatedReport')"></label>
-									<label value=""></label>
-									<label value=""></label>
+									<!--<a href="" style="color:blue;text-decoration:underline;" onClick="@command('goToRelatedReport')">Go To Item Purchase Order Report List</a>-->
+									<!--<label value="" onClick="@command('goToRelatedReport')"></label>-->
+									<!--<label value=""></label>-->
+									<!--<label value=""></label>-->
 								</hlayout> 
 							</cell> 
 							<cell align="right">

@@ -1,5 +1,6 @@
 package hba;
 
+import common.FormatDateText;
 import home.QuotationAttachmentModel;
 import hr.HRData;
 
@@ -401,13 +402,15 @@ public class PurchaseRequestViewModel
 
 	private void ClearData()
 	{
-		if(compSetup.getPvSerialNos().equals("S"))
-		{
-			refNUmber=data.GetSaleNumber(SerialFields.PurchaseRequest.toString());
-		}
-		else{
-			refNUmber=data.GetSerialNumber(SerialFields.PaymentSerial.toString());
-		}
+		refNUmber=data.GetSaleNumber(SerialFields.PurchaseRequest.toString());
+
+//		if(compSetup.getPvSerialNos().equals("S"))
+//		{
+//			refNUmber=data.GetSaleNumber(SerialFields.PurchaseRequest.toString());
+//		}
+//		else{
+//			refNUmber=data.GetSerialNumber(SerialFields.PaymentSerial.toString());
+//		}
 	}
 	private void getCompanyRolePermessions(int companyRoleId,int parentId)
 	{
@@ -456,7 +459,8 @@ public class PurchaseRequestViewModel
 			selectedRow.setSelectedItem(selectedItem);
 			if(selectedRow.getSelectedItem()!=null)
 			{
-				boolean hasSubAccount=selectedRow.getSelectedItem().getSubItemsCount()>0;//data.checkIfItemHasSubQuery(selectedRow.getSelectedItem().getName()+":");
+				boolean hasSubAccount=data.checkIfItemHasSubQuery(selectedRow.getSelectedItem().getName()+":");
+				//boolean hasSubAccount=selectedRow.getSelectedItem().getSubItemsCount()>0;//data.checkIfItemHasSubQuery(selectedRow.getSelectedItem().getName()+":");
 				if(hasSubAccount)
 				{
 					if(compSetup.getPostOnMainClass().equals("Y"))
@@ -823,22 +827,35 @@ public class PurchaseRequestViewModel
 	{
 		boolean isValid=true;
 
+		if(compSetup.getClosingDate()!=null){
+			if(creationdate.compareTo(compSetup.getClosingDate())<=0){
+				Messagebox.show("Purchase Date must be Higher than the QuickBooks Closing Date.!","Purchase Request",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
+		if(compSetup.getDontSaveWithOutMemo().equals("Y")){
+			if(FormatDateText.isEmpty(getMemo())){
+				Messagebox.show("You must fill the transaction Memo according to company settings!","Purchase Request",Messagebox.OK,Messagebox.INFORMATION);
+				return false;
+			}
+		}
+
 		/*	if(selectedAccount==null)
 		{		
 			Messagebox.show("You Must Assign an A/P Account For This Transaction!","Item Receipt",Messagebox.OK,Messagebox.INFORMATION);
 			return false;
 		}*/
-		/*if(selectedPaytoOrder==null)
-		{		
-			Messagebox.show("You Must Select A 'Vendor ' !!!","Item Receipt",Messagebox.OK,Messagebox.INFORMATION);
+		if(selectedPaytoOrder==null || selectedPaytoOrder.getRecNo()==0)
+		{
+			Messagebox.show("You Must Select A 'Vendor ' !!!","Purchase Request",Messagebox.OK,Messagebox.INFORMATION);
 			return false;
 		}
-
-		if(selectedPaytoOrder.getRecNo()==0)
-		{			
-			Messagebox.show("Select An Existing 'Vendor' !!!","Item Receipt",Messagebox.OK,Messagebox.INFORMATION);
+		if(selectedDropShipTo==null || selectedDropShipTo.getRecNo()==0)
+		{
+			Messagebox.show("You Must Select the Drop Ship to !!!","Purchase Request",Messagebox.OK,Messagebox.INFORMATION);
 			return false;
-		}*/
+		}
 
 		/*if(selectedDropShipTo==null)
 		{		
@@ -984,7 +1001,7 @@ public class PurchaseRequestViewModel
 			{
 				if(purchaseRequestKey==0)//Only on create
 				{
-					data.ConfigSerialNumberCashInvoice(SerialFields.PurchaseRequest, obj.getRefNUmber(),0);
+					data.ConfigSerialNumberPurchaseRequest(SerialFields.PurchaseRequest, obj.getRefNUmber(),0);
 				}
 				data.deleteGridDataPurchaseRequest(tmpRecNo);
 				for (PurchaseRequestGridData item : lstCheckItems) 
@@ -1053,9 +1070,56 @@ public class PurchaseRequestViewModel
 		return selectedLstClass;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@NotifyChange({ "selectedLstClass" })
 	public void setSelectedLstClass(ClassModel selectedLstClass) {
 		this.selectedLstClass = selectedLstClass;
+		if(selectedLstClass!=null)
+		{
+			if (selectedLstClass.getClass_Key() == 0)
+				return;
+
+			//check if class has sub class
+			boolean hasSubAccount=data.checkIfClassHasSub(selectedLstClass.getName()+":");
+			if(hasSubAccount)
+			{
+				if(compSetup.getPostOnMainClass().equals("Y"))
+				{
+					Messagebox.show("Selected Class have Sub Class(s). Do you want to continue?","Class", Messagebox.YES | Messagebox.NO  , Messagebox.QUESTION,
+							new org.zkoss.zk.ui.event.EventListener() {
+								public void onEvent(Event evt) throws InterruptedException {
+									if (evt.getName().equals("onYes"))
+									{
+									}
+									else
+									{
+//										Map args = new HashMap();
+//										args.put("result", "1");
+//										BindUtils.postGlobalCommand(null, null, "resetGrid", args);
+										setSelectedLstClass(lstClass.get(0));
+										BindUtils.postNotifyChange(null, null, PurchaseRequestViewModel.this, "selectedLstClass");
+									}
+								}
+
+							});
+				}
+				else
+
+				{
+					Messagebox.show("Selected Class have sub Class(s). You cannot continue!","Class", Messagebox.OK , Messagebox.INFORMATION);
+					//selectedLstClass=null;
+					setSelectedLstClass(lstClass.get(0));
+					//BindUtils.postNotifyChange(null, null, PurchaseRequestViewModel.this, "selectedLstClass");
+				}
+			}
+		}
+		else
+		{
+			Messagebox.show("Invalid Class Name !!","Class",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedLstClass(lstClass.get(0));
+		}
 	}
+
 
 	public List <QbListsModel> getLstPayToOrder() {
 		return lstPayToOrder;
@@ -1069,15 +1133,19 @@ public class PurchaseRequestViewModel
 		return selectedPaytoOrder;
 	}
 
-	@NotifyChange({"address"})
+	@NotifyChange({"address","selectedPaytoOrder"})
 	public void setSelectedPaytoOrder(QbListsModel selectedPaytoOrder) 
 	{
 		this.selectedPaytoOrder = selectedPaytoOrder;
-		if (selectedPaytoOrder != null && selectedPaytoOrder.getRecNo()>0)
+		address="";
+		if (selectedPaytoOrder != null)
 		{
+			if (selectedPaytoOrder.getRecNo() == 0)
+				return;
+
 			PayToOrderModel obj=data.getPayToOrderInfo(selectedPaytoOrder.getListType(), selectedPaytoOrder.getRecNo());		
 			//String address="";
-			address="";
+
 			if(obj.getBillAddress1().length()>0)			
 				address=obj.getBillAddress1();		
 			if(obj.getBillAddress2().length()>0)
@@ -1099,7 +1167,8 @@ public class PurchaseRequestViewModel
 		}
 		else
 		{
-			Messagebox.show("Invalid Name !!","Purchase Request",Messagebox.OK,Messagebox.INFORMATION);
+			Messagebox.show("Invalid Vendor Name !!","Purchase Request",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedPaytoOrder(lstPayToOrder.get(0));
 		}
 	}
 
@@ -1630,11 +1699,15 @@ public class PurchaseRequestViewModel
 		return selectedDropShipTo;
 	}
 
-	@NotifyChange({"shipTo"})
+	@NotifyChange({"shipTo","selectedDropShipTo"})
 	public void setSelectedDropShipTo(QbListsModel selectedDropShipTo) {
 		this.selectedDropShipTo = selectedDropShipTo;
+		shipTo="";
 		if(selectedDropShipTo!=null)
 		{
+			if(selectedDropShipTo.getRecNo()==0)
+				return;
+
 			PayToOrderModel obj=data.getPayToOrderInfo(selectedDropShipTo.getListType(), selectedDropShipTo.getRecNo());		
 			String address="";	
 
@@ -1658,7 +1731,8 @@ public class PurchaseRequestViewModel
 		}
 		else
 		{
-			Messagebox.show("Invlaid Name.");			
+			Messagebox.show("Invalid Drop Ship To Name !!","Purchase Request",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedDropShipTo(lstDropShipTo.get(0));
 		}
 	}
 
