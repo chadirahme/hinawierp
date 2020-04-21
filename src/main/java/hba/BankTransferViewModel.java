@@ -607,12 +607,16 @@ public class BankTransferViewModel
 	}
 
 	@SuppressWarnings("unused")
-	@NotifyChange({"objBank","lstVendorFAItems"})
+	@NotifyChange({"objBank","lstVendorFAItems","selectedPaytoOrder"})
 	public void setSelectedPaytoOrder(QbListsModel selectedPaytoOrder) 
 	{
 		this.selectedPaytoOrder = selectedPaytoOrder;
-		if(selectedPaytoOrder!=null && selectedPaytoOrder.getRecNo()>0)
+		objBank.setToActName("");
+		if(selectedPaytoOrder!=null)
 		{
+			if (selectedPaytoOrder.getRecNo() == 0)
+				return;
+
 			PayToOrderModel obj=data.getPayToOrderInfo(selectedPaytoOrder.getListType(), selectedPaytoOrder.getRecNo());		
 			objBank.setToActName(selectedPaytoOrder.getFullName());
 
@@ -623,6 +627,7 @@ public class BankTransferViewModel
 		else
 		{
 			Messagebox.show("Invalid Name !!","Bank Transfer",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedPaytoOrder(lstPayToOrder.get(0));
 		}
 	}
 
@@ -634,6 +639,10 @@ public class BankTransferViewModel
 		int count=0;
 		if(type.getSelectedAccount()!=null)
 		{
+			if (type.getSelectedAccount().getRec_No() == 0) {
+				return;
+			}
+
 			if(type.getSelectedAccount().getAccountType().equals("AccountsReceivable") || type.getSelectedAccount().getAccountType().equals("AccountsPayable"))
 			{
 				for (ExpensesModel item : lstExpenses) 
@@ -724,6 +733,11 @@ public class BankTransferViewModel
 			}					
 
 		}
+		else
+		{
+			Messagebox.show("Invalid Account Name !!","Bank Transfer",Messagebox.OK,Messagebox.INFORMATION);
+			type.setSelectedAccount(null);
+		}
 	}
 
 	@Command
@@ -754,6 +768,10 @@ public class BankTransferViewModel
 	{
 		if(type.getSelectedClass()!=null)
 		{
+			if(type.getSelectedClass().getClass_Key()==0){
+				return;
+			}
+
 			//check if account has sub account		
 			boolean hasSubAccount=data.checkIfClassHasSub(type.getSelectedClass().getName()+":");
 			if(hasSubAccount)
@@ -795,6 +813,11 @@ public class BankTransferViewModel
 									"lstExpenses");
 				}	
 			}
+		}
+		else
+		{
+			Messagebox.show("Invalid Class Name !!","Bank Transfer",Messagebox.OK,Messagebox.INFORMATION);
+			type.setSelectedClass(null);
 		}
 	}
 
@@ -1768,6 +1791,9 @@ public class BankTransferViewModel
 	public void setSelectedAccount(AccountsModel selectedAccount) {
 		this.selectedAccount = selectedAccount;
 		if(selectedAccount!=null) {
+			if (selectedAccount.getRec_No() == 0)
+				return;
+
 			boolean hasSubAccount = data.checkIfBankAccountsHasSub(selectedAccount.getFullName() + ":");
 			if (hasSubAccount) {
 				if (compSetup.getPostOnMainAccount().equals("Y")) {
@@ -1782,7 +1808,7 @@ public class BankTransferViewModel
 												throws InterruptedException {
 											if (evt.getName().equals("onYes")) {
 											} else {
-												setSelectedAccount(null);
+												setSelectedAccount(lstaccounts.get(0));
 												BindUtils
 														.postNotifyChange(
 																null,
@@ -1800,12 +1826,15 @@ public class BankTransferViewModel
 							.show("Selected account have sub accounts. You cannot continue !!",
 									"Bank Transfer", Messagebox.OK,
 									Messagebox.INFORMATION);
-					setSelectedAccount(null);
-					BindUtils.postNotifyChange(null, null,
-							BankTransferViewModel.this, "selectedAccount");
+					setSelectedAccount(lstaccounts.get(0));
 					return;
 				}
 			}
+		}
+		else
+		{
+			Messagebox.show("Invalid Account Name !!","Bank Transfer",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedAccount(lstaccounts.get(0));
 		}
 	}
 	public List<QbListsModel> getLstPayToOrder() {

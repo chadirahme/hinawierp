@@ -80,7 +80,6 @@
 									</cell>
 									<cell colspan="2">
 										<combobox model="@load(vm.lstaccounts)" selectedItem="@bind(vm.selectedAccount)"
-												  onSelect="@command('selectMainAccount' , type=vm.selectedAccount)"
 											hflex="1" autodrop="true" mold="rounded">
 											<template name="model" var="item">
 												<comboitem label="${item.accountName} : ${item.accountType}"
@@ -237,7 +236,8 @@
 											<listcell>
 												<combobox autodrop="true" mold="rounded"
 													model="@load(vm.lstGridBankAccounts) " selectedItem="@bind(each.selectedAccount)"
-													hflex="1" onSelect="@command('selectExpenseAccount' , type=each)">
+														  onBlur="@command('selectExpenseAccount' , type=each)"
+													hflex="1" >
 
 													<template name="model" var="itemx">
 														<comboitem label="${itemx.accountName} : ${itemx.accountType}"
@@ -280,7 +280,7 @@
 											<listcell>
 												<combobox autodrop="true" mold="rounded"
 													model="@load(vm.lstGridClass)" selectedItem="@bind(each.selectedClass)"
-													hflex="1" onSelect="@command('selectExpenseClass' , type=each)">
+													hflex="1" onBlur="@command('selectExpenseClass' , type=each)">
 
 													<template name="model" var="item">
 														<comboitem label="${item.name}"

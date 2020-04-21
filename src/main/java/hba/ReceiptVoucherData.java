@@ -83,12 +83,17 @@ public class ReceiptVoucherData {
 		
 		ReceiptVoucherQuerries query=new ReceiptVoucherQuerries();
 		ResultSet rs = null;
+		QbListsModel obj=new QbListsModel();
+		obj.setRecNo(0);
+		obj.setName("--Select--");
+		obj.setFullName("--Select--");
+		lst.add(obj);
 		try 
 		{
 			rs=db.executeNonQuery(query.getRiceivedFrom());
 			while(rs.next())
 			{
-				QbListsModel obj=new QbListsModel();
+				obj=new QbListsModel();
 				obj.setRecNo(rs.getInt("RecNo"));
 				obj.setName(rs.getString("Name"));
 				obj.setListID(rs.getString("ListID"));
@@ -202,12 +207,18 @@ public class ReceiptVoucherData {
 		List<AccountsModel> lst=new ArrayList<AccountsModel>();
 		ReceiptVoucherQuerries query=new ReceiptVoucherQuerries();
 		ResultSet rs = null;
+		AccountsModel obj=new AccountsModel();
+		obj.setRec_No(0);
+		obj.setAccountName("--Select--");
+		obj.setFullName("--Select--");
+		obj.setAccountType("");
+		lst.add(obj);
 		try 
 		{
 			rs=db.executeNonQuery(query.getAccountCr());
 			while(rs.next())
 			{
-				AccountsModel obj=new AccountsModel();
+				obj=new AccountsModel();
 			//	obj.setsRL_No(rs.getInt("SRL_No"));
 				obj.setAccountName(rs.getString("Name"));
 				obj.setAccountType(rs.getString("AccountType"));

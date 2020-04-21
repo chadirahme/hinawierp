@@ -1124,6 +1124,11 @@ public class EditReceiptVoucher {
 		if (type != null) {
 			if (parm.equals("dpst")) {
 
+				if(type.getSeletedDepositeTo()==null){
+					Messagebox.show("Invalid Account Name !!","Receipt Voucher",Messagebox.OK,Messagebox.INFORMATION);
+					type.setSeletedDepositeTo(null);
+					return;
+				}
 				if (selectedPostToQbBy != null
 						&& !"".equalsIgnoreCase(selectedPostToQbBy)
 						&& selectedPostToQbBy.equalsIgnoreCase("Receipt Voucher")
@@ -1219,6 +1224,12 @@ public class EditReceiptVoucher {
 			}
 
 			if (parm.equals("class")) {
+
+				if(type.getSelectedClass()==null){
+					Messagebox.show("Invalid Class Name !!","Receipt Voucher",Messagebox.OK,Messagebox.INFORMATION);
+					type.setSelectedClass(null);
+					return;
+				}
 
 				if (type.getSelectedClass() != null) {
 					// check if account has sub account
@@ -2129,12 +2140,16 @@ public class EditReceiptVoucher {
 		return selectedReceivedFrom;
 	}
 
-	@NotifyChange({ "printOnReciptVoucher", "selectedPostToQbBy",
-	"customerBalance" })
+	@NotifyChange({ "printOnReciptVoucher", "selectedPostToQbBy", "customerBalance" ,"selectedReceivedFrom"})
 	public void setSelectedReceivedFrom(QbListsModel selectedReceivedFrom) {
 		this.selectedReceivedFrom = selectedReceivedFrom;
-
+		printOnReciptVoucher="";
+		customerBalance = 0.0;
 		if (null != selectedReceivedFrom) {
+
+			if (selectedReceivedFrom.getRecNo() == 0)
+				return;
+
 			if (selectedReceivedFrom.getListType().equalsIgnoreCase("Customer")) {
 				VendorModel model = dataRV
 						.getForPrintOnReceiptCustomer(selectedReceivedFrom
@@ -2174,6 +2189,11 @@ public class EditReceiptVoucher {
 				}
 			}
 
+		}
+		else
+		{
+			Messagebox.show("Invalid Name !!","Receipt Voucher",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedReceivedFrom(lstReceivedFrom.get(0));
 		}
 
 	}
@@ -2219,8 +2239,62 @@ public class EditReceiptVoucher {
 		return selectedAccountCr;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@NotifyChange({ "selectedPostToQbBy", "selectedAccountCr", "lstAccountCr", "makeAsDeferedIncomeVisible" })
 	public void setSelectedAccountCr(AccountsModel selectedAccountCr) {
 		this.selectedAccountCr = selectedAccountCr;
+		if(selectedAccountCr!=null) {
+			if (selectedAccountCr.getRec_No() == 0)
+				return;
+
+				boolean hasSubAccount = data.checkIfBankAccountsHasSub(selectedAccountCr.getFullName() + ":");
+				if (hasSubAccount) {
+					if (compSetup.getPostOnMainAccount().equals("Y")) {
+
+						Messagebox
+								.show("Selected account have sub accounts. Do you want to continue?",
+										"Receipt Voucher", Messagebox.YES | Messagebox.NO,
+										Messagebox.QUESTION,
+										new org.zkoss.zk.ui.event.EventListener() {
+
+											public void onEvent(Event evt)
+													throws InterruptedException {
+												if (evt.getName().equals("onYes")) {
+													continueOnselectOfAccountCr();
+												} else {
+													setSelectedAccountCr(lstAccountCr.get(0));
+													BindUtils
+															.postNotifyChange(
+																	null,
+																	null,
+																	EditReceiptVoucher.this,
+																	"selectedAccountCr");
+													return;
+												}
+											}
+
+										});
+
+					} else {
+						Messagebox
+								.show("Selected account have sub accounts. You cannot continue !!",
+										"Account", Messagebox.OK,
+										Messagebox.INFORMATION);
+						setSelectedAccountCr(lstAccountCr.get(0));
+						return;
+					}
+				}else {
+					continueOnselectOfAccountCr();
+				}
+
+
+		}
+		else
+		{
+			Messagebox.show("Select An Existing Cr. Account!!!",
+					"Receipt Voucher", Messagebox.OK, Messagebox.INFORMATION);
+			setSelectedAccountCr(lstAccountCr.get(0));
+		}
 
 	}
 
@@ -2284,6 +2358,9 @@ public class EditReceiptVoucher {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void continueOnselectOfAccountCr() {
+		if(selectedReceivedFrom == null || selectedReceivedFrom.getRecNo()==0)
+			return;
+
 		if (selectedAccountCr != null && selectedReceivedFrom != null) {
 			if (selectedPostToQbBy != null && selectedAccountCr != null) {
 

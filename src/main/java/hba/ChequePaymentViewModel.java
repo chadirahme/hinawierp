@@ -1091,6 +1091,10 @@ public class ChequePaymentViewModel
 		try {
 			int count = 0;
 			if (type.getSelectedAccount() != null) {
+
+				if (type.getSelectedAccount().getRec_No() == 0) {
+					return;
+				}
 				if (type.getSelectedAccount().getAccountType().equals("AccountsReceivable") || type.getSelectedAccount().getAccountType().equals("AccountsPayable")) {
 					for (ExpensesModel item : lstExpenses) {
 						if (item.getSelectedAccount() != null) {
@@ -1161,6 +1165,11 @@ public class ChequePaymentViewModel
 					type.setBillableChked(false);
 					//make hide
 				}
+			}
+			else
+			{
+				Messagebox.show("Invalid Account Name !!","Cheque Payment",Messagebox.OK,Messagebox.INFORMATION);
+				type.setSelectedAccount(null);
 			}
 		}
 		catch (Exception ex)
@@ -1248,6 +1257,10 @@ public class ChequePaymentViewModel
 	{
 		if(type.getSelectedClass()!=null)
 		{
+			if(type.getSelectedClass().getClass_Key()==0){
+				return;
+			}
+
 			//check if account has sub account		
 			boolean hasSubAccount=data.checkIfClassHasSub(type.getSelectedClass().getName()+":");
 			if(hasSubAccount)
@@ -1277,6 +1290,10 @@ public class ChequePaymentViewModel
 					type.setSelectedClass(null);						
 				}	
 			}
+		}else
+		{
+			Messagebox.show("Invalid Class Name !!","Cheque Payment",Messagebox.OK,Messagebox.INFORMATION);
+			type.setSelectedClass(null);
 		}
 	}
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -1950,13 +1967,10 @@ public class ChequePaymentViewModel
 	public void setSelectedAccount(AccountsModel selectedAccount) 
 	{	
 		this.selectedAccount = selectedAccount;
-		if (selectedAccount == null || selectedAccount.getRec_No()==0) {
-			Messagebox.show("Select An Existing Bank Account!!!",
-					"Cheque payment", Messagebox.OK, Messagebox.INFORMATION);
-			selectedAccount=null;
-		}
+		if (selectedAccount != null) {
+			if (selectedAccount.getRec_No() == 0)
+				return;
 
-		if(selectedAccount!=null) {
 			boolean hasSubAccount = data.checkIfBankAccountsHasSub(selectedAccount.getFullName() + ":");
 			if (hasSubAccount) {
 				if (compSetup.getPostOnMainAccount().equals("Y")) {
@@ -1971,7 +1985,7 @@ public class ChequePaymentViewModel
 												throws InterruptedException {
 											if (evt.getName().equals("onYes")) {
 											} else {
-												setSelectedAccount(null);
+												setSelectedAccount(lstaccounts.get(0));
 												BindUtils
 														.postNotifyChange(
 																null,
@@ -1989,15 +2003,21 @@ public class ChequePaymentViewModel
 							.show("Selected account have sub accounts. You cannot continue !!",
 									"Account", Messagebox.OK,
 									Messagebox.INFORMATION);
-					setSelectedAccount(null);
-					BindUtils.postNotifyChange(null, null,
-							ChequePaymentViewModel.this, "selectedAccount");
+					setSelectedAccount(lstaccounts.get(0));
 					return;
 				}
 			}
+
+
+		}
+		else
+		{
+			Messagebox.show("Select An Existing Bank Account!!!",
+					"Cheque payment", Messagebox.OK, Messagebox.INFORMATION);
+			setSelectedAccount(lstaccounts.get(0));
 		}
 
-		if(selectedAccount!=null)
+		if(selectedAccount!=null && selectedAccount.getRec_No() > 0)
 			showBankAccount=selectedAccount.getAccountType().equals("Post Dated Cheque");
 	}
 
@@ -2036,18 +2056,24 @@ public class ChequePaymentViewModel
 		return selectedBuilding;
 	}
 
-	@NotifyChange({"lstFlat"})
+	@NotifyChange({"lstFlat","selectedBuilding"})
 	public void setSelectedBuilding(ClassModel selectedBuilding) 
 	{
-		if(selectedBuilding!=null){
-			if(!selectedBuilding.getName().equals(""))
-			{
-				lstFlat=data.fillFlatList("F", selectedBuilding.getName());
+		this.selectedBuilding = selectedBuilding;
+		lstFlat=new ArrayList<ClassModel>();
+
+		if (selectedBuilding != null) {
+			if (selectedBuilding.getClass_Key() == 0)
+				return;
+
+			if (!selectedBuilding.getName().equals("")) {
+				lstFlat = data.fillFlatList("F", selectedBuilding.getName());
 			}
+		} else {
+			Messagebox.show("Invalid Building Name !!","Cheque payment",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedBuilding(lstBuilding.get(0));
 		}
-		else{
-			Messagebox.show("Invlaid Building.");	
-		}
+
 	}
 
 
@@ -2110,13 +2136,18 @@ public class ChequePaymentViewModel
 		return selectedPaytoOrder;
 	}
 
-	@NotifyChange({"objCheque","lstVendorFAItems","payToOrderAddress"})
+	@NotifyChange({"objCheque","lstVendorFAItems","payToOrderAddress","selectedPaytoOrder"})
 	public void setSelectedPaytoOrder(QbListsModel selectedPaytoOrder) 
 	{
 		this.selectedPaytoOrder = selectedPaytoOrder;
 		payToOrderAddress = "";
-		if(selectedPaytoOrder!=null && selectedPaytoOrder.getRecNo()>0)
+		objCheque.setPrintName("");
+		objCheque.setAddress("");
+		if(selectedPaytoOrder!=null)
 		{
+			if (selectedPaytoOrder.getRecNo() == 0)
+				return;
+
 			PayToOrderModel obj=data.getPayToOrderInfo(selectedPaytoOrder.getListType(), selectedPaytoOrder.getRecNo());
 			objCheque.setPrintName(obj.getName());
 			if(selectedPaytoOrder.getListType().equals("Employee") || selectedPaytoOrder.getListType().equals("Vendor") || selectedPaytoOrder.getListType().equals("Customer"))
@@ -2149,6 +2180,7 @@ public class ChequePaymentViewModel
 		else
 		{
 			Messagebox.show("Invalid Name !!","Cheque payment",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedPaytoOrder(lstPayToOrder.get(0));
 		}
 	}
 
@@ -2224,6 +2256,10 @@ public class ChequePaymentViewModel
 		this.selectedBankAccount = selectedBankAccount;
 
 		if(selectedBankAccount!=null) {
+
+			if (selectedBankAccount.getRec_No() == 0)
+				return;
+
 			boolean hasSubAccount = data.checkIfBankAccountsHasSub(selectedBankAccount.getFullName() + ":");
 			if (hasSubAccount) {
 				if (compSetup.getPostOnMainAccount().equals("Y")) {
@@ -2238,7 +2274,7 @@ public class ChequePaymentViewModel
 												throws InterruptedException {
 											if (evt.getName().equals("onYes")) {
 											} else {
-												setSelectedBankAccount(null);
+												setSelectedBankAccount(lstBankAccounts.get(0));
 												BindUtils
 														.postNotifyChange(
 																null,
@@ -2256,13 +2292,17 @@ public class ChequePaymentViewModel
 							.show("Selected bank account have sub accounts. You cannot continue !!",
 									"Account", Messagebox.OK,
 									Messagebox.INFORMATION);
-					setSelectedBankAccount(null);
-					BindUtils.postNotifyChange(null, null,
-							ChequePaymentViewModel.this, "selectedBankAccount");
+					setSelectedBankAccount(lstBankAccounts.get(0));
 					return;
 				}
 			}
 		}
+		else
+		{
+			Messagebox.show("Invalid Bank Account Name !!","Cheque payment",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedBankAccount(lstBankAccounts.get(0));
+		}
+
 
 	}
 	public BanksModel getSelectedBanks() {

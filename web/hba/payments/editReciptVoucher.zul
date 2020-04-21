@@ -47,7 +47,7 @@
 					</caption>
 					<panelchildren>
 						<grid
-							form="@id('fx') @load(vm.objReceiptVoucher) @save(vm.objReceiptVoucher, before='addNewCashInvoice') ">
+							form="@id('fx') @load(vm.objReceiptVoucher) @save(vm.objReceiptVoucher, before='addNewReceiptVoucher') ">
 							<columns>
 								<column width="100px"></column>
 								<column width="150px"></column>
@@ -133,7 +133,7 @@
 									</cell>
 									<cell colspan="2" valign="center">
 										<vlayout>
-											<combobox autodrop="true" mold="rounded" hflex="1"  onSelect="@command('onselectOfAccountCr')"
+											<combobox autodrop="true" mold="rounded" hflex="1"
 												buttonVisible="true" model="@load(vm.lstAccountCr)"
 												selectedItem="@bind(vm.selectedAccountCr)">
 												<template name="model" var="item">
@@ -263,7 +263,8 @@
 								</listcell>
 								<listcell>
 									<combobox autodrop="true" mold="rounded"
-										buttonVisible="true" selectedItem="@bind(each.seletedDepositeTo)" onChange="@command('receiptVoucherGridAjax' , type=each ,parm='dpst')"
+										buttonVisible="true" selectedItem="@bind(each.seletedDepositeTo)"
+											  onChange="@command('receiptVoucherGridAjax' , type=each ,parm='dpst')"
 										model="@load(vm.lstDepositeTo)" hflex="1">
 										<template name="model" var="item">
 											<comboitem label="${item.accountName}" description="@bind(item.accountType)"

@@ -484,50 +484,50 @@ public class CashPaymentViewModel {
 	}
 
 	/********* Contorl Events ********************/
-	@Command
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@NotifyChange({ "selectedAccount" })
-	public void selectMainAccount(@BindingParam("type") final AccountsModel type){
-		boolean hasSubAccount = data.checkIfBankAccountsHasSub(type.getFullName() + ":");
-		if (hasSubAccount) {
-			if (compSetup.getPostOnMainAccount().equals("Y")) {
-
-				Messagebox
-						.show("Selected account have sub accounts. Do you want to continue?",
-								"Account", Messagebox.YES | Messagebox.NO,
-								Messagebox.QUESTION,
-								new org.zkoss.zk.ui.event.EventListener() {
-
-									public void onEvent(Event evt)
-											throws InterruptedException {
-										if (evt.getName().equals("onYes")) {
-										} else {
-											setSelectedAccount(null);
-											BindUtils
-													.postNotifyChange(
-															null,
-															null,
-															CashPaymentViewModel.this,
-															"selectedAccount");
-											return;
-										}
-									}
-
-								});
-
-			} else {
-				Messagebox
-						.show("Selected account have sub accounts. You cannot continue !!",
-								"Account", Messagebox.OK,
-								Messagebox.INFORMATION);
-				setSelectedAccount(null);
-				BindUtils.postNotifyChange(null, null,
-						CashPaymentViewModel.this, "selectedAccount");
-				return;
-			}
-		}
-
-	}
+//	@Command
+//	@SuppressWarnings({ "unchecked", "rawtypes" })
+//	@NotifyChange({ "selectedAccount" })
+//	public void selectMainAccount(@BindingParam("type") final AccountsModel type){
+//		boolean hasSubAccount = data.checkIfBankAccountsHasSub(type.getFullName() + ":");
+//		if (hasSubAccount) {
+//			if (compSetup.getPostOnMainAccount().equals("Y")) {
+//
+//				Messagebox
+//						.show("Selected account have sub accounts. Do you want to continue?",
+//								"Account", Messagebox.YES | Messagebox.NO,
+//								Messagebox.QUESTION,
+//								new org.zkoss.zk.ui.event.EventListener() {
+//
+//									public void onEvent(Event evt)
+//											throws InterruptedException {
+//										if (evt.getName().equals("onYes")) {
+//										} else {
+//											setSelectedAccount(null);
+//											BindUtils
+//													.postNotifyChange(
+//															null,
+//															null,
+//															CashPaymentViewModel.this,
+//															"selectedAccount");
+//											return;
+//										}
+//									}
+//
+//								});
+//
+//			} else {
+//				Messagebox
+//						.show("Selected account have sub accounts. You cannot continue !!",
+//								"Account", Messagebox.OK,
+//								Messagebox.INFORMATION);
+//				setSelectedAccount(null);
+//				BindUtils.postNotifyChange(null, null,
+//						CashPaymentViewModel.this, "selectedAccount");
+//				return;
+//			}
+//		}
+//
+//	}
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Command
 	@NotifyChange({ "totalAmount", "lblExpenses", "lstExpenses" })
@@ -535,6 +535,9 @@ public class CashPaymentViewModel {
 			@BindingParam("type") final ExpensesModel type) {
 		int count = 0;
 		if (type.getSelectedAccount() != null) {
+			if (type.getSelectedAccount().getRec_No() == 0) {
+				return;
+			}
 			if (type.getSelectedAccount().getAccountType()
 					.equals("AccountsReceivable")
 					|| type.getSelectedAccount().getAccountType()
@@ -663,6 +666,11 @@ public class CashPaymentViewModel {
 			}
 
 		}
+		else
+		{
+			Messagebox.show("Invalid Account Name !!","Cash Payment",Messagebox.OK,Messagebox.INFORMATION);
+			type.setSelectedAccount(null);
+		}
 	}
 
 	@Command
@@ -687,9 +695,11 @@ public class CashPaymentViewModel {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Command
 	@NotifyChange({ "lstExpenses" })
-	public void selectExpenseClass(
-			@BindingParam("type") final ExpensesModel type) {
+	public void selectExpenseClass(@BindingParam("type") final ExpensesModel type) {
 		if (type.getSelectedClass() != null) {
+			if(type.getSelectedClass().getClass_Key()==0){
+				return;
+			}
 			// check if account has sub account
 			boolean hasSubAccount = data.checkIfClassHasSub(type
 					.getSelectedClass().getName() + ":");
@@ -731,6 +741,11 @@ public class CashPaymentViewModel {
 							CashPaymentViewModel.this, "lstExpenses");
 				}
 			}
+		}
+		else
+		{
+			Messagebox.show("Invalid Class Name !!","Cash Payment",Messagebox.OK,Messagebox.INFORMATION);
+			type.setSelectedClass(null);
 		}
 	}
 
@@ -1213,7 +1228,7 @@ public class CashPaymentViewModel {
 					|| lastItem.getSelectedAccount().getRec_No() == 0) {
 				Messagebox
 				.show("To add new record,First select Account from the existing record!",
-						"Bill", Messagebox.OK, Messagebox.INFORMATION);
+						"Cash payment", Messagebox.OK, Messagebox.INFORMATION);
 			} else {
 				ExpensesModel objExp = new ExpensesModel();
 				objExp.setSrNO(lstExpenses.size() + 1);
@@ -1322,7 +1337,7 @@ public class CashPaymentViewModel {
 					|| lastItem.getSelectedItems().getRecNo() == 0) {
 				Messagebox
 				.show("To add new record,First select Item from the existing record!",
-						"Bill", Messagebox.OK, Messagebox.INFORMATION);
+						"Cash payment", Messagebox.OK, Messagebox.INFORMATION);
 			} else {
 				CheckItemsModel objExp = new CheckItemsModel();
 				objExp.setLineNo(lstCheckItems.size() + 1);
@@ -1553,7 +1568,7 @@ public class CashPaymentViewModel {
 				&& lstCheckFAItems == null) {
 			Messagebox
 			.show("Please enter the data in the at least one tab of data in the grid ",
-					"Bill", Messagebox.OK, Messagebox.INFORMATION);
+					"Cash payment", Messagebox.OK, Messagebox.INFORMATION);
 			return false;
 		}
 
@@ -1567,7 +1582,7 @@ public class CashPaymentViewModel {
 					&& chekItems.getSelectedItems() == null) {
 				Messagebox
 				.show("Please enter the data in the at least one tab of data in the grid ",
-						"Bill", Messagebox.OK, Messagebox.INFORMATION);
+						"Cash payment", Messagebox.OK, Messagebox.INFORMATION);
 				return false;
 			}
 
@@ -1590,7 +1605,7 @@ public class CashPaymentViewModel {
 											.getRecNo() == 0))) {
 						Messagebox
 						.show("Since Item Type is Inventory Please select Site Name for the existing record in the Items Tab!",
-								"Bill", Messagebox.OK,
+								"Cash payment", Messagebox.OK,
 								Messagebox.INFORMATION);
 						return false;
 					}
@@ -1616,7 +1631,7 @@ public class CashPaymentViewModel {
 					if (objExp.getQuantity() == 0) {
 						Messagebox
 						.show("Please Enter The Quantity,Empty Transaction is not allowed !!!",
-								"Bill", Messagebox.OK,
+								"Cash payment", Messagebox.OK,
 								Messagebox.INFORMATION);
 						return false;
 					}
@@ -1626,7 +1641,7 @@ public class CashPaymentViewModel {
 			if (siteValidation) {
 				Messagebox
 				.show("To Save this record,First select Site Name from the existing records in the Items Tab!",
-						"Bill", Messagebox.OK, Messagebox.INFORMATION);
+						"Cash payment", Messagebox.OK, Messagebox.INFORMATION);
 				return false;
 			}
 
@@ -1639,7 +1654,7 @@ public class CashPaymentViewModel {
 					if (lastItem.getAmount() == 0) {
 						Messagebox.show(
 								"Enter NetAmount in the Expense Tab!!!",
-								"Bill", Messagebox.OK, Messagebox.INFORMATION);
+								"Cash payment", Messagebox.OK, Messagebox.INFORMATION);
 						return false;
 					}
 				}
@@ -1875,13 +1890,57 @@ public class CashPaymentViewModel {
 		return selectedAccount;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@NotifyChange({ "selectedAccount", "objCash" })
 	public void setSelectedAccount(AccountsModel selectedAccount) {
 		this.selectedAccount = selectedAccount;
-		if (selectedAccount == null || selectedAccount.getRec_No()==0) {
-			Messagebox.show("Select An Existing Bank Account!!!",
-					"Cash payment", Messagebox.OK, Messagebox.INFORMATION);
-			selectedAccount=null;
+
+		if (selectedAccount != null) {
+			if (selectedAccount.getRec_No() == 0)
+				return;
+
+			boolean hasSubAccount = data.checkIfBankAccountsHasSub(selectedAccount.getFullName() + ":");
+			if (hasSubAccount) {
+				if (compSetup.getPostOnMainAccount().equals("Y")) {
+
+					Messagebox
+							.show("Selected account have sub accounts. Do you want to continue?",
+									"Account", Messagebox.YES | Messagebox.NO,
+									Messagebox.QUESTION,
+									new org.zkoss.zk.ui.event.EventListener() {
+
+										public void onEvent(Event evt)
+												throws InterruptedException {
+											if (evt.getName().equals("onYes")) {
+											} else {
+												setSelectedAccount(lstaccounts.get(0));
+												BindUtils
+														.postNotifyChange(
+																null,
+																null,
+																CashPaymentViewModel.this,
+																"selectedAccount");
+												return;
+											}
+										}
+
+									});
+
+				} else {
+					Messagebox
+							.show("Selected account have sub accounts. You cannot continue !!",
+									"Account", Messagebox.OK,
+									Messagebox.INFORMATION);
+					setSelectedAccount(lstaccounts.get(0));
+					return;
+				}
+			}
+		}
+
+		else
+		{
+			Messagebox.show("Invalid Account Name !!","Cash payment",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedAccount(lstaccounts.get(0));
 		}
 
 	}
@@ -1898,11 +1957,15 @@ public class CashPaymentViewModel {
 		return selectedPaytoOrder;
 	}
 
-	@NotifyChange({ "payToOrderAddress", "objCash", "lstVendorFAItems" })
+	@NotifyChange({ "payToOrderAddress", "objCash", "lstVendorFAItems","selectedPaytoOrder" })
 	public void setSelectedPaytoOrder(QbListsModel selectedPaytoOrder) {
 		this.selectedPaytoOrder = selectedPaytoOrder;
 		payToOrderAddress = "";
-		if (selectedPaytoOrder != null && selectedPaytoOrder.getRecNo()>0) {
+
+		if (selectedPaytoOrder != null) {
+			if (selectedPaytoOrder.getRecNo() == 0)
+				return;
+
 			PayToOrderModel obj = data.getPayToOrderInfo(
 					selectedPaytoOrder.getListType(),
 					selectedPaytoOrder.getRecNo());
@@ -1926,6 +1989,7 @@ public class CashPaymentViewModel {
 					.getRecNo());
 		} else {
 			Messagebox.show("Invalid Name !!","Cash payment",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedPaytoOrder(lstPayToOrder.get(0));
 		}
 	}
 
@@ -1957,15 +2021,20 @@ public class CashPaymentViewModel {
 		return selectedBuilding;
 	}
 
-	@NotifyChange({ "lstFlat" })
+	@NotifyChange({ "lstFlat","selectedBuilding" })
 	public void setSelectedBuilding(ClassModel selectedBuilding) {
 		this.selectedBuilding = selectedBuilding;
+		lstFlat=new ArrayList<ClassModel>();
 		if (selectedBuilding != null) {
+			if (selectedBuilding.getClass_Key() == 0)
+				return;
+
 			if (!selectedBuilding.getName().equals("")) {
 				lstFlat = data.fillFlatList("F", selectedBuilding.getName());
 			}
 		} else {
-			Messagebox.show("Invlaid Building.");
+			Messagebox.show("Invalid Building Name !!","Cash payment",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedBuilding(lstBuilding.get(0));
 		}
 
 	}
