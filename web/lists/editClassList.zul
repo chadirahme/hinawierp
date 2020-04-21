@@ -4,7 +4,7 @@
 		mode="highlighted" title="Add/Edit Customer" border="normal" position="center,center"
 		closable="true" viewModel="@id('vm')  @init('hba.EditClassViewModel')"
 		sizable="true" onCancel="classModalDialog.detach()" width="700px"
-		height="200px">
+		height="300px">
 
 		<grid
 			form="@id('fx') @load(vm.selectedClass) @save(vm.selectedClass, before='updateClassList')">
@@ -27,6 +27,13 @@
 					<cell colspan="2">
 						<checkbox checked="@bind(vm.statusActive)"></checkbox>
 					</cell>
+				</row>
+				<row>
+					<cell sclass="">Arabic Class Name</cell>
+					<cell colspan="2">
+						<textbox value="@bind(fx.arabicName)" hflex="1" maxlength="31" />
+					</cell>
+
 				</row>
 				<row>
 

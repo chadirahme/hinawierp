@@ -3040,8 +3040,13 @@ public class HBAData {
 			rs = db.executeNonQuery(query.getPropetyListQuery());
 			while (rs.next()) {
 				PropertyModel obj = new PropertyModel();
+
 				obj.setPropetyName(rs.getString("bldg_name") == null ? "" : rs
 						.getString("bldg_name"));
+
+				obj.setPropetyName(rs.getString("ClassName") == null ? "" : rs
+						.getString("ClassName"));
+
 				obj.setPropety_Type(rs.getInt("property_type"));
 				if (obj.getPropety_Type() == -1) {
 					obj.setPropetyType("ALL");

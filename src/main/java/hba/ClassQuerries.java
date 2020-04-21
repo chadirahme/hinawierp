@@ -11,7 +11,7 @@ public class ClassQuerries {
 	public String getClassQuery(String classType,String status)
 	{
 		query=new StringBuffer();
-		query.append("SELECT NAME,CLASS_KEY,sublevel,fullname,isactive,sub_of_parent FROM CLASS"); 
+		query.append("SELECT NAME,NameArabic,CLASS_KEY,sublevel,FullName,isactive,sub_of_parent,ArFullName FROM CLASS");
 		if(!status.equals(""))
 		{
 			query.append(" where IsActive='" + status +"'");
@@ -27,7 +27,8 @@ public class ClassQuerries {
 	public String getClassById(int classId)
 	{
 		query=new StringBuffer();
-		query.append("SELECT NAME,CLASS_KEY,sublevel,fullname,isactive,sub_of_parent  FROM CLASS where class_key="+classId+"");
+		query.append("SELECT NAME,CLASS_KEY,sublevel,fullname,isactive,sub_of_parent,NameArabic,Parent,ListID" +
+				"  FROM CLASS where class_key="+classId+"");
 		return query.toString();		
 	}	
 	
@@ -42,7 +43,10 @@ public class ClassQuerries {
 	public String addClass(ClassModel obj)
 	{
 		query=new StringBuffer();
-		query.append("insert into Class (ListID,Class_Key,Name,FullName,IsActive,SubLevel,sub_of_parent)values('"+obj.getListID()+"',"+obj.getClass_Key()+",'"+obj.getName()+"','"+obj.getFullName()+"','"+obj.getIsActive()+"',"+obj.getSublevel()+","+obj.getSlectedSubOfClass().getClass_Key()+")");
+		query.append("insert into Class (ListID,Class_Key,Name,FullName,IsActive,SubLevel,sub_of_parent,NameArabic,ArFullName,Parent )" +
+				"values('"+obj.getListID()+"',"+obj.getClass_Key()+",'"+obj.getName()+"','"+obj.getFullName()+"','"+obj.getIsActive()+"',"+obj.getSublevel()+","+obj.getSubofKey());
+		query.append( ", '"+obj.getArabicName()+"','"+obj.getArFullName()+ "','"+obj.getParent()+"'");
+		query.append(")");
 		return query.toString();
 		
 	}
@@ -51,7 +55,10 @@ public class ClassQuerries {
 	{
 		String editedFromOnline="Y";
 		query=new StringBuffer();
-		query.append("update class set ListID='"+obj.getListID()+"', Name='"+obj.getName()+"', FullName='"+obj.getFullName()+"',IsActive='"+obj.getIsActive()+"',SubLevel="+obj.getSublevel()+",sub_of_parent="+obj.getSlectedSubOfClass().getClass_Key()+",editedFromOnline='"+editedFromOnline+"' where class_key="+obj.getClass_Key()+"");
+		query.append("update class set Name='"+obj.getName()+"', FullName='"+obj.getFullName()+"',IsActive='"+obj.getIsActive()
+				+"',SubLevel="+obj.getSublevel()+",sub_of_parent="+obj.getSubofKey()+",editedFromOnline='"+editedFromOnline+"' ,NameArabic='"+obj.getArabicName()+"' ,ArFullName='"+obj.getArFullName()
+				+"', Parent='"+obj.getParent()
+				+"' where class_key="+obj.getClass_Key()+"");
 		return query.toString();
 		
 	}

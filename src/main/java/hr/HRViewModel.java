@@ -71,7 +71,7 @@ public class HRViewModel
 	
 	private int employeeKey;
 	
-	int menuID=14;
+	int menuID=241;
 	private MenuModel companyRole;
 	
 	
@@ -176,11 +176,14 @@ public class HRViewModel
 		}
 		
 	}
-	
+
 	private void getCompanyRolePermessions(int companyRoleId)
 	{
 		companyRole=new MenuModel();
-		
+		//temp set true for all until I change the function to pass the parent id like in hbd data
+		companyRole.setCanAdd(true);
+		companyRole.setCanModify(true);
+
 		List<MenuModel> lstRoles= data.getHRRoles(companyRoleId);
 		for (MenuModel item : lstRoles) 
 		{

@@ -1,5 +1,6 @@
 package hba;
 
+import common.FormatDateText;
 import home.MailClient;
 import home.QuotationAttachmentModel;
 import hr.HRData;
@@ -110,13 +111,13 @@ public class EditCustomerViewModel {
 	private Date residenceExpiry;
 	private List<HRListValuesModel> nationality;
 	private HRListValuesModel selectedNationality;
-	private String tradeLicenseNo;
-	private String passportNo;
-	private String placeOfIssue;
-	private String residenceVisaNo;
-	private String sponserName;
-	private String employmentDesignation;
-	private String salaryIncome;
+	private String tradeLicenseNo="";
+	private String passportNo="";
+	private String placeOfIssue="";
+	private String residenceVisaNo="";
+	private String sponserName="";
+	private String employmentDesignation="";
+	private String salaryIncome="";
 	private List<CustomerActivitiesModel> activities;
 	private List<CustomerActivitiesModel> statusHistory;
 	private boolean adminUser;
@@ -463,7 +464,7 @@ public class EditCustomerViewModel {
 		}
 		int result = 0;
 		String shipTo = "";
-		if (selectedCustomer.getName().equalsIgnoreCase("")) {
+		if (FormatDateText.isEmpty(selectedCustomer.getName())) {
 			Messagebox.show("Please enter the Customer Name", "Customer List",
 					Messagebox.OK, Messagebox.INFORMATION);
 			return;

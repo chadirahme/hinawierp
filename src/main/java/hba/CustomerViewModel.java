@@ -652,7 +652,7 @@ public class CustomerViewModel {
 				return;
 			}
 			Map<String, Object> arg = new HashMap<String, Object>();
-			arg.put("reciptVoiucherKey", 0+"");
+			arg.put("reciptVoiucherKey", 0);
 			arg.put("type", "OtherForms");
 			arg.put("customerKey", row.getCustkey());
 			arg.put("canModify", true);

@@ -174,6 +174,9 @@ public class ProspectiveData {
 					+ "LEFT JOIN HRLISTVALUES AS CountryList ON Prospective.CountryRefKey = CountryList.ID "
 					+ "LEFT JOIN HRLISTVALUES AS StreetList ON Prospective.StreeRefKey = StreetList.ID "
 					+ "LEFT JOIN LocalItem ON Prospective.CompanyTypeRefKey=LocalItem.RecNo ";
+			if (type == 0) {
+				query += "where Prospective.Status='A' ";
+			}
 			if (type == 1) {
 				query += "where Prospective.Status='A' and Prospective.recno="
 						+ searchChar;

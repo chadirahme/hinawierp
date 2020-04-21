@@ -63,8 +63,17 @@ public class BanksNameQuerries {
 	public String fillAccountsdropDownForBank()
 	{
 		query=new StringBuffer();
-		 query.append("SELECT Accounts.AccountName As [Name],AccountType    ,   SubLevel    ,   Rec_No , ListID FROM Accounts Inner join AccountType on AccountType.TypeName = Accounts.AccountType where AccountType in ('Bank','Post Dated Cheque') and IsActive='Y' order by AccountType.SRL_No,Accounts.ACTLEVELSwithNO");
+		 query.append("SELECT Accounts.AccountName As [Name],AccountType , SubLevel,Rec_No , ListID,FullName FROM Accounts Inner join AccountType on AccountType.TypeName = Accounts.AccountType where AccountType in ('Bank','Post Dated Cheque') and IsActive='Y' order by AccountType.SRL_No,Accounts.ACTLEVELSwithNO");
 		 return query.toString();		
+	}
+
+	public String checkIfBankAccountsHasSubQuery(String accountName) {
+		query = new StringBuffer();
+		query.append("Select FullName from Accounts Where ");
+		if (!accountName.equals("")) {
+			query.append(" CharIndex('" + accountName + "' ,FullName)>0 ");
+		}
+		return query.toString();
 	}
 
 }

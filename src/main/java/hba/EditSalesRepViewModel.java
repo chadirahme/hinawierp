@@ -211,13 +211,13 @@ public class EditSalesRepViewModel
 	   @NotifyChange({"lstItems","footer"})
 	   public void updateSalesRepList(@BindingParam("cmp") final Window x) throws ParseException
 	   {
-		 if(selectedSalesRepName==null)
+		 if(selectedSalesRepName==null || selectedSalesRepName.getRecNo()==0)
 		 {
 			 Messagebox.show("Please Select The Sales Rep Name","Sales Rep List",Messagebox.OK , Messagebox.INFORMATION);
 			 return;
 		 }
 		 
-		 if(useCommistion==false)
+		 if(useCommistion==false && compSetup.getUseDefaultSalesRepCommission().equals("Y"))
 		 {
 		 Messagebox.show("You did not enter the commission details,Do you want to Continue?", "Confirm Save", Messagebox.YES | Messagebox.NO , Messagebox.QUESTION,
 					new org.zkoss.zk.ui.event.EventListener() {
@@ -461,11 +461,48 @@ public class EditSalesRepViewModel
 	/**
 	 * @param selectedSalesRepName the selectedSalesRepName to set
 	 */
-	 @NotifyChange({"selectedSalesRep"})
+	 @NotifyChange({"selectedSalesRep","selectedSalesRepName"})
 	public void setSelectedSalesRepName(QbListsModel selectedSalesRepName) {
 		this.selectedSalesRepName = selectedSalesRepName;
-		selectedSalesRep.setSalesRepType(selectedSalesRepName.getListType());
-		selectedSalesRep.setQbListKey(selectedSalesRepName.getRecNo());
+		 selectedSalesRep.setSalesRepType("");
+		 selectedSalesRep.setQbListKey(0);
+		 selectedSalesRep.setIntials("");
+
+		 if(selectedSalesRepName!=null) {
+
+			 if (selectedSalesRepName.getRecNo() == 0)
+				 return;
+
+			 selectedSalesRep.setSalesRepType(selectedSalesRepName.getListType());
+			 selectedSalesRep.setQbListKey(selectedSalesRepName.getRecNo());
+			 selectedSalesRep.setIntials(printInitials(selectedSalesRepName.getName()));
+		 }
+		 else
+		 {
+			 Messagebox.show("Invalid Sales Rep Name !!","Sales Rep",Messagebox.OK,Messagebox.INFORMATION);
+			 setSelectedSalesRepName(lstSalesRepName.get(0));
+		 }
+	}
+
+	private String printInitials(String name)
+	{
+		String initials = "";
+		if (name.length() == 0)
+			return	initials;
+
+		initials=""+Character.toUpperCase(name.charAt(0));
+		// Traverse rest of the string and
+		// print the characters after spaces.
+		for (int i = 1; i < name.length() - 1; i++)
+			if (name.charAt(i) == ' ')
+				initials+=" "+Character.toUpperCase(name.charAt(i + 1));
+
+		if (initials.length() > 5)
+		{
+			initials = initials.substring(0, 5);
+		}
+
+		return initials;
 	}
 
 	/**

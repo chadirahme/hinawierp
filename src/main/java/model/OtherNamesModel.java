@@ -5,29 +5,29 @@ import java.util.Date;
 public class OtherNamesModel {
 
 	private int custkey;
-	private String listid;
+	private String listid="";
 	private Date createdDate;
 	private Date modifiedDate;
-	private String name;
-	private String fullName;
-	private String companyName;
-	private String isactive;
-	private String billCountry;
-	private String phone;
-	private String altphone;
-	private String fax;
-	private String email;
-	private String contact;
-	private String arName;
-	private String accountNumber;
-	private String contactPerson;
-	private String alternateContact;
-	private String skypeID;
-	private String accountName;
-	private String bankName;
-	private String branchName;
-	private String bBANNumber;
-	private String printChequeAs;
+	private String name="";
+	private String fullName="";
+	private String companyName="";
+	private String isactive="";
+	private String billCountry="";
+	private String phone="";
+	private String altphone="";
+	private String fax="";
+	private String email="";
+	private String contact="";
+	private String arName="";
+	private String accountNumber="";
+	private String contactPerson="";
+	private String alternateContact="";
+	private String skypeID="";
+	private String accountName="";
+	private String bankName="";
+	private String branchName="";
+	private String bBANNumber="";
+	private String printChequeAs="";
 	/**
 	 * @return the custkey
 	 */

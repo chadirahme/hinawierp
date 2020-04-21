@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import common.FormatDateText;
 import layout.MenuModel;
 import model.CustomerContact;
 import model.QbListsModel;
@@ -119,6 +120,8 @@ public class EditVendorViewModel
 				selectedVendor.setAccountNumber("");
 				selectedVendor.setSalutation("");
 				selectedVendor.setLastName("");
+				selectedVendor.setNote("");
+				selectedVendor.setcC("");
 				selectedVendor.setIsActive("false");
 				activeVendor=false;
 				
@@ -152,7 +155,7 @@ public class EditVendorViewModel
 	   public void updateVendor(@ContextParam(ContextType.VIEW) Window comp) throws ParseException
 	   {
 		 int result=0;
-		 if(selectedVendor.getName().equalsIgnoreCase(""))
+		 if(FormatDateText.isEmpty(selectedVendor.getName()))
 		 {
 			 Messagebox.show("Please Enter the Vendor Name.","Vendor List",Messagebox.OK , Messagebox.INFORMATION);
 			 return;

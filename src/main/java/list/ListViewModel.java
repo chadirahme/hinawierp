@@ -89,11 +89,18 @@ public class ListViewModel
 			loadLabels();
 			getCompanyRolePermessions(dbUser.getCompanyroleid());
 			
-			String fieldID=Executions.getCurrent().getParameter("id") ;
+			//String fieldID=Executions.getCurrent().getParameter("id") ;
+			String fieldID=(String) sess.getAttribute("menuTitle");
+
 			logger.info("url fieldID>> "  + fieldID); 
 			fieldID=fieldID==null?"0":fieldID;
-			passFieldId=Integer.parseInt(fieldID);
-			 selectName=language.equals("en")? "Select" : "Ø§Ø®ØªØ§Ø±" ;
+			if(fieldID.toLowerCase().contains("department"))
+				passFieldId=6;
+			else if(fieldID.toLowerCase().contains("position"))
+				passFieldId=7;
+
+			//passFieldId=Integer.parseInt(fieldID);
+			selectName=language.equals("en")? "Select" : "Ø§Ø®ØªØ§Ø±" ;
 			
 			if(passFieldId==0)
 			{
@@ -136,7 +143,7 @@ public class ListViewModel
 			  }
 			  
 			  lstHRValues=new ListModelList<HRListValuesModel>( data.getHRListValues(passFieldId,"",0));
-			  lstAllHRValues.addAll(lstAllHRValues);
+			  lstAllHRValues.addAll(lstHRValues);
 			}
 						
 		}
@@ -368,7 +375,8 @@ public class ListViewModel
 		
 		
 	}
-	
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Command
 	@NotifyChange({"lstHRValues"})
 	public void deleteCommand(@BindingParam("row") final HRListValuesModel item) 

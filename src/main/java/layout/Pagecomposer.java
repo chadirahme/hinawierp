@@ -184,6 +184,9 @@ public class Pagecomposer extends SelectorComposer
 				
 			}
 		}
+		//add this to get the default general list item selected in ListViewModel
+		Sessions.getCurrent().setAttribute("menuTitle", item.getTitle());
+
 		Tab newTab = new Tab();
 		if(language.equals("en"))
 		newTab.setLabel(item.getTitle());

@@ -74,6 +74,8 @@ public class ClassData {
 				ClassModel obj=new ClassModel();
 				obj.setClass_Key(rs.getInt("CLASS_KEY"));
 				obj.setName(rs.getString("Name"));
+				obj.setArabicName(rs.getString("NameArabic")==null?"":rs.getString("NameArabic"));
+				obj.setArFullName(rs.getString("ArFullName")==null?"":rs.getString("ArFullName"));
 				obj.setFullName(rs.getString("fullname"));
 				obj.setSublevel(rs.getInt("sublevel"));
 				obj.setIsActive(rs.getString("isactive"));
@@ -109,7 +111,10 @@ public class ClassData {
 				
 				obj.setClass_Key(rs.getInt("CLASS_KEY"));
 				obj.setName(rs.getString("Name"));
+				obj.setArabicName(rs.getString("NameArabic"));
 				obj.setFullName(rs.getString("fullname"));
+				obj.setListID(rs.getString("ListID"));
+				obj.setParent(rs.getString("Parent"));
 				obj.setSublevel(rs.getInt("sublevel"));
 				obj.setIsActive(rs.getString("isactive"));
 				obj.setSubofKey(rs.getInt("sub_of_parent"));
@@ -174,6 +179,10 @@ public class ClassData {
 				obj.setSublevel(rs.getInt("sublevel"));
 				obj.setIsActive(rs.getString("isactive"));
 				obj.setSubofKey(rs.getInt("sub_of_parent"));
+				obj.setArabicName(rs.getString("NameArabic")==null?"":rs.getString("NameArabic"));
+				obj.setArFullName(rs.getString("ArFullName")==null?"":rs.getString("ArFullName"));
+				obj.setListID(rs.getString("ListID"));
+				obj.setParent(rs.getString("Parent"));
 				lst.add(obj);
 			}
 		}
@@ -187,21 +196,23 @@ public class ClassData {
 	{
 		int result=0;
 		ClassQuerries query=new ClassQuerries();	
-		if(obj.getSlectedSubOfClass()!=null && obj.getSlectedSubOfClass().getClass_Key()!=0)
+		if(obj.getSlectedSubOfClass()!=null && obj.getSlectedSubOfClass().getClass_Key()>0)
 		{
-			ClassModel subOf=new ClassModel();
-			subOf=obj.getSlectedSubOfClass();
-			obj.setFullName(subOf.getFullName()+":"+obj.getName());
-			obj.setSublevel(subOf.getSublevel()+1);
-			obj.setParent(subOf.getListID());
+			obj.setFullName(obj.getSlectedSubOfClass().getFullName()+":"+obj.getName());
+			obj.setArFullName(obj.getSlectedSubOfClass().getArFullName()+":"+obj.getArabicName());
+			obj.setSublevel(obj.getSlectedSubOfClass().getSublevel()+1);
+			obj.setParent(obj.getSlectedSubOfClass().getListID());
+			obj.setSubofKey(obj.getSlectedSubOfClass().getClass_Key());
 			obj.setListID("");
 		}
 		else
 		{
 			obj.setFullName(obj.getName());
+			obj.setArFullName(obj.getArabicName());
 			obj.setSublevel(0);
 			obj.setParent("");
 			obj.setListID("");
+			obj.setSubofKey(0);
 		}
 		
 		try 
@@ -221,19 +232,21 @@ public class ClassData {
 	{
 		int result=0;
 		ClassQuerries query=new ClassQuerries();	
-		if(obj.getSlectedSubOfClass()!=null && obj.getSlectedSubOfClass().getClass_Key()!=0)
+		if(obj.getSlectedSubOfClass()!=null && obj.getSlectedSubOfClass().getClass_Key()>0)
 		{
-			ClassModel subOf=new ClassModel();
-			subOf=obj.getSlectedSubOfClass();
-			obj.setFullName(subOf.getFullName()+":"+obj.getName());
-			obj.setSublevel(subOf.getSublevel()+1);
-			obj.setParent(subOf.getListID());
+			obj.setFullName(obj.getSlectedSubOfClass().getFullName()+":"+obj.getName());
+			obj.setArFullName(obj.getSlectedSubOfClass().getArFullName()+":"+obj.getArabicName());
+			obj.setSublevel(obj.getSlectedSubOfClass().getSublevel()+1);
+			obj.setParent(obj.getSlectedSubOfClass().getListID());
+			obj.setSubofKey(obj.getSlectedSubOfClass().getClass_Key());
 		}
 		else
 		{
 			obj.setFullName(obj.getName());
+			obj.setArFullName(obj.getArabicName());
 			obj.setSublevel(0);
 			obj.setParent("");
+			obj.setSubofKey(0);
 		}
 		
 		try 

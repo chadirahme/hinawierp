@@ -3,15 +3,15 @@
 <window id="modalDialog" apply="org.zkoss.bind.BindComposer" mode="highlighted" title="Add/Edit Employee" border="normal" position="center,center" closable="true" contentStyle="overflow:auto;" 
 viewModel="@id('vm')  @init('hr.EditEmployeeViewModel')"  sizable="true"
 onCancel="modalDialog.detach()"
- width="650px" height="600px">
+ width="750px" height="600px">
  
 <grid form="@id('fx') @load(vm.selectedEmployee) @save(vm.selectedEmployee, before='saveEmployeeCommand') @validator(vm.todoValidator)">
 <columns>
 <column width="120px"></column>
 <column width="150px"></column>
-<column width="120px"></column>
-<column width="120px"></column>
-<column width="120px"></column>
+<column width="150px"></column>
+<column width="150px"></column>
+<column width="150px"></column>
 </columns>
 
 <rows>
@@ -67,25 +67,25 @@ onCancel="modalDialog.detach()"
 
 <row>
 <label value="Employee No. *"></label>
-<textbox value="@bind(vm.employeeNo)" ></textbox>
+<textbox value="@bind(vm.employeeNo)" hflex="1" ></textbox>
 <cell align="right">
 <label value="Standard No."></label>
 </cell>
-<textbox value="@bind(fx.standardNo)"></textbox>
+<textbox value="@bind(fx.standardNo)" hflex="1"></textbox>
 </row>
 
 <row>
 <label value="Name - English *"></label>
-<textbox value="@bind(fx.enFirstName)" ></textbox>
-<textbox value="@bind(fx.enMiddleName)" ></textbox>
-<textbox value="@bind(fx.enLastName)" ></textbox>
+<textbox value="@bind(fx.enFirstName)" hflex="1" ></textbox>
+<textbox value="@bind(fx.enMiddleName)" hflex="1" ></textbox>
+<textbox value="@bind(fx.enLastName)" hflex="1" ></textbox>
 </row>
 
 <row>
 <label value="Name - Arabic"></label>
-<textbox value="@bind(vm.selectedEmployee.arFirstName)"></textbox>
-<textbox value="@bind(vm.selectedEmployee.arMiddleName)"></textbox>
-<textbox value="@bind(vm.selectedEmployee.arLastName)"></textbox>
+<textbox value="@bind(vm.selectedEmployee.arFirstName)" hflex="1"></textbox>
+<textbox value="@bind(vm.selectedEmployee.arMiddleName)" hflex="1"></textbox>
+<textbox value="@bind(vm.selectedEmployee.arLastName)" hflex="1"></textbox>
 </row>
 
 <row>
@@ -186,7 +186,7 @@ onCancel="modalDialog.detach()"
 <cell align="right">					  
 <label value="Place of Birth"></label>
 </cell>		
-<textbox value="@bind(vm.selectedEmployee.placeOfBirth)"></textbox>			  
+<textbox value="@bind(vm.selectedEmployee.placeOfBirth)" hflex="1"></textbox>
 </row>
 
 <row>
@@ -201,7 +201,8 @@ onCancel="modalDialog.detach()"
 			<cell align="right">					  
 <label value="E-mail *"></label>
 </cell>		
-<textbox value="@bind(vm.selectedEmployee.email)"  constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address (example@example.com)" ></textbox>			  
+<textbox value="@bind(vm.selectedEmployee.email)"  constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address (example@example.com)"
+		 hflex="1"></textbox>
 					  
 </row>
 

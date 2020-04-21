@@ -216,6 +216,22 @@ public class SponsorData {
 		}
 		return lastModified;
 	}
+
+	public int deleteSponsor(SponsorModel obj)
+	{
+		int result=0;
+		SponsorQuerries query=new SponsorQuerries();
+		try
+		{
+			result=db.executeUpdateQuery(query.deleteSponsor(obj.getSponsorKey()));
+
+		}
+		catch (Exception ex) {
+			logger.error("error in SponsorData---deleteSponsor-->" , ex);
+		}
+		return result;
+
+	}
 	
 
 }

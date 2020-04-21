@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import common.FormatDateText;
 import layout.MenuModel;
 import model.ClassModel;
 import model.OtherNamesModel;
@@ -100,22 +101,38 @@ public class EditClassViewModel {
 				{
 					statusActive=false;
 				}
-				for(ClassModel model:fillsubOfClass)
-				{
-					if(model.getClass_Key()==selectedClass.getSubofKey())
-					{
-						selectedClass.setSlectedSubOfClass(model);
-						tempFillsubOfClass=model;
-						if(tempFillsubOfClass.getName().equalsIgnoreCase("none"))
-						{
-							selectedCheckBox=false;
+				if(!FormatDateText.isEmpty(selectedClass.getParent())) {
+					for (ClassModel model : fillsubOfClass) {
+						if (!FormatDateText.isEmpty(model.getListID())) {
+							if (model.getListID().equals(selectedClass.getParent()) || model.getClass_Key()==selectedClass.getSubofKey()) {
+								selectedClass.setSlectedSubOfClass(model);
+								tempFillsubOfClass = model;
+								if (tempFillsubOfClass.getName().equalsIgnoreCase("none")) {
+									selectedCheckBox = false;
+								} else {
+									selectedCheckBox = true;
+								}
+								doCheckedClass();
+								break;
+							}
 						}
-						else{
-							selectedCheckBox=true;
-						}
-						
-						doCheckedClass();
-						break;
+					}
+				}
+
+				//check again for SubofKey
+				if(selectedCheckBox==false && selectedClass.getSubofKey()>0){
+					for (ClassModel model : fillsubOfClass) {
+							if (model.getClass_Key()==selectedClass.getSubofKey()) {
+								selectedClass.setSlectedSubOfClass(model);
+								tempFillsubOfClass = model;
+								if (tempFillsubOfClass.getName().equalsIgnoreCase("none")) {
+									selectedCheckBox = false;
+								} else {
+									selectedCheckBox = true;
+								}
+								doCheckedClass();
+								break;
+							}
 					}
 				}
 			}
@@ -157,7 +174,8 @@ public class EditClassViewModel {
 	}
 	
 	@Command
-	   @NotifyChange({"disableSubOf","slectedSubOfClass","fillsubOfClass","selectedClass"})
+	   //@NotifyChange({"disableSubOf","slectedSubOfClass","fillsubOfClass","selectedClass"})
+	   @NotifyChange({"disableSubOf"})
 	   public void doCheckedClass()
 	 	{
 		  if (selectedCheckBox==true)
@@ -179,17 +197,27 @@ public class EditClassViewModel {
 	   public void updateClassList(@BindingParam("cmp") Window x) throws ParseException
 	   {
 		 int result=0;
-		 if(selectedClass.getName().equalsIgnoreCase(""))
+		 if(FormatDateText.isEmpty(selectedClass.getName()))
 		 {
 			 Messagebox.show("Please Enter the Class Name.","Class List",Messagebox.OK , Messagebox.INFORMATION);
 			 return;
 		 }
-		 if(selectedCheckBox==true && selectedClass.getSlectedSubOfClass()==null)
-		 {
-			 Messagebox.show("Please select the sub of.","Class List",Messagebox.OK , Messagebox.INFORMATION);
-			 return;
-		 }
-		 
+		   if(selectedCheckBox==true) {
+			   if (selectedClass.getSlectedSubOfClass() == null) {
+				   Messagebox.show("Please select the sub of.", "Class List", Messagebox.OK, Messagebox.INFORMATION);
+				   return;
+			   }
+
+			   if (selectedClass.getSlectedSubOfClass().getName().equalsIgnoreCase("none")) {
+				   Messagebox.show("Please select the sub of.", "Class List", Messagebox.OK, Messagebox.INFORMATION);
+				   return;
+			   }
+		   }
+		   else
+		   {
+			   selectedClass.setSlectedSubOfClass(null);
+		   }
+
 		 if(selectedClass.getSlectedSubOfClass()!=null && selectedClass.getSlectedSubOfClass().getName().equalsIgnoreCase(selectedClass.getName())&& selectedClass.getSlectedSubOfClass().getClass_Key()==selectedClass.getClass_Key())
 		 {
 			 Messagebox.show("You cannot make an item a subitem of itself.","Item List", Messagebox.OK , Messagebox.INFORMATION);
@@ -204,18 +232,20 @@ public class EditClassViewModel {
 		 {
 			 selectedClass.setIsActive("Y");
 		 }
-		 if(null!=selectedClass.getSlectedSubOfClass() && selectedClass.getSlectedSubOfClass().getName().equalsIgnoreCase("none"))
-		 {
-			 ClassModel subIytem=new ClassModel();
-			 selectedClass.setSlectedSubOfClass(subIytem);
-		 }
+
+//		 if(null!=selectedClass.getSlectedSubOfClass() && selectedClass.getSlectedSubOfClass().getName().equalsIgnoreCase("none"))
+//		 {
+//			 ClassModel subIytem=new ClassModel();
+//			 selectedClass.setSlectedSubOfClass(subIytem);
+//		 }
+
 		 if(selectedClass.getClass_Key()>0)
 		 {
 			 for(ClassModel ValidationName:classNames)
 				{
 				 if(selectedClass.getName().replaceAll("\\s","").equalsIgnoreCase(ValidationName.getName().replaceAll("\\s","")) && (selectedClass.getClass_Key()!=ValidationName.getClass_Key()))
 					{
-						Messagebox.show("The class name already exist.","Class List",Messagebox.OK , Messagebox.INFORMATION);
+						Messagebox.show("The class name already exist.","Edit Class List",Messagebox.OK , Messagebox.INFORMATION);
 						return;
 					}
 				}
@@ -227,7 +257,7 @@ public class EditClassViewModel {
 				{
 					if(selectedClass.getName().replaceAll("\\s","").equalsIgnoreCase(ValidationName.getName().replaceAll("\\s","")))
 					{
-						Messagebox.show("The class name already exist.","Other Name List",Messagebox.OK , Messagebox.INFORMATION);
+						Messagebox.show("The class name already exist.","Add Class List",Messagebox.OK , Messagebox.INFORMATION);
 						return;
 					}
 				}

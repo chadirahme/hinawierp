@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;   
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import model.AccountsModel;
@@ -25,20 +25,20 @@ import db.DBHandler;
 import db.SQLDBHandler;
 
 public class ChartOFAccountData {
-	
+
 	private Logger logger = Logger.getLogger(ChartOFAccountData.class);
 	DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	
+
 	//DateFormat tf = new SimpleDateFormat("dd/MM/yyyy HH:mm");	
 	//SimpleDateFormat tsdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 	DecimalFormat dcf=new DecimalFormat("0.00");
-	
+
 	SQLDBHandler db=new SQLDBHandler("");
 	Date creationdate;
 	Calendar c = Calendar.getInstance();
-	
-	
+
+
 	public ChartOFAccountData()
 	{
 		try
@@ -52,33 +52,33 @@ public class ChartOFAccountData {
 			{
 				HBAQueries query=new HBAQueries();
 				rs=mysqldb.executeNonQuery(query.getDBCompany(dbUser.getCompanyid()));
-				 while(rs.next())
-				 {						
+				while(rs.next())
+				{
 					obj.setCompanyId(rs.getInt("companyid"));
 					obj.setDbid(rs.getInt("dbid"));
 					obj.setUserip(rs.getString("userip"));
 					obj.setDbname(rs.getString("dbname"));
 					obj.setDbuser(rs.getString("dbuser"));
 					obj.setDbpwd(rs.getString("dbpwd"));
-					obj.setDbtype(rs.getString("dbtype"));						
-				 }
-				  db=new SQLDBHandler(obj);
+					obj.setDbtype(rs.getString("dbtype"));
+				}
+				db=new SQLDBHandler(obj);
 			}
 		}
-		catch (Exception ex) 
+		catch (Exception ex)
 		{
 			logger.error("error in ChartOFAccountData---Init-->" , ex);
 		}
 	}
-	
+
 	public List<AccountsModel> getFullNameFromChartOfAccountForValidation()
 	{
 		List<AccountsModel> lst=new ArrayList<AccountsModel>();
-		
+
 		ChartOfAccountQueries query=new ChartOfAccountQueries();
 		ResultSet rs = null;
 		String name="";
-		try 
+		try
 		{
 			rs=db.executeNonQuery(query.getFullNameFromChartOfAccountForValidation());
 			while(rs.next())
@@ -86,34 +86,34 @@ public class ChartOFAccountData {
 				AccountsModel nameObj=new AccountsModel();
 				nameObj.setName(rs.getString("name"));
 				nameObj.setRec_No(rs.getInt("Rec_No"));
-			  lst.add(nameObj);
+				lst.add(nameObj);
 			}
-			
+
 		}
 		catch (Exception ex) {
 			logger.error("error in ChartOFAccountData---getFullNameFromChartOfAccountForValidation-->" , ex);
 		}
 		return lst;
 	}
-	
+
 	public List<AccountsModel> getAccountNumberFromChartOfAccountForValidation()
 	{
 		List<AccountsModel> lst=new ArrayList<AccountsModel>();
-		
+
 		ChartOfAccountQueries query=new ChartOfAccountQueries();
 		ResultSet rs = null;
 		String name="";
-		try 
+		try
 		{
 			rs=db.executeNonQuery(query.getAccountNumberFromChartOfAccountForValidation());
 			while(rs.next())
 			{
 				AccountsModel objNum=new AccountsModel();
-			   objNum.setAccountNumber(rs.getString("AccountNumber"));
-			   objNum.setRec_No(rs.getInt("Rec_No"));
-			  lst.add(objNum);
+				objNum.setAccountNumber(rs.getString("AccountNumber"));
+				objNum.setRec_No(rs.getInt("Rec_No"));
+				lst.add(objNum);
 			}
-			
+
 		}
 		catch (Exception ex) {
 			logger.error("error in ChartOFAccountData---getAccountNumberFromChartOfAccountForValidation-->" , ex);
@@ -122,37 +122,37 @@ public class ChartOFAccountData {
 	}
 	public String getAccountTypeFromChartOfAccountForValidation(String accountType)
 	{
-		
+
 		ChartOfAccountQueries query=new ChartOfAccountQueries();
 		ResultSet rs = null;
 		String name="";
-		try 
+		try
 		{
 			rs=db.executeNonQuery(query.getAccountTypeFromChartOfAccountForValidation(accountType));
 			while(rs.next())
 			{
-			   name = rs.getString("TypeName");
+				name = rs.getString("TypeName");
 			}
-			
+
 		}
 		catch (Exception ex) {
 			logger.error("error in ChartOFAccountData---getAccountNumberFromChartOfAccountForValidation-->" , ex);
 		}
 		return name;
 	}
-	
+
 	public int getChartOfAccountRecNoQuery()
 	{
 		int MaxRecNo=1;
-		
+
 		ChartOfAccountQueries query=new ChartOfAccountQueries();
 		ResultSet rs = null;
-		try 
+		try
 		{
 			rs=db.executeNonQuery(query.getChartOfAccountRecNoQuery());
 			while(rs.next())
 			{
-				MaxRecNo=rs.getInt("MaxRecNo")+1;						
+				MaxRecNo=rs.getInt("MaxRecNo")+1;
 			}
 		}
 		catch (Exception ex) {
@@ -160,42 +160,42 @@ public class ChartOFAccountData {
 		}
 		return MaxRecNo;
 	}
-	
-	
+
+
 	public int chartOfAccountInsertQuery(AccountsModel customerModel,int recNo)
 	{
 		int result=0;
-		
-		ChartOfAccountQueries query=new ChartOfAccountQueries();		
-		try 
-		{		
+
+		ChartOfAccountQueries query=new ChartOfAccountQueries();
+		try
+		{
 			//.setCreatedDate(new Date());
 			String str=query.chartOfAccountInsertQuery(customerModel,recNo);
-			result=db.executeUpdateQuery(str);			
+			result=db.executeUpdateQuery(str);
 		}
-		catch (Exception ex) 
+		catch (Exception ex)
 		{
 			logger.error("error in ChartOFAccountData---chartOfAccountInsertQuery-->" , ex);
 		}
 		return result;
 	}
-	
+
 	public AccountsModel getChartofAccountsByID(int accountId)
 	{
 		AccountsModel obj=new AccountsModel();
 		ChartOfAccountQueries query=new ChartOfAccountQueries();
 		ResultSet rs = null;
 		ResultSet rsBank = null;
-		Pattern pattern = Pattern.compile("(\\·)(.*?)(\\:)");
+		Pattern pattern = Pattern.compile("(\\Â·)(.*?)(\\:)");
 		List<String> listMatches = new ArrayList<String>();
-		 
+
 		DecimalFormat dcf = new DecimalFormat( "#,###,###,##0.00" );
-		try 
+		try
 		{
 			rs=db.executeNonQuery(query.getChartofAccountsByID(accountId));
 			while(rs.next())
 			{
-				
+
 				obj.setRec_No(rs.getInt("Rec_No"));
 				if(obj.getRec_No()!=0)
 				{
@@ -208,7 +208,7 @@ public class ChartOFAccountData {
 						obj.setiBanNumber(rsBank.getString("ibanno")==null?"":rsBank.getString("ibanno"));
 						obj.setBankName(rsBank.getString("name")==null?"":rsBank.getString("name"));
 					}
-					
+
 				}
 				obj.setName(rs.getString("Name")==null?"":rs.getString("Name"));
 				obj.setFullName(rs.getString("fullname")==null?"":rs.getString("fullname"));
@@ -234,14 +234,14 @@ public class ChartOFAccountData {
 				double TotalBalance=rs.getDouble("TotalBalance");
 				double balance=rs.getDouble("balance");
 				if(rs.getDate("balanceDate")!=null)
-				obj.setBalaceDate(df.parse(sdf.format(rs.getDate("balanceDate"))));
+					obj.setBalaceDate(df.parse(sdf.format(rs.getDate("balanceDate"))));
 				if(rs.getDate("TimeCreated")!=null)
-				obj.setCreatedDate(df.parse(sdf.format(rs.getDate("TimeCreated"))));
+					obj.setCreatedDate(df.parse(sdf.format(rs.getDate("TimeCreated"))));
 				obj.setBalance(dcf.parse(dcf.format(balance)).doubleValue());
 				obj.setTotalBalance(dcf.parse(dcf.format(TotalBalance)).doubleValue());
-			//	obj.setClassName(rs.getString("Class"));
+				//	obj.setClassName(rs.getString("Class"));
 				obj.setNotes(rs.getString("notes")==null?"":rs.getString("notes"));
-				
+
 			}
 		}
 		catch (Exception ex) {
@@ -249,15 +249,15 @@ public class ChartOFAccountData {
 		}
 		return obj;
 	}
-	
+
 	public List<AccountsModel> fillChartofAccounts(String isActive,boolean hasBalance)
 	{
 		List<AccountsModel> lst=new ArrayList<AccountsModel>();
-		
+
 		ChartOfAccountQueries query=new ChartOfAccountQueries();
 		ResultSet rs = null;
 		DecimalFormat dcf=new DecimalFormat("#,##0.00");
-		try 
+		try
 		{
 			rs=db.executeNonQuery(query.GetCharofAccountsListQuery(isActive,hasBalance));
 			while(rs.next())
@@ -292,7 +292,7 @@ public class ChartOFAccountData {
 		}
 		return lst;
 	}
-	
+
 	public int addAccount(AccountsModel obj) throws ParseException
 	{
 		int result=0;
@@ -300,90 +300,90 @@ public class ChartOFAccountData {
 		ChartOfAccountQueries query=new ChartOfAccountQueries();
 		List<AccountsModel> getSubOfCurentSelection=new ArrayList<AccountsModel>();
 		if(obj.getSelectedSubOf()!=null)
-				{
-					AccountsModel getbyIdOfSubOfSelected=getChartofAccountsByID(obj.getSelectedSubOf().getRec_No());
-					obj.setActLevels(getbyIdOfSubOfSelected.getActLevels()+":"+obj.getName());
-					obj.setFullName(getbyIdOfSubOfSelected.getFullName()+":"+obj.getName());
-					obj.setAccountName(obj.getAccountNumber()+"·"+obj.getName());
-					obj.setaCTLEVELSwithNO(getbyIdOfSubOfSelected.getaCTLEVELSwithNO()+":"+obj.getAccountName());
-					obj.setAccountType(getbyIdOfSubOfSelected.getAccountType());
-					obj.setSubLevel(getbyIdOfSubOfSelected.getSubLevel()+1);
-					
-					 Pattern pattern = Pattern.compile("(.*?)·");
-			    	Matcher matcher = pattern.matcher(getbyIdOfSubOfSelected.getaCTLEVELSwithNO());
-			    	String actlevelMatching="";
-			    	if (matcher.find())
-			    	{
-			    	    actlevelMatching=matcher.group(1);
-			    	}
-			    	topLevelRec=getChartofAccountsByNumber(actlevelMatching);
-			    	
-				}
-				else
-				{
-					obj.setActLevels(obj.getName());
-					obj.setFullName(obj.getName());
-					obj.setAccountName(obj.getAccountNumber()+"·"+obj.getName());
-					obj.setaCTLEVELSwithNO(obj.getAccountName());
-					obj.setAccountType(obj.getSelectedAccountType());
-					obj.setSubLevel(0);
-					
-					
-				}
-					
-					
-					
-		try 
-		{	
+		{
+			AccountsModel getbyIdOfSubOfSelected=getChartofAccountsByID(obj.getSelectedSubOf().getRec_No());
+			obj.setActLevels(getbyIdOfSubOfSelected.getActLevels()+":"+obj.getName());
+			obj.setFullName(getbyIdOfSubOfSelected.getFullName()+":"+obj.getName());
+			obj.setAccountName(obj.getAccountNumber()+"Â·"+obj.getName());
+			obj.setaCTLEVELSwithNO(getbyIdOfSubOfSelected.getaCTLEVELSwithNO()+":"+obj.getAccountName());
+			obj.setAccountType(getbyIdOfSubOfSelected.getAccountType());
+			obj.setSubLevel(getbyIdOfSubOfSelected.getSubLevel()+1);
+
+			Pattern pattern = Pattern.compile("(.*?)Â·");
+			Matcher matcher = pattern.matcher(getbyIdOfSubOfSelected.getaCTLEVELSwithNO());
+			String actlevelMatching="";
+			if (matcher.find())
+			{
+				actlevelMatching=matcher.group(1);
+			}
+			topLevelRec=getChartofAccountsByNumber(actlevelMatching);
+
+		}
+		else
+		{
+			obj.setActLevels(obj.getName());
+			obj.setFullName(obj.getName());
+			obj.setAccountName(obj.getAccountNumber()+"Â·"+obj.getName());
+			obj.setaCTLEVELSwithNO(obj.getAccountName());
+			obj.setAccountType(obj.getSelectedAccountType());
+			obj.setSubLevel(0);
+
+
+		}
+
+
+
+		try
+		{
 			int tmpRecNo=getChartOfAccountRecNoQuery();
-			result=db.executeUpdateQuery(query.addAccountQuery(obj,tmpRecNo));	
+			result=db.executeUpdateQuery(query.addAccountQuery(obj,tmpRecNo));
 			if(result>0)
 			{
 				result=db.executeUpdateQuery(query.updateToatalBalance(obj.getBalance(),tmpRecNo));
 			}
 			if(obj.getSelectedSubOf()!=null)
 			{
-			getSubOfCurentSelection=getSubOfCurrentSelection(topLevelRec.getAccountName(),false);
-	    	for(AccountsModel oldObj:getSubOfCurentSelection)
-			{
-	    		   	AccountsModel topLevelRecNew=getChartofAccountsByNumber(oldObj.getAccountNumber());
-			    	List<AccountsModel> getSubOfCurentSelectionNew =getSubOfCurrentSelection(topLevelRecNew.getAccountName(),true);
-			    	double totalBalance=0;
-			    	for(AccountsModel deeperObj:getSubOfCurentSelectionNew)
-			    	{
-			    		totalBalance=totalBalance+deeperObj.getBalance();
-			    	}
-			    	result=db.executeUpdateQuery(query.updateToatalBalance(totalBalance,oldObj.getRec_No()));
-	    		
+				getSubOfCurentSelection=getSubOfCurrentSelection(topLevelRec.getAccountName(),false);
+				for(AccountsModel oldObj:getSubOfCurentSelection)
+				{
+					AccountsModel topLevelRecNew=getChartofAccountsByNumber(oldObj.getAccountNumber());
+					List<AccountsModel> getSubOfCurentSelectionNew =getSubOfCurrentSelection(topLevelRecNew.getAccountName(),true);
+					double totalBalance=0;
+					for(AccountsModel deeperObj:getSubOfCurentSelectionNew)
+					{
+						totalBalance=totalBalance+deeperObj.getBalance();
+					}
+					result=db.executeUpdateQuery(query.updateToatalBalance(totalBalance,oldObj.getRec_No()));
+
+				}
+
 			}
-	    	
-			}
-			
+
 		}
 		catch (Exception ex) {
 			logger.error("error in ChartOFAccountData---UpdateAccount-->" , ex);
 		}
-		
+
 		return result;
-		
+
 	}
-	
+
 	public AccountsModel getChartofAccountsByNumber(String acountNumber)
 	{
 		AccountsModel obj=new AccountsModel();
 		ChartOfAccountQueries query=new ChartOfAccountQueries();
 		ResultSet rs = null;
 		ResultSet rsBank = null;
-		Pattern pattern = Pattern.compile("(\\·)(.*?)(\\:)");
+		Pattern pattern = Pattern.compile("(\\Â·)(.*?)(\\:)");
 		List<String> listMatches = new ArrayList<String>();
-		 
+
 		DecimalFormat dcf = new DecimalFormat( "#,###,###,##0.00" );
-		try 
+		try
 		{
 			rs=db.executeNonQuery(query.getChartofAccountsByNumber(acountNumber));
 			while(rs.next())
 			{
-				
+
 				obj.setRec_No(rs.getInt("Rec_No"));
 				obj.setName(rs.getString("Name")==null?"":rs.getString("Name"));
 				obj.setFullName(rs.getString("fullname")==null?"":rs.getString("fullname"));
@@ -400,14 +400,14 @@ public class ChartOFAccountData {
 				double TotalBalance=rs.getDouble("TotalBalance");
 				double balance=rs.getDouble("balance");
 				if(rs.getDate("balanceDate")!=null)
-				obj.setBalaceDate(df.parse(sdf.format(rs.getDate("balanceDate"))));
+					obj.setBalaceDate(df.parse(sdf.format(rs.getDate("balanceDate"))));
 				if(rs.getDate("TimeCreated")!=null)
-				obj.setCreatedDate(df.parse(sdf.format(rs.getDate("TimeCreated"))));
+					obj.setCreatedDate(df.parse(sdf.format(rs.getDate("TimeCreated"))));
 				obj.setBalance(dcf.parse(dcf.format(balance)).doubleValue());
 				obj.setTotalBalance(dcf.parse(dcf.format(TotalBalance)).doubleValue());
-			//	obj.setClassName(rs.getString("Class"));
+				//	obj.setClassName(rs.getString("Class"));
 				obj.setNotes(rs.getString("notes")==null?"":rs.getString("notes"));
-				
+
 			}
 		}
 		catch (Exception ex) {
@@ -415,81 +415,81 @@ public class ChartOFAccountData {
 		}
 		return obj;
 	}
-	
-	
+
+
 	public int UpdateAccount(AccountsModel obj) throws ParseException
 	{
-		
+
 		List<AccountsModel> getSubOfCurentSelection=new ArrayList<AccountsModel>();
 		ChartOfAccountQueries query=new ChartOfAccountQueries();
 		AccountsModel selectedTempObject=new AccountsModel();
 		AccountsModel getbyIdOfSubOfSelected=null;
 		getSubOfCurentSelection=getSubOfCurrentSelection(obj.getAccountName(),true);
 		int result=0;
-		
-		try 
-		{	
-		if(obj.getSelectedSubOf()!=null)
-			getbyIdOfSubOfSelected=getChartofAccountsByID(obj.getSelectedSubOf().getRec_No());
-		int sublevelTrack=0;
-		String ActLevels="";
-		String ACTLEVELSwithNO ="";
-		String oldAccountName="";
-		String oldAccountNumber ="";
-		selectedTempObject=obj;
-		String AccountType="";
-		double totalBalanceForWithSub=0;
-		
-		if(getbyIdOfSubOfSelected!=null)
+
+		try
 		{
-			//totalBalanceForWithSub=getbyIdOfSubOfSelected.getBalance();
-			AccountType=getbyIdOfSubOfSelected.getAccountType();
-		}
-		else
-		{
-			AccountType=obj.getSelectedAccountType();
-		}
-		
-		for(AccountsModel oldObj:getSubOfCurentSelection)
-		{
-			
-			creationdate=df.parse(sdf.format(c.getTime()));
-			
-			if(getbyIdOfSubOfSelected!=null && oldObj.getAccountName().equalsIgnoreCase(obj.getAccountName()) )
+			if(obj.getSelectedSubOf()!=null)
+				getbyIdOfSubOfSelected=getChartofAccountsByID(obj.getSelectedSubOf().getRec_No());
+			int sublevelTrack=0;
+			String ActLevels="";
+			String ACTLEVELSwithNO ="";
+			String oldAccountName="";
+			String oldAccountNumber ="";
+			selectedTempObject=obj;
+			String AccountType="";
+			double totalBalanceForWithSub=0;
+
+			if(getbyIdOfSubOfSelected!=null)
 			{
-				oldObj=obj;
-				obj.setActLevels(getbyIdOfSubOfSelected.getActLevels()+":"+oldObj.getOldAccountName());
-				obj.setFullName(getbyIdOfSubOfSelected.getFullName()+":"+oldObj.getOldAccountName());
-				obj.setAccountName(obj.getOldAccountNumber()+"·"+oldObj.getOldAccountName());
-				obj.setaCTLEVELSwithNO(getbyIdOfSubOfSelected.getaCTLEVELSwithNO()+":"+oldObj.getAccountName());
-				ActLevels=obj.getActLevels();
-				oldAccountName=obj.getOldAccountName();
-				oldAccountNumber=obj.getOldAccountNumber();
-				ACTLEVELSwithNO=obj.getaCTLEVELSwithNO();
-				obj.setSubLevel(getbyIdOfSubOfSelected.getSubLevel()+1);
-				obj.setAccountType(AccountType);
-				obj.setName(selectedTempObject.getName());
-				obj.setAccountNumber(selectedTempObject.getAccountNumber());
-				sublevelTrack=obj.getSubLevel();
-				
+				//totalBalanceForWithSub=getbyIdOfSubOfSelected.getBalance();
+				AccountType=getbyIdOfSubOfSelected.getAccountType();
 			}
-			else if(getbyIdOfSubOfSelected==null)
+			else
 			{
-				
-				//	double totalBalanceForWithOutSub=0;
+				AccountType=obj.getSelectedAccountType();
+			}
+
+			for(AccountsModel oldObj:getSubOfCurentSelection)
+			{
+
+				creationdate=df.parse(sdf.format(c.getTime()));
+
+				if(getbyIdOfSubOfSelected!=null && oldObj.getAccountName().equalsIgnoreCase(obj.getAccountName()) )
+				{
+					oldObj=obj;
+					obj.setActLevels(getbyIdOfSubOfSelected.getActLevels()+":"+oldObj.getOldAccountName());
+					obj.setFullName(getbyIdOfSubOfSelected.getFullName()+":"+oldObj.getOldAccountName());
+					obj.setAccountName(obj.getOldAccountNumber()+"Â·"+oldObj.getOldAccountName());
+					obj.setaCTLEVELSwithNO(getbyIdOfSubOfSelected.getaCTLEVELSwithNO()+":"+oldObj.getAccountName());
+					ActLevels=obj.getActLevels();
+					oldAccountName=obj.getOldAccountName();
+					oldAccountNumber=obj.getOldAccountNumber();
+					ACTLEVELSwithNO=obj.getaCTLEVELSwithNO();
+					obj.setSubLevel(getbyIdOfSubOfSelected.getSubLevel()+1);
+					obj.setAccountType(AccountType);
+					obj.setName(selectedTempObject.getName());
+					obj.setAccountNumber(selectedTempObject.getAccountNumber());
+					sublevelTrack=obj.getSubLevel();
+
+				}
+				else if(getbyIdOfSubOfSelected==null)
+				{
+
+					//	double totalBalanceForWithOutSub=0;
 					//int recNoForTotalBalance=0;
 					String AccName="";
 					for(AccountsModel irtnObj:getSubOfCurentSelection)
 					{
-						
-							irtnObj.setModifiedDate(creationdate);
-							irtnObj.setBalaceDate(creationdate);
+
+						irtnObj.setModifiedDate(creationdate);
+						irtnObj.setBalaceDate(creationdate);
 						if(irtnObj.getAccountName().equalsIgnoreCase(obj.getAccountName()))
 						{
 							//recNoForTotalBalance=irtnObj.getRec_No();
 							irtnObj.setActLevels(irtnObj.getOldAccountName());
 							irtnObj.setFullName(irtnObj.getOldAccountName());
-							irtnObj.setAccountName(irtnObj.getOldAccountNumber()+"·"+irtnObj.getOldAccountName());
+							irtnObj.setAccountName(irtnObj.getOldAccountNumber()+"Â·"+irtnObj.getOldAccountName());
 							irtnObj.setaCTLEVELSwithNO(irtnObj.getAccountName());
 							irtnObj.setAccountType(irtnObj.getSelectedAccountType());
 							irtnObj.setSubLevel(0);
@@ -517,19 +517,19 @@ public class ChartOFAccountData {
 							AccName=irtnObj.getAccountName();
 							sublevelTrack=irtnObj.getSubLevel();
 						}
-							else
+						else
 						{
-								
-								irtnObj.setActLevels(ActLevels+":"+irtnObj.getName());
-								irtnObj.setaCTLEVELSwithNO(ACTLEVELSwithNO+":"+irtnObj.getAccountName());
-								irtnObj.setFullName(irtnObj.getActLevels());
-								irtnObj.setaCTLEVELSwithNO(irtnObj.getaCTLEVELSwithNO().replace(oldAccountName, selectedTempObject.getName()));
-								irtnObj.setAccountName(irtnObj.getAccountName().replace(oldAccountName, selectedTempObject.getName()));
-								irtnObj.setActLevels(irtnObj.getActLevels().replace(oldAccountName, selectedTempObject.getName()));
-								irtnObj.setFullName(irtnObj.getFullName().replace(oldAccountName, selectedTempObject.getName()));
-								irtnObj.setAccountName(irtnObj.getAccountName().replace(oldAccountNumber, selectedTempObject.getAccountNumber()));
-								irtnObj.setaCTLEVELSwithNO(irtnObj.getaCTLEVELSwithNO().replace(oldAccountNumber, selectedTempObject.getAccountNumber()));
-								irtnObj.setAccountType(AccountType);
+
+							irtnObj.setActLevels(ActLevels+":"+irtnObj.getName());
+							irtnObj.setaCTLEVELSwithNO(ACTLEVELSwithNO+":"+irtnObj.getAccountName());
+							irtnObj.setFullName(irtnObj.getActLevels());
+							irtnObj.setaCTLEVELSwithNO(irtnObj.getaCTLEVELSwithNO().replace(oldAccountName, selectedTempObject.getName()));
+							irtnObj.setAccountName(irtnObj.getAccountName().replace(oldAccountName, selectedTempObject.getName()));
+							irtnObj.setActLevels(irtnObj.getActLevels().replace(oldAccountName, selectedTempObject.getName()));
+							irtnObj.setFullName(irtnObj.getFullName().replace(oldAccountName, selectedTempObject.getName()));
+							irtnObj.setAccountName(irtnObj.getAccountName().replace(oldAccountNumber, selectedTempObject.getAccountNumber()));
+							irtnObj.setaCTLEVELSwithNO(irtnObj.getaCTLEVELSwithNO().replace(oldAccountNumber, selectedTempObject.getAccountNumber()));
+							irtnObj.setAccountType(AccountType);
 							if(irtnObj.getSubLevel()==1)
 							{
 								if(sublevelTrack==irtnObj.getSubLevel())
@@ -547,11 +547,11 @@ public class ChartOFAccountData {
 									irtnObj.setSubLevel(sublevelTrack+1);
 									sublevelTrack=irtnObj.getSubLevel();
 								}
-								
-								
+
+
 							}
 							else if(irtnObj.getSubLevel()==2)
-							{	
+							{
 								if(sublevelTrack==irtnObj.getSubLevel())
 								{
 									irtnObj.setSubLevel(irtnObj.getSubLevel());
@@ -567,8 +567,8 @@ public class ChartOFAccountData {
 									irtnObj.setSubLevel(sublevelTrack+1);
 									sublevelTrack=irtnObj.getSubLevel();
 								}
-								
-							
+
+
 							}
 							else if(irtnObj.getSubLevel()==3)
 							{
@@ -587,8 +587,8 @@ public class ChartOFAccountData {
 									irtnObj.setSubLevel(sublevelTrack+1);
 									sublevelTrack=irtnObj.getSubLevel();
 								}
-								
-							
+
+
 							}
 							else
 							{
@@ -607,15 +607,15 @@ public class ChartOFAccountData {
 									irtnObj.setSubLevel(sublevelTrack+1);
 									sublevelTrack=irtnObj.getSubLevel();
 								}
-							
+
 							}
 						}
-						
+
 						if(irtnObj.getModifiedDate()==null)
 							oldObj.setModifiedDate(creationdate);
 						if(irtnObj.getBalaceDate()==null)
 							obj.setBalaceDate(creationdate);
-						result=db.executeUpdateQuery(query.UpdateAccountQuery(irtnObj));	
+						result=db.executeUpdateQuery(query.UpdateAccountQuery(irtnObj));
 						if(result>0)
 						{
 							db.executeUpdateQuery(query.UpdateBanksForChartOfAccountAccount(irtnObj));
@@ -624,144 +624,144 @@ public class ChartOFAccountData {
 					List<AccountsModel> updateTotalbalanceWithOutSub=getSubOfCurrentSelection(AccName,false);
 					for(AccountsModel newirtnObjwithOutSub:updateTotalbalanceWithOutSub)
 					{
-						
+
 						List<AccountsModel> getSubOfCurentSelectionNew =getSubOfCurrentSelection(newirtnObjwithOutSub.getAccountName(),true);
-				    	double totalBalance=0;
-				    	for(AccountsModel deeperObj:getSubOfCurentSelectionNew)
-				    	{
-				    		totalBalance=totalBalance+deeperObj.getBalance();
-				    	}
-				    	result=db.executeUpdateQuery(query.updateToatalBalance(totalBalance,newirtnObjwithOutSub.getRec_No()));
+						double totalBalance=0;
+						for(AccountsModel deeperObj:getSubOfCurentSelectionNew)
+						{
+							totalBalance=totalBalance+deeperObj.getBalance();
+						}
+						result=db.executeUpdateQuery(query.updateToatalBalance(totalBalance,newirtnObjwithOutSub.getRec_No()));
 						//totalBalanceForWithOutSub=totalBalanceForWithOutSub+newirtnObjwithOutSub.getBalance();
 						//result=db.executeUpdateQuery(query.updateToatalBalance(totalBalanceForWithOutSub,recNoForTotalBalance));
 					}
-					
+
 					break;
-				
-				
-			}
-			else{
-				obj=oldObj;
-		    	obj.setActLevels(ActLevels+":"+oldObj.getName());
-		    	obj.setaCTLEVELSwithNO(ACTLEVELSwithNO+":"+oldObj.getAccountName());
-				obj.setFullName(obj.getActLevels());
-				
-				if(oldObj.getSubLevel()==1)
+
+
+				}
+				else{
+					obj=oldObj;
+					obj.setActLevels(ActLevels+":"+oldObj.getName());
+					obj.setaCTLEVELSwithNO(ACTLEVELSwithNO+":"+oldObj.getAccountName());
+					obj.setFullName(obj.getActLevels());
+
+					if(oldObj.getSubLevel()==1)
+					{
+						if(sublevelTrack==oldObj.getSubLevel())
+						{
+							obj.setSubLevel(oldObj.getSubLevel()+1);
+							sublevelTrack=obj.getSubLevel();
+						}
+						if(sublevelTrack>oldObj.getSubLevel())
+						{
+							obj.setSubLevel(oldObj.getSubLevel()+1);
+							sublevelTrack=obj.getSubLevel();
+						}
+						if(sublevelTrack<oldObj.getSubLevel())
+						{
+							obj.setSubLevel(sublevelTrack+1);
+							sublevelTrack=obj.getSubLevel();
+						}
+
+
+					}
+					else if(oldObj.getSubLevel()==2)
+					{
+						if(sublevelTrack==oldObj.getSubLevel())
+						{
+							obj.setSubLevel(oldObj.getSubLevel()+1);
+							sublevelTrack=obj.getSubLevel();
+						}
+						if(sublevelTrack>oldObj.getSubLevel())
+						{
+							obj.setSubLevel(oldObj.getSubLevel()+1);
+							sublevelTrack=obj.getSubLevel();
+						}
+						if(sublevelTrack<oldObj.getSubLevel())
+						{
+							obj.setSubLevel(sublevelTrack+1);
+							sublevelTrack=obj.getSubLevel();
+						}
+
+
+					}
+					else if(oldObj.getSubLevel()==3)
+					{
+						if(sublevelTrack==oldObj.getSubLevel())
+						{
+							obj.setSubLevel(oldObj.getSubLevel()+1);
+							sublevelTrack=obj.getSubLevel();
+						}
+						if(sublevelTrack>oldObj.getSubLevel())
+						{
+							obj.setSubLevel(oldObj.getSubLevel()+2);
+							sublevelTrack=obj.getSubLevel();
+						}
+						if(sublevelTrack<oldObj.getSubLevel())
+						{
+							obj.setSubLevel(sublevelTrack+1);
+							sublevelTrack=obj.getSubLevel();
+						}
+
+
+					}
+					else
+					{
+						if(sublevelTrack==oldObj.getSubLevel())
+						{
+							obj.setSubLevel(oldObj.getSubLevel()+1);
+							sublevelTrack=obj.getSubLevel();
+						}
+						if(sublevelTrack>oldObj.getSubLevel())
+						{
+							obj.setSubLevel(oldObj.getSubLevel()+1);
+							sublevelTrack=obj.getSubLevel();
+						}
+						if(sublevelTrack<oldObj.getSubLevel())
+						{
+							obj.setSubLevel(sublevelTrack+1);
+							sublevelTrack=obj.getSubLevel();
+						}
+
+
+					}
+					obj.setAccountType(AccountType);
+				}
+				obj.setaCTLEVELSwithNO(obj.getaCTLEVELSwithNO().replace(oldAccountName, selectedTempObject.getName()));
+				obj.setAccountName(obj.getAccountName().replace(oldAccountName, selectedTempObject.getName()));
+				obj.setActLevels(obj.getActLevels().replace(oldAccountName, selectedTempObject.getName()));
+				obj.setFullName(obj.getFullName().replace(oldAccountName, selectedTempObject.getName()));
+				obj.setAccountName(obj.getAccountName().replace(oldAccountNumber, selectedTempObject.getAccountNumber()));
+				obj.setaCTLEVELSwithNO(obj.getaCTLEVELSwithNO().replace(oldAccountNumber, selectedTempObject.getAccountNumber()));
+
+				if(obj.getModifiedDate()==null)
+					oldObj.setModifiedDate(creationdate);
+				if(obj.getBalaceDate()==null)
+					obj.setBalaceDate(creationdate);
+
+
+				result=db.executeUpdateQuery(query.UpdateAccountQuery(obj));
+				if(result>0)
 				{
-					if(sublevelTrack==oldObj.getSubLevel())
-					{
-						obj.setSubLevel(oldObj.getSubLevel()+1);
-						sublevelTrack=obj.getSubLevel();
-					}
-					if(sublevelTrack>oldObj.getSubLevel())
-					{
-						obj.setSubLevel(oldObj.getSubLevel()+1);
-						sublevelTrack=obj.getSubLevel();
-					}
-					if(sublevelTrack<oldObj.getSubLevel())
-					{
-						obj.setSubLevel(sublevelTrack+1);
-						sublevelTrack=obj.getSubLevel();
-					}
-					
-					
+					db.executeUpdateQuery(query.UpdateBanksForChartOfAccountAccount(obj));
 				}
-				else if(oldObj.getSubLevel()==2)
-				{	
-					if(sublevelTrack==oldObj.getSubLevel())
-					{
-						obj.setSubLevel(oldObj.getSubLevel()+1);
-						sublevelTrack=obj.getSubLevel();
-					}
-					if(sublevelTrack>oldObj.getSubLevel())
-					{
-						obj.setSubLevel(oldObj.getSubLevel()+1);
-						sublevelTrack=obj.getSubLevel();
-					}
-					if(sublevelTrack<oldObj.getSubLevel())
-					{
-						obj.setSubLevel(sublevelTrack+1);
-						sublevelTrack=obj.getSubLevel();
-					}
-					
-				
-				}
-				else if(oldObj.getSubLevel()==3)
-				{
-					if(sublevelTrack==oldObj.getSubLevel())
-					{
-						obj.setSubLevel(oldObj.getSubLevel()+1);
-						sublevelTrack=obj.getSubLevel();
-					}
-					if(sublevelTrack>oldObj.getSubLevel())
-					{
-						obj.setSubLevel(oldObj.getSubLevel()+2);
-						sublevelTrack=obj.getSubLevel();
-					}
-					if(sublevelTrack<oldObj.getSubLevel())
-					{
-						obj.setSubLevel(sublevelTrack+1);
-						sublevelTrack=obj.getSubLevel();
-					}
-					
-				
-				}
-				else
-				{
-					if(sublevelTrack==oldObj.getSubLevel())
-					{
-						obj.setSubLevel(oldObj.getSubLevel()+1);
-						sublevelTrack=obj.getSubLevel();
-					}
-					if(sublevelTrack>oldObj.getSubLevel())
-					{
-						obj.setSubLevel(oldObj.getSubLevel()+1);
-						sublevelTrack=obj.getSubLevel();
-					}
-					if(sublevelTrack<oldObj.getSubLevel())
-					{
-						obj.setSubLevel(sublevelTrack+1);
-						sublevelTrack=obj.getSubLevel();
-					}
-					
-				
-				}
-			obj.setAccountType(AccountType);
+
+				//db.executeUpdateQuery(query.updateToatalBalance(oldObj.getBalance(),obj.getRec_No()));
+
 			}
-			obj.setaCTLEVELSwithNO(obj.getaCTLEVELSwithNO().replace(oldAccountName, selectedTempObject.getName()));
-			obj.setAccountName(obj.getAccountName().replace(oldAccountName, selectedTempObject.getName()));
-			obj.setActLevels(obj.getActLevels().replace(oldAccountName, selectedTempObject.getName()));
-			obj.setFullName(obj.getFullName().replace(oldAccountName, selectedTempObject.getName()));
-			obj.setAccountName(obj.getAccountName().replace(oldAccountNumber, selectedTempObject.getAccountNumber()));
-			obj.setaCTLEVELSwithNO(obj.getaCTLEVELSwithNO().replace(oldAccountNumber, selectedTempObject.getAccountNumber()));
-			
-			if(obj.getModifiedDate()==null)
-				oldObj.setModifiedDate(creationdate);
-			if(obj.getBalaceDate()==null)
-				obj.setBalaceDate(creationdate);
-			
-				
-			result=db.executeUpdateQuery(query.UpdateAccountQuery(obj));	
-			if(result>0)
-			{
-				db.executeUpdateQuery(query.UpdateBanksForChartOfAccountAccount(obj));
-			}
-			
-			//db.executeUpdateQuery(query.updateToatalBalance(oldObj.getBalance(),obj.getRec_No()));
-		
-		}
 			if(getbyIdOfSubOfSelected!=null)
 			{
 				List<AccountsModel> updateTotalbalance=getSubOfCurrentSelection(getbyIdOfSubOfSelected.getAccountName(),false);
 				for(AccountsModel newirtnObj:updateTotalbalance)
 				{
 					List<AccountsModel> getSubOfCurentSelectionNew =getSubOfCurrentSelection(newirtnObj.getAccountName(),true);
-			    	double totalBalance=0;
-			    	for(AccountsModel deeperObj:getSubOfCurentSelectionNew)
-			    	{
-			    		totalBalance=totalBalance+deeperObj.getBalance();
-			    	}
-			    	result=db.executeUpdateQuery(query.updateToatalBalance(totalBalance,newirtnObj.getRec_No()));
+					double totalBalance=0;
+					for(AccountsModel deeperObj:getSubOfCurentSelectionNew)
+					{
+						totalBalance=totalBalance+deeperObj.getBalance();
+					}
+					result=db.executeUpdateQuery(query.updateToatalBalance(totalBalance,newirtnObj.getRec_No()));
 					//totalBalanceForWithSub=totalBalanceForWithSub+newirtnObj.getBalance();
 				}
 				//result=db.executeUpdateQuery(query.updateToatalBalance(totalBalanceForWithSub,getbyIdOfSubOfSelected.getRec_No()));
@@ -771,14 +771,14 @@ public class ChartOFAccountData {
 			logger.error("error in ChartOFAccountData---UpdateAccount-->" , ex);
 		}
 		return result;
-		
+
 	}
 	public List<String> getBankNamesForChartofAccounts()
 	{
 		List<String> lst=new ArrayList<String>();
 		ChartOfAccountQueries query=new ChartOfAccountQueries();
 		ResultSet rs = null;
-		try 
+		try
 		{
 			lst.add("Select");
 			rs=db.executeNonQuery(query.getBankNamesForChartofAccounts());
@@ -792,13 +792,13 @@ public class ChartOFAccountData {
 		}
 		return lst;
 	}
-	
+
 	public List<String> getAllAccountTypeFromChartOfAccount()
 	{
 		List<String> lst=new ArrayList<String>();
 		ChartOfAccountQueries query=new ChartOfAccountQueries();
 		ResultSet rs = null;
-		try 
+		try
 		{
 			rs=db.executeNonQuery(query.getAllAccountTypeFromChartOfAccount());
 			while(rs.next())
@@ -811,13 +811,13 @@ public class ChartOFAccountData {
 		}
 		return lst;
 	}
-	
+
 	public List<AccountsModel> getsubOfOnEditChartOFAccount(String accountType)
 	{
 		List<AccountsModel> lst=new ArrayList<AccountsModel>();
 		ChartOfAccountQueries query=new ChartOfAccountQueries();
 		ResultSet rs = null;
-		try 
+		try
 		{
 			rs=db.executeNonQuery(query.getsubOfOnEditChartOFAccount(accountType));
 			AccountsModel newobj=new AccountsModel();
@@ -830,7 +830,7 @@ public class ChartOFAccountData {
 			while(rs.next())
 			{
 				AccountsModel obj=new AccountsModel();
-				
+
 				obj.setRec_No(rs.getInt("Rec_No"));
 				obj.setName(rs.getString("Name"));
 				obj.setAccountName(rs.getString("AccountName"));
@@ -847,7 +847,7 @@ public class ChartOFAccountData {
 				else
 					obj.setAccountName("                             "+obj.getAccountName());
 					*/
-				
+
 				lst.add(obj);
 			}
 		}
@@ -893,16 +893,16 @@ public class ChartOFAccountData {
 		}
 		return lst;
 	}*/
-	
-	
+
+
 	public List<AccountsModel> getSubOfCurrentSelection(String accountName,boolean asdnOrdescd)
 	{
 		List<AccountsModel> lst=new ArrayList<AccountsModel>();
-		
+
 		ChartOfAccountQueries query=new ChartOfAccountQueries();
 		ResultSet rs = null;
 		DecimalFormat dcf=new DecimalFormat("#,##0.00");
-		try 
+		try
 		{
 			rs=db.executeNonQuery(query.getSubOfCurrentSelection(accountName,asdnOrdescd));
 			while(rs.next())
@@ -924,9 +924,9 @@ public class ChartOFAccountData {
 				double TotalBalance=rs.getDouble("TotalBalance");
 				double balance=rs.getDouble("balance");
 				if(rs.getDate("balanceDate")!=null)
-				obj.setBalaceDate(df.parse(sdf.format(rs.getDate("balanceDate"))));
+					obj.setBalaceDate(df.parse(sdf.format(rs.getDate("balanceDate"))));
 				if(rs.getDate("TimeCreated")!=null)
-				obj.setCreatedDate(df.parse(sdf.format(rs.getDate("TimeCreated"))));
+					obj.setCreatedDate(df.parse(sdf.format(rs.getDate("TimeCreated"))));
 				obj.setBalance(dcf.parse(dcf.format(balance)).doubleValue());
 				obj.setTotalBalance(dcf.parse(dcf.format(TotalBalance)).doubleValue());
 				obj.setNotes(rs.getString("notes")==null?"":rs.getString("notes"));
@@ -938,7 +938,4 @@ public class ChartOFAccountData {
 		}
 		return lst;
 	}
-	
-	
-
 }

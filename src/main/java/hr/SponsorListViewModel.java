@@ -10,9 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 import layout.MenuModel;
+import model.CompanyDBModel;
 import model.DataFilter;
 
 import org.apache.log4j.Logger;
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.GlobalCommand;
@@ -21,8 +23,11 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Path;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Borderlayout;
 import org.zkoss.zul.Center;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tabbox;
 
 import setup.users.WebusersModel;
@@ -188,7 +193,27 @@ public class SponsorListViewModel
     {	      
 	   lstItems=filterData();
     }
-	
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Command
+	@NotifyChange("lstItems")
+	public void deleteSponsorCommand(@BindingParam("row")final SponsorModel row)
+	{
+		Messagebox.show("Are you sure to delete this Sponsor ?","Delete Sponsor",Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new EventListener()
+		{
+			public void onEvent(Event e)
+			{
+				if (Messagebox.ON_YES.equals(e.getName()))
+				{
+					if(row.getSponsorKey()>0)
+						sponsorsdata.deleteSponsor(row);
+					lstItems.remove(row);
+					BindUtils.postNotifyChange(null,	null,SponsorListViewModel.this,"lstItems");
+				}
+			}
+		});
+	}
+
 	public List<SponsorModel> getLstItems() {
 		return lstItems;
 	}

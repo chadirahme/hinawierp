@@ -60,4 +60,12 @@ public class SponsorQuerries {
 		  query.append("SELECT max(LastModified) as LastModified from SPONSORINFO");		
 		  return query.toString();
 	}
+
+	public String deleteSponsor(int recNo)
+	{
+		query=new StringBuffer();
+		query.append("Delete FROM SPONSORINFO ");
+		query.append(" where sponsor_key ="  + recNo);
+		return query.toString();
+	}
 }

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import common.FormatDateText;
 import layout.MenuModel;
 import model.OtherNamesModel;
 import model.QbListsModel;
@@ -148,7 +149,7 @@ public class EditOtherNameViewModel
 	   public void updateOtherNameList(@BindingParam("cmp") Window x) throws ParseException
 	   {
 		 int result=0;
-		 if(selectedOtherName.getName().equalsIgnoreCase(""))
+		 if(FormatDateText.isEmpty(selectedOtherName.getName()))
 		 {
 			 Messagebox.show("Please Enter the Name.","Other Name List",Messagebox.OK , Messagebox.INFORMATION);
 			 return;
@@ -221,9 +222,10 @@ public class EditOtherNameViewModel
 		 BindUtils.postGlobalCommand(null, null, "refreshParent", args);
 		 x.detach();
 		}
-		else
-			Clients.showNotification("Error at OtherNameList !!.",Clients.NOTIFICATION_TYPE_INFO, null, "middle_center", 10000,true);
-		x.detach();
+		else {
+			Clients.showNotification("Error at OtherNameList !!.", Clients.NOTIFICATION_TYPE_INFO, null, "middle_center", 10000, true);
+			x.detach();
+		}
 		
 	   }
 	   

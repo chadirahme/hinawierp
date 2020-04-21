@@ -7,7 +7,7 @@
 		mode="highlighted" title="Edit Other Name Info" border="normal" 
 		position="center,center" closable="true"
 		viewModel="@id('vm')  @init('hba.EditOtherNameViewModel')"
-		sizable="true" onCancel="otherNameListModalDialog.detach()" width="500px" height="680px">
+		sizable="true" onCancel="otherNameListModalDialog.detach()" width="500px" height="700px">
 		<grid id="grid_id"
 			form="@id('fx') @load(vm.selectedOtherName)  @save(vm.selectedOtherName, before='updateOtherNameList')"
 			hflex="1" vflex="1">

@@ -46,13 +46,13 @@
 							readonly="true" />
 					</cell>
 				</row>
-				<row>
+				<row visible="@bind(vm.compSetup.useDefaultSalesRepCommission eq 'Y')">
 					<cell>
 						<checkbox checked="@bind(vm.useCommistion)"></checkbox>
 						Use Commission
 					</cell>
 				</row>
-				<row>
+				<row visible="@bind(vm.compSetup.useDefaultSalesRepCommission eq 'Y')">
 					<cell></cell>
 					<cell colspan="1">
 						<checkbox checked="@bind(vm.fixedCommistion)" id="fixedCheckBox">
@@ -70,7 +70,7 @@
 						%
 					</cell>
 				</row>
-				<row>
+				<row visible="@bind(vm.compSetup.useDefaultSalesRepCommission eq 'Y')">
 					<cell></cell>
 					<cell colspan="1">
 						<checkbox checked="@bind(vm.variantCommistion)" id="varientcheckBox">
@@ -93,7 +93,7 @@
 						</listbox>
 					</cell>
 				</row>
-				<row>
+				<row visible="@bind(vm.compSetup.useDefaultSalesRepCommission eq 'Y')">
 					<cell></cell>
 					<cell colspan="1">
 						<checkbox checked="@bind(vm.amountCommistion)" id="amountCheckBox"></checkbox>

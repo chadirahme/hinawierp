@@ -105,6 +105,7 @@ public class ClassViewModel {
 			ClassModel tmp=i.next();				
 			if(tmp.getFullName().toLowerCase().contains(filter.getFullName().toLowerCase()) &&
 					tmp.getIsActive().toLowerCase().contains(filter.getIsActive().toLowerCase())
+					&& tmp.getArabicName().toLowerCase().contains(filter.getArName())
 					)
 			{
 				lst.add(tmp);

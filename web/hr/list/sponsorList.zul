@@ -86,10 +86,10 @@
 					<template name="model">
 						<listitem>		
 						<listcell>
-								<button image="/images/rowedit.png" onDoubleClick="@command('editSponsorCommand', row=each)" />
+								<button image="/images/rowedit.png" onClick="@command('editSponsorCommand', row=each)" />
 							</listcell>	
 							<listcell>
-								<button image="/images/cross.png" onDoubleClick="@command('editSponsorCommand', row=each)" />
+								<button image="/images/cross.png" onClick="@command('deleteSponsorCommand', row=each)" />
 							</listcell>	
 																		
 							<listcell onDoubleClick="@command('viewSponsorCommand', row=each)">

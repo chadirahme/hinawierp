@@ -217,13 +217,19 @@ public class BankNamesData {
 		
 		BanksNameQuerries query=new BanksNameQuerries();
 		ResultSet rs = null;
+		AccountsModel obj = new AccountsModel();
+		obj.setRec_No(0);
+		obj.setFullName("Select");
+		obj.setAccountName("Select");
+		lst.add(obj);
 		try 
 		{
 			rs=db.executeNonQuery(query.fillAccountsdropDownForBank());
 			while(rs.next())
 			{
-				AccountsModel obj=new AccountsModel();
+				obj=new AccountsModel();
 				obj.setAccountName(rs.getString("name"));
+				obj.setFullName(rs.getString("FullName"));
 				obj.setAccountType(rs.getString("AccountType"));
 				obj.setRec_No(rs.getInt("Rec_No"));
 				obj.setSubLevel(rs.getInt("SubLevel"));
@@ -232,10 +238,25 @@ public class BankNamesData {
 			}
 		}
 		catch (Exception ex) {
-			logger.error("error in HBAData---fillBankAccounts-->" , ex);
+			logger.error("error in BankNamesData---fillAccountsdropDownForBank-->" , ex);
 		}
 		return lst;
 	}
-	
+	public boolean checkIfBankAccountsHasSub(String accountName) {
+		boolean hasSubAccount = false;
+		BanksNameQuerries query = new BanksNameQuerries();
+		ResultSet rs = null;
+		try {
+			rs = db.executeNonQuery(query
+					.checkIfBankAccountsHasSubQuery(accountName));
+			while (rs.next()) {
+				hasSubAccount = true;
+			}
+		} catch (Exception ex) {
+			logger.error("error in BanksNamesData---checkIfBankAccountsHasSub-->", ex);
+		}
+
+		return hasSubAccount;
+	}
 	
 }

@@ -5,6 +5,8 @@ public class ClassModel
 
 	private int class_Key;
 	private String name;
+	private String arabicName;
+	private String arFullName;
 	private int sublevel;
 	private String listID;
 	private String fullName;
@@ -101,8 +103,23 @@ public class ClassModel
 	public void setSubofKey(int subofKey) {
 		this.subofKey = subofKey;
 	}
-	
-	
-	
-	
+
+
+	public String getArabicName() {
+		return arabicName;
+	}
+
+	public void setArabicName(String arabicName) {
+		this.arabicName = arabicName;
+	}
+
+	public String getArFullName() {
+		return arFullName;
+	}
+
+	public void setArFullName(String arFullName) {
+		this.arFullName = arFullName;
+	}
+
+
 }

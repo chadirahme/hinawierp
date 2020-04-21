@@ -216,6 +216,12 @@ public class SalesRepData {
 		
 		SalesRepQuerries query=new SalesRepQuerries();
 		ResultSet rs = null;
+		QbListsModel obj1 = new QbListsModel();
+		obj1.setRecNo(0);
+		obj1.setName("Select");
+		obj1.setFullName("Select");
+		obj1.setSubLevel(0);
+		lst.add(obj1);
 		try 
 		{
 			rs=db.executeNonQuery(query.fillSalesNameDropDown());

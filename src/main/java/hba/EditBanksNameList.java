@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import common.FormatDateText;
 import model.AccountsModel;
 import model.BanksModel;
 import model.FixedAssetModel;
@@ -133,12 +134,12 @@ public class EditBanksNameList
 	   public void updateBanksNameList(@BindingParam("cmp") Window x) throws ParseException
 	   {
 		 int result=0;
-		 if(selectedAccount!=null)
+		 if(selectedAccount!=null && selectedAccount.getRec_No()>0)
 		 {
 			 selectedBanksName.setAccountRefKey(selectedAccount.getRec_No());
 		 }
-			 
-		 if(selectedBanksName.getBankName().equalsIgnoreCase(""))
+
+		 if(FormatDateText.isEmpty(selectedBanksName.getBankName()))
 		 {
 			 Messagebox.show("Please Enter the Bank Name.","Bank List",Messagebox.OK , Messagebox.INFORMATION);
 			 return;
@@ -265,12 +266,30 @@ public class EditBanksNameList
 	/**
 	 * @param selectedAccount the selectedAccount to set
 	 */
+	@NotifyChange({"selectedAccount"})
 	public void setSelectedAccount(AccountsModel selectedAccount) {
 		this.selectedAccount = selectedAccount;
-	}
 
-	
-	
+		if (selectedAccount != null) {
+			if (selectedAccount.getRec_No() == 0)
+				return;
+
+			boolean hasSubAccount = bankData.checkIfBankAccountsHasSub(selectedAccount.getFullName() + ":");
+			if (hasSubAccount) {
+				Messagebox
+						.show("Selected account have sub accounts. You cannot continue !!",
+								"Bank List", Messagebox.OK,
+								Messagebox.INFORMATION);
+				setSelectedAccount(lstaccounts.get(0));
+			}
+		}
+		else
+		{
+			Messagebox.show("Invalid Account !!","Bank List",Messagebox.OK,Messagebox.INFORMATION);
+			setSelectedAccount(lstaccounts.get(0));
+		}
+
+	}
 
 	
 }

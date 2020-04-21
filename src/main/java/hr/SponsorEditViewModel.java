@@ -1,5 +1,6 @@
 package hr;
 
+import common.FormatDateText;
 import hr.model.SponsorModel;
 
 import java.text.DateFormat;
@@ -51,7 +52,7 @@ public class SponsorEditViewModel {
 		{
 			Execution exec = Executions.getCurrent();
 			Map map = exec.getArg();
-			int sponsorKey=0;//map.get("sponsorKey");
+			int sponsorKey=(Integer) map.get("sponsorKey");
 			String type=(String)map.get("type");
 			Window win = (Window)Path.getComponent("/sponsorListModalDialog");
 			if(type.equals("edit"))
@@ -117,8 +118,7 @@ public class SponsorEditViewModel {
 	   public void updateSponsorList(@BindingParam("cmp") Window x) throws ParseException
 	   {
 		 int result=0;
-			 
-		 if(selectedSponsor.getSponsorName().equalsIgnoreCase(""))
+		 if(FormatDateText.isEmpty(selectedSponsor.getSponsorName()))
 		 {
 			 Messagebox.show("Please Enter the Sponsor Name.","Sponsor List",Messagebox.OK , Messagebox.INFORMATION);
 			 return;
@@ -127,36 +127,34 @@ public class SponsorEditViewModel {
 		
 		 if(selectedSponsor.getSponsorKey()>0)
 		 {
-			 for(SponsorModel ValidationName:sopnsorNames)
-				{
-				 if(selectedSponsor.getSponsorName().replaceAll("\\s","").equalsIgnoreCase(ValidationName.getSponsorName().replaceAll("\\s","")) && (selectedSponsor.getSponsorKey()!=ValidationName.getSponsorKey()))
-					{
-						Messagebox.show("The Sponsor Name already exist.","Sponsor List",Messagebox.OK , Messagebox.INFORMATION);
-						return;
-					}
-				 if(selectedSponsor.getSponsorNameArabic().replaceAll("\\s","").equalsIgnoreCase(ValidationName.getSponsorNameArabic().replaceAll("\\s","")) && (selectedSponsor.getSponsorKey()!=ValidationName.getSponsorKey()))
-					{
-						Messagebox.show("The Sponsor Name-Arabic already exist.","Sponsor List",Messagebox.OK , Messagebox.INFORMATION);
-						return;
-					}
-				}
+			 for(SponsorModel ValidationName:sopnsorNames) {
+				 if (selectedSponsor.getSponsorName().replaceAll("\\s", "").equalsIgnoreCase(ValidationName.getSponsorName().replaceAll("\\s", "")) && (selectedSponsor.getSponsorKey() != ValidationName.getSponsorKey())) {
+					 Messagebox.show("The Sponsor Name already exist.", "Sponsor List", Messagebox.OK, Messagebox.INFORMATION);
+					 return;
+				 }
+				 if (FormatDateText.isEmpty(selectedSponsor.getSponsorNameArabic())==false) {
+					 if (selectedSponsor.getSponsorNameArabic().replaceAll("\\s", "").equalsIgnoreCase(ValidationName.getSponsorNameArabic().replaceAll("\\s", "")) && (selectedSponsor.getSponsorKey() != ValidationName.getSponsorKey())) {
+						 Messagebox.show("The Sponsor Name-Arabic already exist.", "Sponsor List", Messagebox.OK, Messagebox.INFORMATION);
+						 return;
+					 }
+				 }
+			 }
 			 		result= sponsorsData.updateSponsor(selectedSponsor);
 		 }
 		 else
 		 {
-			 for(SponsorModel ValidationName:sopnsorNames)
-				{
-					if(selectedSponsor.getSponsorName().replaceAll("\\s","").equalsIgnoreCase(ValidationName.getSponsorName().replaceAll("\\s","")))
-					{
-						Messagebox.show("The Sponsor Name already exist.","Sponsor List",Messagebox.OK , Messagebox.INFORMATION);
-						return;
-					}
-					 if(selectedSponsor.getSponsorNameArabic().replaceAll("\\s","").equalsIgnoreCase(ValidationName.getSponsorNameArabic().replaceAll("\\s","")))
-						{
-							Messagebox.show("The Sponsor Name-Arabic already exist.","Sponsor List",Messagebox.OK , Messagebox.INFORMATION);
-							return;
-						}
-				}
+			 for(SponsorModel ValidationName:sopnsorNames) {
+				 if (selectedSponsor.getSponsorName().replaceAll("\\s", "").equalsIgnoreCase(ValidationName.getSponsorName().replaceAll("\\s", ""))) {
+					 Messagebox.show("The Sponsor Name already exist.", "Sponsor List", Messagebox.OK, Messagebox.INFORMATION);
+					 return;
+				 }
+				 if (FormatDateText.isEmpty(selectedSponsor.getSponsorNameArabic()) == false) {
+					 if (selectedSponsor.getSponsorNameArabic().replaceAll("\\s", "").equalsIgnoreCase(ValidationName.getSponsorNameArabic().replaceAll("\\s", ""))) {
+						 Messagebox.show("The Sponsor Name-Arabic already exist.", "Sponsor List", Messagebox.OK, Messagebox.INFORMATION);
+						 return;
+					 }
+				 }
+			 }
 			 int tmpRecNo=sponsorsData.getSponsorMaxRecQuerry();
 			 result=sponsorsData.inserBankNameQuerry(selectedSponsor,tmpRecNo);
 		 }

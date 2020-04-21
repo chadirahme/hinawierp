@@ -148,6 +148,8 @@ public class EditEmployeeViewModel
 			selectedEmployee.setArMiddleName("");
 			selectedEmployee.setArLastName("");
 			selectedEmployee.setPlaceOfBirth("");
+			selectedEmployee.setStandardNo("");
+
 			
 			//GetMaXEMPNO
 			selectedEmployee.setEmployeeNo(GetMaXEMPNO(compKey));
