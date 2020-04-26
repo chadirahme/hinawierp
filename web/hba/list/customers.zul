@@ -133,7 +133,7 @@
 						
 						<listheader label="Status" sort="auto('isactive')" width="100px"  />
 						<listheader label="Note" sort="auto('note')" width="400px"  />
-						<listheader label="Created Time" sort="auto('createdDate')" width="400px"  />
+						<listheader label="Created Date" sort="auto('createdDate')" width="400px"  />
 
 					</listhead>
 					<template name="model">

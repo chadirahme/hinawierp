@@ -83,7 +83,7 @@ public class EmployeeActivity
 		}
 	}
 	
-	public double GetLeaveBalanceDays(int empKey,int leaveId,Date leaveStartDate,int compKey)
+	public int GetLeaveBalanceDays(int empKey,int leaveId,Date leaveStartDate,int compKey)
 	{
 		double totalDays=0;
 		try 
@@ -543,7 +543,7 @@ public class EmployeeActivity
 		catch (Exception ex) {
 			logger.error("error in EmployeeActivity---GetLeaveBalanceDays-->" , ex);
 		}
-		return totalDays;
+		return (int) totalDays;
 	}
 	private double FindTotalLeaveDuration(int SYears,int SMonths,int Sdays,String strDuration)
 	{

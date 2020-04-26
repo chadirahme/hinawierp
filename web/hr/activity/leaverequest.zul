@@ -117,14 +117,17 @@
 			<row>
 				<label value="Last Leave Return: "></label>
 				<label value="@bind(vm.lastEmployeeLeave.leavReturnDate)"></label>
-				<label value="Type: "></label>
+				<label value="Leave Type: "></label>
 				<label value="@bind(vm.lastEmployeeLeave.leaveTypeDesc)" ></label>
 				<label value="Number of Days:  "></label>
 				<cell>
-				<label value="@bind(vm.lastEmployeeLeave.noOfDays)" ></label><space></space><space></space>	<image style="cursor: help" tooltip="isSupervisorHint"  src="/images/hint-icon.png"></image>	
-									 <popup id="isSupervisorHint" width="300px">
-       			 					 <html><![CDATA[Please select Type of Leave to see the No of Days.]]></html>        				
-				   					 </popup>			</cell>
+				<label value="@bind(vm.lastEmployeeLeave.noOfDays)" ></label>
+
+					<!--<space></space><space></space>	<image style="cursor: help" tooltip="isSupervisorHint"  src="/images/hint-icon.png"></image>	-->
+									 <!--<popup id="isSupervisorHint" width="300px">-->
+       			 					 <!--<html><![CDATA[Please select Type of Leave to see the No of Days.]]></html>        				-->
+				   					 <!--</popup>			-->
+				</cell>
 				
 				
 			</row>

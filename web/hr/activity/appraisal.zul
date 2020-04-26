@@ -5,7 +5,7 @@
 	 @init('hr.AppraisalViewModel')" vflex="1">
 	 
 	 <scrollview orient="vertical" vflex="1">
-	 			<label value="Leave Request" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+	 			<label value="Employee Appraisal" style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
 	 		<grid>
 			<columns>
 			<column width="150px"></column>

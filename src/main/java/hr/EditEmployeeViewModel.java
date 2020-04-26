@@ -1,5 +1,6 @@
 package hr;
 
+import common.FormatDateText;
 import hr.model.CompanyModel;
 
 import java.text.DateFormat;
@@ -252,6 +253,7 @@ public class EditEmployeeViewModel
 	private void fillEmployeeInfo()
 	{
 		dateofbirth=selectedEmployee.getDateOfBirth();
+		if(!FormatDateText.isEmpty(selectedEmployee.getAge()))
 		age=Integer.valueOf(selectedEmployee.getAge());
 		
 		for (CompanyModel item : lstComapnies) 

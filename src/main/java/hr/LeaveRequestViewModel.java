@@ -443,8 +443,8 @@ public class LeaveRequestViewModel
 		}
 		
 		EmployeeActivity activity=new EmployeeActivity();
-		//totalDays=activity.GetLeaveBalanceDays(selectedCompEmployee.getEmployeeKey(), selectedType.getListId(), fromDate,selectedCompany.getCompKey());
-		lastEmployeeLeave.setNoOfDays(totalDays);
+		totalDays=activity.GetLeaveBalanceDays(selectedCompEmployee.getEmployeeKey(), selectedType.getListId(), fromDate,selectedCompany.getCompKey());
+		//lastEmployeeLeave.setNoOfDays(totalDays);
 	}
 	
 	@Command	
@@ -493,6 +493,15 @@ public class LeaveRequestViewModel
 		
 		employeePassport=data.GetEmployeePassport(objEmp.getEmployeeKey());		
 		lastEmployeeLeave=data.GetLastEmployeeLeaveQuery(objEmp.getEmployeeKey());
+		if(lastEmployeeLeave!=null)
+		{
+			//lastEmployeeLeave.setNoOfDays(totalDays);
+			if(lastEmployeeLeave.getReturnDate()!=null)
+				lastEmployeeLeave.setLeavReturnDate(new SimpleDateFormat("dd-MM-yyyy").format(lastEmployeeLeave.getReturnDate()));
+			else
+				lastEmployeeLeave.setLeavReturnDate("");
+		}
+
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		otherReason="";
 		lstType=data.getEmployeeLeavesAllowed(objEmp.getEmployeeKey(),df.format(fromDate),"Select type of leave..");
@@ -2223,7 +2232,7 @@ public class LeaveRequestViewModel
 		lastEmployeeLeave=data.GetLastEmployeeLeaveQuery(selectedCompEmployee.getEmployeeKey());
 		if(lastEmployeeLeave!=null)
 		{
-		lastEmployeeLeave.setNoOfDays(totalDays);
+		//lastEmployeeLeave.setNoOfDays(totalDays);
 		if(lastEmployeeLeave.getReturnDate()!=null)
 		lastEmployeeLeave.setLeavReturnDate(new SimpleDateFormat("dd-MM-yyyy").format(lastEmployeeLeave.getReturnDate()));
 		else
@@ -2487,7 +2496,7 @@ public class LeaveRequestViewModel
 			{
 			EmployeeActivity activity=new EmployeeActivity();
 			//totalDays=activity.GetLeaveBalanceDays(selectedCompEmployee.getEmployeeKey(), selectedType.getListId(), fromDate,selectedCompany.getCompKey());
-			lastEmployeeLeave.setNoOfDays(totalDays);
+			//lastEmployeeLeave.setNoOfDays(totalDays);
 			setCanSubmit(true);
 			}
 		
@@ -2507,18 +2516,25 @@ public class LeaveRequestViewModel
 		int Day=daysBetween(fromDate,toDate);						
 		leaveDays=Day+1;
 		}
+		if(leaveDays<=0)
+		{
+			Messagebox.show("From Date cannot be greater than To Date","Leave Request", Messagebox.OK , Messagebox.EXCLAMATION);
+			leaveDays=0;
+			return;
+		}
 		if(selectedType!=null && selectedType.getListId()!=0 && selectedCompEmployee!=null && selectedCompany!=null)
 		{
 		EmployeeActivity activity=new EmployeeActivity();
 		//totalDays=activity.GetLeaveBalanceDays(selectedCompEmployee.getEmployeeKey(), selectedType.getListId(), fromDate,selectedCompany.getCompKey());
-		lastEmployeeLeave.setNoOfDays(totalDays);
+		//lastEmployeeLeave.setNoOfDays(totalDays);
 		setCanSubmit(true);
 		}
 	}
 	
 	private int daysBetween(Date d1, Date d2){
-        return 0;//( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+        return (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
      }
+
 	public String getNote() {
 		return note;
 	}
@@ -2592,7 +2608,7 @@ public class LeaveRequestViewModel
 				{
 					EmployeeActivity activity=new EmployeeActivity();
 					//totalDays=activity.GetLeaveBalanceDays(selectedCompEmployee.getEmployeeKey(), selectedType.getListId(), fromDate,selectedCompany.getCompKey());
-					lastEmployeeLeave.setNoOfDays(totalDays);
+					//lastEmployeeLeave.setNoOfDays(totalDays);
 					setCanSubmit(true);
 				}
 				
@@ -2601,7 +2617,7 @@ public class LeaveRequestViewModel
 			{
 				EmployeeActivity activity=new EmployeeActivity();
 				//totalDays=activity.GetLeaveBalanceDays(selectedCompEmployee.getEmployeeKey(), selectedType.getListId(), fromDate,selectedCompany.getCompKey());
-				lastEmployeeLeave.setNoOfDays(totalDays);
+				//lastEmployeeLeave.setNoOfDays(totalDays);
 				setCanSubmit(true);
 			}
 		}		

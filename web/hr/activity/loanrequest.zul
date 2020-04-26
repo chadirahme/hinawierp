@@ -223,6 +223,11 @@
                <label value="Expected Last Installment:"></label>
               <label value="@bind(vm.expectedReturn)"></label>
                </row>
+
+				<row>
+					<label value="Notes"></label>
+					<textbox multiline="true" rows="3" hflex="1" value="@bind(vm.note)"></textbox>
+				</row>
                
                </rows>
                </grid>
@@ -263,8 +268,7 @@
                                  
         </tabpanels>
        </tabbox>
-		<label value="Notes"></label>
-		<textbox multiline="true" rows="3" hflex="1" value="@bind(vm.note)"></textbox>	
+
 		<hbox align="center" pack="center" hflex="1">			
 		<button  id="btn1" label="Submit" onLongOp="@command('submitLoanCommand')" visible="@bind(vm.companyRole.canAdd)"></button>	
 		<button  label="Clear" onClick="@command('clearDataCommand')"/>		

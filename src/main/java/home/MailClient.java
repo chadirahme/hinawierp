@@ -170,9 +170,9 @@ public class MailClient
 	 {
 		 try
 		 {
-			 if(true)
-				 return;
-		 InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("resources/application.properties");			 
+//			 if(true)
+//				 return;
+		 InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("application.properties");
 		 Properties prop = new Properties();
 		 prop.load(inputStream);
 		 String host=prop.getProperty("mailserver");
@@ -180,7 +180,10 @@ public class MailClient
 		 String mailuser=prop.getProperty("mailuser");
 		 final String mailfrom=prop.getProperty("mailfrom");
 		 final String mailpassword=prop.getProperty("mailpassword");
-		 		 
+		 final String mailactive=prop.getProperty("mailactive");
+		 if(mailactive.equals("0"))
+		 	return;
+
 		 // String to="eng.chadi@gmail.com";
 		  Properties props = new Properties();
 		  props.put("mail.smtp.host", host);

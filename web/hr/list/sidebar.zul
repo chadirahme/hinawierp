@@ -48,7 +48,7 @@
 	viewModel="@id('vm') @init('layout.Pagecomposer')">
 		
 		
-		<west if="${sessionScope.Authentication.language eq 'Arabic' }"  title="@bind(vm.language eq 'en' ? 'HR' : 'شؤون الموظفين' )" size="180px" splittable="true" collapsible="true" autoscroll="true">
+		<west if="${sessionScope.Authentication.language eq 'Arabic' }"  title=" " size="180px" splittable="true" collapsible="true" autoscroll="true">
         
             <vlayout>
                               
@@ -92,7 +92,7 @@
            
             </west >
             
-            <east if="${sessionScope.Authentication.language eq 'English' }"  title="@bind(vm.language eq 'en' ? 'HR' : 'شؤون الموظفين' )" size="180px" splittable="true" collapsible="true" autoscroll="true">
+            <east if="${sessionScope.Authentication.language eq 'English' }"   size="180px" splittable="true" collapsible="true" autoscroll="true">
         
             <vlayout>
                               

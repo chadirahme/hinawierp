@@ -15,11 +15,14 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import model.EmployeeModel;
 import model.HRListValuesModel;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -29,12 +32,14 @@ import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zul.Messagebox;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+//import org.apache.poi.hssf.usermodel.HSSFCell;
+//import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+//import org.apache.poi.hssf.usermodel.HSSFRow;
+//import org.apache.poi.hssf.usermodel.HSSFSheet;
+//import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+
+import org.apache.poi.ss.usermodel.Row;
 
 public class ImportEmployeeViewModel 
 {
@@ -43,7 +48,6 @@ public class ImportEmployeeViewModel
 	HRData data=new HRData();
 	DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	
 	private List<CompanyModel> lstComapnies;
 	private CompanyModel selectedCompany;
 	private String attFile;
@@ -106,9 +110,9 @@ public class ImportEmployeeViewModel
 			logger.info(event.getMedia().getContentType());
 			logger.info("size>> " + event.getMedia().getByteData().length);
 			
-			if(!fileFormat.equals("xls"))
+			if(!fileFormat.equals("xlsx"))
 			{
-				Messagebox.show("Please select Excel in 2003 format (xls) !! ","Import Employee", Messagebox.OK , Messagebox.EXCLAMATION);
+				Messagebox.show("Please select Excel in format (xlsx) !! ","Import Employee", Messagebox.OK , Messagebox.EXCLAMATION);
 				return;
 			}					
 		
@@ -162,11 +166,13 @@ public class ImportEmployeeViewModel
 		return res;
 	}
 	
-	@Command 	
+	@Command
+	@NotifyChange({"message"})
 	public void saveFile()
 	{
 		try
-		{			
+		{
+			message="";
 			if(lstEmployeeData.size()==0)
 			{
 				Messagebox.show("There is no data to save !!","Import Employee", Messagebox.OK , Messagebox.EXCLAMATION);
@@ -274,9 +280,12 @@ public class ImportEmployeeViewModel
 				item.setDateOfBirth(convertToDate(item.getDob()));
 				item.setJoiningDate(convertToDate(item.getJoinDate()));				
 				//we have to check if empNo exist before save
-				
-				
-				if(lst.contains(item.getEmployeeNo()))
+
+				  List<String> lstEmpNumbers =
+						  lst.stream()
+								  .map(EmployeeModel::getEmployeeNo)
+								  .collect(Collectors.toList());
+				if(lstEmpNumbers.contains(item.getEmployeeNo()))
 				{
 					//Messagebox.show("Employee number exist for this company  !!","Edit Employee", Messagebox.OK , Messagebox.EXCLAMATION);
 					//return;
@@ -286,8 +295,8 @@ public class ImportEmployeeViewModel
 				data.insertNewEmployee(item);
 				}
 				
-			  }				
-			
+			  }
+			message="Employee List Data is saved..";
 			Messagebox.show("Data is saved..","Import Employee", Messagebox.OK , Messagebox.INFORMATION);
 		}
 		catch(Exception ex)
@@ -303,18 +312,18 @@ public class ImportEmployeeViewModel
 		try
 		{
 			message="";
-			int colEmpNO=2;
-			int colEnName=3;
-			int colArName=4;
-			int colJoinDate=5;
-			int colSex=6;
-			int colNat=7;
-			int colDob=8;
-			int colReligion=9;
-			int colMarital=10;
-			int colPos=11;
-			int colDep=12;
-			int colLoc=13;
+			int colEmpNO=10;
+			int colEnName=11;
+			int colArName=15;
+			int colJoinDate=19;
+			int colSex=21;
+			int colNat=22;
+			int colDob=24;
+			int colReligion=25;
+			int colMarital=27;
+			int colPos=6;
+			int colDep=4;
+			int colLoc=8;
 			
 			if(uploadedFilePath.equals(""))
 			{
@@ -326,42 +335,71 @@ public class ImportEmployeeViewModel
 			{
 				  FileInputStream fis = null;
 			      fis = new FileInputStream(uploadedFilePath);
-			      HSSFWorkbook workbook = new HSSFWorkbook(fis);
-			      HSSFSheet sheet = workbook.getSheetAt(0);
-			      Iterator rows = sheet.rowIterator();
+				// Finds the workbook instance for XLSX file XSSFWorkbook myWorkBook = new XSSFWorkbook (fis);
+				   XSSFWorkbook workbook = new XSSFWorkbook (fis);
+			     //  HSSFWorkbook workbook = new HSSFWorkbook(fis);
+
+				XSSFSheet sheet = workbook.getSheetAt(0);
+				Iterator<Row> rows = sheet.iterator();
+
+			     // Iterator rows = sheet.rowIterator();
 			      List<EmployeeModel> EmpList = new ArrayList<EmployeeModel>();
 			      
 			      while (rows.hasNext()) 
 			      {
-		           HSSFRow row = (HSSFRow) rows.next();
-		           Iterator cells = row.cellIterator();
+			      	Row row = rows.next();
+			      	Iterator<Cell> cells = row.cellIterator();
+		           //HSSFRow row = (HSSFRow) rows.next();
+		           //Iterator cells = row.cellIterator();
 		           EmployeeModel empModel = new EmployeeModel();
-		           
-		          
-			           if (row.getRowNum() >= 3)
+
+			           if (row.getRowNum() >= 4)
 			           {
 				          while (cells.hasNext())
 				          {
-				        	  
-				             HSSFCell cell1 = (HSSFCell) cells.next();
+				        	  Object cellValue=null;
+				             //HSSFCell cell1 = (HSSFCell) cells.next();
+							  Cell cell1 = cells.next();
+							  switch (cell1.getCellType()) {
+								  case Cell.CELL_TYPE_STRING:
+									  cellValue=cell1.getStringCellValue();
+									  System.out.print(cell1.getStringCellValue() + "\t");
+									  break;
+								  case Cell.CELL_TYPE_NUMERIC:
+									  cellValue=cell1.getNumericCellValue();
+									  System.out.print(cell1.getNumericCellValue() + "\t");
+									  break;
+								  case Cell.CELL_TYPE_BOOLEAN:
+									  cellValue=cell1.getBooleanCellValue();
+									  System.out.print(cell1.getBooleanCellValue() + "\t");
+									  break;
+								  case Cell.CELL_TYPE_FORMULA:
+									  cellValue=cell1.getDateCellValue();
+									  System.out.print(cell1.getDateCellValue() + "\t");
+									  break;
+								  default:
+							  }
+
 				             //cell1.setCellType(Cell.CELL_TYPE_STRING);
-				             
 				           //  logger.info(">> " + cell1.getColumnIndex());
 				            // logger.info(">> " + cell1.getStringCellValue());
-				             
 				             if(cell1.getColumnIndex() == colEmpNO)
 				             {
-				            	 if(cell1.getStringCellValue()==null || cell1.getStringCellValue().equals(""))
+				            	 if(cellValue==null)
 					        	   break;
-				             } 
-				             
-				             if (cell1.getColumnIndex() == 0 && !cell1.getStringCellValue().equalsIgnoreCase(""))
-				             {				            	  
-				            	 empModel.setCompKey(253);
 				             }
+
+							  if(cellValue==null)
+								  continue;
+
+//				             if (cell1.getColumnIndex() == 0 && !cell1.getStringCellValue().equalsIgnoreCase(""))
+//				             {
+//				            	 empModel.setCompKey(253);
+//				             }
+
 				             else if (cell1.getColumnIndex() == colDep)
 				             {
-				            empModel.setEnDepartmentName(cell1.getStringCellValue());	 
+				            empModel.setEnDepartmentName(cellValue.toString());
 				             }
 				            // else if (cell1.getColumnIndex() == 5)
 				            // {
@@ -370,7 +408,7 @@ public class ImportEmployeeViewModel
 				             
 				             else if (cell1.getColumnIndex() == colPos) 
 				             {				            	  
-				              empModel.setEnPositionName(cell1.getStringCellValue());
+				              empModel.setEnPositionName(cellValue.toString());
 				             }
 				             //else if (cell1.getColumnIndex() == 7) 
 				            // {				            	  
@@ -379,16 +417,22 @@ public class ImportEmployeeViewModel
 				             
 				             else if (cell1.getColumnIndex() == colLoc )
 				             {				            	 
-				            	   empModel.setEnLocationName(cell1.getStringCellValue());
+				            	   empModel.setEnLocationName(cellValue.toString());
 				             }
 				             else if (cell1.getColumnIndex() == colEmpNO )
 				             {				            
-				            	   cell1.setCellType(Cell.CELL_TYPE_STRING);
-				            	   empModel.setEmployeeNo(cell1.getStringCellValue());
+				            	   //cell1.setCellType(Cell.CELL_TYPE_STRING);
+								 if(isNumeric(cellValue.toString()))//to remove the decimal points
+								 {
+									 double d = Double.parseDouble(cellValue.toString());
+									 empModel.setEmployeeNo((int) d + "");
+								 }
+								 else
+									 empModel.setEmployeeNo(cellValue.toString());
 				             }
 				             else if (cell1.getColumnIndex() == colEnName )
 				             {				            	 
-				            	   empModel.setFullName(cell1.getStringCellValue());
+				            	   empModel.setFullName(cellValue.toString());
 				             
 				             if(empModel.getFullName()!=null)
 				             {
@@ -429,7 +473,7 @@ public class ImportEmployeeViewModel
 				             */
 				             else if (cell1.getColumnIndex() == colArName )
 				             {				            	 
-				            	   empModel.setArabicName(cell1.getStringCellValue());
+				            	   empModel.setArabicName(cellValue.toString());
 				            	   if(empModel.getArabicName()!=null)
 						             {
 						               List<String> empList = new ArrayList<String>(Arrays.asList(empModel.getArabicName().split(" ")));				            	 				           
@@ -468,54 +512,59 @@ public class ImportEmployeeViewModel
 				             }
 				             */
 				             else if (cell1.getColumnIndex() == colJoinDate )
-				             {			
+				             {
+
+								 empModel.setJoinDate(sdf.format(cell1.getDateCellValue()));
+								// empModel.setJoinDate(cellValue.toString());
+
 				            	 //empModel.setJoinDate(cell1.getStringCellValue());
-				            	 
-				            	 if (HSSFDateUtil.isCellDateFormatted(cell1)) 
-				            	 {
-				            		 //String dateFmt = cell1.getCellStyle().getDataFormatString();
-				            		 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-				            		 empModel.setJoinDate(sdf.format(cell1.getDateCellValue()));
-				            		// logger.info(">> " + cell1.getDateCellValue());
-				            		// logger.info(">>>"+ empModel.getJoinDate());
-				            	 }
-				            	 else
-				            	 {
-				            	  empModel.setJoinDate(cell1.getStringCellValue());
-				            	 }
+//				            	 if (HSSFDateUtil.isCellDateFormatted(cell1))
+//				            	 {
+//				            		 //String dateFmt = cell1.getCellStyle().getDataFormatString();
+//				            		 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+//				            		 empModel.setJoinDate(sdf.format(cell1.getDateCellValue()));
+//				            		// logger.info(">> " + cell1.getDateCellValue());
+//				            		// logger.info(">>>"+ empModel.getJoinDate());
+//				            	 }
+//				            	 else
+//				            	 {
+//				            	  empModel.setJoinDate(cellValue.toString());
+//				            	 }
 				            	 
 				             }
 				             else if (cell1.getColumnIndex() == colSex )
 				             {
 				            	 // logger.info("sex>>" +cell1.getCellType() );
-				            	   empModel.setSex(cell1.getStringCellValue());
+				            	   empModel.setSex(cellValue.toString());
 				             }
 				             else if (cell1.getColumnIndex() == colNat )
 				             {				            	 
-				            	   empModel.setNationality(cell1.getStringCellValue());
+				            	   empModel.setNationality(cellValue.toString());
 				             }
 				             else if (cell1.getColumnIndex() == colDob )
-				             {					            	   
-				            	 if (HSSFDateUtil.isCellDateFormatted(cell1)) 
-				            	 {
-				            		 //String dateFmt = cell1.getCellStyle().getDataFormatString();
-				            		 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-				            		 empModel.setDob(sdf.format(cell1.getDateCellValue()));
-				            		// logger.info(">> " + cell1.getDateCellValue());
-				            		// logger.info(">>>"+ empModel.getJoinDate());
-				            	 }
-				            	 else
-				            	 {
-				            	  empModel.setDob(cell1.getStringCellValue());
-				            	 }				            	 				            
+				             {
+								 empModel.setDob(sdf.format(cell1.getDateCellValue()));
+								 //empModel.setDob(cellValue.toString());
+//				            	 if (HSSFDateUtil.isCellDateFormatted(cell1))
+//				            	 {
+//				            		 //String dateFmt = cell1.getCellStyle().getDataFormatString();
+//				            		 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+//				            		 empModel.setDob(sdf.format(cell1.getDateCellValue()));
+//				            		// logger.info(">> " + cell1.getDateCellValue());
+//				            		// logger.info(">>>"+ empModel.getJoinDate());
+//				            	 }
+//				            	 else
+//				            	 {
+//				            	  empModel.setDob(cell1.getStringCellValue());
+//				            	 }
 				             }
 				             else if (cell1.getColumnIndex() == colReligion )
 				             {				            	 
-				            	   empModel.setEnReligion(cell1.getStringCellValue());
+				            	   empModel.setEnReligion(cellValue.toString());
 				             }
 				             else if (cell1.getColumnIndex() == colMarital )
 				             {				            	 
-				            	   empModel.setMaritalStatus(cell1.getStringCellValue());
+				            	   empModel.setMaritalStatus(cellValue.toString());
 				             }
 				             
 				          }
@@ -544,11 +593,24 @@ public class ImportEmployeeViewModel
 		}
 		
 		catch (Exception ex)
-		{	
+		{
+			message=ex.getMessage();
 			logger.error("ERROR in ImportEmployeeViewModel ----> saveFile", ex);			
 		}
 	}
-	
+
+	private boolean isNumeric(String strNum) {
+		if (strNum == null) {
+			return false;
+		}
+		try {
+			double d = Double.parseDouble(strNum);
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
+		return true;
+	}
+
 	private boolean isDataValid( List<EmployeeModel> EmpList )
 	{
 		boolean isvalid=true;

@@ -12,7 +12,7 @@
 	viewModel="@id('vm') @init('layout.Pagecomposer')">
 		
 
-         <west if="${sessionScope.Authentication.language eq 'Arabic' }" title="@bind(vm.language eq 'en' ? 'Timesheet' : 'كرت الدوام' )"  splittable="true" collapsible="true" autoscroll="true" size="200px" >
+         <west if="${sessionScope.Authentication.language eq 'Arabic' }" title=" "  splittable="true" collapsible="true" autoscroll="true" size="200px" >
 
                  <vlayout>                   
                               
@@ -55,7 +55,7 @@
 		</vlayout>
             </west>
             
-            <east if="${sessionScope.Authentication.language eq 'English' }" title="@bind(vm.language eq 'en' ? 'Timesheet' : 'كرت الدوام' )"  splittable="true" collapsible="true" autoscroll="true" size="200px" >
+            <east if="${sessionScope.Authentication.language eq 'English' }" title=" "  splittable="true" collapsible="true" autoscroll="true" size="200px" >
            
                  <vlayout>                   
                               

@@ -35,7 +35,7 @@
 	<borderlayout apply="org.zkoss.bind.BindComposer" id="hbaSideBar" vflex="1" hflex="1"
 	viewModel="@id('vm') @init('layout.Pagecomposer')">
 		
-            <west if="${sessionScope.Authentication.language eq 'Arabic' }" title="@bind(vm.language eq 'en' ? 'Payroll' : 'الرواتب' )" size="230px" splittable="true" collapsible="true" autoscroll="true">
+            <west if="${sessionScope.Authentication.language eq 'Arabic' }" title=" " size="230px" splittable="true" collapsible="true" autoscroll="true">
                  <vlayout>
                               
               <vlayout children="@bind(vm.lstPayRollMenu) @template(empty each.children?'children':'menu')">
@@ -83,7 +83,7 @@
 		</vlayout>
             </west>
             
-             <east if="${sessionScope.Authentication.language eq 'English' }" title="@bind(vm.language eq 'en' ? 'Payroll' : 'الرواتب' )" size="230px" splittable="true" collapsible="true" autoscroll="true">
+             <east if="${sessionScope.Authentication.language eq 'English' }" title=" " size="230px" splittable="true" collapsible="true" autoscroll="true">
                  <vlayout>
                               
               <vlayout children="@bind(vm.lstPayRollMenu) @template(empty each.children?'children':'menu')">

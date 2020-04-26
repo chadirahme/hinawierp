@@ -79,7 +79,7 @@ public class PassportRequestViewModel
 	private List<ContactModel> lstContacts;
 	private SponsorModel employeeSponsor;
 	
-	private String note;
+	private String note="";
 	
 	private Date checkDate;
 	private boolean canSubmit;
@@ -212,7 +212,7 @@ public class PassportRequestViewModel
 					}
 					selectedMonth=lstMonths.get(0);
 					lstYears=new ArrayList<String>();
-					for(int i=2014;i<2020;i++)
+					for(int i=2020;i<2029;i++)
 					{
 						lstYears.add(String.valueOf(i));	
 					}
@@ -445,6 +445,15 @@ public class PassportRequestViewModel
 	{
 		try
 		{
+			if(requestDate!=null){
+				Calendar c = Calendar.getInstance();
+				Date currentdate=df.parse(sdf.format(c.getTime()));
+				if(requestDate.compareTo(currentdate)<0){
+					Messagebox.show("Request date must be today or greater than the current date!!","Passport Request",Messagebox.OK,Messagebox.INFORMATION);
+					return;
+				}
+			}
+
 			if(selectedCompEmployee.getEmployeeKey()>0)
 			{
 				if(selectedReason.getListId()==0)
@@ -504,7 +513,11 @@ public class PassportRequestViewModel
 		{
 			if(selectedCompEmployee.getEmployeeKey()>0)
 			{
-				
+				if(basicSalary.equals("0.00"))
+				{
+					Messagebox.show("You can't create loan request without set your Basic Salary  !!","Loan Request", Messagebox.OK , Messagebox.EXCLAMATION);
+					return;
+				}
 								
 				if(selectedReason.getListId()==0)
 				{

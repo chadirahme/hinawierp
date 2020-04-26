@@ -27,7 +27,7 @@
 			
 				<button label="Download Standard File">
    			 <attribute name="onClick"><![CDATA[
-       	 	Filedownload.save("/download/sample.xls", null);
+       	 	Filedownload.save("/download/sample.xlsx", null);
   		  ]]></attribute>
 		</button>
 						
