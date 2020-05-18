@@ -233,8 +233,10 @@
                <column  label="OT Unit 1.5" width="90px" if="${!vm.compSettings.hideOverTime}" visible="@bind(!vm.compSettings.hideOverTime)"/>
                <column  label="OT Unit 2" width="90px"  if="${!vm.compSettings.hideOverTime}" visible="@bind(!vm.compSettings.hideOverTime)"/>
                 <column  label="Total" width="50px" if="${!vm.compSettings.hideOverTime}" visible="@bind(!vm.compSettings.hideOverTime)"/>              
-               <column  label="Customer Job" width="150px" if="${!vm.compSettings.hideCustomerJob}" visible="@bind(!vm.compSettings.hideCustomerJob)"/>  
-               <column  label="Customer Task Name" width="150px" if="${!vm.compSettings.hideCustomerTask}" visible="@bind(!vm.compSettings.hideCustomerTask)"/>  
+
+               <column  label="Customer Job" width="150px" if="${!vm.compSettings.hideCustomerJob}" visible="@bind(!vm.compSettings.hideCustomerJob)"/>
+
+               <column  label="Customer Task Name" width="150px" if="${!vm.compSettings.hideCustomerTask}" visible="@bind(!vm.compSettings.hideCustomerTask)"/>
                 <column  label="Task Status" width="150px" if="${!vm.compSettings.hideCustomerTask}" visible="@bind(!vm.compSettings.hideCustomerTask)"/>  
               <column  label="Project" width="150px"/>       
              <column  label="Service Type" width="150px" if="${!vm.compSettings.hideservice}" visible="@bind(!vm.compSettings.hideservice)"/> 

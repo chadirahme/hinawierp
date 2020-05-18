@@ -27,7 +27,7 @@ public class CompanyQueries
 	public String getCompanyUsersQuery(int companyID)
 	{
 		query=new StringBuffer();
-	    query.append("Select * from webusers u LEFT JOIN companyroles r ON u.companyroleid=r.companyroleid where u.companyid="+companyID + " order by isadmin desc");
+	    query.append("Select * from webusers u LEFT JOIN companyroles r ON u.companyroleid=r.companyroleid where isactive=1 and u.companyid="+companyID + " order by isadmin desc");
 		return query.toString();		
 	}
 	

@@ -212,7 +212,8 @@ public class PassportRequestViewModel
 					}
 					selectedMonth=lstMonths.get(0);
 					lstYears=new ArrayList<String>();
-					for(int i=2020;i<2029;i++)
+					//start from YEAR_PAYROLL in compsetup
+					for(int i=compSetup.getPayrollYear();i<c.get(Calendar.YEAR)+11;i++)
 					{
 						lstYears.add(String.valueOf(i));	
 					}
@@ -260,9 +261,9 @@ public class PassportRequestViewModel
 				MailClient mc = new MailClient();
 				String subject="";
 				if(form.equalsIgnoreCase("L"))
-					subject="Loan Request Status";
+					subject="Subject: Loan Request Status";
 				else
-					subject="Passport Request Status";
+					subject="Subject: Passport Request Status";
 				
 				StringBuffer result=null;
 				result=new StringBuffer();
@@ -465,7 +466,7 @@ public class PassportRequestViewModel
 				
 			 int result=data.insertPassportRequest(selectedCompEmployee.getEmployeeKey(), requestDate, returnDate, Integer.valueOf(selectedNoDays).intValue(),selectedReason.getListId(), note);
 			 //String DESCRIPTION="Your Loan for "+selectedReason.getEnDescription() +" you have requested with Amount " +loanAmount+ " and Start From "+ selectedMonth + " / " + selectedYear + " and No of instalments " + selectedNoOfInstallment + " from web application has been ";
-			 String DESCRIPTION="Your Passport Request for "+selectedReason.getEnDescription() +" from " + sdf.format(requestDate) + " To " + sdf.format(returnDate) + " from web application has been " ;			
+			 String DESCRIPTION="Your Passport Request for "+selectedReason.getEnDescription() +" from " + sdf.format(requestDate) + " To " + sdf.format(returnDate) + " Submitted from web application has been " ;
 			 data.addUserActivity(common.HREnum.HRFormNames.HRPassportRequest.getValue(),common.HREnum.HRStatus.HRNew.getValue(), selectedCompEmployee.getEmployeeKey(), selectedCompany.getCompKey(), DESCRIPTION, UserId);
 				
 			if(result==1)
@@ -481,7 +482,7 @@ public class PassportRequestViewModel
 		    		sendEmail(empEmail, DESCRIPTION,1,"P");
 		    	}
 							
-			Messagebox.show("Passport request has been created Sucessfully.","Passport Request", Messagebox.OK , Messagebox.INFORMATION);
+			Messagebox.show("Passport request has been created Successfully.","Passport Request", Messagebox.OK , Messagebox.INFORMATION);
 			clearData();
 			employeeNumber="";
 			
@@ -666,7 +667,7 @@ public class PassportRequestViewModel
     		sendEmail(empEmail, DESCRIPTION,1,"L");
     	}
 				
-		Messagebox.show("Loan request has been created sucessfully .","Loan Request", Messagebox.OK , Messagebox.INFORMATION);
+		Messagebox.show("Loan request has been created Successfully.","Loan Request", Messagebox.OK , Messagebox.INFORMATION);
 		if(employeeKey>0)
 		{
 			searchCommand();//for level of access if employee logs in
@@ -1348,6 +1349,11 @@ public class PassportRequestViewModel
 	public void setSelectedNoOfInstallment(String selectedNoOfInstallment) 
 	{
 		this.selectedNoOfInstallment = selectedNoOfInstallment;
+		if(selectedNoOfInstallment.equals("Select")) {
+			expectedReturn="";
+			installmentAmount=0;
+			return;
+		}
 		getInstallmentExpectedReturn();			
 	}
 	
@@ -1356,7 +1362,11 @@ public class PassportRequestViewModel
 	{
 		expectedReturn="";
 		try 
-		 {		
+		 {
+			 if(selectedNoOfInstallment.equals("Select")) {
+				 return;
+			 }
+
 			DecimalFormat dcf=new DecimalFormat("0.00");
 			Calendar cal = Calendar.getInstance();
 			cal.set(Integer.valueOf(selectedYear), Integer.valueOf(selectedMonth), 1);			

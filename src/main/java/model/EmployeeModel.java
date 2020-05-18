@@ -14,7 +14,7 @@ public class EmployeeModel
 	private int employeeKey;
 	private String employeeNo;
 	private String fullName;
-	private String arabicName;
+	private String arabicName="";
 	private int departmentID;
 	private String department;
 	private String arabicDepartment;
@@ -32,13 +32,13 @@ public class EmployeeModel
 	private String employeementDateString;
 	private String Age;
 	
-	private String enFirstName;
-	private String enMiddleName;
-	private String enLastName;
+	private String enFirstName="";
+	private String enMiddleName="";
+	private String enLastName="";
 	
-	private String arFirstName;
-	private String arMiddleName;
-	private String arLastName;
+	private String arFirstName="";
+	private String arMiddleName="";
+	private String arLastName="";
 	
 	private String status;
 	private String gender;
@@ -77,13 +77,13 @@ public class EmployeeModel
 	private String projectName;
 	
 	private String employeeType;
-	private String standardNo;
+	private String standardNo="";
 	private int bloodType;
 	private int statusId;
 	private String placeOfBirth;
 	private int countryOfBirth;
 	private String employeeStatus;
-	private String local;
+	private String local="";
 	
 	//Assign Employee to Time sheet
 	private String salaryStatus;
@@ -102,7 +102,7 @@ public class EmployeeModel
 	private int shiftkey;
 	private String shiftName;
 	
-	private String email;
+	private String email="";
 	
 	private String statusDescription;
 	

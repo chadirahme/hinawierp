@@ -48,7 +48,10 @@
 							</listitem>
 						</template>
 					</listbox>
-
+					<cell colspan="3">
+					<label value="Only Approved Leave will be Displayed on Desktop."
+						   style="color:red;font-weight:bold;font-size:14px;"></label>
+					</cell>
 					<!-- <label value="Project"></label> <listbox hflex="1" mold="select" 
 						model="@load(vm.lstProject)" selectedItem="@bind(vm.selectedProject)"> <template 
 						name="model" var="item"> <listitem > <listcell label="@load(item.projectName)"></listcell> 

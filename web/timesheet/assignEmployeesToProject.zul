@@ -13,6 +13,8 @@
 
 				<label value="Assign Employees to Project"
 					style="color:#2c6f99;font-weight:bold;margin:15px;font-size:16px;"></label>
+				<label value="Assigning a Project is only done once. If you have previously assigned a project, please go to 'Transfer between Projects  / Location' window."
+					   style="color:red;font-weight:bold;font-size:14px;"></label>
 
 				<grid>
 					<columns>

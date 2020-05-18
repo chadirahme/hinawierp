@@ -56,6 +56,18 @@
 										<space></space>
 										<label value="@bind(vm.labelStatus)"
 											style="color:#0AA0AB;text-align: right;font-weight: bold;font-size:18px"></label>
+
+
+										<space></space>
+										<space></space>
+										<space></space>
+										<space></space>
+										<space></space>
+										<space></space>
+										<space></space>
+										<space></space>
+
+										<checkbox label="Show More Fields" checked="@bind(vm.showMoreFields)"></checkbox>
 									</hbox>
 
 								</div>
@@ -103,7 +115,7 @@
 											</cell>
 			</row>
 
-										<row>
+										<row visible="@bind(vm.showMoreFields)">
 											
 											<cell sclass="">Expected Finish Date <label value="*" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
 
@@ -167,9 +179,9 @@
 												</listbox>
 											</cell>
 											
-											<cell sclass="">Task Type <label value="" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
+											<cell sclass="" visible="@bind(vm.showMoreFields)">Task Type <label value="" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
 
-											<cell>
+											<cell visible="@bind(vm.showMoreFields)">
 												<listbox multiple="false" mold="select" hflex="1"
 													disabled="@bind(vm.disableTaskCreatorPanel)" model="@load(vm.lstTaskType)"
 													selectedItem="@bind(vm.selectedTaskType)">
@@ -241,7 +253,7 @@
 										</row>
 
 
-								<row>
+								<row visible="@bind(vm.showMoreFields)">
 								<cell sclass="">Project <label value="" style="color:red;font-weight: bold;font-size: 20px;" /></cell>
 
 											<cell colspan="1">
@@ -315,9 +327,9 @@
 												</listbox>
 											</cell>
 											
-											<cell sclass="">CC To Employee </cell>
+											<cell sclass="" visible="@bind(vm.showMoreFields)">CC To Employee </cell>
 
-											<cell colspan="1">
+											<cell colspan="1" visible="@bind(vm.showMoreFields)">
 												<listbox hflex="1" mold="select" model="@load(vm.lstCCToEmployees)"
 													disabled="@bind(vm.disableTaskCreatorPanel)" selectedItem="@bind(vm.selectedCCToEmployee)">
 													<template name="model" var="item">

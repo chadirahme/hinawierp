@@ -1,5 +1,6 @@
 package hr;
 
+import common.FormatDateText;
 import hr.model.LeaveapproveOrRejectModel;
 
 import java.text.SimpleDateFormat;
@@ -422,7 +423,7 @@ public class HRQueries
 	{
 		query=new StringBuffer();
 		 query.append(" Select Count(*) as RequestCount from EmployeeASkingPassport");	
-		 query.append(" where Status <> 'R'");		
+		 query.append(" where Status not in ('R' , 'D') ");
 		 query.append(" and emp_key=" + empkey);		 
 		return query.toString();
 	}
@@ -446,7 +447,7 @@ public class HRQueries
 	{
 		query=new StringBuffer();
 		 query.append(" Select Count(*) as RequestCount from PASSPORTREQUEST");	
-		 query.append(" where Status <> 'R'");		
+		 query.append(" where Status not in ('R' , 'D') ");
 		 query.append(" and emp_key=" + empkey);		 
 		return query.toString();
 	}
@@ -476,7 +477,7 @@ public class HRQueries
 		 query.append(" Select ALLOWMINUSLEAVE,MAXLEAVEDAYS,CalculateActualLeaveDays, ");		
 		 query.append(" AddLeaveSalary2TS,LEAVE_BASIS,USE_ENCASH,LEAVE_BEFORE_RETURN,email2,email3,edmail,email_reqd , ");		 
 		 //add this for Salary certificate
-		 query.append(" COMP_NAME, PHONE1 , PO_BOX , FAX1 ");
+		 query.append(" COMP_NAME, PHONE1 , PO_BOX , FAX1, YEAR_PAYROLL ");
 		 query.append(" FROM COMPSETUP Where ");		
 		 query.append(" COMP_KEY=" + compkey);		 
 		return query.toString();
@@ -709,12 +710,12 @@ public class HRQueries
 	{
 		query=new StringBuffer();
 		query.append(" INSERT INTO EMPMAST (EMP_KEY,COMP_KEY,DEP_ID,POS_ID,LOC_ID,EMP_NO,ENGLISH_FIRST,ENGLISH_MIDDLE,ENGLISH_LAST,ENGLISH_FULL,ARABIC_FIRST,ARABIC_MIDDLE,ARABIC_LAST "+
-				",ARABIC_FULL,NAT_ID,BIRTH_DATE,SEX_ID,RELIGION_ID,MARITAL_ID,EMPLOYEEMENT_DATE , CREATE_DATE,EMP_TYPE,ACTIVE) " +
+				",ARABIC_FULL,NAT_ID,BIRTH_DATE,SEX_ID,RELIGION_ID,MARITAL_ID,EMPLOYEEMENT_DATE , CREATE_DATE,EMP_TYPE,ACTIVE,NAT_FLAG) " +
 				"VALUES  ("+obj.getEmployeeKey() +","+obj.getCompKey() +","+obj.getDepartmentID()+","+obj.getPositionID()+","+obj.getLocationId()+",'"+obj.getEmployeeNo()
 					+"' ,'"+obj.getEnFirstName() +"', '"+obj.getEnMiddleName()+"' , '"+obj.getEnLastName()+"' , '"+obj.getFullName()+"' , '"+obj.getArFirstName()+
 						"' , '"+obj.getArMiddleName()+"' , '"+obj.getArLastName()+"' , '"+obj.getArabicName()+"' , "+obj.getNationalityID()+
 						", '"+sdf.format(obj.getDateOfBirth())+"' , "+obj.getSexId()+","+obj.getReligionId()+ "," +obj.getMaritalID()
-						 +", '"+sdf.format(obj.getJoiningDate()) + "' , getdate() , 'E','A' "  +" )");
+						 +", '"+sdf.format(obj.getJoiningDate()) + "' , getdate() , 'E','A' " +",'"+obj.getLocal() +"')");
 		
 		return query.toString();
 	}
@@ -785,7 +786,15 @@ public class HRQueries
 		query.append(" COMP_KEY='" +compKey + "'");		
 		return query.toString();
 	}
-	
+
+	public String checkQbListsEmployeeNoExistQuery()
+	{
+		query=new StringBuffer();
+		query.append(" Select hremp_key, Upper(Name) as 'UName' from QbLists");
+		return query.toString();
+	}
+
+
 	public String getCompanyStartBussinessQuery(int compKey)
 	{
 		query=new StringBuffer();
@@ -798,7 +807,14 @@ public class HRQueries
 	{
 		query=new StringBuffer();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
-		obj.setFullName(obj.getEnFirstName() + " " + obj.getEnMiddleName() + " " + obj.getEnLastName());
+		String enFullName =obj.getEnFirstName().trim();
+		if(!FormatDateText.isEmpty(obj.getEnMiddleName() ))
+			enFullName+=" " + obj.getEnMiddleName().trim();
+		if(!FormatDateText.isEmpty(obj.getEnLastName()))
+			enFullName+=" " + obj.getEnLastName().trim();
+
+		obj.setFullName(enFullName);
+		//obj.setFullName(obj.getEnFirstName() + " " + obj.getEnMiddleName() + " " + obj.getEnLastName());
 		obj.setArabicName(obj.getArFirstName() + " " + obj.getArMiddleName() + " " + obj.getArLastName());
 		if(obj.getLocal().equals("1"))
 		{
@@ -827,7 +843,14 @@ public class HRQueries
 	{
 		query=new StringBuffer();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
-		obj.setFullName(obj.getEnFirstName() + " " + obj.getEnMiddleName() + " " + obj.getEnLastName());
+		String enFullName =obj.getEnFirstName().trim();
+		if(!FormatDateText.isEmpty(obj.getEnMiddleName() ))
+			enFullName+=" " + obj.getEnMiddleName().trim();
+		if(!FormatDateText.isEmpty(obj.getEnLastName()))
+			enFullName+=" " + obj.getEnLastName().trim();
+
+		obj.setFullName(enFullName);
+		//obj.setFullName(obj.getEnFirstName() + " " + obj.getEnMiddleName() + " " + obj.getEnLastName());
 		obj.setArabicName(obj.getArFirstName() + " " + obj.getArMiddleName() + " " + obj.getArLastName());
 		if(obj.getLocal().equals("1"))
 		{
@@ -955,9 +978,17 @@ public class HRQueries
 	
 	public String addNewEmployeeinHBATableQuery(EmployeeModel obj)
 	{
+		String listID="NOTPOSTED";
 		query=new StringBuffer();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
-		obj.setFullName(obj.getEnFirstName() + " " + obj.getEnMiddleName() + " " + obj.getEnLastName());
+		String enFullName =obj.getEnFirstName().trim();
+		if(!FormatDateText.isEmpty(obj.getEnMiddleName() ))
+			enFullName+=" " + obj.getEnMiddleName().trim();
+		if(!FormatDateText.isEmpty(obj.getEnLastName()))
+			enFullName+=" " + obj.getEnLastName().trim();
+
+		obj.setFullName(enFullName);
+		//obj.setFullName(obj.getEnFirstName() + " " + obj.getEnMiddleName() + " " + obj.getEnLastName());
 		obj.setArabicName(obj.getArFirstName() + " " + obj.getArMiddleName() + " " + obj.getArLastName());
 		if(obj.getLocal().equals("1"))
 		{
@@ -972,7 +1003,7 @@ public class HRQueries
 		query.append(" INSERT INTO employee (ListID,EditSequence,TimeCreated,Emp_Key,Name,FirstName,MiddleName,LastName,ArName,FullName,SubLevel,IsActive "+
 				",BillAddress1,PrintChequeAs,SsNo,Gender,Birth_Date,MarStatus,PriorityID,POSITION,NATIONALITY,JOINDATE,EMP_NO,Email,SkypeID,ActName,IBANNo,Emp_Type,LoanAccount,BlackListed,Proj_ID,Notes,HREmp_Key,PrintChequeAsAR");
 		query.append(") " +
-				"VALUES  ('','',getdate(),"+obj.getQblistEmpKey()+",'"+obj.getFullName()+"','"+obj.getEnFirstName()
+				"VALUES  ('"+listID+"','',getdate(),"+obj.getQblistEmpKey()+",'"+obj.getFullName()+"','"+obj.getEnFirstName()
 					+"' ,'"+obj.getEnMiddleName() +"', '"+obj.getEnLastName()+"' , '"+obj.getArabicName()+"' , '"+obj.getFullName()+"' , "+0+
 						", 'Y' , '' , '"+obj.getFullName()+"' , '"+obj.getStandardNo()+"',"+obj.getSexId()+
 						", '"+sdf.format(obj.getDateOfBirth())+"' , "+obj.getMaritalID()+","+0+ "," +obj.getPositionID()+ ","+obj.getNationalityID() 
@@ -987,7 +1018,15 @@ public class HRQueries
 	{
 		query=new StringBuffer();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
-		obj.setFullName(obj.getEnFirstName() + " " + obj.getEnMiddleName() + " " + obj.getEnLastName());
+		String enFullName =obj.getEnFirstName().trim();
+		if(!FormatDateText.isEmpty(obj.getEnMiddleName() ))
+			enFullName+=" " + obj.getEnMiddleName().trim();
+		if(!FormatDateText.isEmpty(obj.getEnLastName()))
+			enFullName+=" " + obj.getEnLastName().trim();
+
+		obj.setFullName(enFullName);
+
+		//obj.setFullName(obj.getEnFirstName() + " " + obj.getEnMiddleName() + " " + obj.getEnLastName());
 		obj.setArabicName(obj.getArFirstName() + " " + obj.getArMiddleName() + " " + obj.getArLastName());
 		if(obj.getLocal().equals("1"))
 		{
@@ -1017,8 +1056,9 @@ public class HRQueries
 	{
 		query=new StringBuffer();		
 		String listType="Employee";
+		String listID="NOTPOSTED";
 		query.append("INSERT INTO qblists(listType,listId,recNo,Name,ArName,FullName,Parent,IsActive,Sublevel,hremp_key)");
-		query.append(" VALUES( '" + listType + "','', " + obj.getQblistEmpKey()+" , '" + obj.getFullName()+"' , ");
+		query.append(" VALUES( '" + listType + "','"+listID +"', " + obj.getQblistEmpKey()+" , '" + obj.getFullName()+"' , ");
 		query.append(" '"+obj.getArabicName()+"' , '"+obj.getFullName()+"' , '', 'Y' , " +0 +","+obj.getEmployeeKey()+"");
 		query.append(" )");
 		return query.toString();		

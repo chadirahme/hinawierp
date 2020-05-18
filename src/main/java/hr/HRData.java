@@ -1160,6 +1160,10 @@ private Logger logger = Logger.getLogger(this.getClass());
 					if(passLoc!=null)
 					{
 						passLoc=passLoc.equals("C")?"Passport With Company":"Passport With Employee";
+						if(passLoc.equals("Passport With Employee"))
+						{
+							obj.setStatus("The passport is with the employee, you can't continue");
+						}
 					}
 					else
 					{
@@ -1167,9 +1171,20 @@ private Logger logger = Logger.getLogger(this.getClass());
 					}
 					obj.setPassportLocation(passLoc);					
 				}
+
+				if(obj.getRecno()==0){
+					obj.setStatus("You can't continue because passport information is missing");
+					return obj;
+				}
+
+				if(obj.getPassportLocation().equals("Passport With Employee"))
+				{
+					obj.setStatus("The passport is with the employee, you can't continue");
+					return obj;
+				}
 				
 				//checkIfEmployeeHasPassportRequestQuery
-				if(obj.getRecno()>0)
+				if(obj.getRecno()>0 && obj.getStatus().equals("Regular"))
 				{
 					rs = null;
 					int RequestCount=0;
@@ -1190,7 +1205,7 @@ private Logger logger = Logger.getLogger(this.getClass());
 					}
 					if(RequestCount>0)
 					{
-						obj.setStatus("Request already exists");
+						obj.setStatus("There is an existing passport request, please wait for the complete process");
 					}
 					else
 					{
@@ -1393,6 +1408,7 @@ private Logger logger = Logger.getLogger(this.getClass());
 					obj.setPhone1(rs.getString("PHONE1")==null?"":rs.getString("PHONE1"));
 					obj.setAddress(rs.getString("PO_BOX")==null?"":rs.getString("PO_BOX"));
 					obj.setFax(rs.getString("FAX1")==null?"":rs.getString("FAX1"));
+					obj.setPayrollYear(rs.getInt("YEAR_PAYROLL"));
 					
 				}
 			}
@@ -1787,8 +1803,16 @@ private Logger logger = Logger.getLogger(this.getClass());
 		try 
 		{	
 			int newID=getMaxID("EMPMAST", "emp_key");
+			int tmpListRecNo=getMaxID("QBLists", "RecNo");
+			obj.setQblistEmpKey(tmpListRecNo);
 			obj.setEmployeeKey(newID);
+
 			result=db.executeUpdateQuery(query.insertNewEmployeeQuery(obj));
+
+			db.executeUpdateQuery(query.addQBListEmployee(obj));
+
+			db.executeUpdateQuery(query.addNewEmployeeinHBATableQuery(obj));
+
 			logger.info(" insertNewEmployee Rows >>>>>>> " + result);
 			result=newID;
 		}
@@ -1928,7 +1952,31 @@ private Logger logger = Logger.getLogger(this.getClass());
 		}
 		return lst;
 	}
-	
+
+	public List<EmployeeModel> checkQbListsEmployeeNoExist()
+	{
+		List<EmployeeModel> lst=new ArrayList<EmployeeModel>();
+		try
+		{
+			HRQueries query=new HRQueries();
+			ResultSet rs = null;
+			rs=db.executeNonQuery(query.checkQbListsEmployeeNoExistQuery());
+			while(rs.next())
+			{
+				EmployeeModel model=new EmployeeModel();
+				model.setEmployeeKey(rs.getInt("hremp_key"));
+				model.setFullName(rs.getString("UName"));
+				lst.add(model);
+			}
+		}
+		catch (Exception ex)
+		{
+			logger.error("error in HRData---checkQbListsEmployeeNoExist-->" , ex);
+		}
+		return lst;
+	}
+
+
 	public int UpdateSystemSerialNo(String SerialField,String LastNumber,boolean isNew)
 	{
 		int result=0;		

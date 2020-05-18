@@ -18,15 +18,18 @@
 			<row>		
 			<checkbox label="Use Workflow for Sales" checked="@bind(vm.useSalesFlow)"></checkbox>
 			<label style="color:red" value="(Quotation--->Delivery--->Cash / Credit Invoices)"></label>
-			<checkbox label="Allow to skip" checked="@bind(vm.allowToSkip)"></checkbox>
-			<label style="color:red" value="(You can begin in any forms)"></label>
+
+				<!--<checkbox label="Allow to skip" checked="@bind(vm.allowToSkip)"></checkbox>-->
+			    <!--<label style="color:red" value="(You can begin in any forms)"></label>-->
+
 			</row>
 			
 			<row>		
 			<checkbox label="Use Workflow for Purchases" checked="@bind(vm.usePurchaseFlow)"></checkbox>
 			<label style="color:red" value="(Materials Request--->Purchase Order--->Item Receipts--->Bill)"></label>
-			<checkbox label="Allow to skip" checked="@bind(vm.allowToSkipPurchase)"></checkbox>
-			<label style="color:red" value="(You can begin in any forms)"></label>
+
+				<!--<checkbox label="Allow to skip" checked="@bind(vm.allowToSkipPurchase)"></checkbox>-->
+			<!--<label style="color:red" value="(You can begin in any forms)"></label>-->
 			
 			</row>
 						

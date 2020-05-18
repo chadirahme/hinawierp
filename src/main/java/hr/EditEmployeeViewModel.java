@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import model.EmployeeModel;
 import model.HRListValuesModel;
@@ -396,22 +397,50 @@ public class EditEmployeeViewModel
 			if(selectedNationality!=null)
 			selectedEmployee.setNationalityID(selectedNationality.getListId());
 			selectedEmployee.setAge(String.valueOf(age));
-			
-			
+
+			List<EmployeeModel> lstQBNames=data.checkQbListsEmployeeNoExist();
+			List<String> lstEmpNames =
+					lstQBNames.stream()
+							.map(EmployeeModel::getFullName)
+							.collect(Collectors.toList());
+
+			String enFullName =selectedEmployee.getEnFirstName().trim();
+             if(!FormatDateText.isEmpty(selectedEmployee.getEnMiddleName() ))
+				 enFullName+=" " + selectedEmployee.getEnMiddleName().trim();
+			if(!FormatDateText.isEmpty(selectedEmployee.getEnLastName()))
+				enFullName+=" " + selectedEmployee.getEnLastName().trim();
+
+			selectedEmployee.setFullName(enFullName);
+
 			List<EmployeeModel> lst=data.checkEmployeeNoExist(selectedEmployee.getCompKey());
 			if (selectedEmployee.getEmployeeKey() ==0)
 			{
+				if(lstEmpNames.contains(enFullName.toUpperCase()))
+				{
+					Messagebox.show("Employee Name exist for this company  !!","Add Employee", Messagebox.OK , Messagebox.EXCLAMATION);
+					return;
+				}
+
 				for(EmployeeModel employeeModel:lst)
 				{
 					if(employeeModel.getEmployeeNo().replaceAll("\\s+","").equalsIgnoreCase(employeeNo.replaceAll("\\s+","")))
 					{
-						Messagebox.show("Employee number exist for this company  !!","Edit Employee", Messagebox.OK , Messagebox.EXCLAMATION);
+						Messagebox.show("Employee number exist for this company  !!","Add Employee", Messagebox.OK , Messagebox.EXCLAMATION);
 						return;
 					}
 				}
 			}
 			else
 			{
+				for(EmployeeModel employeeModel:lstQBNames)
+				{
+					if(employeeModel.getFullName().replaceAll("\\s+","").equalsIgnoreCase(enFullName.toUpperCase().replaceAll("\\s+","")) && employeeModel.getEmployeeKey()!=selectedEmployee.getEmployeeKey())
+					{
+						Messagebox.show("Employee Name exist for this company  !!","Edit Employee", Messagebox.OK , Messagebox.EXCLAMATION);
+						return;
+					}
+				}
+
 				for(EmployeeModel employeeModel:lst)
 				{
 					if(employeeModel.getEmployeeNo().replaceAll("\\s+","").equalsIgnoreCase(employeeNo.replaceAll("\\s+","")) && employeeModel.getEmployeeKey()!=selectedEmployee.getEmployeeKey())

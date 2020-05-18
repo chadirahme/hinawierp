@@ -3984,7 +3984,7 @@ public class DailyTimeSheetViewModel
 				
 				if(tempTomroowsPLan==0)
 				{
-					tempTomrrowsPlanForEmail=item.getTomorrowPlan();
+					tempTomrrowsPlanForEmail=item.getTomorrowPlan()==null?"":item.getTomorrowPlan().replace("'", "`");
 					tempTomroowsPLan++;
 					
 				}
@@ -4063,7 +4063,8 @@ public class DailyTimeSheetViewModel
 				  	selectedCompEmployee=Hrdata.GetEmployeeDeatailsByEmployeeKeyQuery(empKey);
 				  	if(selectedCompEmployee.getSupervisorId()==0)
 				  	{
-				  		supervisorEmail="hinawi@eim.ae";
+				  		//supervisorEmail="hinawi@eim.ae";
+				  		supervisorEmail="eng.chadi@gmail.com";
 				  	}
 				  	else
 				  	{
@@ -5489,15 +5490,18 @@ public class DailyTimeSheetViewModel
 			  	
 			  	result.append("<table border='0' cellpadding='0' cellspacing='0' style='width: 100%;'>");
 			  	result.append("<caption>");
-			  	result.append("	<strong>Timesheet Data</strong></caption>");
+			  	result.append("	<strong>Timesheet Online</strong></caption>");
 			  	result.append("<tbody>");
 			  	result.append("	<tr>");
 			  	result.append("<td style='width:295px;'>");
 			  	result.append("<p>");
 			  	result.append("	<strong>Employee Name : </strong>"+selectedCompEmployee.getFullName()+"</p>");
 			  	result.append("<p>");
-			  	result.append("<strong>No. : </strong>"+selectedCompEmployee.getEmployeeNo()+ "</p>");
+			  	result.append("<strong>Employee No. : </strong>"+selectedCompEmployee.getEmployeeNo()+ "</p>");
 			  	result.append("<p>");
+				result.append("<p>");
+				result.append("<strong>Company Name : </strong>"+selectedCompany.getEnCompanyName()+ "</p>");
+				result.append("<p>");
 			  	result.append("	<strong>Position : </strong>"+selectedCompEmployee.getPosition()+ "</p>");
 			  	result.append("<p>");
 			  	result.append("	<strong>Department :</strong>"+selectedCompEmployee.getDepartment()+ "</p>");
@@ -5506,7 +5510,7 @@ public class DailyTimeSheetViewModel
 			  	result.append("</td>");
 			  	result.append("<td style='width: 295px; text-align: right; vertical-align: top;'>");
 			  	result.append("<p>");
-			  	result.append("	<strong>Sent By </strong>: "+dbUser.getFirstname()+"</p>");
+			  	result.append("	<strong>User </strong>: "+dbUser.getFirstname()+"</p>");
 			  	result.append("<p>");
 			  	result.append("	&nbsp;</p>");
 			  	result.append("</td>");
@@ -5515,11 +5519,11 @@ public class DailyTimeSheetViewModel
 			  	result.append("</table> ");
 
 			  	
-				result.append("	<p>	<strong>"+leaveDescription+"");
-				if(viewType.equalsIgnoreCase("add"))
-				result.append(" Created .</strong></p>");
-				else if(viewType.equalsIgnoreCase("edit"))
-				result.append(" Edited .</strong></p>");
+				//result.append("	<p>	<strong>"+leaveDescription+"");
+				//if(viewType.equalsIgnoreCase("add"))
+				//result.append(" Created .</strong></p>");
+				//else if(viewType.equalsIgnoreCase("edit"))
+				//result.append(" Edited .</strong></p>");
 				result.append("<p><strong>Below is the entered timesheet detail</strong></p>");
 				
 			  		  	
@@ -5608,15 +5612,15 @@ public class DailyTimeSheetViewModel
 			  	result.append("<table border='0' cellpadding='0' cellspacing='0' style='width:100.0%;' width='100%'>");
 			  	result.append("<tbody>");
 			  	result.append("	<tr>");
-			  	result.append("	<td style='width:33.34%;height:43px;background-color: rgb(152, 179, 166);'>");
+			  	result.append("	<td style='width:33.34%;height:43px;background-color: #a2dafa;'>");
 			  	result.append("	<p>");
 			  	result.append("	<strong>From Time : </strong><strong>"+fromTime+"</strong></p>");
 			  	result.append("</td>");
-			  	result.append("<td style='width:33.34%;height:43px;background-color: rgb(152, 179, 166);'>");
+			  	result.append("<td style='width:33.34%;height:43px;background-color: #a2dafa;'>");
 			  	result.append("	<p>");
 			  	result.append("	<strong>To time :</strong><strong> "+ToTime+"</strong></p>");
 			  	result.append("</td>");
-			  	result.append("<td style='width:33.32%;height:43px;background-color: rgb(152, 179, 166);'>");
+			  	result.append("<td style='width:33.32%;height:43px;background-color: #a2dafa;'>");
 			  	result.append("	<p>");
 			  	result.append("		<strong>Hours :&nbsp;</strong>"+item.getUnits()+"</p>");
 			  	result.append("</td>");
@@ -5636,7 +5640,7 @@ public class DailyTimeSheetViewModel
 			  	result.append("</td>");
 			  	result.append("</tr>");
 			  	
-			  	if(item.getOtUnit1()>0 || item.getOtUnit2()>0 || item.getOtUnit3()>0)
+			  	//if(item.getOtUnit1()>0 || item.getOtUnit2()>0 || item.getOtUnit3()>0)
 			  	{
 			  	result.append("<tr>");
 			  	result.append("<td style='width:33.34%;height:16px;'>");

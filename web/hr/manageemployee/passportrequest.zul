@@ -12,7 +12,7 @@
 	 		<grid>
 			<columns>
 			<column width="150px"></column>
-			<column width="250px"></column>
+			<column width="300px"></column>
 			<column></column>
 			<column></column>
 			
@@ -56,7 +56,7 @@
 			<grid>
 			<columns>
 			<column width="150px"></column>
-			<column width="250px"></column>
+			<column width="450px"></column>
 			<column width="150px"></column>
 			<column width="200px"></column>
 			<column width="150px"></column>
@@ -98,7 +98,7 @@
 			<row>
 				<label value="Status: "></label>
 				<label value="@bind(vm.employeePassport.status)" style="color:red"></label>
-				<label value="Passport Status: "></label>
+				<label value="Passport Location: "></label>
 				<label value="@bind(vm.employeePassport.passportLocation)" ></label>
 				
 				<label value="Outstanding Loans: "></label>			

@@ -180,10 +180,27 @@ public class ImportEmployeeViewModel
 			}
 			
 			List<EmployeeModel> lst=data.checkEmployeeNoExist(selectedCompany.getCompKey());
-			for (EmployeeModel item : lstEmployeeData) 
+			List<EmployeeModel> lstQBNames=data.checkQbListsEmployeeNoExist();
+
+			List<String> lstEmpNumbers =
+					lst.stream()
+							.map(EmployeeModel::getEmployeeNo)
+							.collect(Collectors.toList());
+
+			List<String> lstEmpNames =
+					lstQBNames.stream()
+							.map(EmployeeModel::getFullName)
+							.collect(Collectors.toList());
+
+			for (EmployeeModel item : lstEmployeeData)
 		      {
+
+				  if(lstEmpNumbers.contains(item.getEmployeeNo()))
+				  	continue;
+				  if(lstEmpNames.contains(item.getFullName().toUpperCase()))
+					  continue;
+
 		    	item.setCompKey(selectedCompany.getCompKey());
-		    	
 				int depId=getHRListID(item.getEnDepartmentName(),"6");
 				if(depId==0)
 				{
@@ -219,25 +236,25 @@ public class ImportEmployeeViewModel
 				if(item.getNationality().toLowerCase().equals("local"))
 				{
 					item.setNationalityID(0);
+					item.setLocal("L");
 				}
-				else
-				{
-				int NatId=getHRListID(item.getNationality(),"1");
-				if(NatId==0)
-				{
-					//add new Position
-					int newID=data.addNewHRListValue( item.getNationality(), "", "NATIONALITY", "1");
-					if(newID>0)
-					{
-						NatId=newID;
-						HRListValuesModel obj=new HRListValuesModel();
-						obj.setListId(newID);
-						obj.setEnDescription(item.getNationality());
-						lstNationality.add(obj);
+				else {
+					int NatId = getHRListID(item.getNationality(), "1");
+					if (NatId == 0) {
+						//add new Position
+						int newID = data.addNewHRListValue(item.getNationality(), "", "NATIONALITY", "1");
+						if (newID > 0) {
+							NatId = newID;
+							HRListValuesModel obj = new HRListValuesModel();
+							obj.setListId(newID);
+							obj.setEnDescription(item.getNationality());
+							lstNationality.add(obj);
+						}
 					}
-				}							
-				item.setNationalityID(NatId);
+					item.setNationalityID(NatId);
+					item.setLocal("N");
 				}
+
 				
 				int sexId=getHRListID(item.getSex(), "4");
 				if(sexId==0)
@@ -278,22 +295,21 @@ public class ImportEmployeeViewModel
 				
 			
 				item.setDateOfBirth(convertToDate(item.getDob()));
-				item.setJoiningDate(convertToDate(item.getJoinDate()));				
-				//we have to check if empNo exist before save
+				item.setJoiningDate(convertToDate(item.getJoinDate()));
+				item.setEmployeementDate(item.getJoiningDate());
+				item.setEmployeeType("E");
+				  data.insertNewEmployee(item);
 
-				  List<String> lstEmpNumbers =
-						  lst.stream()
-								  .map(EmployeeModel::getEmployeeNo)
-								  .collect(Collectors.toList());
-				if(lstEmpNumbers.contains(item.getEmployeeNo()))
-				{
-					//Messagebox.show("Employee number exist for this company  !!","Edit Employee", Messagebox.OK , Messagebox.EXCLAMATION);
-					//return;
-				}
-				else
-				{
-				data.insertNewEmployee(item);
-				}
+				  //we have to check if empNo exist before save
+//				if(lstEmpNumbers.contains(item.getEmployeeNo()))
+//				{
+//					//Messagebox.show("Employee number exist for this company  !!","Edit Employee", Messagebox.OK , Messagebox.EXCLAMATION);
+//					//return;
+//				}
+//				else
+//				{
+//				data.insertNewEmployee(item);
+//				}
 				
 			  }
 			message="Employee List Data is saved..";

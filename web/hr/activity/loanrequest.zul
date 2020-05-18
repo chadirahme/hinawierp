@@ -50,6 +50,11 @@
 			<textbox value="@bind(vm.employeeNumber)" width="100px" disabled="@bind(vm.employeeKey gt 0)"></textbox>
 			<button label="Search" onClick="@command('searchCommand')" visible="@bind(vm.employeeKey eq 0)"></button>
 			</hbox>
+
+				<cell colspan="4">
+					<label value="This Loan Request will be Displayed on Desktop after Saving, and Doesn't Require Approval from Online."
+						   style="color:red;font-weight:bold;font-size:14px;"></label>
+				</cell>
 			
 			</row>
 			

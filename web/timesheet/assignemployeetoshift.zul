@@ -48,7 +48,7 @@
 									<label value="And"></label>
 									<datebox value="@bind(vm.toDate)" format="dd/MM/yyyy"></datebox>
 								  
-								  	<label value="Dispaly By"></label>
+								  	<label value="Display By"></label>
 								  	<radiogroup id="rbnType" selectedItem="@bind(vm.selectedViewType)" onCheck="@command('selectViewTypeCommand')">
 								  	<radio label="Employee" value="1" radiogroup="rbnType" ></radio>
 								  	<radio label="Position" value="2" radiogroup="rbnType"></radio>

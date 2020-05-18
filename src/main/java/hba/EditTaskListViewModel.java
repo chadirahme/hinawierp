@@ -161,6 +161,9 @@ public class EditTaskListViewModel
 
 	private boolean adminUser;
 
+
+	private boolean showMoreFields;
+
 	private MenuModel companyRole;
 
 	private String employeeEmail="";
@@ -1015,11 +1018,11 @@ public class EditTaskListViewModel
 				return;
 			}
 
-			if(estimatedEffort==0)	//Estimated Time
-			{
-				Messagebox.show("Task Estimated days/hours cannot be empty..","Task",Messagebox.OK , Messagebox.INFORMATION); 
-				return;
-			}
+//			if(estimatedEffort==0)	//Estimated Time
+//			{
+//				Messagebox.show("Task Estimated days/hours cannot be empty..","Task",Messagebox.OK , Messagebox.INFORMATION);
+//				return;
+//			}
 
 			if(remindInNumber>estimatedEffort)
 			{
@@ -4507,6 +4510,13 @@ public class EditTaskListViewModel
 	}
 
 
+	public boolean isShowMoreFields() {
+		return showMoreFields;
+	}
+
+	public void setShowMoreFields(boolean showMoreFields) {
+		this.showMoreFields = showMoreFields;
+	}
 
 
 

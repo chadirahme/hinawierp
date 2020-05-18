@@ -122,7 +122,8 @@
 	 </groupbox>
 	 </hbox>
 	 <hbox hflex="1" pack="center">
-	 <button label="Save" onClick="@command('saveCommand')" visible="@bind(vm.companyRole.canAdd)"></button>
+	 <!--<button label="Save" onClick="@command('saveCommand')" visible="@bind(vm.companyRole.canAdd)"></button>-->
+	 <button label="Save" onClick="@command('saveCommand')"></button>
 	 </hbox>
 	 </vlayout>
 </zk>
