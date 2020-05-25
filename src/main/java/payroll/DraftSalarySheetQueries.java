@@ -570,4 +570,13 @@ public class DraftSalarySheetQueries
 		query.append(" and SALARY_YEAR=" + year);
 		return query.toString();			
 	}
+
+	public String getLastApproveSalaryQuery(int compKey)
+	{
+		query=new StringBuffer();
+		query.append("select top 1 * from SALARYMASTTS where SALARY_STATUS='A' ");
+		query.append(" and COMP_KEY=" + compKey);
+		query.append(" ORDER by APPROVE_DATE desc");
+		return query.toString();
+	}
 }

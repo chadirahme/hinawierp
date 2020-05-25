@@ -16,6 +16,7 @@ import model.CompanyDBModel;
 import model.DraftSalaryModel;
 import model.EmployeeModel;
 
+import model.TimeSheetDataModel;
 import org.apache.log4j.Logger;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
@@ -1096,6 +1097,27 @@ public class DraftSalarySheetData
 			logger.error("error in DraftSalarySheetData---approveSalary-->" , ex);
 		}
 		
+	}
+
+	public TimeSheetDataModel getLastApproveSalary(int compKey)
+	{
+		ResultSet rs = null;
+		TimeSheetDataModel obj=new TimeSheetDataModel();
+		try
+		{
+			rs=db.executeNonQuery(query.getLastApproveSalaryQuery(compKey));
+			while(rs.next())
+			{
+				obj.setRecNo(rs.getInt("Rec_NO"));
+				obj.setTsDate(rs.getDate("APPROVE_DATE"));
+			}
+		}
+		catch (Exception ex)
+		{
+			logger.error("error in DraftSalarySheetData---getLastApproveSalary-->" , ex);
+		}
+
+		return obj;
 	}
 	
 }

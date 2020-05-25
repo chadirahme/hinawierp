@@ -3,6 +3,7 @@ package payroll;
 import hr.HRData;
 import hr.model.CompanyModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 import model.DraftSalaryModel;
 
+import model.TimeSheetDataModel;
 import org.apache.log4j.Logger;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -41,7 +43,8 @@ public class ApproveSalaryViewModel
 	private List<DraftSalaryModel> lstApproveSalary;
 	private Set<DraftSalaryModel> selectedEntities;	
 	private int UserId;
-	
+	private String lastTimeSheetApproved;
+
 	public ApproveSalaryViewModel()
 	{
 		try
@@ -53,13 +56,26 @@ public class ApproveSalaryViewModel
 				selectedCompany=lstComapnies.get(0);			
 			UserId=dbUser.getUserid();
 			fillPeriods();
+			getLastSalarySheetApproved();
 		}
 		catch (Exception ex)
 		{	
 			logger.error("ERROR in ApproveSalaryViewModel ----> init", ex);			
 		}
 	}
-	
+
+	private void getLastSalarySheetApproved()
+	{
+		lastTimeSheetApproved="";
+		TimeSheetDataModel obj=data.getLastApproveSalary(selectedCompany.getCompKey());
+		if(obj.getRecNo()>0){
+			Calendar c = Calendar.getInstance();
+			c.setTime(obj.getTsDate());
+			String monthName =new SimpleDateFormat("MMMM").format(c.getTime());
+			int year= c.get(Calendar.YEAR);
+			lastTimeSheetApproved="Last Approved Salary Sheet : " + monthName + "/" + String.valueOf(year);
+		}
+	}
 	private void fillPeriods()
 	{
 		List<String> months = Arrays.asList("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
@@ -188,8 +204,10 @@ public class ApproveSalaryViewModel
 		return selectedCompany;
 	}
 
+	@NotifyChange({"lastTimeSheetApproved"})
 	public void setSelectedCompany(CompanyModel selectedCompany) {
 		this.selectedCompany = selectedCompany;
+		getLastSalarySheetApproved();
 	}
 
 	public List<String> getLstMonths() {
@@ -238,5 +256,13 @@ public class ApproveSalaryViewModel
 
 	public void setSelectedEntities(Set<DraftSalaryModel> selectedEntities) {
 		this.selectedEntities = selectedEntities;
+	}
+
+	public String getLastTimeSheetApproved() {
+		return lastTimeSheetApproved;
+	}
+
+	public void setLastTimeSheetApproved(String lastTimeSheetApproved) {
+		this.lastTimeSheetApproved = lastTimeSheetApproved;
 	}
 }

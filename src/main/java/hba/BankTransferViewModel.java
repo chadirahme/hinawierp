@@ -163,6 +163,7 @@ public class BankTransferViewModel
 	private boolean canPrint = false;
 	private boolean canCreate = false;
 	private MenuModel companyRole;
+	private String qbUpdateMode="M";
 
 	public BankTransferViewModel()
 	{
@@ -179,6 +180,7 @@ public class BankTransferViewModel
 			objBank=new BankTransferModel();
 			objBank.setPvDate(df.parse(sdf.format(c.getTime())));		
 			compSetup=data.GetDefaultSetupInfo();
+			qbUpdateMode=data.checkQBUpdateMode("BankTransfer");
 
 			lstGridBankAccounts=data.fillBankAccounts("");
 			lstGridCustomer=data.fillQbList("'Customer'");
@@ -1593,7 +1595,12 @@ public class BankTransferViewModel
 				obj.setPayeeType(selectedPaytoOrder.getListType());
 				obj.setPrintName(selectedPaytoOrder.getFullName());
 				obj.setAmount(totalAmount);
-				obj.setStatus("P");
+				//obj.setStatus("P");
+
+				if(qbUpdateMode.equals("M"))
+					obj.setStatus("C");
+				else
+					obj.setStatus("A");
 
 				obj.setMemo(objBank.getMemo());		
 				obj.setCheque("BankTransfer");			

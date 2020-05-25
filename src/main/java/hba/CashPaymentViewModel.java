@@ -161,6 +161,7 @@ public class CashPaymentViewModel {
 	private boolean createPdfSendEmail = false;
 	
 	private boolean seeTrasction=false;
+	private String qbUpdateMode="M";
 
 	// private boolean billable=false;
 
@@ -215,6 +216,7 @@ public class CashPaymentViewModel {
 			objCash = new CashModel();
 			objCash.setPvDate(df.parse(sdf.format(c.getTime())));
 			compSetup = data.GetDefaultSetupInfo();
+			qbUpdateMode=data.checkQBUpdateMode("CashPayment");
 			lstInvcCustomerGridInvrtySite = (data.GetMasterData("GridSite"));
 			lstGridBankAccounts = data.fillBankAccounts("");
 			lstGridCustomer = data.fillQbList("'Customer'");
@@ -1695,7 +1697,12 @@ public class CashPaymentViewModel {
 			obj.setPayeeType(selectedPaytoOrder.getListType());
 			obj.setPrintName(selectedPaytoOrder.getFullName());
 			obj.setAmount(totalAmount);
+			//check If the Update Field is 'M' means it is manual Update
+			if(qbUpdateMode.equals("M"))
 			obj.setStatus("C");
+			//If the Update Field is 'O' means it is Automatic
+			else
+			obj.setStatus("A");
 
 			obj.setMemo(objCash.getMemo()==null?"":objCash.getMemo());
 			obj.setCheque("Cash");

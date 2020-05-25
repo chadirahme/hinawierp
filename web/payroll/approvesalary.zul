@@ -59,6 +59,12 @@
 							<button label="View" hflex="1" onClick="@command('viewSalaryCommand')"></button>
 							<button label="Filter Employee" onClick="@command('filterCommand')"></button>
 			</row>
+
+				<row>
+					<cell colspan="4">
+						<label value="@bind(vm.lastTimeSheetApproved)" style="color:green"></label>
+					</cell>
+				</row>
 			
 			</rows>
 			

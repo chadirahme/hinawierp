@@ -98,7 +98,7 @@
 									<cell>
 										<textbox hflex="1" value="@bind(fx.pvNo)"
 											constraint="no empty: Please enter transaction no !!!"
-											readonly="false"></textbox>
+												 readonly="@bind(vm.compSetup.allowToChangeTXNNo eq 'N')"></textbox>
 									</cell>
 									<cell>
 										<checkbox checked="@bind(vm.chkPvNo)"></checkbox>
@@ -179,7 +179,8 @@
 									</cell>
 									<cell colspan="2">
 										<hlayout>
-											<textbox value="@bind(fx.checkNo)" constraint="no empty: Please enter cheque no !" width="130px"></textbox>
+											<textbox value="@bind(fx.checkNo)" constraint="no empty: Please enter cheque no !"
+													 width="130px" readonly="@bind(vm.compSetup.allowToChangeChequeNo eq 'N')"></textbox>
 											<checkbox checked="@bind(vm.chkChequeNo)"></checkbox>
 										</hlayout>
 									</cell>

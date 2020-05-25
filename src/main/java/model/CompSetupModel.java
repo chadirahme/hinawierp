@@ -102,7 +102,10 @@ public class CompSetupModel
 
 	private String dontSaveWithOutMemo;
 	private Date ClosingDate;
-	
+
+	private String allowToChangeTXNNo;
+	private String allowToChangeChequeNo;
+
 	
 	public String getPvSerialNos() {
 		return pvSerialNos;
@@ -697,5 +700,20 @@ public class CompSetupModel
 		this.dontSaveWithOutMemo = dontSaveWithOutMemo;
 	}
 
+	public String getAllowToChangeTXNNo() {
+		return allowToChangeTXNNo;
+	}
+
+	public void setAllowToChangeTXNNo(String allowToChangeTXNNo) {
+		this.allowToChangeTXNNo = allowToChangeTXNNo;
+	}
+
+	public String getAllowToChangeChequeNo() {
+		return allowToChangeChequeNo;
+	}
+
+	public void setAllowToChangeChequeNo(String allowToChangeChequeNo) {
+		this.allowToChangeChequeNo = allowToChangeChequeNo;
+	}
 
 }

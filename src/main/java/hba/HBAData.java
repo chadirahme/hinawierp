@@ -659,6 +659,11 @@ public class HBAData {
 				obj.setClosingDate(rs.getDate("ClosingDate"));
 				obj.setDontSaveWithOutMemo(rs.getString("DontSaveWithOutMemo") == null ? "N": rs.getString("DontSaveWithOutMemo"));
 
+				obj.setAllowToChangeTXNNo(rs.getString("AllowToChangeTXNNo") == null ? "N": rs.getString("AllowToChangeTXNNo"));
+				obj.setAllowToChangeChequeNo(rs.getString("AllowToChangeChequeNo") == null ? "N": rs.getString("AllowToChangeChequeNo"));
+
+
+
 			}
 		} catch (Exception ex) {
 			logger.error("error in HBAData---GetDefaultSetupInfo-->", ex);
@@ -895,6 +900,23 @@ public class HBAData {
 			logger.error("error in HBAData---GetSerialNumber-->", ex);
 		}
 		return LastNumber;
+	}
+
+	public String checkQBUpdateMode(String formID) {
+		String update = "M";
+
+		HBAQueries query = new HBAQueries();
+		ResultSet rs = null;
+		try {
+			rs = db.executeNonQuery(query.checkQBUpdateModeQuery(formID));
+			while (rs.next()) {
+				update = rs.getString("UPDATE") == null ? "M"
+						: rs.getString("UPDATE");
+			}
+		} catch (Exception ex) {
+			logger.error("error in HBAData---checkQBUpdateMode-->", ex);
+		}
+		return update;
 	}
 
 	public PayToOrderModel getPayToOrderInfo(String ListType, int keyID) {

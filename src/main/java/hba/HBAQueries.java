@@ -275,13 +275,20 @@ public class HBAQueries {
 	public String GetDefaultSetupInfoQuery() {
 		query = new StringBuffer();
 		query.append(" Select RVSERIALNOS,PVSERIALNOS,Post2MainAccount,PostOnMainClass,ChangeClass_Account,postItem2Main,PostJVWithOutName,usepurchaseflow,ChangePrice_ConvertPO,");
-		query.append(" BuyItemWithHighCost,UseMinPurchasePrice,MinPurchasePriceRatio,MaxPurchasePriceRatio,UseMaxPurchasePrice,address,companyName,AllowToAddInvSite,countrykey,citykey,telephone,ccemail,fax,usebillable,AllowToSkipPurchaseWorkFlow,ClosingDate,DontSaveWithOutMemo ");
+		query.append(" BuyItemWithHighCost,UseMinPurchasePrice,MinPurchasePriceRatio,MaxPurchasePriceRatio,UseMaxPurchasePrice,address,companyName,AllowToAddInvSite,countrykey,citykey,telephone,ccemail,fax,usebillable,AllowToSkipPurchaseWorkFlow,ClosingDate,DontSaveWithOutMemo,AllowToChangeTXNNo,AllowToChangeChequeNo ");
 		if (dbUser.getMergedDatabse().equalsIgnoreCase("Yes")) {
 			query.append(" From companySettings");
 		} else {
 			query.append(" From COMPSETUP");
 		}
 
+		return query.toString();
+	}
+
+	//QBUpdateMode
+	public String checkQBUpdateModeQuery(String formID) {
+		query = new StringBuffer();
+		query.append("Select [UPDATE] from QBUpdateMode Where FORM_ID='" + formID+"'");
 		return query.toString();
 	}
 
@@ -606,6 +613,7 @@ public class HBAQueries {
 
 	public String updateNewCashPayment(CashModel obj) {
 		// DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		String editedFromOnline = "Y";
 		query = new StringBuffer();
 		query.append("Update Checkmast set PvNo='" + obj.getPvNo()
 				+ "',BankKey=" + obj.getBankKey() + ",PayeeKey="
@@ -625,8 +633,9 @@ public class HBAQueries {
 				+ "',ItemBillNoHide='" + obj.getItemBillNoHide()
 				+ "',ItemBillDateHide='" + obj.getItemBillDateHide()
 				+ "',PrintName='" + obj.getPrintName() + "',UnitKey='"
-				+ obj.getUnitKey() + "',userID=" + obj.getUserID()
-				+ " where recNo=" + obj.getRecNo());
+				+ obj.getUnitKey() + "',userID="
+				+ obj.getUserID() + ",editedFromOnline='" + editedFromOnline
+				+ "' where recNo=" + obj.getRecNo());
 		return query.toString();
 
 	}
@@ -663,7 +672,7 @@ public class HBAQueries {
 				+ "',webUserID='" + obj.getWebUserID()
 				+ "',PrintName='" + obj.getPrintName()
 				+ "',userID=" + obj.getUserID()
-				+ " where recNo=" + obj.getRecNo());
+				+ " , editedFromOnline='Y' where recNo=" + obj.getRecNo());
 		return query.toString();
 
 	}
@@ -4136,7 +4145,7 @@ public class HBAQueries {
 		query.append(",SwiftCode ='"+obj.getSwiftCode()+"'");
 		query.append(",DATEMODIFIED ='"+sdf.format(c.getTime())+"'");
 		query.append(",ModifiedUserID ="+webUserID);
-		query.append(" Where RecNo="+obj.getRecNo());
+		query.append(" ,EditedFromOnline='Y' Where RecNo="+obj.getRecNo());
 		return query.toString();
 
 	}

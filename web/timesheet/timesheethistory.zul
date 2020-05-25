@@ -17,7 +17,7 @@
 			<column  width="180px"></column>
 			<column  width="140px"></column>
 			<column  width="150px"></column>
-									
+				<column  width="150px"></column>
 			</columns>
 			<rows>
 			
@@ -71,8 +71,10 @@
 			<listitem  label="All"></listitem>			
 			</listbox>
 			</cell>
-		 	<button label="Search"  onClick="@command('searchCommand')"></button>	
-			<button label="Approve"  onClick="@command('approveAllCommand')" visible="@bind(vm.companyRole.canAdd)"></button>
+
+		 	<button label="Search"  onClick="@command('searchCommand')"></button>
+				<button label="Approve"  onClick="@command('approveAllCommand')" visible="@bind(vm.companyRole.canAdd)"></button>
+
 			</row>
 			</rows>
 			</grid>

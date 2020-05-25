@@ -61,7 +61,7 @@ import timesheet.TimeSheetData;
 public class NotesForEachModule {
 	private Logger logger = Logger.getLogger(this.getClass());
 
-	//CustomerFeedBackData feedBackData=null;
+	CustomerFeedBackData feedBackData=null;
 
 	ListData data=new ListData();
 
@@ -145,7 +145,7 @@ public class NotesForEachModule {
 				obj.setDbpwd(rs.getString("dbpwd"));
 				obj.setDbtype(rs.getString("dbtype"));
 			}
-		//	feedBackData=new CustomerFeedBackData(obj);
+			feedBackData=new CustomerFeedBackData(obj);
 
 
 			supervisorID=dbUser.getSupervisor();//logged in as supervisor
@@ -164,7 +164,7 @@ public class NotesForEachModule {
 			}
 			else
 			{
-			//lstlocalItem=feedBackData.getLocalItemListValuesForFeedBack(38, "Select");
+			lstlocalItem=feedBackData.getLocalItemListValuesForFeedBack(38, "Select");
 			if(lstlocalItem!=null && lstlocalItem.size()>0)
 				selectedService=lstlocalItem.get(0);
 			
@@ -365,7 +365,7 @@ public class NotesForEachModule {
 				feedbackModel.setMemoAr(memoAr);
 				feedbackModel.setWebuserID(dbUser.getDesktopUserid());
 				
-				//resutlt=feedBackData.editLocalItem(feedbackModel);
+				resutlt=feedBackData.editLocalItem(feedbackModel);
 			}
 			
 			if(resutlt>0)

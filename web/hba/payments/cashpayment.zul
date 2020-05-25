@@ -64,7 +64,7 @@
 										<label value="No."></label>
 									</cell>
 									<cell>
-										<textbox hflex="1" value="@bind(fx.pvNo)" readonly="true"
+										<textbox hflex="1" value="@bind(fx.pvNo)" readonly="@bind(vm.compSetup.allowToChangeTXNNo eq 'N')"
 											constraint="no empty: Please enter transaction no !!!"></textbox>
 									</cell>
 									<cell>

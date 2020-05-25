@@ -174,6 +174,7 @@ public class ChequePaymentViewModel
 	private String checkNo;
 	
 	private boolean seeTrasction=false;
+	private String qbUpdateMode="M";
 
 	public ChequePaymentViewModel()
 	{
@@ -193,6 +194,7 @@ public class ChequePaymentViewModel
 			objCheque.setCheckDate(creationdate);
 			chequePyamentKey = 0;
 			compSetup=data.GetDefaultSetupInfo();
+			qbUpdateMode=data.checkQBUpdateMode("ChequePayment");
 			lstInvcCustomerGridInvrtySite=(data.GetMasterData("GridSite"));
 			lstGridBankAccounts=data.fillBankAccounts("");
 			lstGridCustomer=data.fillQbList("'Customer'");
@@ -876,7 +878,10 @@ public class ChequePaymentViewModel
 					}
 					else
 					{
-						obj.setStatus("C");
+						if(qbUpdateMode.equals("M"))
+							obj.setStatus("C");
+						else
+							obj.setStatus("A");
 					}
 				}
 				else
