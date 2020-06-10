@@ -324,6 +324,11 @@
 											<listheader label="" width="30px"></listheader>
 											<listheader label="Account" width="150px"></listheader>
 											<listheader label="Net Amount" width="100px"></listheader>
+											<listheader label="VAT Code" if="${vm.compSetup.useVAT eq 'Y'}" visible="@bind(vm.compSetup.useVAT eq 'Y')" width="100px"></listheader>
+											<listheader label="VAT Amount" if="${vm.compSetup.useVAT eq 'Y'}" visible="@bind(vm.compSetup.useVAT eq 'Y')" width="100px"></listheader>
+											<listheader label="Amount After VAT" if="${vm.compSetup.useVAT eq 'Y'}" visible="@bind(vm.compSetup.useVAT eq 'Y')" width="120px"></listheader>
+
+
 											<listheader label="Memo" width="300px"></listheader>
 											<listheader label="Bill No" width="150px"></listheader>
 											<listheader label="Bill Date" width="120px"></listheader>
@@ -372,6 +377,30 @@
 												<listcell>
 													<doublebox value="@bind(each.amount)" format="###0.00" inplace="true" onChange="@command('changeAmount' , row=each)"></doublebox>
 												</listcell>
+
+												<listcell if="${vm.compSetup.useVAT eq 'Y'}">
+													<listbox mold="select" model="@load(vm.lstVatCodeList)"
+															 hflex="1" selectedItem="@bind(each.selectedVatCode)" disabled="@bind(each.notAllowEditVAT)"
+															 onSelect="@command('selectVatCode' , type=each)">
+														<template name="model" var="item">
+															<listitem>
+																<listcell label="@load(item.vatCode)">
+																</listcell>
+															</listitem>
+														</template>
+													</listbox>
+												</listcell>
+
+												<listcell if="${vm.compSetup.useVAT eq 'Y'}">
+													<doublebox value="@bind(each.vatAmount)" format="###0.00" readonly="true"
+															   inplace="true"></doublebox>
+												</listcell>
+
+												<listcell if="${vm.compSetup.useVAT eq 'Y'}">
+													<doublebox value="@bind(each.amountAfterVAT)" format="###0.00" readonly="true"
+															   inplace="true"></doublebox>
+												</listcell>
+
 												<listcell>
 													<textbox value="@bind(each.memo)" hflex="1"></textbox>
 												</listcell>
@@ -436,6 +465,10 @@
 											<listheader label="Qty" width="50px"></listheader>
 											<listheader label="Cost" width="100px"></listheader>
 											<listheader label="Net Amount" width="100px"></listheader>
+											<listheader label="VAT Code" if="${vm.compSetup.useVAT eq 'Y'}" visible="@bind(vm.compSetup.useVAT eq 'Y')" width="100px"></listheader>
+											<listheader label="VAT Amount" if="${vm.compSetup.useVAT eq 'Y'}" visible="@bind(vm.compSetup.useVAT eq 'Y')" width="100px"></listheader>
+											<listheader label="Amount After VAT" if="${vm.compSetup.useVAT eq 'Y'}" visible="@bind(vm.compSetup.useVAT eq 'Y')" width="120px"></listheader>
+
 											<listheader label="Customer Job" width="150px"></listheader>
 											<listheader label="Class" width="100px"></listheader>
 											<listheader label="Fixed Asset Item" width="100px"></listheader>
@@ -494,6 +527,30 @@
 												<listcell>
 													<doublebox value="@bind(each.amount)" format="###0.00" inplace="true" onChange="@command('changeCheckItems' , type=each ,parm='amount')"></doublebox>
 												</listcell>
+
+												<listcell if="${vm.compSetup.useVAT eq 'Y'}">
+													<listbox mold="select" model="@load(vm.lstVatCodeList)"
+															 hflex="1" selectedItem="@bind(each.selectedVatCode)" disabled="@bind(each.notAllowEditVAT)"
+															 onSelect="@command('selectItemVatCode' , type=each)">
+														<template name="model" var="item">
+															<listitem>
+																<listcell label="@load(item.vatCode)">
+																</listcell>
+															</listitem>
+														</template>
+													</listbox>
+												</listcell>
+
+												<listcell if="${vm.compSetup.useVAT eq 'Y'}">
+													<doublebox value="@bind(each.vatAmount)" format="###0.00" readonly="true"
+															   inplace="true"></doublebox>
+												</listcell>
+
+												<listcell if="${vm.compSetup.useVAT eq 'Y'}">
+													<doublebox value="@bind(each.amountAfterVAT)" format="###0.00" readonly="true"
+															   inplace="true"></doublebox>
+												</listcell>
+
 												<listcell>
 													<listbox mold="select" model="@load(vm.lstGridCustomer)" hflex="1" selectedItem="@bind(each.selectedCustomer)">
 														<template name="model" var="item">

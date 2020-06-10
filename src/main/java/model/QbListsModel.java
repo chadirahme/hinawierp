@@ -73,6 +73,10 @@ public class QbListsModel {
 	private double AvgCost;
 	private int selectedClass;
 
+
+
+	private int purchaseVATKey;
+
 	public int getRecNo() {
 		return recNo;
 	}
@@ -668,8 +672,14 @@ public class QbListsModel {
 	public void setSelectedClass(int selectedClass) {
 		this.selectedClass = selectedClass;
 	}
-	
-	
 
+
+	public int getPurchaseVATKey() {
+		return purchaseVATKey;
+	}
+
+	public void setPurchaseVATKey(int purchaseVATKey) {
+		this.purchaseVATKey = purchaseVATKey;
+	}
 
 }

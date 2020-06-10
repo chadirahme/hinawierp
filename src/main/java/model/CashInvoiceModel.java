@@ -267,8 +267,9 @@ public class CashInvoiceModel {
 	
 	private String balckListed;
 	private String transformD;
-	
 
+	private int vatKey;
+	private double vatAmount;
 	/**
 	 * @return the recNo
 	 */
@@ -1825,7 +1826,21 @@ public class CashInvoiceModel {
 	public void setCanChangeStatus(boolean canChangeStatus) {
 		this.canChangeStatus = canChangeStatus;
 	}
-	
-	
+
+	public int getVatKey() {
+		return vatKey;
+	}
+
+	public void setVatKey(int vatKey) {
+		this.vatKey = vatKey;
+	}
+
+	public double getVatAmount() {
+		return vatAmount;
+	}
+
+	public void setVatAmount(double vatAmount) {
+		this.vatAmount = vatAmount;
+	}
 		
 }

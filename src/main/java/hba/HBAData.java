@@ -19,53 +19,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import common.HbaEnum;
 import layout.MenuModel;
-import model.AccountsModel;
-import model.ActivityStatusModel;
-import model.ApprovePurchaseOrderModel;
-import model.ApprovedMaterialsModel;
-import model.ApprovedQuotationModel;
-import model.BalanceSheetReportModel;
-import model.BankTransferModel;
-import model.BanksModel;
-import model.BarcodeSettingsModel;
-import model.CashInvoiceGridData;
-import model.CashInvoiceModel;
-import model.CashInvoiceSalesReportModel;
-import model.CashModel;
-import model.ChangeStatusQuotationModel;
-import model.CheckFAItemsModel;
-import model.CheckItemsModel;
-import model.ClassModel;
-import model.CompSetupModel;
-import model.CompanyDBModel;
-import model.CustomerModel;
-import model.CustomerStatusHistoryModel;
-import model.CutomerSummaryReport;
-import model.DeliveryLineModel;
-import model.DeliveryModel;
-import model.DepreciationModel;
-import model.ExpensesModel;
-import model.FixedAssetModel;
-import model.ItemReceiptModel;
-import model.ItemReceiptReportModel;
-import model.JobModel;
-import model.JournalVoucherGridData;
-import model.JournalVoucherModel;
-import model.LocalItemModel;
-import model.OtherNamesModel;
-import model.PayToOrderModel;
-import model.PaymentMethod;
-import model.PropertyModel;
-import model.PurchaseRequestGridData;
-import model.PurchaseRequestModel;
-import model.PurchaseRequestReportModel;
-import model.QbListsModel;
-import model.SelectItemReceiptModel;
-import model.SerialFields;
-import model.TermModel;
-import model.VehicleModel;
-import model.VendorModel;
+import model.*;
 
 import org.apache.log4j.Logger;
 import org.zkoss.zk.ui.Session;
@@ -661,6 +617,8 @@ public class HBAData {
 
 				obj.setAllowToChangeTXNNo(rs.getString("AllowToChangeTXNNo") == null ? "N": rs.getString("AllowToChangeTXNNo"));
 				obj.setAllowToChangeChequeNo(rs.getString("AllowToChangeChequeNo") == null ? "N": rs.getString("AllowToChangeChequeNo"));
+				obj.setUseVAT(rs.getString("Use_VAT") == null ? "N": rs.getString("Use_VAT"));
+				obj.setAllowVATCodeARAP(rs.getString("AllowVATCode_ARAP") == null ? "N": rs.getString("AllowVATCode_ARAP"));
 
 
 
@@ -693,6 +651,7 @@ public class HBAData {
 				obj.setSubLevel(rs.getInt("SubLevel"));
 				obj.setListID(rs.getString("ListID"));
 				obj.setFullName(rs.getString("FullName"));
+				obj.setVatKey(rs.getInt("VAT_KEY"));
 				lst.add(obj);
 			}
 		} catch (Exception ex) {
@@ -938,6 +897,7 @@ public class HBAData {
 							: rs.getString("BillAddress3"));
 					obj.setBillAddress4(rs.getString("BillAddress4") == null ? ""
 							: rs.getString("BillAddress4"));
+					obj.setVatKey(rs.getInt("VAT_KEY"));
 				} else {
 					obj.setBillAddress3("");
 					obj.setBillAddress4("");
@@ -986,6 +946,7 @@ public class HBAData {
 							.getString("Branch"));
 					obj.setIBANNo(rs.getString("IBANNo") == null ? "" : rs
 							.getString("IBANNo"));
+					obj.setVatKey(rs.getInt("VAT_KEY"));
 				}
 				if (ListType.equals("OtherNames")) {
 					obj.setAccountName(rs.getString("ActName") == null ? ""
@@ -1368,6 +1329,10 @@ public class HBAData {
 				obj.setBillDate(rs.getDate("BillDate"));
 				obj.setBillNo((rs.getString("BillNO") == null ? "" : rs
 						.getString("BillNO")));
+
+				obj.setVatAmount(rs.getDouble("Vat_ExpAmount"));
+				obj.setVatKey(rs.getInt("Vat_KEY"));
+				obj.setAmountAfterVAT(obj.getAmount()+obj.getVatAmount());
 				lst.add(obj);
 
 			}
@@ -1404,9 +1369,10 @@ public class HBAData {
 				obj.setInvoiceDate(rs.getDate("InvoiceDate"));
 				obj.setBillNo((rs.getString("BillNO") == null ? "" : rs
 						.getString("BillNO")));
+				obj.setVatAmount(rs.getDouble("Vat_ItemAmount"));
+				obj.setVatKey(rs.getInt("Vat_KEY"));
+				obj.setAmountAfterVAT(obj.getAmount()+obj.getVatAmount());
 				lst.add(obj);
-
-
 			}
 		} catch (Exception ex) {
 			logger.error(
@@ -1492,6 +1458,137 @@ public class HBAData {
 
 	}
 
+	public int deleteQBVATTransaction(int RecNo,int txnType) {
+		int result = 0;
+
+		HBAQueries query = new HBAQueries();
+		try {
+			result = db.executeUpdateQuery(query.deleteQBVATTransactionQuery(RecNo,txnType));
+		} catch (Exception ex) {
+			logger.error("error in HBAData---deleteQBVATTransaction-->", ex);
+		}
+		return result;
+	}
+
+	public List<VATCodeModel> getQBVATTransaction(int recNo) {
+		List<VATCodeModel> lst = new ArrayList<VATCodeModel>();
+
+		HBAQueries query = new HBAQueries();
+		ResultSet rs = null;
+		try {
+			VATCodeModel obj = new VATCodeModel();
+			rs = db.executeNonQuery(query.getQBVATTransactionQuery(recNo));
+			while (rs.next()) {
+				obj = new VATCodeModel();
+				obj.setVatKey(rs.getInt("Vat_Key"));
+				obj.setVatServiceItem(rs.getInt("Vat_ServiceItem"));
+				obj.setVatPercentage(rs.getDouble("VatItemAmount"));
+				obj.setVatCalcualtedFromAmt(rs.getDouble("VatCalcualtedFromAmt"));
+				obj.setVatDescription(rs.getString("VatMemo"));
+
+				lst.add(obj);
+			}
+		} catch (Exception ex) {
+			logger.error("error in HBAData---getQBVATTransaction-->", ex);
+		}
+		return lst;
+	}
+
+	public List<VATCodeModel> getCashInvoiceQBVATTransaction(int recNo,int formId) {
+		List<VATCodeModel> lst = new ArrayList<VATCodeModel>();
+
+		HBAQueries query = new HBAQueries();
+		ResultSet rs = null;
+		try {
+			VATCodeModel obj = new VATCodeModel();
+			if(HbaEnum.VatForms.CashInvoice.getValue()==formId)
+			rs = db.executeNonQuery(query.getCashInvoiceQBVATTransactionQuery(recNo));
+			else
+				rs = db.executeNonQuery(query.getCreditInvoiceQBVATTransactionQuery(recNo));
+			while (rs.next()) {
+				obj = new VATCodeModel();
+				obj.setVatKey(rs.getInt("Vat_Key"));
+				obj.setVatServiceItem(rs.getInt("Vat_ServiceItem"));
+				obj.setVatPercentage(rs.getDouble("VatItemAmount"));
+				obj.setVatCalcualtedFromAmt(rs.getDouble("VatCalcualtedFromAmt"));
+
+				lst.add(obj);
+			}
+		} catch (Exception ex) {
+			logger.error("error in HBAData---getCashInvoiceQBVATTransaction-->", ex);
+		}
+		return lst;
+	}
+
+	public int CreateServiceItems4QBPurchase(int recNo,int txnType,int nameRefKey,String nameType,double txnAmount){
+		int result = 0;
+
+		HBAQueries query = new HBAQueries();
+		try {
+			int tmpPRVVatKey=-1, tmpVATKey=0, tmpVATServiceItem=0;
+			double tmpVATAmount=0 , tmpCalculateFromAmt=0;
+			boolean tmpDataExists=false;
+
+			deleteQBVATTransaction(recNo,txnType);
+			List<VATCodeModel> lst=getQBVATTransaction(recNo);
+			for(VATCodeModel item:lst){
+				if(tmpPRVVatKey!=item.getVatKey()){
+					if(tmpPRVVatKey!=-1){
+						VATCodeModel newVat=new VATCodeModel(tmpVATKey,tmpVATServiceItem,tmpVATAmount,tmpCalculateFromAmt);
+						//db.executeUpdateQuery(query.addQBVATTransactionQuery(recNo,txnType,item,nameRefKey,nameType,txnAmount));
+						db.executeUpdateQuery(query.addQBVATTransactionQuery(recNo,txnType,newVat,nameRefKey,nameType,txnAmount));
+					}
+					tmpPRVVatKey=item.getVatKey();
+					tmpVATKey = 0;
+					tmpVATServiceItem = 0;
+					tmpVATAmount = 0;
+					tmpCalculateFromAmt = 0;
+				}
+				tmpVATKey = item.getVatKey();
+				tmpVATServiceItem = item.getVatServiceItem();
+				tmpVATAmount += item.getVatPercentage();
+				tmpCalculateFromAmt += item.getVatCalcualtedFromAmt();
+				tmpDataExists = true;
+			}
+			//add last item
+			if(tmpDataExists){
+				VATCodeModel newVat=new VATCodeModel(tmpVATKey,tmpVATServiceItem,tmpVATAmount,tmpCalculateFromAmt);
+				db.executeUpdateQuery(query.addQBVATTransactionQuery(recNo,txnType,newVat,nameRefKey,nameType,txnAmount));
+			}
+
+		} catch (Exception ex) {
+			logger.error("error in HBAData---CreateServiceItems4QBPurchase-->", ex);
+		}
+		return result;
+	}
+
+	public int CreateCashInvoice4QBVAT(int recNo,int txnType,int nameRefKey,String nameType,double txnAmount){
+		int result = 0;
+
+		HBAQueries query = new HBAQueries();
+		try {
+			int tmpVATKey=0, tmpVATServiceItem=0;
+			double tmpVATAmount=0 , tmpCalculateFromAmt=0;
+
+
+			deleteQBVATTransaction(recNo,txnType);
+			List<VATCodeModel> lst=getCashInvoiceQBVATTransaction(recNo,txnType);
+			for(VATCodeModel item:lst){
+				tmpVATKey = item.getVatKey();
+				tmpVATServiceItem = item.getVatServiceItem();
+				tmpVATAmount = item.getVatPercentage();
+				tmpCalculateFromAmt = item.getVatCalcualtedFromAmt();
+				VATCodeModel newVat=new VATCodeModel(tmpVATKey,tmpVATServiceItem,tmpVATAmount,tmpCalculateFromAmt);
+				db.executeUpdateQuery(query.addQBVATTransactionQuery(recNo,txnType,newVat,nameRefKey,nameType,txnAmount));
+			}
+
+		} catch (Exception ex) {
+			logger.error("error in HBAData---CreateCashInvoice4QBVAT-->", ex);
+		}
+		return result;
+	}
+
+
 	public int addExpense(ExpensesModel objExpenses, int RecNo) {
 		int result = 0;
 
@@ -1546,6 +1643,7 @@ public class HBAData {
 				obj.setInvoiceRate(rs.getDouble("SalesPrice"));
 				obj.setAvgCost(rs.getDouble("averagecost"));
 				obj.setSelectedClass(rs.getInt("ClassKey"));
+				obj.setPurchaseVATKey(rs.getInt("PurchaseVATKey"));
 				
 				lst.add(obj);
 			}
@@ -2234,6 +2332,8 @@ public class HBAData {
 						obj.setStatus("InActive");
 					}
 
+					obj.setVatKey(rs.getInt("VAT_KEY"));
+
 				} else {
 					obj.setBillAddress3("");
 					obj.setBillAddress4("");
@@ -2266,6 +2366,7 @@ public class HBAData {
 					obj.setBankName(rs.getString("BankName") == null ? "" : rs.getString("BankName"));
 					obj.setBranchName(rs.getString("Branch") == null ? "" : rs.getString("Branch"));
 					obj.setiBANNo(rs.getString("IBANNo") == null ? "" : rs.getString("IBANNo"));
+					obj.setVatKey(rs.getInt("VAT_KEY"));
 				}
 				if (ListType.equals("OtherNames")) {
 					obj.setFullname(rs.getString("fullname") == null ? "" : rs.getString("fullname"));
@@ -2390,6 +2491,9 @@ public class HBAData {
 					obj.setPvSerialNos("S");
 				else
 					obj.setPvSerialNos(rs.getString("PVSERIALNOS"));
+
+				obj.setUseVAT(rs.getString("Use_VAT") == null ? "N": rs.getString("Use_VAT"));
+				obj.setAllowVATCodeARAP(rs.getString("AllowVATCode_ARAP") == null ? "N": rs.getString("AllowVATCode_ARAP"));
 			}
 		} catch (Exception ex) {
 			logger.error(
@@ -3703,6 +3807,8 @@ public class HBAData {
 				obj.setCheckNo(rs.getString("checkNo") == null ? "" : rs
 						.getString("checkNo"));
 				obj.setInvoiceAmount(rs.getDouble("invamount"));
+				obj.setVatAmount(rs.getDouble("VAT_AMOUNT"));
+
 				obj.setPaymentType(rs.getString("paymentType") == null ? ""
 						: rs.getString("paymentType"));
 				obj.setSalesRep(rs.getString("salesrepname") == null ? "" : rs
@@ -3751,6 +3857,7 @@ public class HBAData {
 				obj.setStatus(rs.getString("status") == null ? "" : rs
 						.getString("status"));
 				obj.setInvoiceAmount(rs.getDouble("invamount"));
+				obj.setVatAmount(rs.getDouble("VAT_AMOUNT"));
 				obj.setPaidAmount(rs.getDouble("paidAmount"));
 				obj.setInvoiceSource(rs.getString("invoice_Source") == null ? ""
 						: rs.getString("invoice_Source"));
@@ -4050,6 +4157,9 @@ public class HBAData {
 				obj.setBarcode(rs.getString("barcode") == null ? "" : rs.getString("barcode"));
 				obj.setDeliverRecNo(rs.getInt("DeliveryRecNo"));
 				obj.setDeliveryLineNo(rs.getInt("DeliveryLineNo"));
+				obj.setVatKey(rs.getInt("Vat_Key"));
+				obj.setUnitPriceWithVAT(rs.getDouble("RateAfterVAT"));
+				obj.setVatAmount(rs.getDouble("Vat_ItemAmount"));
 				lst.add(obj);
 
 			}
@@ -4363,6 +4473,9 @@ public class HBAData {
 				obj.setInvoicearabicDescription(rs.getString("descriptionAr") == null ? "" : rs.getString("descriptionAr"));
 				obj.setDeliverRecNo(rs.getInt("DeliveryRecNo"));
 				obj.setDeliveryLineNo(rs.getInt("DeliveryLineNo"));
+				obj.setVatKey(rs.getInt("Vat_Key"));
+				obj.setUnitPriceWithVAT(rs.getDouble("RateAfterVAT"));
+				obj.setVatAmount(rs.getDouble("Vat_ItemAmount"));
 				lst.add(obj);
 
 			}
@@ -7624,5 +7737,33 @@ public class HBAData {
 		catch (Exception ex) {
 			logger.error("error in HBAData---upadteLogo-->", ex);
 		}
+	}
+
+	public List<VATCodeModel> fillVatCodeList() {
+		List<VATCodeModel> lst = new ArrayList<VATCodeModel>();
+		HBAQueries query = new HBAQueries();
+
+		ResultSet rs = null;
+		VATCodeModel obj = new VATCodeModel();
+		obj.setVatKey(0);
+		obj.setVatCode("");
+		obj.setVatPercentage(0);
+		obj.setVatType("");
+		lst.add(obj);
+		try {
+			rs = db.executeNonQuery(query.getVatCodeQuery());
+			while (rs.next()) {
+				obj = new VATCodeModel();
+				obj.setVatKey(rs.getInt("VAT_KEY"));
+				obj.setVatCode(rs.getString("VAT_CODE") + "(" + rs.getDouble("VAT_PERCENTAGE") + ")");
+				obj.setVatDescription(rs.getString("VAT_Description"));
+				obj.setVatType(rs.getString("VAT_TYPE"));
+				obj.setVatPercentage(rs.getDouble("VAT_PERCENTAGE"));
+				lst.add(obj);
+			}
+		} catch (Exception ex) {
+			logger.error("error in HBAData---fillVatCodeList-->", ex);
+		}
+		return lst;
 	}
 }

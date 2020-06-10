@@ -55,7 +55,7 @@ private String selectedAccountType;
 private List<AccountsModel> subOfdropDown;
 private AccountsModel selectedSubOf;
 
-
+	private int vatKey;
 
 
 
@@ -504,6 +504,15 @@ public String getOldAccountNumber() {
 public void setOldAccountNumber(String oldAccountNumber) {
 	this.oldAccountNumber = oldAccountNumber;
 }
+
+
+	public int getVatKey() {
+		return vatKey;
+	}
+
+	public void setVatKey(int vatKey) {
+		this.vatKey = vatKey;
+	}
 
 
 

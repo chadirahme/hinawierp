@@ -161,4 +161,25 @@ public class HbaEnum {
 
 
 
+	public static enum VatForms{
+		CashPayment(0),
+		ChequePayment(0),
+		BankTransfer(0),
+		CashInvoice(9),
+		CreditInvoice(15),
+		CreditMemo(44),
+		Quotation(20);
+
+		private final int value;
+
+		private VatForms(int value) {
+			this.value = value;
+		}
+
+		public int getValue() {
+			return value;
+		}
+	}
+
+
 }

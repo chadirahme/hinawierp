@@ -312,7 +312,8 @@ public class CashInvoiceSalesReport {
 						tmp.getInvoiceDateStr().toLowerCase().contains(filter.getInvoiceDate().toLowerCase())&&
 						tmp.getCheckNo().toLowerCase().contains(filter.getCheckNo().toLowerCase())
 						&&(tmp.getTotalSales()+"").toLowerCase().contains(filter.getTotalSales().toLowerCase())&&
-						(tmp.getInvoiceAmount()+"").toLowerCase().contains(filter.getInvoiceAmount().toLowerCase())
+						(tmp.getInvoiceAmount()+"").toLowerCase().contains(filter.getInvoiceAmount().toLowerCase())&&
+						(tmp.getVatAmount()+"").toLowerCase().contains(filter.getVatAmount().toLowerCase())
 						)
 				{
 					lst.add(tmp);

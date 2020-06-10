@@ -44,6 +44,13 @@ public class CheckItemsModel
 	private boolean readOnly=false;
 	private int quantityInHand;
 
+
+	private int vatKey;
+	private VATCodeModel selectedVatCode;
+	private double vatAmount;
+	private double amountAfterVAT;
+	private boolean notAllowEditVAT;
+
 	public int getRecNo() {
 		return recNo;
 	}
@@ -268,7 +275,45 @@ public class CheckItemsModel
 		Cost1 = cost1;
 	}
 
+	public int getVatKey() {
+		return vatKey;
+	}
 
+	public void setVatKey(int vatKey) {
+		this.vatKey = vatKey;
+	}
+
+	public VATCodeModel getSelectedVatCode() {
+		return selectedVatCode;
+	}
+
+	public void setSelectedVatCode(VATCodeModel selectedVatCode) {
+		this.selectedVatCode = selectedVatCode;
+	}
+
+	public double getVatAmount() {
+		return vatAmount;
+	}
+
+	public void setVatAmount(double vatAmount) {
+		this.vatAmount = vatAmount;
+	}
+
+	public double getAmountAfterVAT() {
+		return amountAfterVAT;
+	}
+
+	public void setAmountAfterVAT(double amountAfterVAT) {
+		this.amountAfterVAT = amountAfterVAT;
+	}
+
+	public boolean isNotAllowEditVAT() {
+		return notAllowEditVAT;
+	}
+
+	public void setNotAllowEditVAT(boolean notAllowEditVAT) {
+		this.notAllowEditVAT = notAllowEditVAT;
+	}
 
 
 }

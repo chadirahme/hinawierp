@@ -59,6 +59,9 @@ public class CashModel
 	private String editedFromonline;
 	private String PVCheck_Printed;
 	private int AcctForPdc;
+
+
+	private double vatAmount;
 	
 	
 	public String getTxnID() {
@@ -652,7 +655,14 @@ public class CashModel
 	}
 
 
-	
-	
-	
+
+	public double getVatAmount() {
+		return vatAmount;
+	}
+
+	public void setVatAmount(double vatAmount) {
+		this.vatAmount = vatAmount;
+	}
+
+
 }

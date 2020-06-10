@@ -31,8 +31,13 @@ public class ExpensesModel
 	private boolean billableChked=false;
 	
 	private boolean showBillable=false;
-	
-	
+
+	private int vatKey;
+	private VATCodeModel selectedVatCode;
+	private double vatAmount;
+	private double amountAfterVAT;
+	private boolean notAllowEditVAT;
+
 	
 	public int getSrNO() {
 		return srNO;
@@ -160,7 +165,46 @@ public class ExpensesModel
 	public void setShowBillable(boolean showBillable) {
 		this.showBillable = showBillable;
 	}
-	
-	
-	
+
+
+	public int getVatKey() {
+		return vatKey;
+	}
+
+	public void setVatKey(int vatKey) {
+		this.vatKey = vatKey;
+	}
+
+	public VATCodeModel getSelectedVatCode() {
+		return selectedVatCode;
+	}
+
+	public void setSelectedVatCode(VATCodeModel selectedVatCode) {
+		this.selectedVatCode = selectedVatCode;
+	}
+
+	public double getVatAmount() {
+		return vatAmount;
+	}
+
+	public void setVatAmount(double vatAmount) {
+		this.vatAmount = vatAmount;
+	}
+
+	public double getAmountAfterVAT() {
+		return amountAfterVAT;
+	}
+
+	public void setAmountAfterVAT(double amountAfterVAT) {
+		this.amountAfterVAT = amountAfterVAT;
+	}
+
+	public boolean isNotAllowEditVAT() {
+		return notAllowEditVAT;
+	}
+
+	public void setNotAllowEditVAT(boolean notAllowEditVAT) {
+		this.notAllowEditVAT = notAllowEditVAT;
+	}
+
 }

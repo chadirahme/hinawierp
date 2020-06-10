@@ -112,6 +112,11 @@
 						</auxheader>
 						<auxheader colspan="1">
 							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px"
+									 value="@bind(vm.filter.vatAmount)" onChange="@command('changeFilter')" />
+						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
 							<textbox instant="true" width="80px" value="@bind(vm.filter.totalSales)"
 								onChange="@command('changeFilter')" />
 						</auxheader>
@@ -150,6 +155,8 @@
 						<listheader label="Check No" sort="auto('checkNo')" width="120px" />
 							<listheader label="Invoice Amount " sort="auto('invoiceAmount')"
 							width="120px" />
+						<listheader label="VAT Amount " sort="auto('vatAmount')"
+									width="120px" />
 						<listheader label="Total Sales" sort="auto('totalSales')"
 							width="120px" />
 						<listheader label="Payment Type" sort="auto('paymentType')" width="120px" />
@@ -204,6 +211,9 @@
 							</listcell>
 							<listcell>
 								<label value="${c:formatNumber(each.invoiceAmount, '###,###,###.00')}" />
+							</listcell>
+							<listcell>
+								<label value="${c:formatNumber(each.vatAmount, '###,###,###.00')}" />
 							</listcell>
 								<listcell>
 								<label value="${c:formatNumber(each.totalSales, '###,###,###.00')}" />

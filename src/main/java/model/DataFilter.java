@@ -137,6 +137,10 @@ public class DataFilter {
 
 	private String invoiceAmount = "";
 
+
+
+	private String vatAmount="";
+
 	private String totalSales = "";
 
 	private String paymentType = "";
@@ -2086,7 +2090,13 @@ public class DataFilter {
 	public void setCostPrice(double costPrice) {
 		this.costPrice = costPrice;
 	}
-	
-	
+
+	public String getVatAmount() {
+		return vatAmount;
+	}
+
+	public void setVatAmount(String vatAmount) {
+		this.vatAmount = vatAmount;
+	}
 
 }

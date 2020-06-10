@@ -20,7 +20,11 @@ public class CashInvoiceSalesReportModel implements Comparable<CashInvoiceSalesR
 	private String checkNo;
 	
 	private Double invoiceAmount;
-	
+
+
+
+	private Double vatAmount;
+
 	private double totalSales;
 	
 	private String paymentType;
@@ -249,8 +253,14 @@ public class CashInvoiceSalesReportModel implements Comparable<CashInvoiceSalesR
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	 
-	 
+
+	public Double getVatAmount() {
+		return vatAmount;
+	}
+
+	public void setVatAmount(Double vatAmount) {
+		this.vatAmount = vatAmount;
+	}
 	 
 	 
 

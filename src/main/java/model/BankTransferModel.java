@@ -51,6 +51,7 @@ public class BankTransferModel
 	private String toBranch="";
 	private String toIBANNo="";
 	private String toTRANSCode="";
+	private double vatAmount;
 	
 	public String getAttnName() {
 		return attnName;
@@ -323,7 +324,13 @@ public class BankTransferModel
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
-	
-	
+
+	public double getVatAmount() {
+		return vatAmount;
+	}
+
+	public void setVatAmount(double vatAmount) {
+		this.vatAmount = vatAmount;
+	}
 	
 }

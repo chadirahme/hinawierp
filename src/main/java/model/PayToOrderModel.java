@@ -25,6 +25,7 @@ public class PayToOrderModel
 	//by iqbal
 	private String email;
 	private double totalBalance;
+	private int vatKey;
 			
 	public String getBankName() {
 		return BankName;
@@ -128,7 +129,13 @@ public class PayToOrderModel
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
-	
-	
-	
+
+
+	public int getVatKey() {
+		return vatKey;
+	}
+
+	public void setVatKey(int vatKey) {
+		this.vatKey = vatKey;
+	}
 }

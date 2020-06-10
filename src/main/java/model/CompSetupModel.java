@@ -106,6 +106,12 @@ public class CompSetupModel
 	private String allowToChangeTXNNo;
 	private String allowToChangeChequeNo;
 
+
+
+	private String useVAT;
+	private String allowVATCodeARAP;
+	//Use_VAT, AllowVATCode_ARAP
+
 	
 	public String getPvSerialNos() {
 		return pvSerialNos;
@@ -716,4 +722,19 @@ public class CompSetupModel
 		this.allowToChangeChequeNo = allowToChangeChequeNo;
 	}
 
+	public String getUseVAT() {
+		return useVAT;
+	}
+
+	public void setUseVAT(String useVAT) {
+		this.useVAT = useVAT;
+	}
+
+	public String getAllowVATCodeARAP() {
+		return allowVATCodeARAP;
+	}
+
+	public void setAllowVATCodeARAP(String allowVATCodeARAP) {
+		this.allowVATCodeARAP = allowVATCodeARAP;
+	}
 }
