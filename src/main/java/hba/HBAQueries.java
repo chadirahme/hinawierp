@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import common.FormatDateText;
 import model.*;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
@@ -1500,6 +1501,8 @@ public class HBAQueries {
 		if (obj.getInvoiceDescription() != null) {
 			desc = obj.getInvoiceDescription().replace("'", "`");
 		}
+		if(FormatDateText.isEmpty(obj.getInvoicearabicDescription()))
+			obj.setInvoicearabicDescription("");
 		query.append(" Insert into InvoiceLine (RecNo,[LineNo],ItemRefKey,Description,DescriptionAR,Quantity,Rate,AvgCost,RatePercent,PriceLevelRefKey,ClassRefKey,Amount,ServiceDate,SalesTaxCodeRefKey,IsTaxable,OverrideItemAccountRefKey,Other1,Other2,QuotationLineNo,InventorySiteKey,DeliveryRecNo,DeliveryLineNo,DeliveryTxnID,DeliveryTxnLineID," +
 				"Vat_Key, Vat_ItemAmount,RateAfterVAT)");
 		query.append(" values(" + RecNo + ", '" + obj.getLineNo() + "' , '"
@@ -2268,7 +2271,7 @@ public class HBAQueries {
 		query.append("BillAddress2,BillAddress3,BillAddress4,BillAddress5,BillAddressCity,BillAddressState,BillAddressPostalCode,BillAddressCountry,BillAddressNote,ShipAddress1,");
 		query.append("ShipAddress2,ShipAddress3,ShipAddress4,ShipAddress5,ShipAddressCity,ShipAddressState,ShipAddressPostalCode,ShipAddressCountry,ShipAddressNote,");
 		query.append("IsPending,PONumber,TermsRefKey,DueDate,SalesRefKey,FOB,ShipDate,ShipMethodRefKey,ItemSalesTaxRefKey,Memo,CustomerMsgRefKey,IsToBePrinted,IsToEmailed,IsTaxIncluded,");
-		query.append("CustomerSalesTaxCodeRefKey,Other,Amount,SendViaReffKey,CustomField1,CustomField2,CustomField3,CustomField4,CustomField5,status,remindflag,reminddate,reminddays,attachment,DescriptionHIDE,QtyHIDE,RateHIDE,LetterTemplate,ShipToAddress,webUserID)");
+		query.append("CustomerSalesTaxCodeRefKey,Other,Amount,SendViaReffKey,CustomField1,CustomField2,CustomField3,CustomField4,CustomField5,status,remindflag,reminddate,reminddays,attachment,DescriptionHIDE,QtyHIDE,RateHIDE,LetterTemplate,ShipToAddress,webUserID,VAT_AMOUNT)");
 		query.append(" Values(" + obj.getRecNo() + ",'" + obj.getTxnId()
 				+ "','" + obj.getClientType() + "'," + obj.getCustomerRefKey()
 				+ "," + obj.getClassRefKey() + "," + obj.getAccountRefKey()
@@ -2317,7 +2320,7 @@ public class HBAQueries {
 		query.append(", " + obj.getRemindMedays() + ",'" + obj.getAttachemnet()
 				+ "','" + obj.getDescriptionHIDE() + "' , '" + obj.getQtyHIDE()
 				+ "' ,'" + obj.getRateHIDE() + "','" + obj.getLetterTemplate()
-				+ "','" + obj.getShipToAddress() + "'," + webUserID);
+				+ "','" + obj.getShipToAddress() + "'," + webUserID +"," + obj.getVatAmount());
 		query.append(")");
 		query.append(" ");
 		return query.toString();
@@ -2396,7 +2399,7 @@ public class HBAQueries {
 				+ obj.getDescriptionHIDE() + "',QtyHIDE='" + obj.getQtyHIDE()
 				+ "',RateHIDE='" + obj.getRateHIDE() + "',LetterTemplate='"
 				+ obj.getLetterTemplate() + "',ShipToAddress='"
-				+ obj.getShipToAddress() + "',webUserID=" + webUserID
+				+ obj.getShipToAddress() + "',webUserID=" + webUserID + ",VAT_AMOUNT="+obj.getVatAmount()
 				+ "  where recNO=" + obj.getRecNo());
 		return query.toString();
 
@@ -2409,7 +2412,7 @@ public class HBAQueries {
 		if (obj.getInvoiceDescription() != null) {
 			desc = obj.getInvoiceDescription().replace("'", "`");
 		}
-		query.append(" Insert into QuotationLine (RecNo,[LineNo],ItemRefKey,Description,Quantity,Rate,AvgCost,RatePercent,PriceLevelRefKey,ClassRefKey,Amount,ServiceDate,SalesTaxCodeRefKey,IsTaxable,OverrideItemAccountRefKey,Other1,Other2,InventorySiteKey)");
+		query.append(" Insert into QuotationLine (RecNo,[LineNo],ItemRefKey,Description,Quantity,Rate,AvgCost,RatePercent,PriceLevelRefKey,ClassRefKey,Amount,ServiceDate,SalesTaxCodeRefKey,IsTaxable,OverrideItemAccountRefKey,Other1,Other2,InventorySiteKey,Vat_Key, Vat_ItemAmount)");
 		query.append(" values(" + RecNo + ", '" + obj.getLineNo() + "' , '"
 				+ obj.getSelectedItems().getRecNo() + "', '" + desc + "',"
 				+ obj.getInvoiceQty() + " , '" + obj.getInvoiceRate() + "' , '"
@@ -2429,9 +2432,18 @@ public class HBAQueries {
 			query.append(""
 					+ obj.getSelectedInvcCutomerGridInvrtySiteNew().getRecNo());
 			query.append("");
-			query.append(" )");
+			query.append(" ");
 		} else
-			query.append("0)");
+			query.append("0");
+
+		if(obj.getSelectedVatCode()!=null)
+			query.append(", "  + obj.getSelectedVatCode().getVatKey() + ", "  + obj.getVatAmount());
+		else
+			query.append(",0,0");
+
+		query.append(")");
+
+
 		query.append(" ");
 
 		return query.toString();

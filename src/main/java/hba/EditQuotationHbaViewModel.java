@@ -24,17 +24,7 @@ import java.util.Map;
 
 import layout.MenuData;
 import layout.MenuModel;
-import model.AccountsModel;
-import model.ActivityStatusModel;
-import model.CashInvoiceGridData;
-import model.CashInvoiceModel;
-import model.CompSetupModel;
-import model.CustomerStatusHistoryModel;
-import model.HRListValuesModel;
-import model.PrintModel;
-import model.QbListsModel;
-import model.SerialFields;
-import model.TermModel;
+import model.*;
 
 import org.apache.log4j.Logger;
 //import org.apache.xmlbeans.impl.xb.xsdschema.All;
@@ -249,6 +239,9 @@ public class EditQuotationHbaViewModel {
 	boolean isRevise=false;
 	boolean isDuplicate=false;
 	private PrintModel objPrint;
+	private List<VATCodeModel> lstVatCodeList;
+	VATCodeModel custVendVatCodeModel;
+
 	/**
 	 * This is a constructor method edit work group functionality,used to load the nessassary drop down values and get database based on edit.    
 	 * 
@@ -382,12 +375,15 @@ public class EditQuotationHbaViewModel {
 			lstInvcCustomerGridClass = data.GetMasterData("GridClass");
 			// ltnCreditinvcAccount=data.getAccountsForCreditInvoice();
 			// lstCreditInvoiceTerms=data.getTermsForCreditInvoice();
-			
-			
+
+			if(compSetup.getUseVAT().equals("Y")){
+				lstVatCodeList=data.fillVatCodeList();
+			}
 			
 			if (creditInvoiceKey > 0) 
 			{//edit functionality
 				labelStatus = "Edit";
+				CashInvoiceModel obj1 = new CashInvoiceModel();
 								
 				objCashInvoice = data.getQuatationByID(creditInvoiceKey,webUserID,seeTrasction);
 
@@ -494,6 +490,7 @@ public class EditQuotationHbaViewModel {
 						if (cutomerNmae.getRecNo() == objCashInvoice
 								.getCustomerRefKey()) {
 							selectedInvcCutomerName = cutomerNmae;
+							obj1=data.getCashInvoiceCusomerInfo(selectedInvcCutomerName.getListType(), selectedInvcCutomerName.getRecNo());
 							break;
 						}
 
@@ -573,6 +570,24 @@ public class EditQuotationHbaViewModel {
 						obj.setInvoiceRate(editInvoiceGrid.getInvoiceRate());
 						obj.setInvoiceQtyOnHand(editInvoiceGrid.getInvoiceQtyOnHand());
 						obj.setInvoiceAmmount(editInvoiceGrid.getInvoiceAmmount());
+						obj.setVatAmount(editInvoiceGrid.getVatAmount());
+						obj.setAmountAfterVAT(obj.getInvoiceAmmount() + obj.getVatAmount());
+						obj.setVatKey(editInvoiceGrid.getVatKey());
+						obj.setUnitPriceWithVAT(editInvoiceGrid.getUnitPriceWithVAT());
+						if(compSetup.getUseVAT().equals("Y")){
+							if(obj.getVatKey()>0) {
+								VATCodeModel vatCodeModel = lstVatCodeList.stream().filter(x -> x.getVatKey() == obj.getVatKey()).findFirst().orElse(null);
+								if (vatCodeModel != null) {
+									obj.setSelectedVatCode(vatCodeModel);
+								} else {
+									obj.setSelectedVatCode(lstVatCodeList.get(0));
+								}
+
+								if (obj.getVatKey() == obj1.getVatKey())
+									obj.setNotAllowEditVAT(true);
+							}
+						}
+
 						obj.setInvoiceDescription(editInvoiceGrid.getInvoiceDescription());
 						obj.setAvgCost(editInvoiceGrid.getAvgCost());
 						obj.setInvoicearabicDescription(editInvoiceGrid.getInvoicearabicDescription());
@@ -1081,6 +1096,9 @@ public class EditQuotationHbaViewModel {
 			type.setInvoiceRate(objItems.getInvoiceRate());
 			type.setInvoiceQty(1);
 			type.setInvoiceAmmount(type.getInvoiceRate() * type.getInvoiceQty());
+			//check VaTCode
+			VATCodeOperation.selectCashInvoiceItemsVAT(type,custVendVatCodeModel,compSetup,lstVatCodeList);
+
 			type.setServiceDate(creationdate);// dummy
 			for (QbListsModel gridClass : lstInvcCustomerGridClass) {
 				if (gridClass.getRecNo() == objItems.getSelectedClass()) {
@@ -1103,7 +1121,7 @@ public class EditQuotationHbaViewModel {
 	private void setLabelCheckTotalcost() {
 		double toalCheckItemsAmount = 0;
 		for (CashInvoiceGridData item : lstCashInvoiceCheckItems) {
-			toalCheckItemsAmount += item.getInvoiceAmmount();
+			toalCheckItemsAmount += item.getAmountAfterVAT();
 		}
 		lblTotalCost = "Amount :"
 				+ BigDecimal.valueOf(toalCheckItemsAmount).toPlainString();
@@ -1833,6 +1851,7 @@ public class EditQuotationHbaViewModel {
 				type.setInvoiceRate(type.getInvoiceAmmount()
 						/ type.getInvoiceQty());
 			}
+			VATCodeOperation.getCashInvoiceItemVatAmount(compSetup,type);
 			setLabelCheckTotalcost();
 
 			if (amountPiad >= toatlAmount) {
@@ -2061,6 +2080,14 @@ public class EditQuotationHbaViewModel {
 			obj.setCustomerSalesTaxCodeRefKey(0);
 			obj.setOther("");
 			obj.setAmount(toatlAmount);
+			if(compSetup.getUseVAT().equals("Y"))
+			{
+				double vatAmount = 0;
+				for (CashInvoiceGridData item : lstCashInvoiceCheckItems) {
+					vatAmount += item.getVatAmount();
+				}
+				obj.setVatAmount(vatAmount);
+			}
 			obj.setAttachemnet("");
 			obj.setQuotationRecNo(0);
 			if (null != selectedInvcCutomerSendVia) {
@@ -2158,7 +2185,7 @@ public class EditQuotationHbaViewModel {
 			if (objCashInvoice != null && objCashInvoice.getRecNo() > 0) {
 				actionTYpe = "edit";
 				labelStatus = "Edit";
-
+				CashInvoiceModel obj1 = new CashInvoiceModel();
 				if(objCashInvoice.getStatus().equalsIgnoreCase("A")){
 					status=objCashInvoice.getStatusDesc();
 					matchFlag=false;
@@ -2214,6 +2241,7 @@ public class EditQuotationHbaViewModel {
 				for (QbListsModel cutomerNmae : lstInvcCustomerName) {
 					if (cutomerNmae.getRecNo() == objCashInvoice.getCustomerRefKey()) {
 						selectedInvcCutomerName = cutomerNmae;
+						obj1=data.getCashInvoiceCusomerInfo(selectedInvcCutomerName.getListType(), selectedInvcCutomerName.getRecNo());
 						break;
 					}
 
@@ -2332,6 +2360,23 @@ public class EditQuotationHbaViewModel {
 					obj.setInvoiceQtyOnHand(editInvoiceGrid
 							.getInvoiceQtyOnHand());
 					obj.setInvoiceAmmount(editInvoiceGrid.getInvoiceAmmount());
+					obj.setVatAmount(editInvoiceGrid.getVatAmount());
+					obj.setAmountAfterVAT(obj.getInvoiceAmmount() + obj.getVatAmount());
+					obj.setVatKey(editInvoiceGrid.getVatKey());
+					obj.setUnitPriceWithVAT(editInvoiceGrid.getUnitPriceWithVAT());
+					if(compSetup.getUseVAT().equals("Y")){
+						if(obj.getVatKey()>0) {
+							VATCodeModel vatCodeModel = lstVatCodeList.stream().filter(x -> x.getVatKey() == obj.getVatKey()).findFirst().orElse(null);
+							if (vatCodeModel != null) {
+								obj.setSelectedVatCode(vatCodeModel);
+							} else {
+								obj.setSelectedVatCode(lstVatCodeList.get(0));
+							}
+
+							if (obj.getVatKey() == obj1.getVatKey())
+								obj.setNotAllowEditVAT(true);
+						}
+					}
 					obj.setInvoiceDescription(editInvoiceGrid
 							.getInvoiceDescription());
 					obj.setAvgCost(editInvoiceGrid.getAvgCost());
@@ -2682,7 +2727,7 @@ public class EditQuotationHbaViewModel {
 	 *            the selectedInvcCutomerName to set
 	 */
 	@SuppressWarnings("unused")
-	@NotifyChange({ "objCashInvoice", "invoiceNewBillToAddress","selectedInvcCutomerName" })
+	@NotifyChange({ "objCashInvoice", "invoiceNewBillToAddress","selectedInvcCutomerName" ,"lstCashInvoiceCheckItems","lblTotalCost","toatlAmount"})
 	public void setSelectedInvcCutomerName(QbListsModel selectedInvcCutomerName) {
 		this.selectedInvcCutomerName = selectedInvcCutomerName;
 		if (selectedInvcCutomerName != null ) {
@@ -2752,6 +2797,32 @@ public class EditQuotationHbaViewModel {
 					objCashInvoice.setFax(obj.getFax());
 					objCashInvoice.setPrintChequeAs(obj.getPrintChequeAs());
 					customerCreditLimit = obj.getCreditLimit();
+
+					//VAT
+					if (compSetup.getUseVAT().equals("Y")) {
+						if (obj.getVatKey() > 0) {
+							custVendVatCodeModel = lstVatCodeList.stream().filter(x -> x.getVatKey() == obj.getVatKey()).findFirst().orElse(null);
+							if (custVendVatCodeModel != null) {
+								if (lstCashInvoiceCheckItems.size() > 0) {
+									Messagebox.show("There is VAT Code assigned for this Customer" +
+											". System will recalculate the VAT Amount based on the Customer.", "Quotation", Messagebox.OK, Messagebox.INFORMATION);
+
+									//for Items
+									VATCodeOperation.recalculateCashInvoiceItemsVAT(lstCashInvoiceCheckItems, custVendVatCodeModel, compSetup);
+								}
+							}
+						}
+						else //not vat assigned to this customer Sony asked to skip this
+						{
+							for (CashInvoiceGridData item : lstCashInvoiceCheckItems) {
+								if (item.getSelectedItems() != null && item.getSelectedVatCode()!=null) {
+									item.setNotAllowEditVAT(false);
+									//VATCodeOperation.selectCashInvoiceItemsVAT(item, custVendVatCodeModel, compSetup, lstVatCodeList);
+								}
+							}
+						}
+					}
+					setLabelCheckTotalcost();
 
 				}
 			}
@@ -4605,4 +4676,18 @@ public class EditQuotationHbaViewModel {
 		this.matchFlag = matchFlag;
 	}
 
+	public List<VATCodeModel> getLstVatCodeList() {
+		return lstVatCodeList;
+	}
+
+	public void setLstVatCodeList(List<VATCodeModel> lstVatCodeList) {
+		this.lstVatCodeList = lstVatCodeList;
+	}
+
+	@Command
+	@NotifyChange({ "toatlAmount", "lstCashInvoiceCheckItems","lblTotalCost","balance","amountPiad","exChnage" })
+	public void selectVatCode(@BindingParam("type") final CashInvoiceGridData type) {
+		VATCodeOperation.getCashInvoiceItemVatAmount(compSetup,type);
+		setLabelCheckTotalcost();
+	}
 }

@@ -3038,6 +3038,7 @@ public class EditCashInvoice {
 				win.setTitle("Edit Cash Invoice Info");
 				actionTYpe="edit";
 				labelStatus="Edit";
+				CashInvoiceModel obj1 = new CashInvoiceModel();
 				cashInvoiceKey=objCashInvoice.getRecNo();
 				if(objCashInvoice.getTransformD().equalsIgnoreCase("Y")){
 					transformD=true;
@@ -3050,7 +3051,7 @@ public class EditCashInvoice {
 					if(cutomerNmae.getRecNo()==objCashInvoice.getCustomerRefKey())
 					{
 						selectedInvcCutomerName=cutomerNmae;
-						CashInvoiceModel obj1=data.getCashInvoiceCusomerInfo(selectedInvcCutomerName.getListType(), selectedInvcCutomerName.getRecNo());
+						obj1=data.getCashInvoiceCusomerInfo(selectedInvcCutomerName.getListType(), selectedInvcCutomerName.getRecNo());
 						objCashInvoice.setInvoiceProfileNumber(obj1.getTotalBalance());
 						break;
 					}
@@ -3180,6 +3181,24 @@ public class EditCashInvoice {
 					obj.setInvoiceRate(editInvoiceGrid.getInvoiceRate());
 					obj.setInvoiceQtyOnHand(editInvoiceGrid.getInvoiceQtyOnHand());
 					obj.setInvoiceAmmount(editInvoiceGrid.getInvoiceAmmount());
+					obj.setVatAmount(editInvoiceGrid.getVatAmount());
+					obj.setAmountAfterVAT(obj.getInvoiceAmmount() + obj.getVatAmount());
+					obj.setVatKey(editInvoiceGrid.getVatKey());
+					obj.setUnitPriceWithVAT(editInvoiceGrid.getUnitPriceWithVAT());
+					if(compSetup.getUseVAT().equals("Y")){
+						if(obj.getVatKey()>0) {
+							VATCodeModel vatCodeModel = lstVatCodeList.stream().filter(x -> x.getVatKey() == obj.getVatKey()).findFirst().orElse(null);
+							if (vatCodeModel != null) {
+								obj.setSelectedVatCode(vatCodeModel);
+							} else {
+								obj.setSelectedVatCode(lstVatCodeList.get(0));
+							}
+
+							if (obj.getVatKey() == obj1.getVatKey())
+								obj.setNotAllowEditVAT(true);
+						}
+					}
+
 					obj.setBarcode(editInvoiceGrid.getBarcode());
 					obj.setInvoiceDescription(editInvoiceGrid.getInvoiceDescription());
 					obj.setAvgCost(editInvoiceGrid.getAvgCost());

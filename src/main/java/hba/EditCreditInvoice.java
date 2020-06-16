@@ -1813,6 +1813,7 @@ public class EditCreditInvoice {
 				}
 				actionTYpe="edit";
 				labelStatus="Edit";
+				CashInvoiceModel obj1 = new CashInvoiceModel();
 				creditInvoiceKey=objCashInvoice.getRecNo();
 				List<CashInvoiceGridData> invoiceModelnew=data.getCreditInvoiceGridDataByID(creditInvoiceKey);
 				for(QbListsModel cutomerNmae:lstInvcCustomerName)
@@ -1820,8 +1821,8 @@ public class EditCreditInvoice {
 					if(cutomerNmae.getRecNo()==objCashInvoice.getCustomerRefKey())
 					{
 						selectedInvcCutomerName=cutomerNmae;
-						CashInvoiceModel obj=data.getCashInvoiceCusomerInfo(selectedInvcCutomerName.getListType(), selectedInvcCutomerName.getRecNo());
-						objCashInvoice.setTotalBalance(obj.getTotalBalance());
+						obj1=data.getCashInvoiceCusomerInfo(selectedInvcCutomerName.getListType(), selectedInvcCutomerName.getRecNo());
+						objCashInvoice.setTotalBalance(obj1.getTotalBalance());
 						break;
 					}
 
@@ -1938,6 +1939,24 @@ public class EditCreditInvoice {
 					obj.setInvoiceRate(editInvoiceGrid.getInvoiceRate());
 					obj.setInvoiceQtyOnHand(editInvoiceGrid.getInvoiceQtyOnHand());
 					obj.setInvoiceAmmount(editInvoiceGrid.getInvoiceAmmount());
+					obj.setVatAmount(editInvoiceGrid.getVatAmount());
+					obj.setAmountAfterVAT(obj.getInvoiceAmmount() + obj.getVatAmount());
+					obj.setVatKey(editInvoiceGrid.getVatKey());
+					obj.setUnitPriceWithVAT(editInvoiceGrid.getUnitPriceWithVAT());
+					if(compSetup.getUseVAT().equals("Y")){
+						if(obj.getVatKey()>0) {
+							VATCodeModel vatCodeModel = lstVatCodeList.stream().filter(x -> x.getVatKey() == obj.getVatKey()).findFirst().orElse(null);
+							if (vatCodeModel != null) {
+								obj.setSelectedVatCode(vatCodeModel);
+							} else {
+								obj.setSelectedVatCode(lstVatCodeList.get(0));
+							}
+
+							if (obj.getVatKey() == obj1.getVatKey())
+								obj.setNotAllowEditVAT(true);
+						}
+					}
+
 					obj.setInvoiceDescription(editInvoiceGrid.getInvoiceDescription());
 					obj.setAvgCost(editInvoiceGrid.getAvgCost());
 					obj.setInvoicearabicDescription(editInvoiceGrid.getInvoicearabicDescription());

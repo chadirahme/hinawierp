@@ -327,9 +327,9 @@
 												</listbox>
 											</cell>
 											
-											<cell sclass="" visible="@bind(vm.showMoreFields)">CC To Employee </cell>
+											<cell sclass="" >CC To Employee </cell>
 
-											<cell colspan="1" visible="@bind(vm.showMoreFields)">
+											<cell colspan="1" >
 												<listbox hflex="1" mold="select" model="@load(vm.lstCCToEmployees)"
 													disabled="@bind(vm.disableTaskCreatorPanel)" selectedItem="@bind(vm.selectedCCToEmployee)">
 													<template name="model" var="item">
@@ -340,11 +340,11 @@
 												</listbox>
 											</cell>
 											
-											<cell colspan="2">
-												<button visible="@bind(vm.feedbackKeyForTaskRelation ne 0)" style="background:#A3FFA3" label="View Feedback" onClick="@command('openFeedback',feedBackId=vm.feedbackKeyForTaskRelation)"/><space></space><space></space>
-												<button  label="Send E-mail" onClick="@command('replyFeedbackByEmail',taskKey=vm.taskKey)" style="background:#A3FFA3"/>
-											</cell>
-											
+											<!--<cell colspan="2">-->
+												<!--<button visible="@bind(vm.feedbackKeyForTaskRelation ne 0)" style="background:#A3FFA3" label="View Feedback" onClick="@command('openFeedback',feedBackId=vm.feedbackKeyForTaskRelation)"/><space></space><space></space>-->
+												<!--<button  label="Send E-mail" onClick="@command('replyFeedbackByEmail',taskKey=vm.taskKey)" style="background:#A3FFA3"/>-->
+											<!--</cell>-->
+											<!---->
 																																
 											
 

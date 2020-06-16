@@ -19,6 +19,7 @@
 						<column width="150px"></column>
 						<column width="220px"></column>
 						<column width="130px"></column>
+						<column width="130px"></column>
 					</columns>
 					<rows>
 					
@@ -129,6 +130,12 @@
 							<textbox instant="true"  hflex="1" value="@bind(vm.filter.lineAmount)"
 								onChange="@command('changeFilter')" />
 						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px"
+									 value="@bind(vm.filter.vatAmount)" onChange="@command('changeFilter')" />
+						</auxheader>
+
 					</auxhead>
 					<listhead menupopup="auto" sizable="true">
 						<listheader label=" " width="110px" />
@@ -143,6 +150,8 @@
 						<!-- <listheader label="Qty" sort="auto('quantity')" width="80px" />
 						<listheader label="Rate" sort="auto('rate')" width="80px" /> -->
 						<listheader label="Amount" sort="auto('amount')" width="120px" />
+						<listheader label="VAT Amount " sort="auto('vatAmount')"
+									width="120px" />
 					</listhead>
 					<template name="model">
 						<listitem>
@@ -195,6 +204,9 @@
 							<listcell>
 								
 								<label value="${c:formatNumber(each.amount, '###,###,###.00')}" ></label>
+							</listcell>
+							<listcell>
+								<label value="${c:formatNumber(each.vatAmount, '###,###,###.00')}" />
 							</listcell>
 
 						</listitem>

@@ -6,7 +6,7 @@
 	<window id="quotationPopUP" apply="org.zkoss.bind.BindComposer"
 		mode="highlighted" title="Add/Edit " border="normal" position="center,center"
 		closable="true" sizable="true" onCancel="quotationPopUP.detach()"
-		width="1200px" height="550px">
+		width="1500px" height="650px">
 
 		<zscript>
 			void openContexMenu(Integer type) { if(type==1)
@@ -427,6 +427,12 @@
 								<listheader label="Class" width="120px"></listheader>
 								<listheader label="Amount" width="100px"
 									sort="auto('invoiceAmmount')"></listheader>
+
+								<listheader label="VAT Code" if="${vm.compSetup.useVAT eq 'Y'}" visible="@bind(vm.compSetup.useVAT eq 'Y')" width="100px"></listheader>
+								<listheader label="VAT Amount" if="${vm.compSetup.useVAT eq 'Y'}" visible="@bind(vm.compSetup.useVAT eq 'Y')" width="100px"></listheader>
+								<!--<listheader label="Unit Price with VAT" if="${vm.compSetup.useVAT eq 'Y'}" visible="@bind(vm.compSetup.useVAT eq 'Y')" width="120px"></listheader>-->
+								<listheader label="Amount After VAT" if="${vm.compSetup.useVAT eq 'Y'}" visible="@bind(vm.compSetup.useVAT eq 'Y')" width="120px"></listheader>
+
 							</listhead>
 							<template name="model" var="each">
 								<listitem droppable="true" draggable="true" onDrop="doDrop(event,self);" style="@bind(each.deliverRecNo eq 0 ? '' : 'background-color: #FFCCCC;')">
@@ -527,6 +533,35 @@
 											onChange="@command('changeCashInvoiceCheckItems' , type=each ,parm='amount')"
 											format="###,###,###.00" readonly="false"></doublebox>
 									</listcell>
+
+									<listcell if="${vm.compSetup.useVAT eq 'Y'}">
+										<listbox mold="select" model="@load(vm.lstVatCodeList)"
+												 hflex="1" selectedItem="@bind(each.selectedVatCode)" disabled="@bind(each.notAllowEditVAT)"
+												 onSelect="@command('selectVatCode' , type=each)">
+											<template name="model" var="item">
+												<listitem>
+													<listcell label="@load(item.vatCode)">
+													</listcell>
+												</listitem>
+											</template>
+										</listbox>
+									</listcell>
+
+									<listcell if="${vm.compSetup.useVAT eq 'Y'}">
+										<doublebox value="@bind(each.vatAmount)" format="###0.00" readonly="true"
+												   inplace="true"></doublebox>
+									</listcell>
+
+									<!--<listcell if="${vm.compSetup.useVAT eq 'Y'}">-->
+										<!--<doublebox value="@bind(each.unitPriceWithVAT)" format="###0.00" readonly="true"-->
+												   <!--inplace="true"></doublebox>-->
+									<!--</listcell>-->
+
+									<listcell if="${vm.compSetup.useVAT eq 'Y'}">
+										<doublebox value="@bind(each.amountAfterVAT)" format="###0.00" readonly="true"
+												   inplace="true"></doublebox>
+									</listcell>
+
 								</listitem>
 							</template>
 						</listbox>

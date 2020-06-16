@@ -38,7 +38,7 @@ public class CashInvoiceGridData {
 			
 	private String invoiceDescription;
 	
-	private String invoicearabicDescription;
+	private String invoicearabicDescription="";
 	
 	private QbListsModel selectedInvcCutomerGridInvrtySiteNew;
 	

@@ -349,7 +349,8 @@ public class QuotationHbaReport {
 						/*	(tmp.getDescription()).toLowerCase().contains(filter.getDescription().toLowerCase())&&*/
 						(tmp.getQuantity()+"").toLowerCase().contains(filter.getQuantity().toLowerCase())&&
 						(tmp.getRate()+"").toLowerCase().contains(filter.getRate().toLowerCase())&&
-						(tmp.getLineAmount()+"").toLowerCase().contains(filter.getLineAmount().toLowerCase())
+						(tmp.getLineAmount()+"").toLowerCase().contains(filter.getLineAmount().toLowerCase())&&
+						(tmp.getVatAmount()+"").toLowerCase().contains(filter.getVatAmount().toLowerCase())
 						)
 				{
 					lst.add(tmp);

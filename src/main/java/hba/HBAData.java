@@ -5036,6 +5036,10 @@ public class HBAData {
 				obj.setInvertySiteKey(rs.getInt("InventorySiteKey"));
 				obj.setDeliverdAs(rs.getString("DeliverdAs") == null ? "" : rs.getString("DeliverdAs"));
 				obj.setDeliverRecNo(rs.getInt("DeliverRecNo"));
+				obj.setVatKey(rs.getInt("Vat_Key"));
+				obj.setVatAmount(rs.getDouble("Vat_ItemAmount"));
+				obj.setVatKey(rs.getInt("Vat_Key"));
+				obj.setVatAmount(rs.getDouble("Vat_ItemAmount"));
 				lst.add(obj);
 
 			}
@@ -5160,7 +5164,9 @@ public class HBAData {
 				obj.setAvgCost(rs.getDouble("avgcost"));
 				obj.setLineAmount(rs.getDouble("lineAmount"));*/
 				obj.setAmount(rs.getDouble("Amount"));
+				obj.setVatAmount(rs.getDouble("VAT_AMOUNT"));
 				obj.setLineAmount(obj.getAmount()); //use this for filter
+
 				/*obj.setRate(rs.getDouble("rate"));*/
 				if (obj.getClientType().equalsIgnoreCase("P")) {
 					obj.setCustomerName(rs.getString("prospectiveName") == null ? "": rs.getString("prospectiveName"));
