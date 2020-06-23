@@ -168,7 +168,9 @@ public class HbaEnum {
 		CashInvoice(9),
 		CreditInvoice(15),
 		CreditMemo(44),
-		Quotation(20);
+		Quotation(20),
+		Bill(27),
+		ItemReceipt(14);
 
 		private final int value;
 

@@ -1,6 +1,7 @@
 package hba;
 
 import common.FormatDateText;
+import common.HbaEnum;
 import home.QuotationAttachmentModel;
 import hr.HRData;
 
@@ -23,22 +24,7 @@ import java.util.Map;
 
 import layout.MenuData;
 import layout.MenuModel;
-import model.AccountsModel;
-import model.CheckFAItemsModel;
-import model.CheckItemsModel;
-import model.ClassModel;
-import model.CompSetupModel;
-import model.CreditBillModel;
-import model.DepreciationModel;
-import model.ExpensesModel;
-import model.FixedAssetModel;
-import model.HRListValuesModel;
-import model.PayToOrderModel;
-import model.PrintModel;
-import model.QbListsModel;
-import model.SelectItemReceiptModel;
-import model.SerialFields;
-import model.TermModel;
+import model.*;
 
 import org.apache.log4j.Logger;
 import org.zkoss.bind.BindUtils;
@@ -96,6 +82,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import common.NumberToWord;
 import company.CompanyData;
+
+import static hba.VATCodeOperation.getItemVatAmount;
+import static hba.VATCodeOperation.getVatAmount;
 
 public class EditCreditBillViewModel 
 {
@@ -213,6 +202,11 @@ public class EditCreditBillViewModel
 	private boolean changeToBill=false;
 	private PrintModel objPrint;
 
+	private List<VATCodeModel> lstVatCodeList;
+	VATCodeModel custVendVatCodeModel;
+
+	String CR_Flag="";
+
 	@SuppressWarnings("rawtypes")
 	public EditCreditBillViewModel()
 	{
@@ -231,7 +225,9 @@ public class EditCreditBillViewModel
 			{
 				objPrint=(PrintModel) map.get("objPrint");
 			}
-			
+			if(map.get("CR_Flag")!=null) //to check if Credit Bill CreditBillReportViewModel
+				CR_Flag=(String) map.get("CR_Flag");
+
 			actionTYpe=type;
 			actionTYpe="Create";
 			Session sess = Sessions.getCurrent();
@@ -299,6 +295,9 @@ public class EditCreditBillViewModel
 			lstGridCustody=data.fillQbList("'Employee'");
 			lstInvcCustomerGridInvrtySite=(data.GetMasterData("GridSite"));
 			setLstGridQBItems(billData.fillQbItemsList());
+			if(compSetup.getUseVAT().equals("Y")){
+				lstVatCodeList=data.fillVatCodeList();
+			}
 			objCheque=new CreditBillModel();
 
 			if(editBillKey>0)
@@ -340,11 +339,13 @@ public class EditCreditBillViewModel
 
 					}
 
+					PayToOrderModel objPayToOrderModel=new PayToOrderModel();
 					for(QbListsModel vendorList:lstPayToOrder)
 					{
 						if(vendorList.getRecNo()==objCheque.getVendRefKey())
 						{
 							selectedPaytoOrder=vendorList;
+							objPayToOrderModel = data.getPayToOrderInfo(selectedPaytoOrder.getListType(), selectedPaytoOrder.getRecNo());
 							break;
 						}
 
@@ -354,11 +355,12 @@ public class EditCreditBillViewModel
 					billDueDate=df.parse(sdf.format(objCheque.getDueDate()));
 					creationdate=df.parse(sdf.format(objCheque.getTxnDate()));
 					billNo=objCheque.getBillNo();
+					lstExpenses=new ArrayList<ExpensesModel>();
+					lstCheckItems=new ArrayList<CheckItemsModel>();
 					setSelectedPaytoOrder(selectedPaytoOrder);
 					objCheque.setRefNumber(objCheque.getRefNumber());
 
 					//Expense Grid
-					lstExpenses=new ArrayList<ExpensesModel>();
 					for(ExpensesModel editExpensesModel:expenseGrid)
 					{
 						ExpensesModel obj=new ExpensesModel();
@@ -407,6 +409,22 @@ public class EditCreditBillViewModel
 						obj.setRecNo(editExpensesModel.getRecNo());
 						obj.setMemo(editExpensesModel.getMemo());
 						obj.setAmount(editExpensesModel.getAmount());
+						obj.setVatAmount(editExpensesModel.getVatAmount());
+						obj.setAmountAfterVAT(obj.getAmount() + obj.getVatAmount());
+						obj.setVatKey(editExpensesModel.getVatKey());
+						if(compSetup.getUseVAT().equals("Y")){
+							if(obj.getVatKey()>0) {
+								VATCodeModel vatCodeModel = lstVatCodeList.stream().filter(x -> x.getVatKey() == obj.getVatKey()).findFirst().orElse(null);
+								if (vatCodeModel != null) {
+									obj.setSelectedVatCode(vatCodeModel);
+								} else {
+									obj.setSelectedVatCode(lstVatCodeList.get(0));
+								}
+
+								if (obj.getVatKey() == objPayToOrderModel.getVatKey())
+									obj.setNotAllowEditVAT(true);
+							}
+						}
 						if(editExpensesModel.getBillable()!=null && editExpensesModel.getBillable().equalsIgnoreCase("Y"))
 						{
 							obj.setBillableChked(true);
@@ -428,7 +446,6 @@ public class EditCreditBillViewModel
 					}
 
 					//Items Grid
-					lstCheckItems=new ArrayList<CheckItemsModel>();
 					for(CheckItemsModel editItemsGrid:itemsGrid)
 					{
 						CheckItemsModel obj=new CheckItemsModel();
@@ -499,6 +516,22 @@ public class EditCreditBillViewModel
 						obj.setCost(editItemsGrid.getCost());
 						obj.setAmount(editItemsGrid.getAmount());
 						obj.setQuantity(editItemsGrid.getQuantity());
+						obj.setVatAmount(editItemsGrid.getVatAmount());
+						obj.setAmountAfterVAT(obj.getAmount() + obj.getVatAmount());
+						obj.setVatKey(editItemsGrid.getVatKey());
+						if(compSetup.getUseVAT().equals("Y")){
+							if(obj.getVatKey()>0) {
+								VATCodeModel vatCodeModel = lstVatCodeList.stream().filter(x -> x.getVatKey() == obj.getVatKey()).findFirst().orElse(null);
+								if (vatCodeModel != null) {
+									obj.setSelectedVatCode(vatCodeModel);
+								} else {
+									obj.setSelectedVatCode(lstVatCodeList.get(0));
+								}
+
+								if (obj.getVatKey() == objPayToOrderModel.getVatKey())
+									obj.setNotAllowEditVAT(true);
+							}
+						}
 						lstCheckItems.add(obj);
 					}
 
@@ -899,8 +932,25 @@ public class EditCreditBillViewModel
 				CreditBillModel obj=new CreditBillModel();
 				obj.setRecNo(tmpRecNo);
 				obj.setTxtnId("Local-"+tmpRecNo);
-				obj.setCr_flag("C");
+				//obj.setCr_flag("C");
+				if(FormatDateText.isEmpty(CR_Flag))
+					obj.setCr_flag("C");
+				else
+					obj.setCr_flag(CR_Flag);
+
 				obj.setAmount(totalAmount);
+				if(compSetup.getUseVAT().equals("Y"))
+				{
+					double vatAmount = 0;
+					for (ExpensesModel item : lstExpenses) {
+						vatAmount += item.getVatAmount();
+					}
+					for (CheckItemsModel item : lstCheckItems) {
+						vatAmount += item.getVatAmount();
+					}
+					obj.setVatAmount(vatAmount);
+				}
+
 				obj.setMemo(objCheque.getMemo());
 				obj.setBillSource("CMS");
 				obj.setStatus("A");
@@ -1012,6 +1062,10 @@ public class EditCreditBillViewModel
 							//updateFixedAssetItemDepreciation(item.getSelectedFixedAsset().getAssetid(), item.getSelectedCustomer().getRecNo());
 						}
 					}
+
+					//After Saving in to 4 Tables above Please save to QBVATTransaction
+					data.CreateItemReceipt4QBVAT(tmpRecNo, HbaEnum.VatForms.Bill.getValue()  , selectedPaytoOrder.getRecNo() , selectedPaytoOrder.getListType(),totalAmount);
+
 					if(editBillKey==0)
 					{
 						data.addUserActivity(data.GetNewUserActivityRecNo(), common.HbaEnum.HbaList.BillCreditCreate.getValue(), (int)obj.getRecNo(), obj.getMemo(), obj.getRefNumber(), billDueDate,  webUserName, webUserID,common.HbaEnum.UserAction.Create.getValue());
@@ -1113,11 +1167,11 @@ public class EditCreditBillViewModel
 			row.setAmount(0);
 			return;			
 		}
-
+		getVatAmount(compSetup,row);
 		double ExpAmount=0;
 		for (ExpensesModel item : lstExpenses) 
 		{
-			ExpAmount+=item.getAmount();
+			ExpAmount+=item.getAmountAfterVAT();
 		}
 
 		lblExpenses="Expenses " + String.valueOf(ExpAmount);
@@ -1265,7 +1319,50 @@ public class EditCreditBillViewModel
 					type.setSelectedAccount(null);	
 					BindUtils.postNotifyChange(null, null, EditCreditBillViewModel.this, "lstExpenses");
 				}				
-			}					
+			}
+			// check VaTCode
+			if(compSetup.getUseVAT().equals("Y")) {
+				if (type.getSelectedAccount() != null) {
+
+					//ALSO CHECK WHETHER ACCOUNT TYPE IS Accounts Receivable or Accounts Payable
+					if (type.getSelectedAccount().getAccountType().equals("AccountsReceivable")
+							|| type.getSelectedAccount().getAccountType().equals("AccountsPayable")){
+						if(compSetup.getAllowVATCodeARAP().equals("N")){
+							type.setSelectedVatCode(lstVatCodeList.get(0));
+							getVatAmount(compSetup,type);
+							//disable AllowEditing = False
+							type.setNotAllowEditVAT(true);
+							getNewTotalAmount();
+							return;
+						}
+					}
+
+					if(custVendVatCodeModel!=null)
+					{
+						type.setSelectedVatCode(custVendVatCodeModel);
+						getVatAmount(compSetup,type);
+						//disable AllowEditing = False
+						type.setNotAllowEditVAT(true);
+						getNewTotalAmount();
+						return;
+					}
+
+					if (type.getSelectedAccount().getVatKey() > 0) {
+						VATCodeModel vatCodeModel = lstVatCodeList.stream().filter(x -> x.getVatKey() == type.getSelectedAccount().getVatKey()).findFirst().orElse(null);
+						if (vatCodeModel != null) {
+							type.setSelectedVatCode(vatCodeModel);
+						} else {
+							type.setSelectedVatCode(lstVatCodeList.get(0));
+						}
+					} else {
+						type.setSelectedVatCode(lstVatCodeList.get(0));
+					}
+					type.setNotAllowEditVAT(false);
+					getVatAmount(compSetup,type);
+					getNewTotalAmount();
+				}
+			}
+
 
 		}
 	}
@@ -1415,7 +1512,7 @@ public class EditCreditBillViewModel
 										}
 
 									}
-
+									VATCodeOperation.selectItemsVAT(type,custVendVatCodeModel,compSetup,lstVatCodeList);
 									setLabelCheckItems();
 									getNewTotalAmount();
 								}
@@ -1444,6 +1541,7 @@ public class EditCreditBillViewModel
 								type.setNetTotal(0);
 								type.setBillableChked(false);
 								type.setSelectedFixedAsset(null);
+								VATCodeOperation.selectItemsVAT(type,custVendVatCodeModel,compSetup,lstVatCodeList);
 								setLabelCheckItems();
 								getNewTotalAmount();
 								BindUtils.postNotifyChange(null, null, EditCreditBillViewModel.this, "lstCheckItems");
@@ -1467,6 +1565,7 @@ public class EditCreditBillViewModel
 					type.setNetTotal(0);
 					type.setBillableChked(false);
 					type.setSelectedFixedAsset(null);
+					VATCodeOperation.selectItemsVAT(type,custVendVatCodeModel,compSetup,lstVatCodeList);
 					setLabelCheckItems();
 					getNewTotalAmount();
 					BindUtils.postNotifyChange(null, null, EditCreditBillViewModel.this, "lstCheckItems");
@@ -1512,7 +1611,7 @@ public class EditCreditBillViewModel
 					{
 						type.setBillableChked(false);
 					}
-
+					VATCodeOperation.selectItemsVAT(type,custVendVatCodeModel,compSetup,lstVatCodeList);
 					setLabelCheckItems();
 					getNewTotalAmount();
 				}
@@ -1526,7 +1625,7 @@ public class EditCreditBillViewModel
 		double toalCheckItemsAmount=0;
 		for (CheckItemsModel item : lstCheckItems) 
 		{
-			toalCheckItemsAmount+=item.getAmount();
+			toalCheckItemsAmount+=item.getAmountAfterVAT();
 		}
 		//totalAmount=ExpAmount;
 		lblCheckItems="Items " + String.valueOf(toalCheckItemsAmount);
@@ -1537,7 +1636,7 @@ public class EditCreditBillViewModel
 		double toalExpanseAmount=0;
 		for (ExpensesModel item : lstExpenses) 
 		{
-			toalExpanseAmount+=item.getAmount();
+			toalExpanseAmount+=item.getAmountAfterVAT();
 		}
 		lblExpenses="Expenses " + String.valueOf(toalExpanseAmount);
 	}
@@ -1560,12 +1659,12 @@ public class EditCreditBillViewModel
 		double ExpAmount=0;
 		for (ExpensesModel item : lstExpenses) 
 		{
-			ExpAmount+=item.getAmount();
+			ExpAmount+=item.getAmountAfterVAT();
 		}
 		double toalCheckItemsAmount=0;
 		for (CheckItemsModel item : lstCheckItems) 
 		{
-			toalCheckItemsAmount+=item.getAmount();
+			toalCheckItemsAmount+=item.getAmountAfterVAT();
 		}
 		double toalCheckFAItemsAmount=0;
 		for (CheckFAItemsModel item : lstCheckFAItems) 
@@ -1708,6 +1807,7 @@ public class EditCreditBillViewModel
 			double cost=type.getAmount() / type.getQuantity();
 			type.setCost(cost);
 		}
+		getItemVatAmount(compSetup,type);
 		setLabelCheckItems();
 		getNewTotalAmount();
 	}
@@ -2095,13 +2195,13 @@ public class EditCreditBillViewModel
 		return selectedPaytoOrder;
 	}
 
-	@NotifyChange({"objCheque","lstVendorFAItems","showIR","selectedPaytoOrder"})
+	@NotifyChange({"objCheque","lstVendorFAItems","showIR","selectedPaytoOrder","lstExpenses","totalAmount","lblExpenses","lstCheckItems","lblCheckItems"})
 	public void setSelectedPaytoOrder(QbListsModel selectedPaytoOrder) 
 	{
 		this.selectedPaytoOrder = selectedPaytoOrder;
 		objCheque.setAddress("");
 		vendorKey=0;
-
+		custVendVatCodeModel=null;
 		if(selectedPaytoOrder!=null)
 		{
 			if (selectedPaytoOrder.getRecNo() == 0)
@@ -2140,6 +2240,69 @@ public class EditCreditBillViewModel
 			}else{
 				showIR=true;
 			}
+
+			if (obj.getVatKey() > 0 && lstExpenses!=null) {
+				custVendVatCodeModel = lstVatCodeList.stream().filter(x -> x.getVatKey() == obj.getVatKey()).findFirst().orElse(null);
+				if (custVendVatCodeModel != null) {
+					if (lstExpenses.size() > 0 || lstCheckItems.size() > 0) {
+						Messagebox.show("There is VAT Code assigned for this " + selectedPaytoOrder.getListType() +
+								". System will recalculate the VAT Amount based on the " + selectedPaytoOrder.getListType(), "Item Receipt", Messagebox.OK, Messagebox.INFORMATION);
+
+						//for Items
+						VATCodeOperation.recalculateItemsVAT(lstCheckItems, custVendVatCodeModel, compSetup);
+						setLabelCheckItems();
+						getNewTotalAmount();
+
+						//for Expenses
+						for (ExpensesModel item : lstExpenses) {
+							if (item.getSelectedAccount() != null) {
+								//ALSO CHECK WHETHER ACCOUNT TYPE IS Accounts Receivable or Accounts Payable
+								if (item.getSelectedAccount().getAccountType().equals("AccountsReceivable")
+										|| item.getSelectedAccount().getAccountType().equals("AccountsPayable")) {
+									if (compSetup.getAllowVATCodeARAP().equals("N")) {
+										item.setSelectedVatCode(lstVatCodeList.get(0));
+										getVatAmount(compSetup,item);
+										//disable AllowEditing = False
+										item.setNotAllowEditVAT(true);
+									} else {
+										item.setSelectedVatCode(custVendVatCodeModel);
+										item.setNotAllowEditVAT(true);
+										getVatAmount(compSetup,item);
+									}
+								} else {
+									item.setSelectedVatCode(custVendVatCodeModel);
+									item.setNotAllowEditVAT(true);
+									getVatAmount(compSetup,item);
+								}
+							}
+
+						}
+						double ExpAmount = 0;
+						for (ExpensesModel item : lstExpenses) {
+							ExpAmount += item.getAmountAfterVAT();
+						}
+
+						lblExpenses = "Expenses " + String.valueOf(ExpAmount);
+						getNewTotalAmount();
+					}
+				}
+
+				else {
+					for (ExpensesModel item : lstExpenses) {
+						if (item.getSelectedAccount() != null)
+							selectExpenseAccount(item);
+					}
+					double ExpAmount = 0;
+					for (ExpensesModel item : lstExpenses) {
+						ExpAmount += item.getAmountAfterVAT();
+					}
+
+
+					lblExpenses = "Expenses " + String.valueOf(ExpAmount);
+					getNewTotalAmount();
+				}
+			}
+
 
 		}
 		else
@@ -2546,6 +2709,7 @@ public class EditCreditBillViewModel
 			objCheque=billData.navigationBill(editBillKey,webUserID,seeTrasction,navigation,actionTYpe);
 			lblExpenses="Expenses 0.00";
 			lblCheckItems="Items 0.00";
+			PayToOrderModel objPayToOrderModel=new PayToOrderModel();
 			if(objCheque!=null && objCheque.getRecNo()>0)
 			{
 				actionTYpe="edit";
@@ -2584,6 +2748,7 @@ public class EditCreditBillViewModel
 					if(vendorList.getRecNo()==objCheque.getVendRefKey())
 					{
 						selectedPaytoOrder=vendorList;
+						objPayToOrderModel = data.getPayToOrderInfo(selectedPaytoOrder.getListType(), selectedPaytoOrder.getRecNo());
 						break;
 					}
 
@@ -2594,10 +2759,12 @@ public class EditCreditBillViewModel
 				creationdate=df.parse(sdf.format(objCheque.getTxnDate()));
 				billNo=objCheque.getBillNo();
 				objCheque.setRefNumber(objCheque.getRefNumber());
+				lstExpenses=new ArrayList<ExpensesModel>();
+				lstCheckItems=new ArrayList<CheckItemsModel>();
 				setSelectedPaytoOrder(selectedPaytoOrder);
 
 				//Expense Grid
-				lstExpenses=new ArrayList<ExpensesModel>();
+
 				for(ExpensesModel editExpensesModel:expenseGrid)
 				{
 					ExpensesModel obj=new ExpensesModel();
@@ -2645,6 +2812,23 @@ public class EditCreditBillViewModel
 					obj.setRecNo(editExpensesModel.getRecNo());
 					obj.setMemo(editExpensesModel.getMemo());
 					obj.setAmount(editExpensesModel.getAmount());
+					obj.setVatAmount(editExpensesModel.getVatAmount());
+					obj.setAmountAfterVAT(obj.getAmount() + obj.getVatAmount());
+					obj.setVatKey(editExpensesModel.getVatKey());
+					if(compSetup.getUseVAT().equals("Y")){
+						if(obj.getVatKey()>0) {
+							VATCodeModel vatCodeModel = lstVatCodeList.stream().filter(x -> x.getVatKey() == obj.getVatKey()).findFirst().orElse(null);
+							if (vatCodeModel != null) {
+								obj.setSelectedVatCode(vatCodeModel);
+							} else {
+								obj.setSelectedVatCode(lstVatCodeList.get(0));
+							}
+
+							if (obj.getVatKey() == objPayToOrderModel.getVatKey())
+								obj.setNotAllowEditVAT(true);
+						}
+					}
+
 					if (editExpensesModel.getBillable().equalsIgnoreCase("Y")) {
 						obj.setBillableChked(true);
 						obj.setBillable("Y");
@@ -2739,6 +2923,23 @@ public class EditCreditBillViewModel
 					obj.setCost(editItemsGrid.getCost());
 					obj.setAmount(editItemsGrid.getAmount());
 					obj.setQuantity(editItemsGrid.getQuantity());
+					obj.setVatAmount(editItemsGrid.getVatAmount());
+					obj.setAmountAfterVAT(obj.getAmount() + obj.getVatAmount());
+					obj.setVatKey(editItemsGrid.getVatKey());
+					if(compSetup.getUseVAT().equals("Y")){
+						if(obj.getVatKey()>0) {
+							VATCodeModel vatCodeModel = lstVatCodeList.stream().filter(x -> x.getVatKey() == obj.getVatKey()).findFirst().orElse(null);
+							if (vatCodeModel != null) {
+								obj.setSelectedVatCode(vatCodeModel);
+							} else {
+								obj.setSelectedVatCode(lstVatCodeList.get(0));
+							}
+
+							if (obj.getVatKey() == objPayToOrderModel.getVatKey())
+								obj.setNotAllowEditVAT(true);
+						}
+					}
+
 					lstCheckItems.add(obj);
 				}
 
@@ -2909,6 +3110,8 @@ public class EditCreditBillViewModel
 					billDueDate=df.parse(sdf.format(objCheque.getDueDate()));
 					creationdate=df.parse(sdf.format(objCheque.getTxnDate()));
 					billNo=objCheque.getBillNo();
+					lstExpenses=new ArrayList<ExpensesModel>();
+					lstCheckItems=new ArrayList<CheckItemsModel>();
 					setSelectedPaytoOrder(selectedPaytoOrder);
 
 					editBillKey=0;
@@ -2922,7 +3125,6 @@ public class EditCreditBillViewModel
 					ClearData();
 
 					//Expense Grid
-					lstExpenses=new ArrayList<ExpensesModel>();
 					for(ExpensesModel editExpensesModel:expenseGrid)
 					{
 						ExpensesModel obj=new ExpensesModel();
@@ -2992,7 +3194,6 @@ public class EditCreditBillViewModel
 					}
 
 					//Items Grid
-					lstCheckItems=new ArrayList<CheckItemsModel>();
 					for(CheckItemsModel editItemsGrid:itemsGrid)
 					{
 						CheckItemsModel obj=new CheckItemsModel();
@@ -4237,4 +4438,34 @@ public class EditCreditBillViewModel
 	public void setSelectIR(boolean selectIR) {
 		this.selectIR = selectIR;
 	}
+
+	public List<VATCodeModel> getLstVatCodeList() {
+		return lstVatCodeList;
+	}
+
+	public void setLstVatCodeList(List<VATCodeModel> lstVatCodeList) {
+		this.lstVatCodeList = lstVatCodeList;
+	}
+
+	@Command
+	@NotifyChange({ "totalAmount", "lblExpenses", "lstExpenses", "billable" })
+	public void selectVatCode(@BindingParam("type") final ExpensesModel type) {
+		getVatAmount(compSetup,type);
+		double ExpAmount = 0;
+		for (ExpensesModel item : lstExpenses) {
+			ExpAmount += item.getAmountAfterVAT();
+		}
+		lblExpenses = "Expenses " + String.valueOf(ExpAmount);
+		getNewTotalAmount();
+	}
+
+	@Command
+	//@NotifyChange({ "totalAmount", "lblExpenses", "lstExpenses", "billable" })
+	@NotifyChange({ "lstCheckItems", "lblCheckItems", "totalAmount" })
+	public void selectItemVatCode(@BindingParam("type") final CheckItemsModel type) {
+		getItemVatAmount(compSetup,type);
+		setLabelCheckItems();
+		getNewTotalAmount();
+	}
+
 }

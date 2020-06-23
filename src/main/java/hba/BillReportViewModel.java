@@ -317,13 +317,14 @@ public class BillReportViewModel {
 						tmp.getVendor().toLowerCase().contains(filter.getDueDate().toLowerCase())
 						&&(tmp.getStatus()).toLowerCase().contains(filter.getStatus().toLowerCase())&&
 						(tmp.getMainMemo()).toLowerCase().contains(filter.getMainMemo().toLowerCase())&&
-						(tmp.getItemName()).toLowerCase().contains(filter.getItemName().toLowerCase())&&
-						(tmp.getDescription()).toLowerCase().contains(filter.getDescription().toLowerCase())&&
+					//	(tmp.getItemName()).toLowerCase().contains(filter.getItemName().toLowerCase())&&
+					//	(tmp.getDescription()).toLowerCase().contains(filter.getDescription().toLowerCase())&&
 						(tmp.getQuantity()+"").toLowerCase().contains(filter.getQuantity().toLowerCase())&&
 						tmp.getAccountName().toLowerCase().contains(filter.getAccountName().toLowerCase())&&
 						tmp.getAccountNUmber().toLowerCase().contains(filter.getAccountNUmber().toLowerCase())&&
-						tmp.getClassName().toLowerCase().contains(filter.getClassName().toLowerCase())&&
-						(tmp.getAmount()+"").toLowerCase().contains(filter.getAmount().toLowerCase())
+					//	tmp.getClassName().toLowerCase().contains(filter.getClassName().toLowerCase())&&
+						(tmp.getAmount()+"").toLowerCase().contains(filter.getAmount().toLowerCase())&&
+						(tmp.getVatAmount()+"").toLowerCase().contains(filter.getVatAmount().toLowerCase())
 						)
 				{
 					lst.add(tmp);

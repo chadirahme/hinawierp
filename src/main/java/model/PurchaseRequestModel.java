@@ -26,7 +26,11 @@ public class PurchaseRequestModel {
 	private String adressBillTo;
 	
 	private double amount;
-	
+
+
+
+	private double vatAmount;
+
 	private String memo;
 	
 	private String isManualyClosed;
@@ -215,8 +219,14 @@ public class PurchaseRequestModel {
 	public void setReqDate(Date reqDate) {
 		this.reqDate = reqDate;
 	}
-	
-	
-	
+
+
+	public double getVatAmount() {
+		return vatAmount;
+	}
+
+	public void setVatAmount(double vatAmount) {
+		this.vatAmount = vatAmount;
+	}
 
 }

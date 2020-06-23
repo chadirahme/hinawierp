@@ -34,6 +34,7 @@ public class ItemReceiptReportModel {
 	private int classRefKey;
 	
 	private double amount;
+	private double vatAmount;
 
 	public String getIrLocalNo() {
 		return irLocalNo;
@@ -171,7 +172,14 @@ public class ItemReceiptReportModel {
 		VendorKey = vendorKey;
 	}
 
-	
-		
+	public double getVatAmount() {
+		return vatAmount;
+	}
+
+	public void setVatAmount(double vatAmount) {
+		this.vatAmount = vatAmount;
+	}
+
+
 
 }

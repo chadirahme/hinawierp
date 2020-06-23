@@ -44,9 +44,15 @@ public class PurchaseRequestGridData {
 	private int pOLineNo;
 	
 	private boolean readOnly=false;
-	
-	
-	
+
+
+
+	private int vatKey;
+	private VATCodeModel selectedVatCode;
+	private double vatAmount;
+	private double unitPriceWithVAT;
+	private double amountAfterVAT;
+	private boolean notAllowEditVAT;
 	
 
 	public int getRecNo() {
@@ -217,8 +223,54 @@ public class PurchaseRequestGridData {
 		this.readOnly = readOnly;
 	}
 
-	
-	
+
+	public int getVatKey() {
+		return vatKey;
+	}
+
+	public void setVatKey(int vatKey) {
+		this.vatKey = vatKey;
+	}
+
+	public VATCodeModel getSelectedVatCode() {
+		return selectedVatCode;
+	}
+
+	public void setSelectedVatCode(VATCodeModel selectedVatCode) {
+		this.selectedVatCode = selectedVatCode;
+	}
+
+	public double getVatAmount() {
+		return vatAmount;
+	}
+
+	public void setVatAmount(double vatAmount) {
+		this.vatAmount = vatAmount;
+	}
+
+	public double getUnitPriceWithVAT() {
+		return unitPriceWithVAT;
+	}
+
+	public void setUnitPriceWithVAT(double unitPriceWithVAT) {
+		this.unitPriceWithVAT = unitPriceWithVAT;
+	}
+
+	public double getAmountAfterVAT() {
+		return amountAfterVAT;
+	}
+
+	public void setAmountAfterVAT(double amountAfterVAT) {
+		this.amountAfterVAT = amountAfterVAT;
+	}
+
+	public boolean isNotAllowEditVAT() {
+		return notAllowEditVAT;
+	}
+
+	public void setNotAllowEditVAT(boolean notAllowEditVAT) {
+		this.notAllowEditVAT = notAllowEditVAT;
+	}
 	
 	
 }

@@ -275,19 +275,15 @@ public class ItemReceiptReportViewModel {
 		if(invoiceSalesReport!=null && invoiceSalesReport.size()>0)
 		{
 			for (Iterator<ItemReceiptReportModel> i = invoiceSalesReport.iterator(); i.hasNext();)
-			{
-				ItemReceiptReportModel tmp=i.next();				
-				if(tmp.getCustomerName().toLowerCase().contains(filter.getCustomerName().toLowerCase())
-						&&tmp.getIrDate().toLowerCase().contains(filter.getIrDate().toLowerCase())&&
+			{ItemReceiptReportModel tmp=i.next();
+				if(
+						tmp.getIrDate().toLowerCase().contains(filter.getIrDate().toLowerCase())&&
 						tmp.getIrLocalNo().toLowerCase().contains(filter.getIrLocalNo().toLowerCase())&&
 						tmp.getVendor().toLowerCase().contains(filter.getVendor().toLowerCase())
 						&&(tmp.getStatus()).toLowerCase().contains(filter.getStatus().toLowerCase())&&
-						(tmp.getMainMemo()).toLowerCase().contains(filter.getMainMemo().toLowerCase())&&
-						(tmp.getItemName()).toLowerCase().contains(filter.getItemName().toLowerCase())&&
-						(tmp.getDescription()).toLowerCase().contains(filter.getDescription().toLowerCase())&&
-						(tmp.getQuantity()+"").toLowerCase().contains(filter.getQuantity().toLowerCase())&&
-						tmp.getClassName().toLowerCase().contains(filter.getClassName().toLowerCase())&&
-						(tmp.getAmount()+"").toLowerCase().contains(filter.getAmount().toLowerCase())
+						tmp.getAccountName().toLowerCase().contains(filter.getClassName().toLowerCase())&&
+						(tmp.getAmount()+"").toLowerCase().contains(filter.getAmount().toLowerCase())&&
+						(tmp.getVatAmount()+"").toLowerCase().contains(filter.getVatAmount().toLowerCase())
 						)
 				{
 					lst.add(tmp);

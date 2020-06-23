@@ -431,6 +431,8 @@ public class BillData {
 				obj.setAmount(rs.getDouble("amount"));
 				obj.setMemo(rs.getString("memo")==null?"":rs.getString("memo"));
 				obj.setBillable(rs.getString("billable")==null?"":rs.getString("billable"));
+				obj.setVatKey(rs.getInt("Vat_KEY"));
+				obj.setVatAmount(rs.getDouble("Vat_ExpAmount"));
 				lst.add(obj);
 			}
 		}
@@ -450,7 +452,7 @@ public class BillData {
 		ResultSet rs = null;
 		try 
 		{
-rs=db.executeNonQuery(query.getBillGridDataItemById(billKey));
+			rs=db.executeNonQuery(query.getBillGridDataItemById(billKey));
 			while(rs.next())
 			{
 				CheckItemsModel obj=new CheckItemsModel();
@@ -466,6 +468,8 @@ rs=db.executeNonQuery(query.getBillGridDataItemById(billKey));
 				obj.setInventorySiteKey(rs.getInt("InventorySiteKey"));
 				obj.setFixedIteKey(rs.getInt("FAItemKey"));
 				obj.setBillable(rs.getString("billable")==null?"":rs.getString("billable"));
+				obj.setVatKey(rs.getInt("Vat_KEY"));
+				obj.setVatAmount(rs.getDouble("Vat_ItemAmount"));
 				lst.add(obj);
 				
 			}
@@ -610,6 +614,7 @@ rs=db.executeNonQuery(query.getBillGridDataItemById(billKey));
 				//obj.setCustomer(rs.getString("customer")==null?"":rs.getString("customer"));
 				//obj.setClassName(rs.getString("className")==null?"":rs.getString("className"));
 				obj.setAmount(String.valueOf(rs.getDouble("amount")));
+				obj.setVatAmount(rs.getDouble("VAT_AMOUNT"));
 				obj.setAmountDue(String.valueOf(rs.getDouble("amountDue")));
 				obj.setcRFlag(rs.getString("cr_Flag")==null?"":rs.getString("cr_Flag"));
 				obj.setRefNumber(rs.getString("refNumber")==null?"":rs.getString("refNumber"));
@@ -647,6 +652,7 @@ rs=db.executeNonQuery(query.getBillGridDataItemById(billKey));
 				obj.setListType(rs.getString("ItemType"));
 				obj.setBarcode(rs.getString("BARCODE"));
 				obj.setSalesDesc(rs.getString("salesdesc")==null?"":rs.getString("salesdesc"));
+				obj.setPurchaseVATKey(rs.getInt("PurchaseVATKey"));
 				lst.add(obj);
 			}
 		}
@@ -655,6 +661,55 @@ rs=db.executeNonQuery(query.getBillGridDataItemById(billKey));
 		}
 		return lst;
 	}
-	
+
+
+	public List<BillReportModel> getCreditBillReport(Date fromDate,Date toDate)
+	{
+		List<BillReportModel> lst=new ArrayList<BillReportModel>();
+		BillDataQuerry query=new BillDataQuerry();
+		ResultSet rs = null;
+		try
+		{
+			rs=db.executeNonQuery(query.getCreditBillReportQuery(fromDate,toDate));
+			while(rs.next())
+			{
+				BillReportModel obj=new BillReportModel();
+				obj.setTxnDate(new SimpleDateFormat("dd-MM-yyyy").format(rs.getDate("txnDate")));
+				obj.setDueDate(new SimpleDateFormat("dd-MM-yyyy").format(rs.getDate("dueDate")));
+				obj.setWebUserId(rs.getInt("webuserID"));
+				String stat=rs.getString("status")==null?"":rs.getString("status");
+				if(stat.equalsIgnoreCase("C"))
+				{
+					obj.setStatus("Created");
+				}
+				else if(stat.equalsIgnoreCase("A"))
+				{
+					obj.setStatus("Approved");
+				}
+				obj.setAccountName(rs.getString("accountName")==null?"":rs.getString("accountName"));
+				obj.setAccountNUmber(rs.getString("accountNumber")==null?"":rs.getString("accountNumber"));
+				obj.setVendor(rs.getString("vendor")==null?"":rs.getString("vendor"));
+				//obj.setItemName(rs.getString("itemName")==null?"":rs.getString("itemName"));
+				//obj.setDescription(rs.getString("description")==null?"":rs.getString("description"));
+				//obj.setQuantity((int)rs.getDouble("quantity"));
+				obj.setMainMemo(rs.getString("Memo")==null?"":rs.getString("Memo"));
+				//obj.setCustomer(rs.getString("customer")==null?"":rs.getString("customer"));
+				//obj.setClassName(rs.getString("className")==null?"":rs.getString("className"));
+				obj.setAmount(String.valueOf(rs.getDouble("amount")));
+				obj.setVatAmount(rs.getDouble("VAT_AMOUNT"));
+				obj.setAmountDue(String.valueOf(rs.getDouble("amountDue")));
+				obj.setcRFlag(rs.getString("cr_Flag")==null?"":rs.getString("cr_Flag"));
+				obj.setRefNumber(rs.getString("refNumber")==null?"":rs.getString("refNumber"));
+				obj.setBillNo(rs.getString("billNo")==null?"":rs.getString("billNo"));
+				obj.setMastRecNo(rs.getInt("Rec_No"));
+				lst.add(obj);
+
+			}
+		}
+		catch (Exception ex) {
+			logger.error("error in BillData---getCreditBillReport-->" , ex);
+		}
+		return lst;
+	}
 
 }

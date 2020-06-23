@@ -21,7 +21,11 @@ public class BillReportModel {
 	private String dueDate;
 	
 	private String amount;
-	
+
+
+
+	private double vatAmount;
+
 	private String amountDue;
 	
 	private String accountNUmber;
@@ -192,6 +196,14 @@ public class BillReportModel {
 
 	public void setClassName(String className) {
 		this.className = className;
+	}
+
+	public double getVatAmount() {
+		return vatAmount;
+	}
+
+	public void setVatAmount(double vatAmount) {
+		this.vatAmount = vatAmount;
 	}
 
 }

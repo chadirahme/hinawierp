@@ -28,7 +28,11 @@ public class CreditBillModel {
 	private Date dueDate;
 	
 	private double amount;
-	
+
+
+
+	private double vatAmount;
+
 	private double amountDue;
 	
 	private String refNumber;
@@ -315,8 +319,14 @@ public class CreditBillModel {
 	public void setTransformIR(String transformIR) {
 		this.transformIR = transformIR;
 	}
-	
-	
-			
+
+
+	public double getVatAmount() {
+		return vatAmount;
+	}
+
+	public void setVatAmount(double vatAmount) {
+		this.vatAmount = vatAmount;
+	}
 
 }

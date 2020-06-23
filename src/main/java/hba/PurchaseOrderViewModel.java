@@ -21,17 +21,7 @@ import java.util.Map;
 
 import layout.MenuData;
 import layout.MenuModel;
-import model.ApprovedMaterialsModel;
-import model.ClassModel;
-import model.CompSetupModel;
-import model.ExpensesModel;
-import model.HRListValuesModel;
-import model.PayToOrderModel;
-import model.PrintModel;
-import model.PurchaseRequestGridData;
-import model.PurchaseRequestModel;
-import model.QbListsModel;
-import model.SerialFields;
+import model.*;
 
 import org.apache.log4j.Logger;
 import org.zkoss.bind.BindUtils;
@@ -47,16 +37,7 @@ import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Borderlayout;
-import org.zkoss.zul.Center;
-import org.zkoss.zul.Include;
-import org.zkoss.zul.ListModelList;
-import org.zkoss.zul.Messagebox;
-import org.zkoss.zul.Tab;
-import org.zkoss.zul.Tabbox;
-import org.zkoss.zul.Tabpanel;
-import org.zkoss.zul.Tabpanels;
-import org.zkoss.zul.Tabs;
+import org.zkoss.zul.*;
 
 import setup.users.WebusersModel;
 
@@ -180,6 +161,9 @@ public class PurchaseOrderViewModel
 	private boolean changeToPO=false;
 	private PrintModel objPrint;
 	private boolean isSkip=false;
+
+	private List<VATCodeModel> lstVatCodeList;
+	VATCodeModel custVendVatCodeModel;
 	
 	@SuppressWarnings("rawtypes")
 	public PurchaseOrderViewModel()
@@ -239,6 +223,9 @@ public class PurchaseOrderViewModel
 			lstDropShipTo=data.getDropShipTo();
 			objCash=new PurchaseRequestModel();
 			compSetup=data.GetDefaultSetupInfo();
+			if(compSetup.getUseVAT().equals("Y")){
+				lstVatCodeList=data.fillVatCodeList();
+			}
 			lstGridCustomer=data.fillQbList("'Customer'");
 			lstGridClass=data.fillClassList("");
 			lstGridQBItems=data.getItemForPurchaseRequest();
@@ -247,6 +234,7 @@ public class PurchaseOrderViewModel
 			if(purchaseRequestKey>0)
 			{
 				labelStatus="Edit";
+				PayToOrderModel obj1 = new PayToOrderModel();
 				objCash=data.getPurchaseOrderByID(purchaseRequestKey,webUserID,seeTrasction);
 				List<PurchaseRequestGridData> itemsGrid=data.getGridDataPurchaseOrderById(purchaseRequestKey);
 				if(objCash!=null)
@@ -298,6 +286,7 @@ public class PurchaseOrderViewModel
 						if(vendorList.getRecNo()==objCash.getVendorRefKEy())
 						{
 							selectedPaytoOrder=vendorList;
+							obj1=data.getPayToOrderInfo(selectedPaytoOrder.getListType(), selectedPaytoOrder.getRecNo());
 							break;
 						}
 
@@ -363,6 +352,23 @@ public class PurchaseOrderViewModel
 						obj.setIsOrderd(editItemsGrid.getIsOrderd());
 						obj.setRecivedQuantity(editItemsGrid.getRecivedQuantity());
 
+						obj.setVatAmount(editItemsGrid.getVatAmount());
+						obj.setAmountAfterVAT(obj.getAmount() + obj.getVatAmount());
+						obj.setVatKey(editItemsGrid.getVatKey());
+						obj.setUnitPriceWithVAT(editItemsGrid.getUnitPriceWithVAT());
+						if(compSetup.getUseVAT().equals("Y")){
+							if(obj.getVatKey()>0) {
+								VATCodeModel vatCodeModel = lstVatCodeList.stream().filter(x -> x.getVatKey() == obj.getVatKey()).findFirst().orElse(null);
+								if (vatCodeModel != null) {
+									obj.setSelectedVatCode(vatCodeModel);
+								} else {
+									obj.setSelectedVatCode(lstVatCodeList.get(0));
+								}
+
+								if (obj.getVatKey() == obj1.getVatKey())
+									obj.setNotAllowEditVAT(true);
+							}
+						}
 						lstCheckItems.add(obj);
 					}
 
@@ -478,7 +484,10 @@ public class PurchaseOrderViewModel
 									type.setDecription(objItems.getPurchaseDesc());
 									type.setQuantity(type.getQuantity());
 									type.setAmount(type.getRate() * type.getQuantity());
+									//check VaTCode
+									VATCodeOperation.selectPurchasrOrderItemsVAT(type,custVendVatCodeModel,compSetup,lstVatCodeList);
 									getNewTotalAmount();
+
 									BindUtils.postNotifyChange(null, null, PurchaseOrderViewModel.this, "lstCheckItems");
 									BindUtils.postNotifyChange(null, null, PurchaseOrderViewModel.this, "totalAmount");
 								}
@@ -492,6 +501,7 @@ public class PurchaseOrderViewModel
 								type.setRate(0);
 								type.setQuantity(0);
 								type.setAmount(0);
+								VATCodeOperation.selectPurchasrOrderItemsVAT(type,custVendVatCodeModel,compSetup,lstVatCodeList);
 								getNewTotalAmount();
 								type.setDecription("");
 								BindUtils.postNotifyChange(null, null, PurchaseOrderViewModel.this, "lstCheckItems");
@@ -508,6 +518,7 @@ public class PurchaseOrderViewModel
 					type.setRate(0);
 					type.setQuantity(0);
 					type.setAmount(0);
+					VATCodeOperation.selectPurchasrOrderItemsVAT(type,custVendVatCodeModel,compSetup,lstVatCodeList);
 					getNewTotalAmount();
 					type.setDecription("");
 					BindUtils.postNotifyChange(null, null, PurchaseOrderViewModel.this, "lstCheckItems");
@@ -523,6 +534,7 @@ public class PurchaseOrderViewModel
 					type.setDecription(objItems.getPurchaseDesc());
 					type.setQuantity(type.getQuantity());
 					type.setAmount(type.getRate() * type.getQuantity());
+					VATCodeOperation.selectPurchasrOrderItemsVAT(type,custVendVatCodeModel,compSetup,lstVatCodeList);
 					getNewTotalAmount();
 				}
 			}
@@ -636,6 +648,7 @@ public class PurchaseOrderViewModel
 			double cost=type.getAmount() / type.getQuantity();
 			type.setRate(cost);
 		}
+		VATCodeOperation.getPurchaseOrderItemVatAmount(compSetup,type);
 		getNewTotalAmount();
 	}
 
@@ -646,7 +659,7 @@ public class PurchaseOrderViewModel
 		double toalCheckItemsAmount=0;
 		for (PurchaseRequestGridData item : lstCheckItems) 
 		{
-			toalCheckItemsAmount+=item.getAmount();
+			toalCheckItemsAmount+=item.getAmountAfterVAT();
 		}
 
 
@@ -724,11 +737,12 @@ public class PurchaseOrderViewModel
 
 
 	@Command  
-	public void addPurchaseRquest()
+	public void addPurchaseRquest(@BindingParam("cmp") Window x)
 	{
 		if(validateData(true))
 		{
 			saveData();
+			x.detach();
 			
 		}
 	}
@@ -884,6 +898,14 @@ public class PurchaseOrderViewModel
 			else
 				obj.setEntityRefKey(0);
 			obj.setAmount(totalAmount);
+			if(compSetup.getUseVAT().equals("Y"))
+			{
+				double vatAmount = 0;
+				for (PurchaseRequestGridData item : lstCheckItems) {
+					vatAmount += item.getVatAmount();
+				}
+				obj.setVatAmount(vatAmount);
+			}
 			if(selectedLstClass!=null)
 				obj.setClassRefkey(selectedLstClass.getClass_Key());
 			else
@@ -1044,7 +1066,7 @@ public class PurchaseOrderViewModel
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@NotifyChange({"address","showMaterial","selectedPaytoOrder"})
+	@NotifyChange({"address","showMaterial","selectedPaytoOrder","lstCheckItems","totalAmount"})
 	public void setSelectedPaytoOrder(QbListsModel selectedPaytoOrder) 
 	{
 		this.selectedPaytoOrder = selectedPaytoOrder;
@@ -1075,12 +1097,40 @@ public class PurchaseOrderViewModel
 			{
 				address=selectedPaytoOrder.getFullName();
 			}
+
+			//VAT
+			if (compSetup.getUseVAT().equals("Y")) {
+				if (obj.getVatKey() > 0) {
+					custVendVatCodeModel = lstVatCodeList.stream().filter(x -> x.getVatKey() == obj.getVatKey()).findFirst().orElse(null);
+					if (custVendVatCodeModel != null) {
+						if (lstCheckItems.size() > 0) {
+							Messagebox.show("There is VAT Code assigned for this Vendor" +
+									". System will recalculate the VAT Amount based on the Vendor.", "Purchase Order", Messagebox.OK, Messagebox.INFORMATION);
+
+							//for Items
+							VATCodeOperation.recalculatePurchaseOrderVAT(lstCheckItems, custVendVatCodeModel, compSetup);
+						}
+					}
+				}
+				else //not vat assigned to this customer Sony asked to skip this
+				{
+					for (PurchaseRequestGridData item : lstCheckItems) {
+						if (item.getSelectedItem() != null && item.getSelectedVatCode()!=null) {
+							item.setNotAllowEditVAT(false);
+							//VATCodeOperation.selectCashInvoiceItemsVAT(item, custVendVatCodeModel, compSetup, lstVatCodeList);
+						}
+					}
+				}
+			}
+			getNewTotalAmount();
+
 		}
 		else
 		{
 			Messagebox.show("Invalid Vendor Name !!","Purchase Order",Messagebox.OK,Messagebox.INFORMATION);
 			setSelectedPaytoOrder(lstPayToOrder.get(0));
 		}
+
 		if(selectedPaytoOrder!=null && selectedPaytoOrder.getRecNo()>0){
 			if(!data.checkMR(selectedPaytoOrder.getRecNo())){
 				showMaterial=false;
@@ -1120,6 +1170,7 @@ public class PurchaseOrderViewModel
 			{
 				actionTYpe="edit";
 				labelStatus="Edit";
+				PayToOrderModel obj1 = new PayToOrderModel();
 				purchaseRequestKey=objCash.getRecNo();
 				if(objCash.getTransformMR().equalsIgnoreCase("Y")){
 					transferedPO=true;
@@ -1169,6 +1220,7 @@ public class PurchaseOrderViewModel
 					if(vendorList.getRecNo()==objCash.getVendorRefKEy())
 					{
 						selectedPaytoOrder=vendorList;
+						obj1=data.getPayToOrderInfo(selectedPaytoOrder.getListType(), selectedPaytoOrder.getRecNo());
 						break;
 					}
 
@@ -1232,6 +1284,25 @@ public class PurchaseOrderViewModel
 					obj.setIsOrderd(editItemsGrid.getIsOrderd());
 					obj.setRecivedQuantity(editItemsGrid.getRecivedQuantity());
 					obj.setReadOnly(transferedPO);
+
+					obj.setVatAmount(editItemsGrid.getVatAmount());
+					obj.setAmountAfterVAT(obj.getAmount() + obj.getVatAmount());
+					obj.setVatKey(editItemsGrid.getVatKey());
+					obj.setUnitPriceWithVAT(editItemsGrid.getUnitPriceWithVAT());
+					if(compSetup.getUseVAT().equals("Y")){
+						if(obj.getVatKey()>0) {
+							VATCodeModel vatCodeModel = lstVatCodeList.stream().filter(x -> x.getVatKey() == obj.getVatKey()).findFirst().orElse(null);
+							if (vatCodeModel != null) {
+								obj.setSelectedVatCode(vatCodeModel);
+							} else {
+								obj.setSelectedVatCode(lstVatCodeList.get(0));
+							}
+
+							if (obj.getVatKey() == obj1.getVatKey())
+								obj.setNotAllowEditVAT(true);
+						}
+					}
+
 					lstCheckItems.add(obj);
 				}
 				getNewTotalAmount();
@@ -2438,5 +2509,21 @@ public class PurchaseOrderViewModel
 
 	public void setMatchFlag(boolean matchFlag) {
 		this.matchFlag = matchFlag;
+	}
+
+	public List<VATCodeModel> getLstVatCodeList() {
+		return lstVatCodeList;
+	}
+
+	public void setLstVatCodeList(List<VATCodeModel> lstVatCodeList) {
+		this.lstVatCodeList = lstVatCodeList;
+	}
+
+
+	@Command
+	@NotifyChange({ "toatlAmount", "lstCheckItems","lblTotalCost","balance","amountPiad","exChnage" })
+	public void selectVatCode(@BindingParam("type") final PurchaseRequestGridData type) {
+		VATCodeOperation.getPurchaseOrderItemVatAmount(compSetup,type);
+		//setLabelCheckTotalcost();
 	}
 }

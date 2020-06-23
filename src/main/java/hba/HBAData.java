@@ -677,6 +677,7 @@ public class HBAData {
 				obj.setSubLevel(rs.getInt("SubLevel"));
 				obj.setListID(rs.getString("ListID"));
 				obj.setFullName(rs.getString("FullName"));
+				obj.setVatKey(rs.getInt("VAT_KEY"));
 				lst.add(obj);
 			}
 		} catch (Exception ex) {
@@ -1470,14 +1471,20 @@ public class HBAData {
 		return result;
 	}
 
-	public List<VATCodeModel> getQBVATTransaction(int recNo) {
+	public List<VATCodeModel> getQBVATTransaction(int recNo,int formId) {
 		List<VATCodeModel> lst = new ArrayList<VATCodeModel>();
 
 		HBAQueries query = new HBAQueries();
 		ResultSet rs = null;
 		try {
 			VATCodeModel obj = new VATCodeModel();
+			if(HbaEnum.VatForms.ItemReceipt.getValue()==formId)
+				rs = db.executeNonQuery(query.getItemReceiptQBVATTransactionQuery(recNo));
+			else if(HbaEnum.VatForms.Bill.getValue()==formId)
+				rs = db.executeNonQuery(query.getBillQBVATTransactionQuery(recNo));
+			else
 			rs = db.executeNonQuery(query.getQBVATTransactionQuery(recNo));
+
 			while (rs.next()) {
 				obj = new VATCodeModel();
 				obj.setVatKey(rs.getInt("Vat_Key"));
@@ -1530,7 +1537,7 @@ public class HBAData {
 			boolean tmpDataExists=false;
 
 			deleteQBVATTransaction(recNo,txnType);
-			List<VATCodeModel> lst=getQBVATTransaction(recNo);
+			List<VATCodeModel> lst=getQBVATTransaction(recNo,txnType);
 			for(VATCodeModel item:lst){
 				if(tmpPRVVatKey!=item.getVatKey()){
 					if(tmpPRVVatKey!=-1){
@@ -1587,6 +1594,50 @@ public class HBAData {
 		}
 		return result;
 	}
+
+
+	public int CreateItemReceipt4QBVAT(int recNo,int txnType,int nameRefKey,String nameType,double txnAmount){
+		int result = 0;
+
+		HBAQueries query = new HBAQueries();
+		try {
+			int tmpPRVVatKey=-1, tmpVATKey=0, tmpVATServiceItem=0;
+			double tmpVATAmount=0 , tmpCalculateFromAmt=0;
+			boolean tmpDataExists=false;
+
+			deleteQBVATTransaction(recNo,txnType);
+			List<VATCodeModel> lst=getQBVATTransaction(recNo,txnType);
+			for(VATCodeModel item:lst){
+				if(tmpPRVVatKey!=item.getVatKey()){
+					if(tmpPRVVatKey!=-1){
+						VATCodeModel newVat=new VATCodeModel(tmpVATKey,tmpVATServiceItem,tmpVATAmount,tmpCalculateFromAmt);
+						//db.executeUpdateQuery(query.addQBVATTransactionQuery(recNo,txnType,item,nameRefKey,nameType,txnAmount));
+						db.executeUpdateQuery(query.addQBVATTransactionQuery(recNo,txnType,newVat,nameRefKey,nameType,txnAmount));
+					}
+					tmpPRVVatKey=item.getVatKey();
+					tmpVATKey = 0;
+					tmpVATServiceItem = 0;
+					tmpVATAmount = 0;
+					tmpCalculateFromAmt = 0;
+				}
+				tmpVATKey = item.getVatKey();
+				tmpVATServiceItem = item.getVatServiceItem();
+				tmpVATAmount += item.getVatPercentage();
+				tmpCalculateFromAmt += item.getVatCalcualtedFromAmt();
+				tmpDataExists = true;
+			}
+			//add last item
+			if(tmpDataExists){
+				VATCodeModel newVat=new VATCodeModel(tmpVATKey,tmpVATServiceItem,tmpVATAmount,tmpCalculateFromAmt);
+				db.executeUpdateQuery(query.addQBVATTransactionQuery(recNo,txnType,newVat,nameRefKey,nameType,txnAmount));
+			}
+
+		} catch (Exception ex) {
+			logger.error("error in HBAData---CreateItemReceipt4QBVAT-->", ex);
+		}
+		return result;
+	}
+
 
 
 	public int addExpense(ExpensesModel objExpenses, int RecNo) {
@@ -2809,7 +2860,7 @@ public class HBAData {
 			boolean isRecExists;
 			isRecExists=FindTxnNumber(field,tmpConfigSerailNum,"",0);
 			while(isRecExists) {
-				tmpConfigSerailNum = GenerateSerialNumber(field, SerialNumber, keyID);
+				tmpConfigSerailNum = GenerateSerialNumber(field, tmpConfigSerailNum, keyID);
 				isRecExists=FindTxnNumber(field,tmpConfigSerailNum,"",0);
 			}
 
@@ -5207,6 +5258,7 @@ public class HBAData {
 				obj.setListID(rs.getString("ListID"));
 				obj.setAccountName(rs.getString("AccountName"));
 				obj.setAccountType(rs.getString("AccountType"));
+				obj.setVatKey(rs.getInt("VAT_KEY"));
 				lst.add(obj);
 			}
 		} catch (Exception ex) {
@@ -5428,6 +5480,8 @@ public class HBAData {
 				obj.setAmount(rs.getDouble("amount"));
 				obj.setMemo(rs.getString("memo") == null ? "" : rs
 						.getString("memo"));
+				obj.setVatKey(rs.getInt("Vat_KEY"));
+				obj.setVatAmount(rs.getDouble("Vat_ExpAmount"));
 				lst.add(obj);
 
 			}
@@ -5466,6 +5520,8 @@ public class HBAData {
 						.getString("status"));
 				obj.setMemo(rs.getString("memo") == null ? "" : rs
 						.getString("memo"));
+				obj.setVatKey(rs.getInt("Vat_KEY"));
+				obj.setVatAmount(rs.getDouble("Vat_ItemAmount"));
 				lst.add(obj);
 
 			}
@@ -5576,6 +5632,7 @@ public class HBAData {
 				//obj.setCustomerName(rs.getString("customer") == null ? "" : rs.getString("customer"));
 				//obj.setClassName(rs.getString("className") == null ? "" : rs.getString("className"));
 				obj.setAmount(rs.getDouble("amount"));
+				obj.setVatAmount(rs.getDouble("VAT_AMOUNT"));
 				lst.add(obj);
 
 			}
@@ -5638,6 +5695,7 @@ public class HBAData {
 				obj.setPurchaseDesc(rs.getString("PurchaseDesc"));
 				obj.setPurchaseCost(rs.getDouble("averageCost"));				
 				obj.setSubOfClasskey(rs.getInt("ClassKey"));
+				obj.setPurchaseVATKey(rs.getInt("PurchaseVATKey"));
 				lst.add(obj);
 			}
 		} catch (Exception ex) {
@@ -6075,6 +6133,8 @@ public class HBAData {
 				obj.setLineNo(rs.getInt("Line_No"));
 				obj.setRecivedQuantity((int) rs.getDouble("RcvdQuantity"));
 				obj.setEntityRefKey(rs.getInt("EntityRefKey"));
+				obj.setVatKey(rs.getInt("Vat_KEY"));
+				obj.setVatAmount(rs.getDouble("Vat_ItemAmount"));
 				lst.add(obj);
 
 			}

@@ -114,6 +114,11 @@
 							<image src="/images/funnel.png" />
 							<textbox instant="true" width="80px" value="@bind(vm.filter.amount)" onChange="@command('changeFilter')" />
 						</auxheader>
+						<auxheader colspan="1">
+							<image src="/images/funnel.png" />
+							<textbox instant="true" width="80px" value="@bind(vm.filter.vatAmount)" onChange="@command('changeFilter')" />
+						</auxheader>
+
 					</auxhead>
 					<listhead menupopup="auto" sizable="true">
 						<listheader label=" " width="110px" />
@@ -131,6 +136,7 @@
 						<!-- <listheader label="Customer job" sort="auto('customer')" width="120px" />
 						<listheader label="Class" sort="auto('className')" width="120px" /> -->
 						<listheader label="Amount" sort="auto('amount')" width="100px" />
+						<listheader label="VAT Amount" sort="auto('vatAmount')" width="100px" />
 
 					</listhead>
 					<template name="model">
@@ -172,7 +178,10 @@
 								<label value="@bind(each.status)" />
 							</listcell>
 							<listcell>
-								<label value="@bind(each.amount)" />
+							<label value="@bind(each.amount)" />
+						</listcell>
+							<listcell>
+								<label value="@bind(each.vatAmount)" />
 							</listcell>
 
 						</listitem>

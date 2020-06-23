@@ -18,7 +18,7 @@ public class BillDataQuerry {
 			public String getVendorFixedAssetItemQueryforbill(int vendorID)
 			{
 				query=new StringBuffer();
-				query.append(" Select AssetID,ASsetCode,AssetName, CAse WHEN isnull(AssetCode,'') = '' THen AssetName Else AssetCode + '·' + AssetName END as ASSETNAMECode ");
+				query.append(" Select AssetID,ASsetCode,AssetName, CAse WHEN isnull(AssetCode,'') = '' THen AssetName Else AssetCode + 'ï¿½' + AssetName END as ASSETNAMECode ");
 				query.append(" FROM ASSETMASTER Where STatusID NOT IN (1,2) ");
 				query.append(" and ASSETMASTER.VendorID = " + vendorID+" order by ASsetCode,AssetName SELECT sitename,itemkey,'Inventory Site' as ItemType,0 as sublevel,ListID FROM InventorySiteList where IsActive='Y' and SiteName <> 'Unspecified Site' order by siteName");
 				return query.toString();	
@@ -31,19 +31,20 @@ public class BillDataQuerry {
 				  query.append(" SELECT max(Rec_No) as MaxRecNo from Bill");		
 				  return query.toString();
 			}
-			
+
 			
 			public String addNewBill(CreditBillModel obj,int webUserID)
 			{
 				  //DateFormat df = new SimpleDateFormat("dd/MM/yyyy");		 
 				  query=new StringBuffer();
 				  query.append("Insert into Bill  (Rec_No,TxnID,CR_Flag,APAccountRef_Key,VendorRef_Key,TermsRef_Key,TxnDate,DueDate,Amount,RefNumber,BillNo,[Memo],IsPaid,");	
-				  query.append(" Bill_Source,QBRefNo,Allocated,Allocation_Method,Allocation_Type,Allocation_Amount,AssetIns_RecNo,Status,Address,transformIR,webUserID)");
+				  query.append(" Bill_Source,QBRefNo,Allocated,Allocation_Method,Allocation_Type,Allocation_Amount,AssetIns_RecNo,Status,Address,transformIR,webUserID,VAT_AMOUNT,TXNTIME)");
 				  query.append(" Values(" + obj.getRecNo() + ",'" + obj.getTxtnId()+"','" + obj.getCr_flag() +"' ,"+obj.getApAccountRefKey()+","+ obj.getVendRefKey() + " , ");
 				  query.append("" +obj.getTermsRefKey() + ", '" + sdf.format(obj.getTxnDate()) + "' ,'" + sdf.format(obj.getDueDate()) + "' , " + obj.getAmount() + " , '" +obj.getRefNumber() + "' , " );
 				  query.append(" '" + obj.getBillNo() + "' , '" + obj.getMemo() + "','" + obj.getIsPaid() + "', '" + obj.getBillSource() + "' , '" + obj.getQbRefNUmber() + "' , ");
 				  query.append(" '" + obj.getAllocated() + "' , '"+ obj.getAllocationMethod() + "' , '" + obj.getAllocatedType() + "' , " + obj.getAllocationAmount() + ", " + obj.getAssetInsRecNo() +" ,");
 				  query.append(" '" + obj.getStatus() + "' , '" + obj.getAddress()+ "' , '" + obj.getTransformIR() + "',"+webUserID+"");
+				  query.append(" , " + obj.getVatAmount() + ", getdate()");
 				  query.append(" )");
 				  query.append(" ");
 				  return query.toString();
@@ -58,7 +59,7 @@ public class BillDataQuerry {
 				  query.append("VendorRef_Key="+obj.getVendRefKey()+",TermsRef_Key="+obj.getTermsRefKey()+",Amount="+obj.getAmount()+",RefNumber='"+obj.getRefNumber()+"',[Memo]='"+obj.getMemo()+"',");	
 				  query.append("BillNo='"+obj.getBillNo()+"',IsPaid='"+obj.getIsPaid()+"',Bill_Source='"+obj.getBillSource()+"',QBRefNo='"+obj.getQbRefNUmber()+"',Allocated='"+obj.getAllocated()+"',");
 				  query.append("Allocation_Method='"+obj.getAllocationMethod()+"',Allocation_Type='"+obj.getAllocatedType()+"',AssetIns_RecNo="+obj.getAssetInsRecNo()+",Allocation_Amount="+obj.getAllocationAmount()+",Status='"+obj.getStatus()+"',");
-				  query.append("webUserId="+webUserID+",editedFromOnline='"+editedFromOnline+"' where Rec_No="+obj.getRecNo()+"");
+				  query.append("webUserId="+webUserID+",editedFromOnline='"+editedFromOnline+"', VAT_AMOUNT="+ obj.getVatAmount() + " where Rec_No="+obj.getRecNo()+"");
 				  query.append(" ");
 				  return query.toString();
 			}
@@ -81,7 +82,7 @@ public class BillDataQuerry {
 				  {
 					  memo=objExpenses.getMemo().replace( "'", "`");
 				  }
-				  query.append(" Insert into BillExpenses(Rec_No,AccountsRef_Key,Amount,[Memo],CustRef_Key,Class_Key,[Line_No],FaItemKey,AssetIns_RecNo,Billable) ");
+				  query.append(" Insert into BillExpenses(Rec_No,AccountsRef_Key,Amount,[Memo],CustRef_Key,Class_Key,[Line_No],FaItemKey,AssetIns_RecNo,Billable,Vat_KEY,Vat_ExpAmount) ");
 				  query.append(" values(" + RecNo + ", " + objExpenses.getSelectedAccount().getRec_No() + ", " + objExpenses.getAmount() + ", '" + memo + "',");
 				  if(objExpenses.getSelectedCustomer()!=null)
 				  query.append(objExpenses.getSelectedCustomer().getRecNo());
@@ -101,6 +102,10 @@ public class BillDataQuerry {
 				  query.append(", 0");
 				  }
 				  query.append(",0, '"+objExpenses.getBillable()+"'");
+				  if(objExpenses.getSelectedVatCode()!=null)
+					  query.append(", " + objExpenses.getSelectedVatCode().getVatKey() + "," + objExpenses.getVatAmount());
+				  else
+					  query.append(", 0 ,0 ");
 				  query.append(" )");
 				  return query.toString();
 			}
@@ -121,7 +126,7 @@ public class BillDataQuerry {
 				  {
 					  desc=obj.getDescription().replace( "'", "`");
 				  }
-				 query.append(" Insert into BillItems(Rec_No, ItemRef_Key,Description,Quantity,Cost,Amount,CustRef_Key,Class_Key,[Line_No],FAItemKey,InventorySiteKey,IsAllocated,Allocated_Amount,Allocated_UnitCost,NetTotal,Billable)");
+				 query.append(" Insert into BillItems(Rec_No, ItemRef_Key,Description,Quantity,Cost,Amount,CustRef_Key,Class_Key,[Line_No],FAItemKey,InventorySiteKey,IsAllocated,Allocated_Amount,Allocated_UnitCost,NetTotal,Billable,Vat_KEY,Vat_ItemAmount)");
 				 query.append(" values(" + RecNo + ", " + obj.getSelectedItems().getRecNo() + ", '" + desc + "', " + obj.getQuantity() + ", ");
 				 query.append(" " + obj.getCost() + ", " + obj.getAmount() + ", ");
 				 if(obj.getSelectedCustomer()!=null)
@@ -147,8 +152,14 @@ public class BillDataQuerry {
 				 query.append(",0");
 				 query.append(",0");
 				 query.append(",0");
-				 query.append(", '" +obj.getBillable()+ "')" );			
-				 
+				 query.append(", '" +obj.getBillable()+ "'" );
+
+				if(obj.getSelectedVatCode()!=null)
+					query.append(", " + obj.getSelectedVatCode().getVatKey() + "," + obj.getVatAmount());
+				else
+					query.append(", 0 ,0 ");
+
+				query.append(")");
 				 return query.toString();
 			}
 			
@@ -320,10 +331,24 @@ public class BillDataQuerry {
 			public String GetQBItemsQuery()
 			{
 				  query=new StringBuffer();
-				  query.append(" SELECT name,item_key,ListID,ItemType,SubLevel,FullName,BARCODE,salesdesc FROM QBItems ");
+				  query.append(" SELECT name,item_key,ListID,ItemType,SubLevel,FullName,BARCODE,salesdesc,PurchaseVATKey FROM QBItems ");
 				  query.append(" where isnull(PricePercent,0)=0 and IsActive='Y' and ItemType!='itemDiscount' order by ItemType desc,FullName ");
 				  return query.toString();
 			}
+
+	public String getCreditBillReportQuery(Date fromDate,Date toDate)
+	{
+		query=new StringBuffer();
+
+		query.append("SELECT Bill.*,Accounts.AccountNumber, Accounts.Name AS AccountName,QBListsVendor.Name AS Vendor ");
+		query.append("FROM (Bill  LEFT JOIN Accounts ON Bill.APAccountRef_Key = Accounts.REC_NO) ");
+		query.append("LEFT JOIN QBLists AS QBListsVendor ON Bill.VendorRef_Key = QBListsVendor.RecNo ");
+		query.append(" where Bill.Rec_No <>0 And Bill.CR_Flag='R'");
+		query.append(" and Bill.TxnDate Between '"+sdf.format(fromDate)+"' And '"+sdf.format(toDate)+"' ");
+		query.append("ORDER BY Bill.BillNo ");
+		return query.toString();
+	}
+
 			
 	
 }

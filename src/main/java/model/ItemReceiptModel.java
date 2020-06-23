@@ -33,7 +33,11 @@ public class ItemReceiptModel {
 	private String Demo;
 	
 	private double amount;
-	
+
+
+
+	private double vatAmount;
+
 	private String status;
 	
 	private String statusMemo;
@@ -257,9 +261,15 @@ public class ItemReceiptModel {
 	public void setTransformPO(String transformPO) {
 		this.transformPO = transformPO;
 	}
-	
-	
-	
+
+
+	public double getVatAmount() {
+		return vatAmount;
+	}
+
+	public void setVatAmount(double vatAmount) {
+		this.vatAmount = vatAmount;
+	}
 		
 
 }

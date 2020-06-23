@@ -368,7 +368,7 @@
 						<listheader label="Name In Arabic" width="300px"
 							sort="auto('description')" />
 						<listheader label="Type" width="250px" sort="auto('accountType')" />
-						<listheader label="Total Balance" width="150px" align="right"
+						<listheader label="Balance" width="150px" align="right"
 							sort="auto('totalBalance')" />
 							<listheader label="Status" width="150px" align="right"
 							sort="auto('isActive')" />

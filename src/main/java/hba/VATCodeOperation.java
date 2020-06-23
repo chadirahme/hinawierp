@@ -206,5 +206,74 @@ public class  VATCodeOperation {
 
     }
 
+
+    public static void recalculatePurchaseOrderVAT(List<PurchaseRequestGridData> lstCashInvoiceCheckItem,
+                                                      VATCodeModel custVendVatCodeModel,
+                                                      CompSetupModel compSetupModel) {
+
+        for (PurchaseRequestGridData item : lstCashInvoiceCheckItem) {
+            if (item.getSelectedItem() != null) {
+                item.setSelectedVatCode(custVendVatCodeModel);
+                item.setNotAllowEditVAT(true);
+                getPurchaseOrderItemVatAmount(compSetupModel, item);
+            }
+        }
+    }
+
+    public static void getPurchaseOrderItemVatAmount(CompSetupModel compSetup,PurchaseRequestGridData row) {
+        if (compSetup.getUseVAT().equals("Y")) {
+            if (row.getSelectedVatCode().getVatPercentage() > 0 && row.getSelectedVatCode().getVatType().equals("T")) {
+                //Math.round(row.getAmount() * row.getSelectedVatCode().getVatPercentage()/100);
+                row.setVatAmount(row.getAmount() * row.getSelectedVatCode().getVatPercentage() / 100);
+                row.setAmountAfterVAT(row.getAmount() + row.getVatAmount());
+
+            } else {
+                row.setVatAmount(0);
+                row.setAmountAfterVAT(row.getAmount());
+
+            }
+        }else {
+            row.setVatAmount(0);
+            row.setAmountAfterVAT(row.getAmount());
+        }
+    }
+
+    public static void selectPurchasrOrderItemsVAT(PurchaseRequestGridData type,
+                                      VATCodeModel custVendVatCodeModel,
+                                      CompSetupModel compSetup,
+                                      List<VATCodeModel> lstVatCodeList) {
+
+
+        if(compSetup.getUseVAT().equals("Y")) {
+            if (type.getSelectedItem() != null) {
+
+                if(custVendVatCodeModel!=null)
+                {
+                    type.setSelectedVatCode(custVendVatCodeModel);
+                    getPurchaseOrderItemVatAmount(compSetup,type);
+                    //disable AllowEditing = False
+                    type.setNotAllowEditVAT(true);
+                    return;
+                }
+
+                if (type.getSelectedItem().getPurchaseVATKey() > 0) {
+                    VATCodeModel vatCodeModel = lstVatCodeList.stream().filter(x -> x.getVatKey() == type.getSelectedItem().getPurchaseVATKey()).findFirst().orElse(null);
+                    if (vatCodeModel != null) {
+                        type.setSelectedVatCode(vatCodeModel);
+                    } else {
+                        type.setSelectedVatCode(lstVatCodeList.get(0));
+                    }
+                } else {
+                    type.setSelectedVatCode(lstVatCodeList.get(0));
+                }
+                type.setNotAllowEditVAT(false);
+                getPurchaseOrderItemVatAmount(compSetup,type);
+            }
+        }else {
+            getPurchaseOrderItemVatAmount(compSetup,type);
+        }
+
+    }
+
 }
 
