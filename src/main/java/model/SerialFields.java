@@ -21,7 +21,8 @@ public enum SerialFields
 	FeedBack,
 	feedBackSend,
 	delivery,
-	PaymentSerial
+	PaymentSerial,
+	CreditMemo
 	
 }
 

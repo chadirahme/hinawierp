@@ -204,7 +204,6 @@ public class EditCreditBillViewModel
 
 	private List<VATCodeModel> lstVatCodeList;
 	VATCodeModel custVendVatCodeModel;
-
 	String CR_Flag="";
 
 	@SuppressWarnings("rawtypes")
@@ -352,6 +351,7 @@ public class EditCreditBillViewModel
 					}
 
 					totalAmount=objCheque.getAmount();
+					if(objCheque.getDueDate()!=null)
 					billDueDate=df.parse(sdf.format(objCheque.getDueDate()));
 					creationdate=df.parse(sdf.format(objCheque.getTxnDate()));
 					billNo=objCheque.getBillNo();
@@ -961,6 +961,9 @@ public class EditCreditBillViewModel
 				obj.setTxnDate(creationdate);
 				obj.setTimeCreated(creationdate);
 				obj.setDueDate(billDueDate);
+				if(obj.getCr_flag().equals("R"))
+					obj.setDueDate(null);
+
 				obj.setAmount(totalAmount);
 				obj.setAmountDue(0);
 				obj.setBillNo(billNo);
@@ -1068,10 +1071,10 @@ public class EditCreditBillViewModel
 
 					if(editBillKey==0)
 					{
-						data.addUserActivity(data.GetNewUserActivityRecNo(), common.HbaEnum.HbaList.BillCreditCreate.getValue(), (int)obj.getRecNo(), obj.getMemo(), obj.getRefNumber(), billDueDate,  webUserName, webUserID,common.HbaEnum.UserAction.Create.getValue());
+						data.addUserActivity(data.GetNewUserActivityRecNo(), common.HbaEnum.HbaList.BillCreditCreate.getValue(), (int)obj.getRecNo(), obj.getMemo(), obj.getRefNumber(), creationdate,  webUserName, webUserID,common.HbaEnum.UserAction.Create.getValue());
 					}else
 					{
-						data.addUserActivity(data.GetNewUserActivityRecNo(), common.HbaEnum.HbaList.BillCreditCreate.getValue(), (int)obj.getRecNo(), obj.getMemo(), obj.getRefNumber(), billDueDate,  webUserName, webUserID,common.HbaEnum.UserAction.Edit.getValue());
+						data.addUserActivity(data.GetNewUserActivityRecNo(), common.HbaEnum.HbaList.BillCreditCreate.getValue(), (int)obj.getRecNo(), obj.getMemo(), obj.getRefNumber(), creationdate,  webUserName, webUserID,common.HbaEnum.UserAction.Edit.getValue());
 					}
 
 					if(editBillKey==0)
@@ -2706,7 +2709,7 @@ public class EditCreditBillViewModel
 	{
 		try
 		{
-			objCheque=billData.navigationBill(editBillKey,webUserID,seeTrasction,navigation,actionTYpe);
+			objCheque=billData.navigationBill(editBillKey,webUserID,seeTrasction,navigation,actionTYpe,CR_Flag);
 			lblExpenses="Expenses 0.00";
 			lblCheckItems="Items 0.00";
 			PayToOrderModel objPayToOrderModel=new PayToOrderModel();
@@ -2755,6 +2758,7 @@ public class EditCreditBillViewModel
 				}
 
 				totalAmount=objCheque.getAmount();
+				if(objCheque.getDueDate()!=null)
 				billDueDate=df.parse(sdf.format(objCheque.getDueDate()));
 				creationdate=df.parse(sdf.format(objCheque.getTxnDate()));
 				billNo=objCheque.getBillNo();
@@ -3107,6 +3111,7 @@ public class EditCreditBillViewModel
 					}
 
 					totalAmount=objCheque.getAmount();
+					if(objCheque.getDueDate()!=null)
 					billDueDate=df.parse(sdf.format(objCheque.getDueDate()));
 					creationdate=df.parse(sdf.format(objCheque.getTxnDate()));
 					billNo=objCheque.getBillNo();
@@ -4466,6 +4471,15 @@ public class EditCreditBillViewModel
 		getItemVatAmount(compSetup,type);
 		setLabelCheckItems();
 		getNewTotalAmount();
+	}
+
+
+	public String getCR_Flag() {
+		return CR_Flag;
+	}
+
+	public void setCR_Flag(String CR_Flag) {
+		this.CR_Flag = CR_Flag;
 	}
 
 }

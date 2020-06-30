@@ -40,7 +40,14 @@ public class BillDataQuerry {
 				  query.append("Insert into Bill  (Rec_No,TxnID,CR_Flag,APAccountRef_Key,VendorRef_Key,TermsRef_Key,TxnDate,DueDate,Amount,RefNumber,BillNo,[Memo],IsPaid,");	
 				  query.append(" Bill_Source,QBRefNo,Allocated,Allocation_Method,Allocation_Type,Allocation_Amount,AssetIns_RecNo,Status,Address,transformIR,webUserID,VAT_AMOUNT,TXNTIME)");
 				  query.append(" Values(" + obj.getRecNo() + ",'" + obj.getTxtnId()+"','" + obj.getCr_flag() +"' ,"+obj.getApAccountRefKey()+","+ obj.getVendRefKey() + " , ");
-				  query.append("" +obj.getTermsRefKey() + ", '" + sdf.format(obj.getTxnDate()) + "' ,'" + sdf.format(obj.getDueDate()) + "' , " + obj.getAmount() + " , '" +obj.getRefNumber() + "' , " );
+				  query.append("" +obj.getTermsRefKey() + ", '" + sdf.format(obj.getTxnDate()) + "' , " );
+
+				  if(obj.getDueDate()!=null)
+					  query.append("'" + sdf.format(obj.getDueDate()) + "' , ");
+				  else
+					  query.append(" NULL , ");
+
+				  query.append(obj.getAmount() + " , '" +obj.getRefNumber() + "' , " );
 				  query.append(" '" + obj.getBillNo() + "' , '" + obj.getMemo() + "','" + obj.getIsPaid() + "', '" + obj.getBillSource() + "' , '" + obj.getQbRefNUmber() + "' , ");
 				  query.append(" '" + obj.getAllocated() + "' , '"+ obj.getAllocationMethod() + "' , '" + obj.getAllocatedType() + "' , " + obj.getAllocationAmount() + ", " + obj.getAssetInsRecNo() +" ,");
 				  query.append(" '" + obj.getStatus() + "' , '" + obj.getAddress()+ "' , '" + obj.getTransformIR() + "',"+webUserID+"");
@@ -55,8 +62,12 @@ public class BillDataQuerry {
 			{
 				  query=new StringBuffer();
 				  String editedFromOnline="Y";
-				  query.append("Update Bill set TxnDate='"+sdf.format(obj.getTxnDate())+"',DueDate='"+sdf.format(obj.getDueDate())+"',CR_Flag='"+obj.getCr_flag()+"',APAccountRef_Key="+obj.getApAccountRefKey()+",");
-				  query.append("VendorRef_Key="+obj.getVendRefKey()+",TermsRef_Key="+obj.getTermsRefKey()+",Amount="+obj.getAmount()+",RefNumber='"+obj.getRefNumber()+"',[Memo]='"+obj.getMemo()+"',");	
+				  query.append("Update Bill set TxnDate='"+sdf.format(obj.getTxnDate())+"' , CR_Flag='"+obj.getCr_flag()+"',APAccountRef_Key="+obj.getApAccountRefKey()+",");
+
+				  if(obj.getDueDate()!=null)
+					query.append(" DueDate='"+sdf.format(obj.getDueDate())+"' , " );
+
+					query.append("VendorRef_Key="+obj.getVendRefKey()+",TermsRef_Key="+obj.getTermsRefKey()+",Amount="+obj.getAmount()+",RefNumber='"+obj.getRefNumber()+"',[Memo]='"+obj.getMemo()+"',");
 				  query.append("BillNo='"+obj.getBillNo()+"',IsPaid='"+obj.getIsPaid()+"',Bill_Source='"+obj.getBillSource()+"',QBRefNo='"+obj.getQbRefNUmber()+"',Allocated='"+obj.getAllocated()+"',");
 				  query.append("Allocation_Method='"+obj.getAllocationMethod()+"',Allocation_Type='"+obj.getAllocatedType()+"',AssetIns_RecNo="+obj.getAssetInsRecNo()+",Allocation_Amount="+obj.getAllocationAmount()+",Status='"+obj.getStatus()+"',");
 				  query.append("webUserId="+webUserID+",editedFromOnline='"+editedFromOnline+"', VAT_AMOUNT="+ obj.getVatAmount() + " where Rec_No="+obj.getRecNo()+"");
@@ -255,43 +266,52 @@ public class BillDataQuerry {
 				  return query.toString();
 			}
 			
-			public String getNextRecordbill(int recNo,int webUserID,boolean seeTrasction)
+			public String getNextRecordbill(int recNo,int webUserID,boolean seeTrasction,String crFlag)
 			{
 				  query=new StringBuffer();
 				  query.append("SELECT TOP 1 * FROM Bill   WHERE rec_no >"+recNo+"");
 				  if (webUserID > 0 && !seeTrasction)
 				  query.append(" and webuserid="+webUserID+" ");
+				if(!crFlag.equals(""))
+					query.append(" and CR_Flag='"+crFlag+"'");
 				  query.append(" ORDER BY rec_no ");
 				  return query.toString();
 			}
 			
-			public String getPreviousRecordBill(int recNo,int webUserID,boolean seeTrasction)
+			public String getPreviousRecordBill(int recNo,int webUserID,boolean seeTrasction,String crFlag)
 			{
 				  query=new StringBuffer();
-				  query.append("SELECT TOP 1 * FROM Bill   WHERE rec_no <"+recNo+" ");
+				  query.append("SELECT TOP 1 * FROM Bill WHERE rec_no <"+recNo+" ");
 				  if (webUserID > 0 && !seeTrasction)
-				  query.append(" and webuserid="+webUserID+" ");
+				  query.append(" and webuserid="+webUserID);
+				  if(!crFlag.equals(""))
+					  query.append(" and CR_Flag='"+crFlag+"'");
+
 				  query.append(" ORDER BY rec_no  desc");
 				  return query.toString();
 			}
 			
-			public String getFirstRecordBill(int webUserID,boolean seeTrasction)
+			public String getFirstRecordBill(int webUserID,boolean seeTrasction,String crFlag)
 			{
 				  query=new StringBuffer();
-				  query.append("SELECT TOP 1 * FROM Bill  ");
+				  query.append("SELECT TOP 1 * FROM Bill where 1=1 ");
 				  if (webUserID > 0 && !seeTrasction)
-				  query.append(" where webuserid="+webUserID+" ");
+				  query.append(" and webuserid="+webUserID);
+				if(!crFlag.equals(""))
+					query.append(" and CR_Flag='"+crFlag+"'");
 				  query.append(" ORDER BY rec_no");
 				  return query.toString();
 			}
 			
 			
-			public String getLastRecordBill(int webUserID,boolean seeTrasction)
+			public String getLastRecordBill(int webUserID,boolean seeTrasction,String crFlag)
 			{
 				  query=new StringBuffer();
-				  query.append("SELECT TOP 1 * FROM Bill ");
+				  query.append("SELECT TOP 1 * FROM Bill where 1=1 ");
 				  if (webUserID > 0 && !seeTrasction)
-				  query.append(" where webuserid="+webUserID+" ");
+				  query.append(" and webuserid="+webUserID+" ");
+				if(!crFlag.equals(""))
+					query.append(" and CR_Flag='"+crFlag+"'");
 				  query.append(" ORDER BY rec_no desc");
 				  return query.toString();
 			}

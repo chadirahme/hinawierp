@@ -118,7 +118,6 @@ public class CreditBillReportViewModel {
                 BillReportModel tmp=i.next();
                 if(tmp.getBillNo().toLowerCase().contains(filter.getBillNo().toLowerCase())
                         &&tmp.getTxnDate().toLowerCase().contains(filter.getTxnDate().toLowerCase())&&
-                        tmp.getDueDate().toLowerCase().contains(filter.getIrLocalNo().toLowerCase())&&
                         tmp.getVendor().toLowerCase().contains(filter.getDueDate().toLowerCase())
                         &&(tmp.getStatus()).toLowerCase().contains(filter.getStatus().toLowerCase())&&
                         (tmp.getMainMemo()).toLowerCase().contains(filter.getMainMemo().toLowerCase())&&

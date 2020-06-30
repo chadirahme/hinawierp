@@ -2125,7 +2125,7 @@ public class CreditBillViewModel
 	{
 		try
 		{
-			objCheque=billData.navigationBill(editBillKey,webUserID,seeTrasction,navigation,actionTYpe);
+			objCheque=billData.navigationBill(editBillKey,webUserID,seeTrasction,navigation,actionTYpe,"");
 			lblExpenses="Expenses 0.00";
 			lblCheckItems="Items 0.00";
 			if(objCheque!=null && objCheque.getRecNo()>0)

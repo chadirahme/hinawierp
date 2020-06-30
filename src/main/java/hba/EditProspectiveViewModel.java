@@ -621,8 +621,9 @@ public class EditProspectiveViewModel {
 			String[] cc =null;
 			String[] to =null;
 			String[] bcc =null;							
-			String toMail="eng.chadi@gmail.com";//"hinawi@eim.ae,aya@hinawi.ae,chadi@hinawi.ae";//"eng.chadi@gmail.com";				
-			to= toMail.split(",");	
+			//String toMail="eng.chadi@gmail.com";//"hinawi@eim.ae,aya@hinawi.ae,chadi@hinawi.ae";//"eng.chadi@gmail.com";
+			String toMail="hinawi@eim.ae,aya@hinawi.ae,walaa@hinawi.ae,chadi@hinawi.ae";//"eng.chadi@gmail.com";
+			to= toMail.split(",");
 					
 			MailClient mc = new MailClient();
 			String subject="";

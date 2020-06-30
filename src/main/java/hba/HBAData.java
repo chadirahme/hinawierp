@@ -1510,6 +1510,8 @@ public class HBAData {
 			VATCodeModel obj = new VATCodeModel();
 			if(HbaEnum.VatForms.CashInvoice.getValue()==formId)
 			rs = db.executeNonQuery(query.getCashInvoiceQBVATTransactionQuery(recNo));
+			else if(HbaEnum.VatForms.CreditMemo.getValue()==formId)
+				rs = db.executeNonQuery(query.getCreditMemoLineQBVATTransactionQuery(recNo));
 			else
 				rs = db.executeNonQuery(query.getCreditInvoiceQBVATTransactionQuery(recNo));
 			while (rs.next()) {
@@ -2501,6 +2503,23 @@ public class HBAData {
 		return MaxRecNo;
 	}
 
+	public int GetNewCreditMemoRecNoQuery() {
+		int MaxRecNo = 1;
+
+		HBAQueries query = new HBAQueries();
+		ResultSet rs = null;
+		try {
+			rs = db.executeNonQuery(query.GetNewCreditMemoRecNoQuery());
+			while (rs.next()) {
+				MaxRecNo = rs.getInt("MaxRecNo") + 1;
+			}
+		} catch (Exception ex) {
+			logger.error("error in HBAData---GetNewCreditMemoRecNoQuery-->", ex);
+		}
+		return MaxRecNo;
+	}
+
+
 	public CompSetupModel getDefaultSetUpInfoForCashInvoice() {
 		CompSetupModel obj = new CompSetupModel();
 
@@ -2605,6 +2624,30 @@ public class HBAData {
 			result = db.executeUpdateQuery(query.addNewCreditInvoiceQuery(obj,webUserID));
 		} catch (Exception ex) {
 			logger.error("error in HBAData---addCreditCashInvoice-->", ex);
+		}
+		return result;
+	}
+
+	public int addNewCreditMemo(CashInvoiceModel obj, int webUserID) {
+		int result = 0;
+
+		HBAQueries query = new HBAQueries();
+		try {
+			result = db.executeUpdateQuery(query.addNewCreditMemoQuery(obj,webUserID));
+		} catch (Exception ex) {
+			logger.error("error in HBAData---addNewCreditMemo-->", ex);
+		}
+		return result;
+	}
+
+	public int updateCreditMemo(CashInvoiceModel obj, int webUserID) {
+		int result = 0;
+
+		HBAQueries query = new HBAQueries();
+		try {
+			result = db.executeUpdateQuery(query.updateCreditMemoQuery(obj, webUserID));
+		} catch (Exception ex) {
+			logger.error("error in HBAData---updateCreditMemo-->", ex);
 		}
 		return result;
 	}
@@ -2814,6 +2857,21 @@ public class HBAData {
 
 	}
 
+	public int addNewCreditMemoLineGridItems(CashInvoiceGridData obj, int RecNo) {
+		int result = 0;
+
+		HBAQueries query = new HBAQueries();
+		try {
+			result = db.executeUpdateQuery(query
+					.addNewCreditMemoLineGridItemsQuery(obj, RecNo));
+		} catch (Exception ex) {
+			logger.error("error in HBAData---addNewCreditMemoLineGridItems-->", ex);
+		}
+		return result;
+
+	}
+
+
 	public int deleteCashInvoiceGridItems(int RecNo) {
 		int result = 0;
 
@@ -2837,6 +2895,21 @@ public class HBAData {
 					.deleteCreditInvoiceGridItemsQuery(RecNo));
 		} catch (Exception ex) {
 			logger.error("error in HBAData---deleteCreditInvoiceGridItems-->",
+					ex);
+		}
+		return result;
+
+	}
+
+	public int deleteCreditMemoGridItems(int RecNo) {
+		int result = 0;
+
+		HBAQueries query = new HBAQueries();
+		try {
+			result = db.executeUpdateQuery(query
+					.deleteCreditMemoGridItemsQuery(RecNo));
+		} catch (Exception ex) {
+			logger.error("error in HBAData---deleteCreditMemoGridItems-->",
 					ex);
 		}
 		return result;
@@ -3161,6 +3234,25 @@ public class HBAData {
 
 		return hasSerialNumber;
 	}
+
+	public boolean checkIfSerialNumberIsDuplicateForCreditMemo(
+			String SerialNumber, int recNo) {
+		boolean hasSerialNumber = false;
+
+		HBAQueries query = new HBAQueries();
+		ResultSet rs = null;
+		try {
+			rs = db.executeNonQuery(query.checkIfSerialNumberIsDuplicateForCreditMemo(SerialNumber, recNo));
+			while (rs.next()) {
+				hasSerialNumber = true;
+			}
+		} catch (Exception ex) {
+			logger.error("error in HBAData---checkIfSerialNumberIsDuplicateForCreditMemo-->",ex);
+		}
+
+		return hasSerialNumber;
+	}
+
 
 	public List<CustomerModel> getOtherNameList() {
 		List<CustomerModel> lstOtherNames = new ArrayList<CustomerModel>();
@@ -3933,6 +4025,53 @@ public class HBAData {
 
 	}
 
+	public List<CashInvoiceSalesReportModel> getCreditMemoeReport(
+			Date fromDate, Date toDate, int webUserID) {
+		List<CashInvoiceSalesReportModel> lst = new ArrayList<CashInvoiceSalesReportModel>();
+		HBAQueries query = new HBAQueries();
+		ResultSet rs = null;
+		double totalSale = 0;
+		double paidAmount = 0;
+		try {
+			rs = db.executeNonQuery(query.getCreditMemoeReportQuery(fromDate, toDate, webUserID));
+			while (rs.next()) {
+				CashInvoiceSalesReportModel obj = new CashInvoiceSalesReportModel();
+				obj.setCustomerName(rs.getString("customerName") == null ? ""
+						: rs.getString("customerName"));
+				obj.setDepositeTo(rs.getString("depositaccount") == null ? ""
+						: rs.getString("depositaccount"));
+				obj.setSalesRep(rs.getString("salesrepname") == null ? "" : rs
+						.getString("salesrepname"));
+				obj.setInvoiceNumber(rs.getString("invoiceno") == null ? ""
+						: rs.getString("invoiceno"));
+				obj.setInvoiceDateStr(new SimpleDateFormat("dd-MM-yyyy")
+						.format(rs.getDate("invoiceDate")));
+
+				obj.setStatus(rs.getString("status") == null ? "" : rs
+						.getString("status"));
+				obj.setInvoiceAmount(rs.getDouble("invamount"));
+				obj.setVatAmount(rs.getDouble("VAT_AMOUNT"));
+				obj.setInvoiceSource(rs.getString("CreditMemo_Source") == null ? ""
+						: rs.getString("CreditMemo_Source"));
+				obj.setNotes(rs.getString("notes") == null ? "" : rs
+						.getString("notes"));
+				obj.setRecNO(rs.getInt("recNo"));
+				obj.setWebuserId(rs.getInt("webUserID"));
+				if (obj.getStatus().equalsIgnoreCase("C")) {
+					obj.setStatus("Created");
+				} else if (obj.getStatus().equalsIgnoreCase("P")) {
+					obj.setStatus("Paid");
+				}
+				lst.add(obj);
+			}
+		} catch (Exception ex) {
+			logger.error("error in HBAData---getCreditMemoeReport-->", ex);
+		}
+
+		return lst;
+
+	}
+
 	public List<String> getLstBarcodes(String itemKey) {
 		List<String> lstBarcode = new ArrayList<String>();
 
@@ -4492,6 +4631,79 @@ public class HBAData {
 		return obj;
 	}
 
+	public CashInvoiceModel getCreditMemoByID(int recNo)
+	{
+		CashInvoiceModel obj = new CashInvoiceModel();
+
+		HBAQueries query = new HBAQueries();
+		ResultSet rs = null;
+		try {
+			rs = db.executeNonQuery(query.getCreditMemoByID(recNo));
+			while (rs.next()) {
+				obj.setRecNo(rs.getInt("recNo"));
+				obj.setTxnId(rs.getString("txnId"));
+				obj.setCustomerRefKey(rs.getInt("customerRefKey"));
+				obj.setClassRefKey(rs.getInt("classRefKey"));
+				// obj.setDepositAccountRefKey(rs.getInt("depositAccountRefKey"));
+				obj.setTemplateRefKey(rs.getInt("templateRefKey"));
+				obj.setTxnDate(rs.getDate("txnDate"));
+				obj.setInvoiceSaleNo(rs.getString("refNUmber"));
+				obj.setBillAddress1(rs.getString("billaddress1") == null ? ""
+						: rs.getString("billaddress1"));
+				obj.setBillAddress2(rs.getString("billaddress2") == null ? ""
+						: rs.getString("billaddress2"));
+				obj.setBillAddress3(rs.getString("billaddress3") == null ? ""
+						: rs.getString("billaddress3"));
+				obj.setBillAddress4(rs.getString("billaddress4") == null ? ""
+						: rs.getString("billaddress4"));
+				obj.setBillAddress5(rs.getString("billaddress5") == null ? ""
+						: rs.getString("billaddress5"));
+				obj.setBillAddressCity(rs.getString("billaddresscity") == null ? ""
+						: rs.getString("billaddresscity"));
+				obj.setBillAddressState(rs.getString("billaddressState") == null ? ""
+						: rs.getString("billaddressState"));
+				obj.setBillAddressPostalCode(rs
+						.getString("billaddressPostalCode") == null ? "" : rs
+						.getString("billaddressPostalCode"));
+				obj.setBillAddressCountry(rs.getString("billaddressCountry") == null ? ""
+						: rs.getString("billaddressCountry"));
+				obj.setBillAddressNote(rs.getString("billAddressNote") == null ? ""
+						: rs.getString("billAddressNote"));
+
+				obj.setSalesRefKey(rs.getInt("salesRefKey"));
+
+				obj.setMemo(rs.getString("memo") == null ? "" : rs
+						.getString("memo"));
+				obj.setCustomerMsgRefKey(rs.getInt("customermsgRefKey"));
+				obj.setIsToBePrinted(rs.getString("istobePrinted") == null ? ""
+						: rs.getString("istobePrinted"));
+				obj.setIsToEmailed(rs.getString("istoEmailed") == null ? ""
+						: rs.getString("istoEmailed"));
+
+				obj.setAmount(rs.getDouble("amount"));
+				obj.setStatus(rs.getString("status") == null ? "" : rs
+						.getString("status"));
+				obj.setDescriptionHIDE(rs.getString("descriptionHIde") == null ? ""
+						: rs.getString("descriptionHIde"));
+				obj.setQtyHIDE(rs.getString("qtyHide") == null ? "" : rs
+						.getString("qtyHide"));
+				obj.setRateHIDE(rs.getString("rateHide") == null ? "" : rs
+						.getString("rateHide"));
+				obj.setClassHIDE(rs.getString("classHide") == null ? "" : rs
+						.getString("classHide"));
+				obj.setSendViaReffKey(rs.getInt("sendviaReffKey"));
+
+				obj.setAccountRefKey(rs.getInt("ARAccountRefKey"));
+
+				obj.setPoNumber(rs.getString("ponumber"));
+
+			}
+		} catch (Exception ex) {
+			logger.error("error in HBAData---getCreditMemoByID-->", ex);
+		}
+		return obj;
+	}
+
 	public List<CashInvoiceGridData> getCreditInvoiceGridDataByID(
 			int cashInvoiceId) {
 		List<CashInvoiceGridData> lst = new ArrayList<CashInvoiceGridData>();
@@ -4532,6 +4744,41 @@ public class HBAData {
 			}
 		} catch (Exception ex) {
 			logger.error("error in HBAData---getCreditInvoiceGridDataByID-->",
+					ex);
+		}
+		return lst;
+	}
+
+	public List<CashInvoiceGridData> getCreditMemoLineGridDataByID(
+			int cashInvoiceId) {
+		List<CashInvoiceGridData> lst = new ArrayList<CashInvoiceGridData>();
+
+		HBAQueries query = new HBAQueries();
+		ResultSet rs = null;
+		try {
+			rs = db.executeNonQuery(query.getCreditMemoLineGridDataByID(cashInvoiceId));
+			while (rs.next()) {
+				CashInvoiceGridData obj = new CashInvoiceGridData();
+				obj.setRecNo(rs.getInt("recNo"));
+				obj.setLineNo(rs.getInt("lineNo"));
+				obj.setItemRefKey(rs.getInt("itemrefKey"));
+				obj.setInvoiceDescription(rs.getString("description"));
+				obj.setInvoiceQty((int) rs.getDouble("quantity"));
+				obj.setInvoiceRate(rs.getDouble("rate"));
+				obj.setAvgCost(rs.getDouble("avgCost"));
+				obj.setRatePercent(rs.getDouble("ratePercent"));
+
+				obj.setSelectedClass(rs.getInt("classrefKey"));
+				obj.setInvoiceAmmount(rs.getDouble("amount"));
+				obj.setIsTaxable(rs.getString("isTaxable"));
+				obj.setInventorySiteKey(rs.getInt("inventorySiteKey"));
+				obj.setVatKey(rs.getInt("Vat_Key"));
+				obj.setVatAmount(rs.getDouble("Vat_ItemAmount"));
+				lst.add(obj);
+
+			}
+		} catch (Exception ex) {
+			logger.error("error in HBAData---getCreditMemoLineGridDataByID-->",
 					ex);
 		}
 		return lst;
@@ -4670,6 +4917,46 @@ public class HBAData {
 						: rs.getString("transformD"));
 
 			}
+		} catch (Exception ex) {
+			logger.error(
+					"error in HBAData---navigationCreditInvoiceInvoice-->", ex);
+		}
+		return obj;
+	}
+
+	public CashInvoiceModel navigationCreditMemo(int cashInvoiceId,
+														   int webUserID,boolean seeTrasction, String navigation, String actionTYpe) {
+		CashInvoiceModel obj = new CashInvoiceModel();
+		int recNo=0;
+		HBAQueries query = new HBAQueries();
+		ResultSet rs = null;
+		try {
+			if (navigation.equalsIgnoreCase("prev")
+					&& (actionTYpe.equalsIgnoreCase("edit") || actionTYpe
+					.equalsIgnoreCase("view"))) {
+				rs = db.executeNonQuery(query.getPreviousRecordCreditMemo(
+						cashInvoiceId, webUserID,seeTrasction));
+			} else if (navigation.equalsIgnoreCase("next")
+					&& (actionTYpe.equalsIgnoreCase("edit") || actionTYpe
+					.equalsIgnoreCase("view"))) {
+				rs = db.executeNonQuery(query.getNextRecordCreditMemo(
+						cashInvoiceId, webUserID,seeTrasction));
+			} else if (navigation.equalsIgnoreCase("next")
+					&& actionTYpe.equalsIgnoreCase("create")) {
+				rs = db.executeNonQuery(query
+						.getFirstRecordCreditMemo(webUserID,seeTrasction));
+			} else if (navigation.equalsIgnoreCase("prev")
+					&& actionTYpe.equalsIgnoreCase("create")) {
+				rs = db.executeNonQuery(query
+						.getLastRecordCreditMemo(webUserID,seeTrasction));
+			}
+			while (rs.next()) {
+				recNo = rs.getInt("recNo");
+			}
+
+			obj= getCreditMemoByID(recNo);
+
+
 		} catch (Exception ex) {
 			logger.error(
 					"error in HBAData---navigationCreditInvoiceInvoice-->", ex);

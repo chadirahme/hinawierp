@@ -518,7 +518,7 @@ public class BillData {
 	}
 	
 	
-	public CreditBillModel navigationBill(int billKey,int webUserID,boolean seeTrasction,String navigation,String actionTYpe)
+	public CreditBillModel navigationBill(int billKey,int webUserID,boolean seeTrasction,String navigation,String actionTYpe , String crFlag)
 	{
 		CreditBillModel obj=new CreditBillModel();
 		
@@ -528,19 +528,19 @@ public class BillData {
 		{
 			if(navigation.equalsIgnoreCase("prev") && (actionTYpe.equalsIgnoreCase("edit") || actionTYpe.equalsIgnoreCase("view")))
 			{
-				rs=db.executeNonQuery(query.getPreviousRecordBill(billKey,webUserID,seeTrasction));
+				rs=db.executeNonQuery(query.getPreviousRecordBill(billKey,webUserID,seeTrasction,crFlag));
 			}
 			else if(navigation.equalsIgnoreCase("next")&& (actionTYpe.equalsIgnoreCase("edit") || actionTYpe.equalsIgnoreCase("view")))
 			{
-				rs=db.executeNonQuery(query.getNextRecordbill(billKey,webUserID,seeTrasction));
+				rs=db.executeNonQuery(query.getNextRecordbill(billKey,webUserID,seeTrasction,crFlag));
 			}
 			else if(navigation.equalsIgnoreCase("next")&& actionTYpe.equalsIgnoreCase("create"))
 			{
-				rs=db.executeNonQuery(query.getFirstRecordBill(webUserID,seeTrasction));
+				rs=db.executeNonQuery(query.getFirstRecordBill(webUserID,seeTrasction,crFlag));
 			}
 			else if(navigation.equalsIgnoreCase("prev")&& actionTYpe.equalsIgnoreCase("create"))
 			{
-				rs=db.executeNonQuery(query.getLastRecordBill(webUserID,seeTrasction));
+				rs=db.executeNonQuery(query.getLastRecordBill(webUserID,seeTrasction,crFlag));
 			}
 			while(rs.next())
 			{
@@ -675,7 +675,7 @@ public class BillData {
 			{
 				BillReportModel obj=new BillReportModel();
 				obj.setTxnDate(new SimpleDateFormat("dd-MM-yyyy").format(rs.getDate("txnDate")));
-				obj.setDueDate(new SimpleDateFormat("dd-MM-yyyy").format(rs.getDate("dueDate")));
+				//obj.setDueDate(new SimpleDateFormat("dd-MM-yyyy").format(rs.getDate("dueDate")));
 				obj.setWebUserId(rs.getInt("webuserID"));
 				String stat=rs.getString("status")==null?"":rs.getString("status");
 				if(stat.equalsIgnoreCase("C"))

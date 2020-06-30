@@ -211,7 +211,7 @@ public class CustomerData {
 						: rs1.getString("AuditorName"));
 				obj.setAccountantName(rs1.getString("AccountantName") == null ? ""
 						: rs1.getString("AccountantName"));
-				obj.setHowdidYouknowus((int) rs1.getFloat("HowKnowRefKey"));							
+				//obj.setHowdidYouknowus((int) rs1.getFloat("HowKnowRefKey"));
 			}
 		}
 

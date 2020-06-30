@@ -751,6 +751,17 @@ public class HBAQueries {
 		return query.toString();
 	}
 
+	public String getCreditMemoLineQBVATTransactionQuery(int recNo) {
+		query = new StringBuffer();
+		query.append(" Select CreditMemoLine.Vat_Key,Vat_ServiceItem,Sum(Vat_ItemAmount) As VatItemAmount,Sum(CreditMemoLine.Amount) As VatCalcualtedFromAmt From CreditMemoLine " +
+				" Inner Join VATCodeList On CreditMemoLine.Vat_Key=VATCodeList.Vat_Key " +
+				" Where  RecNo  = " + recNo);
+		query.append(" Group By CreditMemoLine.Vat_Key,Vat_ServiceItem");
+
+		return query.toString();
+	}
+
+
 	public String getItemReceiptQBVATTransactionQuery(int recNo) {
 		query = new StringBuffer();
 		query.append(" Select IRExpenses.Vat_Key,Vat_ServiceItem,Sum(Vat_ExpAmount) As VatItemAmount,Sum(IRExpenses.Amount) As VatCalcualtedFromAmt,'EXP' As VatMemo From IRExpenses  Inner Join VATCodeList On IRExpenses.Vat_Key=VATCodeList.Vat_Key " +
@@ -1446,6 +1457,78 @@ public class HBAQueries {
 
 	}
 
+	public String addNewCreditMemoQuery(CashInvoiceModel obj, int webUserID) {
+		query = new StringBuffer();
+		query.append("Insert into CreditMemo (RecNo, TxnID, CustomerRefKey, ClassRefKey,ARAccountRefKey, TemplateRefKey,");
+		query.append(" TxnDate,RefNumber,BillAddress1,");
+		query.append("BillAddress2,BillAddress3,BillAddress4,BillAddress5,BillAddressCity,BillAddressState,BillAddressPostalCode,BillAddressCountry,BillAddressNote,");
+		query.append("IsPending,PONumber,SendViaReffKey,SalesRefKey,Memo,memoArabic,CustomerMsgRefKey,IsToBePrinted,IsToEmailed,");
+		query.append("Amount,MemoHide,DescriptionARHide,DescriptionHIDE,QtyHIDE,RateHIDE,ClassHIDE,status,CreditMemo_Source,UserID,DATECREATED,TXNTIME,VAT_AMOUNT,ONLINEFLAG,WEBUSERID)");
+		query.append(" Values(" + obj.getRecNo() + "," + " Null , "
+				+ obj.getCustomerRefKey() + "," + obj.getClassRefKey() + ","
+				+ obj.getAccountRefKey() + "," + obj.getTemplateRefKey() + ",");
+		query.append(" '" + sdf.format(obj.getTxnDate()) + "','"
+				+ obj.getRefNumber() + "' ,' " + obj.getBillAddress1()
+				+ "' , '" + obj.getBillAddress2() + "' , '"
+				+ obj.getBillAddress3() + "' , '" + obj.getBillAddress4()
+				+ "' , '" + obj.getBillAddress5() + "' , ");
+		query.append(" '" + obj.getBillAddressCity() + "','"
+				+ obj.getBillAddressState() + "' , '"
+				+ obj.getBillAddressPostalCode() + "' , '"
+				+ obj.getBillAddressCountry() + "' , '"
+				+ obj.getBillAddressNote() + "' , " );
+
+		query.append(" '" + obj.getIsPending() + "' , '" + obj.getPoNumber()
+				+ "' , 0, " + + obj.getSalesRefKey() + ", '" + obj.getMemo().replace("'", "`") + "' , '' , 0 , 'Y' , 'N' ,");
+
+		query.append(obj.getAmount()+ ", 'N', 'N','N','N','N','N','A', 'CMS'," + webUserID + ", getdate() , getdate() , " + obj.getVatAmount() + ", 'Y'," + webUserID);
+		query.append(")");
+		query.append(" ");
+		return query.toString();
+
+	}
+
+	public String updateCreditMemoQuery(CashInvoiceModel obj, int webUserID) {
+		// DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		String editedFromOnline = "Y";
+		String invoiceSource = "CMS";
+		query = new StringBuffer();
+		query.append("Update CreditMemo set CustomerRefKey="
+				+ obj.getCustomerRefKey() + ",ClassRefKey="
+				+ obj.getClassRefKey() + ",ARAccountRefKey="
+				+ obj.getAccountRefKey() + ",TemplateRefKey="
+				+ obj.getTemplateRefKey() + ",TxnDate='"
+				+ sdf.format(obj.getTxnDate()) + "',RefNumber='"
+				+ obj.getRefNumber() + "',BillAddress1='"
+				+ obj.getBillAddress1() + "',");
+		query.append("BillAddress2='" + obj.getBillAddress2()
+				+ "',BillAddress3='" + obj.getBillAddress3()
+				+ "',BillAddress4='" + obj.getBillAddress4()
+				+ "',BillAddress5='" + obj.getBillAddress5()
+				+ "',BillAddressCity='" + obj.getBillAddressCity()
+				+ "',BillAddressState='" + obj.getBillAddressState()
+				+ "',BillAddressPostalCode='" + obj.getBillAddressPostalCode()
+				+ "',BillAddressCountry='" + obj.getBillAddressCountry() + "',");
+		query.append("BillAddressNote='" + obj.getBillAddressNote() + "',");
+
+		query.append(""
+				+ "IsPending='" + obj.getIsPending() + "',PONumber='"
+				+ obj.getPoNumber()
+				+ "',SalesRefKey=" + obj.getSalesRefKey() + ",");
+
+		query.append("Memo='" + obj.getMemo().replace("'", "`") + "',CustomerMsgRefKey="
+				+ obj.getCustomerMsgRefKey() + ",IsToBePrinted='"
+				+ obj.getIsToBePrinted() + "',IsToEmailed='"
+				+ obj.getIsToEmailed() + "',");
+		query.append("Amount=" + obj.getAmount()
+				+ ",SendViaReffKey=" + obj.getSendViaReffKey() + ",");
+
+		query.append("ModifiedUserID=" + webUserID + ",DATEMODIFIED=getdate() , VAT_AMOUNT= " + obj.getVatAmount()
+				 + "  where recNO=" + obj.getRecNo());
+		return query.toString();
+
+	}
+
 	// cash Invoice By Iqbal
 
 	// Save New Cheque Payment
@@ -1458,6 +1541,12 @@ public class HBAQueries {
 	public String GetNewCreditInvoiceRecNoQuery() {
 		query = new StringBuffer();
 		query.append(" SELECT max(RecNo) as MaxRecNo from INVOICE");
+		return query.toString();
+	}
+
+	public String GetNewCreditMemoRecNoQuery() {
+		query = new StringBuffer();
+		query.append(" SELECT max(RecNo) as MaxRecNo from CreditMemo");
 		return query.toString();
 	}
 
@@ -1483,6 +1572,13 @@ public class HBAQueries {
 		query.append(" Delete from INVOICELINE  Where RecNo=" + RecNo);
 		return query.toString();
 	}
+
+	public String deleteCreditMemoGridItemsQuery(int RecNo) {
+		query = new StringBuffer();
+		query.append(" Delete from CreditMemoLine  Where RecNo=" + RecNo);
+		return query.toString();
+	}
+
 
 	public String addNewCashInvoiceGridItemsQuery(CashInvoiceGridData obj,
 			int RecNo) {
@@ -1576,6 +1672,48 @@ public class HBAQueries {
 		return query.toString();
 	}
 
+	public String addNewCreditMemoLineGridItemsQuery(CashInvoiceGridData obj,
+													int RecNo) {
+		query = new StringBuffer();
+		String desc = "";
+		if (obj.getInvoiceDescription() != null) {
+			desc = obj.getInvoiceDescription().replace("'", "`");
+		}
+		if(FormatDateText.isEmpty(obj.getInvoicearabicDescription()))
+			obj.setInvoicearabicDescription("");
+		query.append(" Insert into CreditMemoLine (RecNo,[LineNo],ItemRefKey,Description,Quantity,Rate,AvgCost,RatePercent,ClassRefKey,Amount,IsTaxable,InventorySiteKey," +
+				"Vat_Key, Vat_ItemAmount)");
+		query.append(" values(" + RecNo + ", '" + obj.getLineNo() + "' , '"
+				+ obj.getSelectedItems().getRecNo() + "', '" + desc + "', "
+				+ obj.getInvoiceQty() + " , " + obj.getInvoiceRate()
+				+ " , '" + obj.getAvgCost() + "' , '" + obj.getRatePercent()
+				+ "', ");
+		if (obj.getSelectedInvcCutomerGridInvrtyClassNew() != null)
+			query.append(obj.getSelectedInvcCutomerGridInvrtyClassNew()
+					.getRecNo());
+		else
+			query.append("0");
+		query.append(" ," + obj.getInvoiceAmmount() + ", '"
+				+ obj.getIsTaxable()
+				 + "' , ");
+		if (obj.getSelectedInvcCutomerGridInvrtySiteNew() != null) {
+			query.append(obj.getSelectedInvcCutomerGridInvrtySiteNew().getRecNo());
+		} else
+			query.append(" 0 ");
+
+		if(obj.getSelectedVatCode()!=null)
+			query.append(", "  + obj.getSelectedVatCode().getVatKey() + ", "  + obj.getVatAmount());
+		else
+			query.append(",0,0");
+
+		query.append(")");
+
+
+		query.append(" ");
+
+		return query.toString();
+	}
+
 	/**
 	 * Gets List of Barcodes or the barcode of a selected itemKey
 	 * 
@@ -1621,6 +1759,13 @@ public class HBAQueries {
 		query.append(" Select * from Invoice Where RefNumber='" + serialNumber + "' and recno !=" + recNO);
 		return query.toString();
 	}
+
+	public String checkIfSerialNumberIsDuplicateForCreditMemo(String serialNumber, int recNO) {
+		query = new StringBuffer();
+		query.append(" Select * from CreditMemo Where RefNumber='" + serialNumber + "' and RecNo <>" + recNO);
+		return query.toString();
+	}
+
 
 	public String getOtherListQuery() {
 		query = new StringBuffer();
@@ -2120,6 +2265,24 @@ public class HBAQueries {
 		return query.toString();
 	}
 
+	public String getCreditMemoeReportQuery(Date fromDate, Date toDate, int webUserID)
+	{
+
+		query = new StringBuffer();
+		query.append("SELECT QBLists.FullName AS CustomerName,Accounts.Name AS DepositAccount,SalesRep.Initial AS SalesRepName,CreditMemo.RefNumber As InvoiceNo, CreditMemo.CreditMemo_Source, ");
+		query.append(" CreditMemo.TxnDate As InvoiceDate,CreditMemo.status,CreditMemo.Amount As InvAmount,CreditMemo.VAT_AMOUNT, ");
+		query.append(" CreditMemo.Memo AS Notes,CreditMemo.RecNo,CreditMemo.webuserId  FROM (((CreditMemo LEFT JOIN QBLists  ON CreditMemo.CustomerRefKey    = QBLists.RecNo)  LEFT JOIN Accounts ON CreditMemo.ARAccountRefKey  = Accounts.REC_NO) ");
+		query.append(" LEFT JOIN SalesRep ON CreditMemo.SalesRefKey      = SalesRep.SalesRep_Key)  where CreditMemo.TxnDate Between '"
+				+ sdf.format(fromDate)
+				+ "' And '"
+				+ sdf.format(toDate)
+				+ "' and CreditMemo.CreditMemo_Source='CMS'");
+		if (webUserID > 0)
+			query.append(" and CreditMemo.webuserID=" + webUserID + "");
+		query.append(" Order by CreditMemo.RecNo Desc, CreditMemo.TxnDate");
+		return query.toString();
+	}
+
 	public String getAccountsForCreditInvoice() {
 		query = new StringBuffer();
 		query.append("SELECT Accounts.AccountName As [Name], AccountType ,   SubLevel  ,   Rec_No , ListID,FullName FROM Accounts Inner join   AccountType on AccountType.TypeName = Accounts.AccountType " +
@@ -2210,6 +2373,13 @@ public class HBAQueries {
 		return query.toString();
 	}
 
+	public String getCreditMemoByID(int recNo) {
+		query = new StringBuffer();
+		query.append("select * from CreditMemo where recNo=" + recNo + "");
+		return query.toString();
+	}
+
+
 	public String getCreditInvoiceGridDataByID(int cashInvoiceKey) {
 		query = new StringBuffer();
 		query.append("SELECT InvoiceLine.*,QBItems.FullName AS ItemName,QBItems.ArFullName as ItemNameAR,QBItems.ItemType,QBItems.ListID,QBItems.IncomeAccountRef, ");
@@ -2224,6 +2394,20 @@ public class HBAQueries {
 		query.append(" Order By [LineNo] ");
 		return query.toString();
 	}
+
+	public String getCreditMemoLineGridDataByID(int cashInvoiceKey) {
+		query = new StringBuffer();
+		query.append("SELECT CreditMemoLine.*,QBItems.FullName AS ItemName,QBItems.ArFullName as ItemNameAR,QBItems.ItemType,QBItems.ListID,QBItems.IncomeAccountRef, ");
+		query.append("Class.FullName AS ClassName,Class.ArFullName As ClassNameAR, ");
+		query.append("InventorySiteList.SiteName as InventorySite,InventorySiteList.ArName as InventorySiteAR FROM ((((CreditMemoLine  ");
+		query.append("LEFT JOIN Class ON CreditMemoLine.ClassRefKey = Class.Class_Key) ");
+		query.append("LEFT JOIN QBItems ON CreditMemoLine.ItemRefKey = QBItems.Item_Key) ");
+		query.append("LEFT JOIN InventorySiteList ON InventorySiteList.ItemKey = CreditMemoLine.InventorySiteKey)) ");
+		query.append("where CreditMemoLine.RecNo=  "+ cashInvoiceKey);
+		query.append(" Order By [LineNo] ");
+		return query.toString();
+	}
+
 
 	public String getNextRecordCreditInvoice(int recNo, int webUserID,boolean seeTrasction) {
 		query = new StringBuffer();
@@ -2242,6 +2426,42 @@ public class HBAQueries {
 		if (webUserID > 0 && !seeTrasction)
 			query.append(" and webuserid=" + webUserID + " ");
 		query.append(" ORDER BY recno  desc ");
+		return query.toString();
+	}
+
+	public String getPreviousRecordCreditMemo(int recNo, int webUserID,boolean seeTrasction) {
+		query = new StringBuffer();
+		query.append("SELECT TOP 1 * FROM CreditMemo  WHERE recNO <" + recNo
+				+ " and CreditMemo_source='CMS'");
+		if (webUserID > 0 && !seeTrasction)
+			query.append(" and webuserid=" + webUserID + " ");
+		query.append(" ORDER BY recno  desc ");
+		return query.toString();
+	}
+	public String getNextRecordCreditMemo(int recNo, int webUserID,boolean seeTrasction) {
+		query = new StringBuffer();
+		query.append("SELECT TOP 1 * FROM CreditMemo  WHERE recNO >" + recNo
+				+ " and CreditMemo_source='CMS' ");
+		if (webUserID > 0 && !seeTrasction)
+			query.append(" and webuserid=" + webUserID + " ");
+		query.append(" ORDER BY recno ");
+		return query.toString();
+	}
+	public String getFirstRecordCreditMemo(int webUserID,boolean seeTrasction) {
+		query = new StringBuffer();
+		query.append("SELECT TOP 1 * FROM CreditMemo where CreditMemo_source='CMS' ");
+		if (webUserID > 0 && !seeTrasction)
+			query.append(" and webuserid=" + webUserID + " ");
+		query.append(" ORDER BY recno");
+		return query.toString();
+	}
+
+	public String getLastRecordCreditMemo(int webUserID,boolean seeTrasction) {
+		query = new StringBuffer();
+		query.append("SELECT TOP 1 * FROM CreditMemo  where CreditMemo_source='CMS' ");
+		if (webUserID > 0 && !seeTrasction)
+			query.append(" and  webuserid=" + webUserID + " ");
+		query.append(" ORDER BY recno desc");
 		return query.toString();
 	}
 

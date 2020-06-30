@@ -65,16 +65,16 @@
 								</cell>
 
 
-								<cell>
+								<cell if="${vm.CR_Flag eq ''}">
 									<label value="Bill Due Date * "></label>
 								</cell>
-								<cell>
+								<cell if="${vm.CR_Flag eq ''}">
 									<datebox value="@bind(vm.billDueDate)" format="dd/MM/yyyy" constraint="no empty: Please enter Date !"
 										width="130px"></datebox>
 								</cell>
 								<cell>
 								</cell>
-								<cell>
+								<cell if="${vm.CR_Flag eq ''}">
 									<button label="Item Receipts" onClick="@command('selectItemReceipt')" disabled="@bind(!vm.showIR)"></button>
 								</cell>
 
@@ -121,7 +121,7 @@
 							</row>
 
 
-							<row>
+							<row if="${vm.CR_Flag eq ''}">
 								<cell>
 									<label value="Terms"></label>
 								</cell>
