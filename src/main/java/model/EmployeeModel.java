@@ -77,6 +77,16 @@ public class EmployeeModel
 	private String projectName;
 	
 	private String employeeType;
+
+	public String getEmployeeSalaryType() {
+		return employeeSalaryType;
+	}
+
+	public void setEmployeeSalaryType(String employeeSalaryType) {
+		this.employeeSalaryType = employeeSalaryType;
+	}
+
+	private String employeeSalaryType;
 	private String standardNo="";
 	private int bloodType;
 	private int statusId;

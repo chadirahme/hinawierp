@@ -7,7 +7,6 @@ import javax.sql.*;
 import java.io.*;
 import org.apache.log4j.Logger;
 import com.sun.rowset.CachedRowSetImpl;
-
 public class DBHandler {
 
 	private Connection con = null;
@@ -17,24 +16,23 @@ public class DBHandler {
 	private int nColumns=0;
 	private StringWriter sw = null;
 	DataSource ds = null;
-	
 	public DBHandler(){
 		createPool();
 	}
 	
 	
-	public void createPool(String dataSource){
-		try{
-			Context ctx = new InitialContext();
-			Context envCtx = (Context) ctx.lookup("java:comp/env");
-			ds = (DataSource)envCtx.lookup(dataSource);
-		}
-		catch(Exception e) {
-			sw = new StringWriter();
-			e.printStackTrace(new PrintWriter(sw));
-			logger.error("| Services Monitor | [DBManager.connect(1)]  ClassNotFoundException:  "+sw.toString());
-		}
-	}
+//	public void createPool(String dataSource){
+//		try{
+//			Context ctx = new InitialContext();
+//			Context envCtx = (Context) ctx.lookup("java:comp/env");
+//			ds = (DataSource)envCtx.lookup(dataSource);
+//		}
+//		catch(Exception e) {
+//			sw = new StringWriter();
+//			e.printStackTrace(new PrintWriter(sw));
+//			logger.error("| Services Monitor | [DBManager.connect(1)]  ClassNotFoundException:  "+sw.toString());
+//		}
+//	}
 	
 	public void createPool(){
 		try{
@@ -49,12 +47,41 @@ public class DBHandler {
 			logger.error("| Services Monitor | [DBManager.connect(1)]  ClassNotFoundException:  "+sw.toString());
 		}
 	}
-	
+
+	public void Azureconnect() {
+		try{
+			//String connectionUrl="jdbc:mysql://localhost:3306/hinawi?characterEncoding=utf8";
+			String connectionUrl="jdbc:mysql://hinawi2.dyndns.org:3306/test?characterEncoding=utf8";
+			Properties connectionProps = new Properties();
+			connectionProps.put("user", "root");
+			connectionProps.put("password", "Mysql0nline");
+			con = DriverManager.getConnection(connectionUrl,connectionProps);
+
+//			if (ds != null) {
+//		        con = ds.getConnection();
+//			}
+//			if (mysqlDS != null) {
+//				con = mysqlDS.getConnection();
+//			}
+		}
+		catch(SQLException sqlEx)
+		{
+			sw = new StringWriter();
+			sqlEx.printStackTrace(new PrintWriter(sw));
+			logger.error("error in DBHandler---connect-->"+sw.toString());
+		}
+		catch(Exception e) {
+			sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			logger.error("| Services Monitor | [DBManager.connect(1)]  ClassNotFoundException:  "+sw.toString());
+		}
+	}
+
 	public void connect() {		
-		try{			
+		try{
 			if (ds != null) {
 		        con = ds.getConnection();
-			}								
+			}
 		}
 		catch(SQLException sqlEx)
 		{

@@ -38,7 +38,7 @@ public class BillDataQuerry {
 				  //DateFormat df = new SimpleDateFormat("dd/MM/yyyy");		 
 				  query=new StringBuffer();
 				  query.append("Insert into Bill  (Rec_No,TxnID,CR_Flag,APAccountRef_Key,VendorRef_Key,TermsRef_Key,TxnDate,DueDate,Amount,RefNumber,BillNo,[Memo],IsPaid,");	
-				  query.append(" Bill_Source,QBRefNo,Allocated,Allocation_Method,Allocation_Type,Allocation_Amount,AssetIns_RecNo,Status,Address,transformIR,webUserID,VAT_AMOUNT,TXNTIME)");
+				  query.append(" Bill_Source,QBRefNo,Allocated,Allocation_Method,Allocation_Type,Allocation_Amount,AssetIns_RecNo,Status,Address,transformIR,webUserID,VAT_AMOUNT,TXNTIME,DATECREATED,CreatedFromOnline)");
 				  query.append(" Values(" + obj.getRecNo() + ",'" + obj.getTxtnId()+"','" + obj.getCr_flag() +"' ,"+obj.getApAccountRefKey()+","+ obj.getVendRefKey() + " , ");
 				  query.append("" +obj.getTermsRefKey() + ", '" + sdf.format(obj.getTxnDate()) + "' , " );
 
@@ -51,7 +51,7 @@ public class BillDataQuerry {
 				  query.append(" '" + obj.getBillNo() + "' , '" + obj.getMemo() + "','" + obj.getIsPaid() + "', '" + obj.getBillSource() + "' , '" + obj.getQbRefNUmber() + "' , ");
 				  query.append(" '" + obj.getAllocated() + "' , '"+ obj.getAllocationMethod() + "' , '" + obj.getAllocatedType() + "' , " + obj.getAllocationAmount() + ", " + obj.getAssetInsRecNo() +" ,");
 				  query.append(" '" + obj.getStatus() + "' , '" + obj.getAddress()+ "' , '" + obj.getTransformIR() + "',"+webUserID+"");
-				  query.append(" , " + obj.getVatAmount() + ", getdate()");
+				  query.append(" , " + obj.getVatAmount() + ", getdate() , getdate() , 'Y' ");
 				  query.append(" )");
 				  query.append(" ");
 				  return query.toString();
@@ -62,7 +62,7 @@ public class BillDataQuerry {
 			{
 				  query=new StringBuffer();
 				  String editedFromOnline="Y";
-				  query.append("Update Bill set TxnDate='"+sdf.format(obj.getTxnDate())+"' , CR_Flag='"+obj.getCr_flag()+"',APAccountRef_Key="+obj.getApAccountRefKey()+",");
+				  query.append("Update Bill set DATEMODIFIED=getdate(), TxnDate='"+sdf.format(obj.getTxnDate())+"' , CR_Flag='"+obj.getCr_flag()+"',APAccountRef_Key="+obj.getApAccountRefKey()+",");
 
 				  if(obj.getDueDate()!=null)
 					query.append(" DueDate='"+sdf.format(obj.getDueDate())+"' , " );

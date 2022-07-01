@@ -102,11 +102,11 @@ public class TestViewModel
 		
 		try 
 		{
-			if(emailTo.isEmpty())
-			{
-				Messagebox.show("Enter Email !!");
-				return;
-			}
+//			if(emailTo.isEmpty())
+//			{
+//				Messagebox.show("Enter Email !!");
+//				return;
+//			}
 
 			MailClient mc = new MailClient();
 			//mc.sendTestEmail();
@@ -333,57 +333,57 @@ public class TestViewModel
 
 		List<String> lines = null;
 		StringBuilder contentBuilder = new StringBuilder();
-		try {
-			String logFilePath= DevelopmentConfig.getLogFilesPath();
-			//lines = tailFile(Paths.get("//Library//Tomcat//bin//my-logs//satalogs.log"), noOfLines);
-			lines = tailFile(Paths.get(logFilePath), noOfLines,logFilePath);
-			//lines.forEach(line -> System.out.println(line));
-			lines.forEach(s -> contentBuilder.append(s).append("\n"));
-			logsLines=contentBuilder.toString();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.info("readLogsCommand >> " + e.getMessage());
-		}
-	}
-
-	private List<String> tailFile(final Path source, final int noOfLines,final String logFilePath) throws IOException {
-		//String result = null;
-		List<String> lines=new ArrayList<>();
-		CharsetDecoder decoder = Charset.forName("UTF-8").newDecoder();
-		decoder.onMalformedInput(CodingErrorAction.IGNORE);
-		try {
-			FileInputStream input;
-			input = new FileInputStream(new File(logFilePath));
-			InputStreamReader reader = new InputStreamReader(input, decoder);
-			BufferedReader bufferedReader = new BufferedReader(reader);
-			//StringBuilder sb = new StringBuilder();
-			String line = bufferedReader.readLine();
-			while (line != null) {
-				//sb.append(line);
-				lines.add(line);
-				line = bufferedReader.readLine();
-			}
-			bufferedReader.close();
-			//result = sb.toString();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		FileBuffer fileBuffer = new FileBuffer(noOfLines);
-		lines.stream().forEach(line -> fileBuffer.collect(line));
-		return fileBuffer.getLines();
-
-//		try (Stream<String> stream = Files.lines(source,StandardCharsets.UTF_8)) {
-//			FileBuffer fileBuffer = new FileBuffer(noOfLines);
-//			stream.forEach(line -> fileBuffer.collect(line));
-//			return fileBuffer.getLines();
-//		}
-		//catch(MalformedInputException mie){
-//			// ignore or do something
+//		try {
+//			String logFilePath= DevelopmentConfig.getLogFilesPath();
+//			//lines = tailFile(Paths.get("//Library//Tomcat//bin//my-logs//satalogs.log"), noOfLines);
+//			lines = tailFile(Paths.get(logFilePath), noOfLines,logFilePath);
+//			//lines.forEach(line -> System.out.println(line));
+//			lines.forEach(s -> contentBuilder.append(s).append("\n"));
+//			logsLines=contentBuilder.toString();
+//
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			logger.info("readLogsCommand >> " + e.getMessage());
 //		}
 	}
+
+//	private List<String> tailFile(final Path source, final int noOfLines,final String logFilePath) throws IOException {
+//		//String result = null;
+//		List<String> lines=new ArrayList<>();
+//		CharsetDecoder decoder = Charset.forName("UTF-8").newDecoder();
+//		decoder.onMalformedInput(CodingErrorAction.IGNORE);
+//		try {
+//			FileInputStream input;
+//			input = new FileInputStream(new File(logFilePath));
+//			InputStreamReader reader = new InputStreamReader(input, decoder);
+//			BufferedReader bufferedReader = new BufferedReader(reader);
+//			//StringBuilder sb = new StringBuilder();
+//			String line = bufferedReader.readLine();
+//			while (line != null) {
+//				//sb.append(line);
+//				lines.add(line);
+//				line = bufferedReader.readLine();
+//			}
+//			bufferedReader.close();
+//			//result = sb.toString();
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		FileBuffer fileBuffer = new FileBuffer(noOfLines);
+//		//lines.stream().forEach(line -> fileBuffer.collect(line));
+//		return fileBuffer.getLines();
+//
+////		try (Stream<String> stream = Files.lines(source,StandardCharsets.UTF_8)) {
+////			FileBuffer fileBuffer = new FileBuffer(noOfLines);
+////			stream.forEach(line -> fileBuffer.collect(line));
+////			return fileBuffer.getLines();
+////		}
+//		//catch(MalformedInputException mie){
+////			// ignore or do something
+////		}
+//	}
 	private static final class FileBuffer {
 		private int offset = 0;
 		private final int noOfLines;
@@ -396,8 +396,9 @@ public class TestViewModel
 			lines[offset++ % noOfLines] = line;
 		}
 		public List<String> getLines() {
-			return IntStream.range(offset < noOfLines ? 0 : offset - noOfLines, offset)
-					.mapToObj(idx -> lines[idx % noOfLines]).collect(Collectors.toList());
+			return null;
+//			return IntStream.range(offset < noOfLines ? 0 : offset - noOfLines, offset)
+//					.mapToObj(idx -> lines[idx % noOfLines]).collect(Collectors.toList());
 		}
 	}
 	public int getNoOfLines() {

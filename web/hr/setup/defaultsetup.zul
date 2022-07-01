@@ -52,7 +52,7 @@ font-weight:bold;
 				<hbox>
 				<label value="Effective Date"></label>
 				<datebox value="@bind(vm.salaryEffDate)" format="dd/MM/yyyy"></datebox>
-				<label style="color:gray;" value="(Items that Grayed out are already setup. To change the setup go to Advanced.)"></label>
+				<label style="color:gray;" value="(Items that are greyed out are already setup. To change the setup, kindly go to Advanced.)"></label>
 				</hbox>
 				
 				<separator height="5px"></separator>
@@ -128,7 +128,7 @@ font-weight:bold;
 				<hbox>
 				<label value="Effective Date"></label>
 				<datebox value="@bind(vm.leaveEffDate)" format="dd/MM/yyyy"></datebox>
-				<label style="color:gray;" value="(Items that Grayed out are already setup. To change the setup go to Advanced.)"></label>
+				<label style="color:gray;" value="(Items that are greyed out are already setup. To change the setup, kindly go to Advanced.)"></label>
 				</hbox>
 				
 				<separator height="5px"></separator>
@@ -174,7 +174,7 @@ font-weight:bold;
 				<hbox>
 				<label value="Effective Date"></label>
 				<datebox value="@bind(vm.eosEffDate)" format="dd/MM/yyyy"></datebox>
-				<label style="color:gray;" value="(Items that Grayed out are already setup. To change the setup go to Advanced.)"></label>
+				<label style="color:gray;" value="(Items that are greyed out are already setup. To change the setup, kindly go to Advanced.)"></label>
 				</hbox>
 				
 				<separator height="5px"></separator>

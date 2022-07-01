@@ -1,0 +1,213 @@
+setup tomact
+https://www.youtube.com/watch?v=JIRDMGJ66SE
+
+Office: +97128867761
+
+
+this work in Azure after i start the api.hinawierp.com
+http://api.hinawierp.com/home/health
+
+http://test.hinawierp.com/test.zul
+it works after add custom domain
+
+String connectionUrl="jdbc:mysql://localhost:3306/hinawi?autoReconnect=true&amp;jdbcCompliantTruncation=false&amp;useOldAliasMetadataBehavior=true&amp;characterEncoding=utf8";
+			Properties connectionProps = new Properties();
+			connectionProps.put("user", "root");
+			connectionProps.put("password", "12345678");
+
+
+https://dzone.com/articles/generating-war-file-plain
+
+ContactEmailViewModel.java we used insert batch
+
+
+
+DECLARE @ConstraintName nvarchar(200)
+SELECT @ConstraintName = Name FROM SYS.DEFAULT_CONSTRAINTS
+WHERE PARENT_OBJECT_ID = OBJECT_ID('JournalEntry')
+AND PARENT_COLUMN_ID = (SELECT column_id FROM sys.columns
+                        WHERE NAME = N'EditedFromOnline'
+                        AND object_id = OBJECT_ID(N'JournalEntry'))
+                        print @ConstraintName
+         alter table JournalEntry drop constraint DF__JournalEn__Creat__29E2CDB8
+
+
+-- SELECT * from CheckMast
+-- where
+--
+--
+--  SELECT name,item_key,ListID,ItemType,SubLevel,FullName,BARCODE,salesdesc,  DescriptionAR, QuantityOnHand,SalesPrice,averagecost,ClassKey FROM QBItems  where isnull(PricePercent,0)=0 and IsActive='Y'
+--  and IsNull(ISVAT_Item,'')<>'Y' And IsNull(ISDefault_Item,'')<>'Y'
+--  order by ItemType desc,FullName
+
+
+SELECT Cheque,Memo, EditedFromOnline, * from Checkmast where EditedFromOnline is not NULL
+SELECT Memo, EditedFromOnline, * from RVmast where EditedFromOnline is not NULL
+
+ select AllowToChangeChequeNo,AllowToChangeTXNNo,PostJVWithOutName,PostOnMainClass,UseSalesFlow,UsePurchaseFlow from companySettings
+
+Select * from SystemSerialNos Where SerialField       ='PaymentSerial'
+Select * from PurchaseRequest
+Select EditedFromOnline, * from Bill ORDER by Rec_No DESC
+
+Select * from CheckMast
+SELECT * from OtherNames  where OthNam_Key =129
+Select * from PurchaseOrder
+SELECT * from Quotation
+
+Select RefNumber, * From  Bill
+select * from Accounts where AccountNumber like '%1231%'
+select vat_key,* from Customer
+select * from tenant where Cust_Key> 180
+SELECT vat_key,* from Vendor  where Vend_Key =132
+
+
+Select * from OtherNames
+
+SELECT * from EMPMAST
+
+SELECT *  FROM CLASS where class_key=189
+
+
+Select *
+ from QbLists Where ListType in('Employee','OtherNames','Vendor','SalesRepType') AND IsActive in ('Y','N')
+  order by ListType,FullName
+
+Select maxcommission,usesalesrepcommission from companySettings
+
+SELECT * from HRLISTFIELDS
+select * from HRLISTVALUES where FIELD_ID=25 order by PRIORITY_ID,DESCRIPTION
+
+Select NAT_FLAG,* from EMPMAST ORDER by emp_key DESC
+SELECT  * FROM Employee ORDER by emp_key DESC
+SELECT Upper(Name) as 'UName',* from QbLists ORDER by RecNo DESC
+
+delete from EMPMAST where EMP_KEY>102
+delete from QbLists where RecNo>191
+delete from Employee where EMP_KEY>191
+
+select * from empcontact where contact_id=622 and emp_key=1
+
+
+
+SELECT * from EMPPASSPORT
+select * from PASSPORTREQUEST
+
+SELECT top 1 EMPLEAVE.* ,HRLISTVALUES.Description   FROM EMPLEAVE   LEFT JOIN HRLISTVALUES ON EMPLEAVE.LEAVE_ID=HRLISTVALUES.ID
+Where RETURN_STATUS ='True' and return_date is not null
+and EMP_KEY=1 order by return_date desc
+
+Select * from EmployeeASkingPassport where Status <> 'R' and emp_key=78
+
+
+
+
+SELECT * from Userwebcompany where USERID=76
+
+select * from COMPSETUP
+
+select Salary_Create, * from  EmployeeDetails where Active ='A' and CompKey=1 order by REPLICATE('0',2-LEN(employeeNo)) + employeeNo
+
+SELECT POS_ID, FROM_DATE, TO_DATE, EMPSHIFT.SHIFT_KEY ,TIMING_FLAG,Unit_Key  from EMPSHIFT INNER JOIN  SHIFTMAST ON SHIFTMAST.SHIFT_KEY = EMPSHIFT.SHIFT_KEY AND SHIFTMAST.COMP_KEY = EMPSHIFT.COMP_KEY where EMP_KEY=103 and EMPSHIFT.COMP_KEY=1 and '2020-05-07' between FROM_DATE and TO_DATE
+
+SELECT EMPSHIFT.*,shiftmast.* ,EmployeeDetails.* FROM EMPSHIFT  INNER JOIN EmployeeDetails ON EMPSHIFT.EMP_KEY = EmployeeDetails.employeeKey INNER JOIN shiftmast ON EMPSHIFT.shift_key = shiftmast.shift_Key  WHERE EMPSHIFT.COMP_KEY=1 AND ((EMPSHIFT.FROM_DATE BETWEEN '2020-05-01' AND '2020-05-31') OR (EMPSHIFT.TO_DATE BETWEEN '2020-05-01' AND '2020-05-31') OR (EMPSHIFT.TO_DATE >= '2020-05-31') and ( EMPSHIFT.FROM_DATE <= '2020-05-01'))   ORDER BY EMPSHIFT.POS_ID,EMPSHIFT.EMP_KEY,EMPSHIFT.FROM_DATE
+
+
+SELECT SHIFTMAST.no_of_shifts, SQLSelectTSDays.TS_DATE, SQLSelectTSDays.EMP_KEY, SQLSelectTSDays.EMP_NO, SQLSelectTSDays.DAY_NO, SQLSelectTSDays.ENGLISH_FULL, SQLSelectTSDays.ARABIC_FULL, '' AS REC_NO,'' AS LINE_NO, '' AS TOTAL_UNIT_NO, '' AS OT_NOS, '' AS TOTAL_NORMAL_HRS, '' AS NORMAL_OTHRS, COMPSHIFT.OFFDAY, 'P' AS STATUS, SHIFTMAST.UNIT_KEY AS UNIT_ID, COMPSHIFT.SHIFT_KEY, COMPSHIFT.REC_NO AS SHIFT_REC_NO, COMPSHIFT.FROM_TIME, COMPSHIFT.TO_TIME, COMPSHIFT.HOURS AS UNIT_NOS, COMPSHIFT.HOURS AS NORMAL_UNITS, '' AS PROJECT_KEY, '' AS SERVICE_ID, 'Y' AS CALC_FLAG, '' AS NOTES, COMPSHIFT.PAIDNORMAL, COMPSHIFT.PAIDIFWORK, SHIFTMAST.TIMING_FLAG, SQLSelectTSDays.DEP_ID, SQLSelectTSDays.POS_ID, SQLSelectTSDays.SECTION_ID, SQLSelectTSDays.CLASS_ID, SQLSelectTSDays.STATUS AS EMP_STATUS, SQLCompHolidays.DESCRIPTION AS HolidayDesc  FROM (((SQLSelectTSDays inner JOIN SQLDailyShift    ON (SQLSelectTSDays.TS_DATE = SQLDailyShift.TS_DATE) AND (SQLSelectTSDays.EMP_KEY = SQLDailyShift.EMP_KEY)) LEFT OUTER JOIN COMPSHIFT        ON (SQLDailyShift.SHIFT_KEY = COMPSHIFT.SHIFT_KEY) AND (SQLDailyShift.DAY_NO    = COMPSHIFT.DAY_NO) AND (SQLDailyShift.COMP_KEY  = COMPSHIFT.COMP_KEY)) LEFT OUTER JOIN SHIFTMAST        ON (COMPSHIFT.SHIFT_KEY     = SHIFTMAST.SHIFT_KEY) AND (COMPSHIFT.COMP_KEY      = SHIFTMAST.COMP_KEY)) LEFT OUTER JOIN SQLCompHolidays  ON (SQLDailyShift.SHIFT_KEY = SQLCompHolidays.SHIFT_KEY) AND (SQLDailyShift.COMP_KEY  = SQLCompHolidays.COMP_KEY) AND (SQLDailyShift.TS_DATE   = SQLCompHolidays.TS_DATE) Where SQLSelectTSDays.COMP_KEY=1 AND SQLSelectTSDays.EMP_KEY  = 103 AND SQLSelectTSDays.TS_DATE between '2020-05-07' and '2020-05-07'  Order by SQLSelectTSDays.EMP_NO,SQLSelectTSDays.EMP_KEY,SQLSelectTSDays.TS_DATE,COMPSHIFT.SHIFT_KEY,COMPSHIFT.REC_NO
+
+select * from SQLDailyShift
+SELECT top 10 * from DAILYTS Order by REC_NO DESC
+
+Select * from SALARYMASTTS
+
+SELECT * from QBUpdateMode
+Select [UPDATE] from QBUpdateMode Where FORM_ID='Cash'
+
+
+Select TXNTIME,VAT_AMOUNT, Status, * from CheckMast ORDER by RecNo DESC
+Select TXNTIME,VAT_AMOUNT, Status, * from IRMAST ORDER by RecNo DESC
+Select EditedFromOnline,TXNTIME,VAT_AMOUNT, Status, * from Bill ORDER by Rec_No DESC
+SELECT Vat_KEY,Vat_ItemAmount, * from BillItems --IRITEMS
+SELECT Vat_KEY,Vat_ExpAmount, * from BillExpenses --IREXPENSES
+Select RefNumber from Bill where RefNumber='5'
+
+Select TxnID, Rec_No , CR_Flag from Bill where Rec_No =52
+
+DELETE from Bill where Rec_No=49
+
+SELECT * from SystemSerialNos
+
+
+Select TXNTIME, VAT_AMOUNT, Status, * from PurchaseOrder ORDER by Rec_No DESC
+SELECT Vat_KEY,Vat_ItemAmount,* from PurchaseOrderLine where Rec_No=15
+select * from BankTransfer
+
+select Vat_KEY,Vat_ExpAmount , * from CheckExpense where RECNO > 39
+select Vat_KEY,Vat_ItemAmount , * from CheckItems where RECNO > 39
+select TXNTIME,AMOUNT, VAT_AMOUNT,* from SALESRECEIPT
+SELECT Vat_Key, Vat_ItemAmount,RateAfterVAT,* from SalesReceiptLine
+select TXNTIME,AMOUNT, VAT_AMOUNT,* from Invoice
+SELECT Vat_Key, Vat_ItemAmount,RateAfterVAT,* from InvoiceLine
+SELECT Vat_Key, Vat_ItemAmount,* from QuotationLine
+
+
+Select SalesReceiptLine.Vat_Key,Vat_ServiceItem,Sum(Vat_ItemAmount) As
+VatItemAmount,Sum(SalesReceiptLine.Amount) As VatCalcualtedFromAmt
+From SalesReceiptLine
+Inner Join VATCodeList On SalesReceiptLine.Vat_Key=VATCodeList.Vat_Key
+Where RecNo        =10
+Group By SalesReceiptLine.Vat_Key,Vat_ServiceItem
+
+Select InvoiceLine.Vat_Key,Vat_ServiceItem,Sum(Vat_ItemAmount) As
+VatItemAmount,Sum(InvoiceLine.Amount) As VatCalcualtedFromAmt
+From InvoiceLine
+Inner Join VATCodeList On InvoiceLine.Vat_Key=VATCodeList.Vat_Key
+Where RecNo        =31
+Group By InvoiceLine.Vat_Key,Vat_ServiceItem
+
+
+SELECT * from Vendor
+
+
+
+SELECT * from QBVATTransaction
+
+Select RecNo, Name, AccountRefKey, Attn_Name, Attn_Position, ActName, ActNumber, Branch, IBANNo from Banks  where RecNo=5
+
+SELECT PurchaseVATKey,* FROM QBItems where Item_key=69
+
+Select CheckExpense.Vat_Key,Vat_ServiceItem,Sum(Vat_ExpAmount) As VatItemAmount,Sum(CheckExpense.Amount) As VatCalcualtedFromAmt,'EXP' As VatMemo From CheckExpense  Inner Join VATCodeList On CheckExpense.Vat_Key=VATCodeList.Vat_Key Where  RecNo        =46 Group By CheckExpense.Vat_Key,Vat_ServiceItem
+
+Union Select  CheckItems.Vat_Key,Vat_ServiceItem,Sum(Vat_ItemAmount) As VatItemAmount,Sum(CheckItems.Amount) As VatCalcualtedFromAmt,'ITM' As VatMemo From  CheckItems Inner Join VATCodeList On  CheckItems.Vat_Key=VATCodeList.Vat_Key Where RecNo        = 46 Group By  CheckItems.Vat_Key,Vat_ServiceItem
+
+Union Select  CheckFAItems.Vat_Key,Vat_ServiceItem,Sum(Vat_FAAmount) As VatItemAmount,Sum(CheckFAItems.Amount) As VatCalcualtedFromAmt,'FA' As VatMemo From  CheckFAItems  Inner Join VATCodeList On  CheckFAItems.Vat_Key=VATCodeList.Vat_Key Where  RecNo        = 44
+ Group By  CheckFAItems.Vat_Key,Vat_ServiceItem Order By Vat_Key
+
+
+select top 1 * from SALARYMASTTS where SALARY_STATUS='A' ORDER by APPROVE_DATE desc
+
+Select Use_VAT, AllowVATCode_ARAP FROM COMPANYSETTINGS
+
+SELECT *
+ From VATCodeList Where IsActive='Y' order by VAT_CODE
+
+SELECT VAT_KEY,* FROM Customer WHERE Cust_Key=148
+SELECT VAT_KEY,* FROM Vendor
+
+Select Name,RecNo,ListID,ListType,SubLevel,FullName,isactive from QbLists Where IsActive='Y'  and ListType in ('Customer')  order by ListType,FullName
+
+SELECT * from Accounts where Rec_No=189
+
+Select * from SystemSerialNos Where SerialField   = 'CreditMemo'
+
+SELECT ONLINEFLAG,* from CreditMemo where RefNumber=1 and RecNo <>1
+SELECT * from CreditMemoLine
+SELECT * from QBVATTransaction
+
+-- INSERT INTO employee (ListID,EditSequence,TimeCreated,Emp_Key,Name,FirstName,MiddleName,LastName,ArName,FullName,SubLevel,IsActive ,BillAddress1,PrintChequeAs,SsNo,Gender,Birth_Date,MarStatus,PriorityID,POSITION,NATIONALITY,JOINDATE,EMP_NO,Email,SkypeID,ActName,IBANNo,Emp_Type,LoanAccount,BlackListed,Proj_ID,Notes,HREmp_Key,PrintChequeAsAR)
+
+-- VALUES  ('','',getdate(),192,'Chadi  Rahme','Chadi' ,'', 'Rahme' , '  ' , 'Chadi  Rahme' , 0, 'Y' , '' , 'Chadi  Rahme' , 'null',1, '03-Mar-1980' , 39,0,839,593,'03-Mar-2000','10', 'null' , '' , 'Chadi  Rahme','','E','','',0,'',103,'')
+
+
+select * from Bill ORDER by Rec_No DESC
+-- delete from Bill where Rec_No= 55

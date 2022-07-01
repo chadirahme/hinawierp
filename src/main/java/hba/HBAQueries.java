@@ -498,7 +498,7 @@ public class HBAQueries {
 		query = new StringBuffer();
 		query.append("Insert into Checkmast (RecNo,CheckNo,CheckDate,PvNo,PvDate,BankKey,PayeeKey,PayeeType,Amount,Status,PVCheck_Printed,[Memo],");
 		query.append(" BankRefKey,Cheque,QBRefNo,QBRefDate,QBStatus,ExpClassHide,ExpMemoHide,ExpBillNoHide,ExpBillDateHide,ItemClassHide,ItemDesHide,");
-		query.append(" ItemBillNoHide,ItemBillDateHide,AcctForPdc,PrintName,UnitKey,UserID,webUserID,VAT_AMOUNT,TXNTIME)");
+		query.append(" ItemBillNoHide,ItemBillDateHide,AcctForPdc,PrintName,UnitKey,UserID,webUserID,VAT_AMOUNT,TXNTIME,DATECREATED,CreatedFromOnline)");
 		query.append(" Values(" 
 				+ obj.getRecNo() 
 				+ ",'" 
@@ -561,7 +561,7 @@ public class HBAQueries {
 				+ obj.getWebUserID()
 				+ ","
 				+ obj.getVatAmount()
-				+ ", getdate()"
+				+ ", getdate() , getdate() , 'Y' "
 				+")");
 		return query.toString();
 	}
@@ -571,7 +571,7 @@ public class HBAQueries {
 		query = new StringBuffer();
 		query.append("Insert into Checkmast (RecNo,PvNo,PvDate,BankKey,PayeeKey,PayeeType,Amount,Status,[Memo],");
 		query.append(" Cheque,QBRefNo,QBRefDate,QBStatus,ExpClassHide,ExpMemoHide,ExpBillNoHide,ExpBillDateHide,ItemClassHide,ItemDesHide,");
-		query.append(" ItemBillNoHide,ItemBillDateHide,PrintName,UnitKey,UserID,VAT_AMOUNT,TXNTIME)");
+		query.append(" ItemBillNoHide,ItemBillDateHide,PrintName,UnitKey,UserID,VAT_AMOUNT,TXNTIME,DATECREATED,CreatedFromOnline)");
 		query.append(" Values(" + obj.getRecNo() + ", '" + obj.getPvNo()
 				+ "' , ");
 		query.append(" '" + sdf.format(obj.getPvDate()) + "' , "
@@ -588,7 +588,7 @@ public class HBAQueries {
 				+ obj.getItemDesHide() + "' , '" + obj.getItemBillNoHide()
 				+ "' , '" + obj.getItemBillDateHide() + "' ,");
 		query.append(" '" + obj.getPrintName() + "' , " + obj.getUnitKey()
-				+ " , " + obj.getUserID() + " , " + obj.getVatAmount()+", getdate()");
+				+ " , " + obj.getUserID() + " , " + obj.getVatAmount()+", getdate() , getdate() , 'Y'");
 		query.append(" )");
 		query.append(" ");
 		return query.toString();
@@ -598,7 +598,7 @@ public class HBAQueries {
 		// DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		String editedFromOnline = "Y";
 		query = new StringBuffer();
-		query.append("Update Checkmast set PvNo='" + obj.getPvNo()
+		query.append("Update Checkmast set DATEMODIFIED=getdate(), PvNo='" + obj.getPvNo()
 				+ "',BankKey=" + obj.getBankKey() + ",PayeeKey="
 				+ obj.getPayeeKey() + ",PayeeType='" + obj.getPayeeType()
 				+ "',Amount=" + obj.getAmount() + ",PvDate='"
@@ -625,7 +625,7 @@ public class HBAQueries {
 
 	public String updateNewChequePayment(CashModel obj) {
 		query = new StringBuffer();
-		query.append("Update Checkmast set "
+		query.append("Update Checkmast set DATEMODIFIED=getdate(), "
 				+ "PvNo='" + obj.getPvNo()
 				+ "',BankKey=" + obj.getBankKey()
 				+ ",CheckNo=" + obj.getCheckNo()
@@ -665,7 +665,7 @@ public class HBAQueries {
 		query = new StringBuffer();
 		query.append("Insert into Checkmast (RecNo,TxnID,PvNo,PvDate,BankKey,PayeeKey,PayeeType,Amount,Status,[Memo],BankRefKey,");
 		query.append(" Cheque,QBRefNo,QBRefDate,QBStatus,ExpClassHide,ExpMemoHide,ExpBillNoHide,ExpBillDateHide,ItemClassHide,ItemDesHide,");
-		query.append(" ItemBillNoHide,ItemBillDateHide,PrintName,UnitKey,UserID,SwiftCode,VAT_AMOUNT,TXNTIME)");
+		query.append(" ItemBillNoHide,ItemBillDateHide,PrintName,UnitKey,UserID,SwiftCode,VAT_AMOUNT,TXNTIME ,DATECREATED,CreatedFromOnline)");
 		query.append(" Values(" + obj.getRecNo() + ",'" + obj.getTxnID()
 				+ "' , '" + obj.getPvNo() + "' , ");
 		query.append(" '" + sdf.format(obj.getPvDate()) + "' , "
@@ -683,7 +683,7 @@ public class HBAQueries {
 				+ obj.getItemDesHide() + "' , '" + obj.getItemBillNoHide()
 				+ "' , '" + obj.getItemBillDateHide() + "' ,");
 		query.append(" '" + obj.getPrintName() + "' , " + obj.getUnitKey()
-				+ " , " + obj.getUserID() + " , '" + obj.getSwiftCode() + "'" + " , " + obj.getVatAmount() +", getdate()" );
+				+ " , " + obj.getUserID() + " , '" + obj.getSwiftCode() + "'" + " , " + obj.getVatAmount() +", getdate() , getdate() , 'Y' " );
 
 		query.append(" )");
 		query.append(" ");
@@ -1221,7 +1221,7 @@ public class HBAQueries {
 		query.append("BillAddress2,BillAddress3,BillAddress4,BillAddress5,BillAddressCity,BillAddressState,BillAddressPostalCode,BillAddressCountry,BillAddressNote,ShipAddress1,");
 		query.append("ShipAddress2,ShipAddress3,ShipAddress4,ShipAddress5,ShipAddressCity,ShipAddressState,ShipAddressPostalCode,ShipAddressCountry,ShipAddressNote,");
 		query.append("IsPending,CheckNo,PaymentMethodRefKey,SalesRefKey,FOB,ShipDate,ShipMethodRefKey,ItemSalesTaxRefKey,Memo,CustomerMsgRefKey,IsToBePrinted,IsToEmailed,IsTaxIncluded,");
-		query.append("CustomerSalesTaxCodeRefKey,Other,Amount,QuotationRecNo,SendViaReffKey,CustomField1,CustomField2,CustomField3,CustomField4,CustomField5,status,DescriptionHIDE,QtyHIDE,ClassHIDE,RateHIDE,transformD,webUserID,VAT_AMOUNT,TXNTIME)");
+		query.append("CustomerSalesTaxCodeRefKey,Other,Amount,QuotationRecNo,SendViaReffKey,CustomField1,CustomField2,CustomField3,CustomField4,CustomField5,status,DescriptionHIDE,QtyHIDE,ClassHIDE,RateHIDE,transformD,webUserID,VAT_AMOUNT,TXNTIME,DATECREATED,CreatedFromOnline)");
 		query.append(" Values(" + obj.getRecNo() + ", "
 				+ obj.getCustomerRefKey() + " , " + obj.getClassRefKey()
 				+ " , " + obj.getDepositAccountRefKey() + " , "
@@ -1264,7 +1264,7 @@ public class HBAQueries {
 				+ "' , '" + obj.getDescriptionHIDE() + "' , '"
 				+ obj.getQtyHIDE() + "' , '" + obj.getClassHIDE() + "' , '"
 				+ obj.getRateHIDE() + "' , '"
-						+ obj.getTransformD()+ "'," + webUserID + "," + obj.getVatAmount() + ", getdate()");
+						+ obj.getTransformD()+ "'," + webUserID + "," + obj.getVatAmount() + ", getdate() , getdate() , 'Y' ");
 		query.append(" )");
 		query.append(" ");
 		return query.toString();
@@ -1275,7 +1275,7 @@ public class HBAQueries {
 		String editedFromOnline = "Y";
 		// DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		query = new StringBuffer();
-		query.append("Update SalesReceipt set CustomerRefKey="
+		query.append("Update SalesReceipt set DATEMODIFIED= getdate(), CustomerRefKey="
 				+ obj.getCustomerRefKey() + ",ClassRefKey="
 				+ obj.getClassRefKey() + ",DepositAccountRefKey="
 				+ obj.getDepositAccountRefKey() + ",TemplateRefKey="
@@ -1343,7 +1343,7 @@ public class HBAQueries {
 		query.append("BillAddress2,BillAddress3,BillAddress4,BillAddress5,BillAddressCity,BillAddressState,BillAddressPostalCode,BillAddressCountry,BillAddressNote,ShipAddress1,");
 		query.append("ShipAddress2,ShipAddress3,ShipAddress4,ShipAddress5,ShipAddressCity,ShipAddressState,ShipAddressPostalCode,ShipAddressCountry,ShipAddressNote,");
 		query.append("IsPending,PONumber,TermsRefKey,DueDate,SalesRefKey,FOB,ShipDate,ShipMethodRefKey,ItemSalesTaxRefKey,Memo,CustomerMsgRefKey,IsToBePrinted,IsToEmailed,IsTaxIncluded,");
-		query.append("CustomerSalesTaxCodeRefKey,Other,Amount,QuotationRecNo,SendViaReffKey,CustomField1,CustomField2,CustomField3,CustomField4,CustomField5,status,invoice_source,DescriptionHIDE,QtyHIDE,ClassHIDE,RateHIDE,transformD,webUserID,VAT_AMOUNT,TXNTIME)");
+		query.append("CustomerSalesTaxCodeRefKey,Other,Amount,QuotationRecNo,SendViaReffKey,CustomField1,CustomField2,CustomField3,CustomField4,CustomField5,status,invoice_source,DescriptionHIDE,QtyHIDE,ClassHIDE,RateHIDE,transformD,webUserID,VAT_AMOUNT,TXNTIME,DATECREATED,CreatedFromOnline)");
 		query.append(" Values(" + obj.getRecNo() + ","
 				+ obj.getCustomerRefKey() + "," + obj.getClassRefKey() + ","
 				+ obj.getAccountRefKey() + "," + obj.getTemplateRefKey() + ",");
@@ -1385,7 +1385,7 @@ public class HBAQueries {
 				+ "' , '" + obj.getCustomField5() + "' , '" + obj.getStatus()
 				+ "' , '" + invoiceSource + "' ,'" + obj.getDescriptionHIDE()
 				+ "' , '" + obj.getQtyHIDE() + "' , '" + obj.getClassHIDE()
-				+ "' , '" + obj.getRateHIDE() + "','"+ obj.getTransformD() + "'," + webUserID + ","+obj.getVatAmount()+", getdate()");
+				+ "' , '" + obj.getRateHIDE() + "','"+ obj.getTransformD() + "'," + webUserID + ","+obj.getVatAmount()+", getdate() , getdate() , 'Y' ");
 		query.append(")");
 		query.append(" ");
 		return query.toString();
@@ -1397,7 +1397,7 @@ public class HBAQueries {
 		String editedFromOnline = "Y";
 		String invoiceSource = "CMS";
 		query = new StringBuffer();
-		query.append("Update Invoice set CustomerRefKey="
+		query.append("Update Invoice set DATEMODIFIED=getdate() , CustomerRefKey="
 				+ obj.getCustomerRefKey() + ",ClassRefKey="
 				+ obj.getClassRefKey() + ",ARAccountRefKey="
 				+ obj.getAccountRefKey() + ",TemplateRefKey="
@@ -1463,7 +1463,7 @@ public class HBAQueries {
 		query.append(" TxnDate,RefNumber,BillAddress1,");
 		query.append("BillAddress2,BillAddress3,BillAddress4,BillAddress5,BillAddressCity,BillAddressState,BillAddressPostalCode,BillAddressCountry,BillAddressNote,");
 		query.append("IsPending,PONumber,SendViaReffKey,SalesRefKey,Memo,memoArabic,CustomerMsgRefKey,IsToBePrinted,IsToEmailed,");
-		query.append("Amount,MemoHide,DescriptionARHide,DescriptionHIDE,QtyHIDE,RateHIDE,ClassHIDE,status,CreditMemo_Source,UserID,DATECREATED,TXNTIME,VAT_AMOUNT,ONLINEFLAG,WEBUSERID)");
+		query.append("Amount,MemoHide,DescriptionARHide,DescriptionHIDE,QtyHIDE,RateHIDE,ClassHIDE,status,CreditMemo_Source,UserID,DATECREATED,TXNTIME,VAT_AMOUNT,ONLINEFLAG,WEBUSERID,CreatedFromOnline)");
 		query.append(" Values(" + obj.getRecNo() + "," + " Null , "
 				+ obj.getCustomerRefKey() + "," + obj.getClassRefKey() + ","
 				+ obj.getAccountRefKey() + "," + obj.getTemplateRefKey() + ",");
@@ -1481,7 +1481,7 @@ public class HBAQueries {
 		query.append(" '" + obj.getIsPending() + "' , '" + obj.getPoNumber()
 				+ "' , 0, " + + obj.getSalesRefKey() + ", '" + obj.getMemo().replace("'", "`") + "' , '' , 0 , 'Y' , 'N' ,");
 
-		query.append(obj.getAmount()+ ", 'N', 'N','N','N','N','N','A', 'CMS'," + webUserID + ", getdate() , getdate() , " + obj.getVatAmount() + ", 'Y'," + webUserID);
+		query.append(obj.getAmount()+ ", 'N', 'N','N','N','N','N','A', 'CMS'," + webUserID + ", getdate() , getdate() , " + obj.getVatAmount() + ", 'Y'," + webUserID + ", 'Y' ");
 		query.append(")");
 		query.append(" ");
 		return query.toString();
@@ -1523,7 +1523,7 @@ public class HBAQueries {
 		query.append("Amount=" + obj.getAmount()
 				+ ",SendViaReffKey=" + obj.getSendViaReffKey() + ",");
 
-		query.append("ModifiedUserID=" + webUserID + ",DATEMODIFIED=getdate() , VAT_AMOUNT= " + obj.getVatAmount()
+		query.append("ModifiedUserID=" + webUserID + ",DATEMODIFIED=getdate() , EditedFromOnline='Y' , VAT_AMOUNT= " + obj.getVatAmount()
 				 + "  where recNO=" + obj.getRecNo());
 		return query.toString();
 
@@ -2524,7 +2524,7 @@ public class HBAQueries {
 		query.append("BillAddress2,BillAddress3,BillAddress4,BillAddress5,BillAddressCity,BillAddressState,BillAddressPostalCode,BillAddressCountry,BillAddressNote,ShipAddress1,");
 		query.append("ShipAddress2,ShipAddress3,ShipAddress4,ShipAddress5,ShipAddressCity,ShipAddressState,ShipAddressPostalCode,ShipAddressCountry,ShipAddressNote,");
 		query.append("IsPending,PONumber,TermsRefKey,DueDate,SalesRefKey,FOB,ShipDate,ShipMethodRefKey,ItemSalesTaxRefKey,Memo,CustomerMsgRefKey,IsToBePrinted,IsToEmailed,IsTaxIncluded,");
-		query.append("CustomerSalesTaxCodeRefKey,Other,Amount,SendViaReffKey,CustomField1,CustomField2,CustomField3,CustomField4,CustomField5,status,remindflag,reminddate,reminddays,attachment,DescriptionHIDE,QtyHIDE,RateHIDE,LetterTemplate,ShipToAddress,webUserID,VAT_AMOUNT)");
+		query.append("CustomerSalesTaxCodeRefKey,Other,Amount,SendViaReffKey,CustomField1,CustomField2,CustomField3,CustomField4,CustomField5,status,remindflag,reminddate,reminddays,attachment,DescriptionHIDE,QtyHIDE,RateHIDE,LetterTemplate,ShipToAddress,webUserID,VAT_AMOUNT,DATECREATED,CreatedFromOnline)");
 		query.append(" Values(" + obj.getRecNo() + ",'" + obj.getTxnId()
 				+ "','" + obj.getClientType() + "'," + obj.getCustomerRefKey()
 				+ "," + obj.getClassRefKey() + "," + obj.getAccountRefKey()
@@ -2573,7 +2573,7 @@ public class HBAQueries {
 		query.append(", " + obj.getRemindMedays() + ",'" + obj.getAttachemnet()
 				+ "','" + obj.getDescriptionHIDE() + "' , '" + obj.getQtyHIDE()
 				+ "' ,'" + obj.getRateHIDE() + "','" + obj.getLetterTemplate()
-				+ "','" + obj.getShipToAddress() + "'," + webUserID +"," + obj.getVatAmount());
+				+ "','" + obj.getShipToAddress() + "'," + webUserID +"," + obj.getVatAmount() + " , getdate() , 'Y' ");
 		query.append(")");
 		query.append(" ");
 		return query.toString();
@@ -2583,7 +2583,7 @@ public class HBAQueries {
 	public String updateQuotation(CashInvoiceModel obj, int webUserID) {
 		// DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		query = new StringBuffer();
-		query.append("Update QUOTATION set TxnID='" + obj.getTxnId()
+		query.append("Update QUOTATION set DATEMODIFIED=getdate(), TxnID='" + obj.getTxnId()
 				+ "',ClientType='" + obj.getClientType() + "',CustomerRefKey="
 				+ obj.getCustomerRefKey() + ",ClassRefKey="
 				+ obj.getClassRefKey() + ",ARAccountRefKey="
@@ -2809,10 +2809,10 @@ public class HBAQueries {
 	public String addNewItemReceipt(ItemReceiptModel obj) {
 		// DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		query = new StringBuffer();
-		query.append("Insert into IRMAST (RecNo,TxnID,IRNo,IRNoLocal,IRDate,APAccountKey,VendorKey,Amount,Status,[Memo],");
-		query.append("QBStatus,ItemClassHide,ItemDesHide,ItemBillNoHide,ItemBillDateHide,PrintName,IRSource,webUserId,transformPO,VAT_AMOUNT,TXNTIME)");
-		query.append(" Values(" + obj.getRecNo() + ",'" + obj.getTxnID()
-				+ "','" + obj.getIrNo() + "','" + obj.getIrNoLocal() + "',");
+		query.append("Insert into IRMAST (RecNo,IRNo,IRNoLocal,IRDate,APAccountKey,VendorKey,Amount,Status,[Memo],");
+		query.append("QBStatus,ItemClassHide,ItemDesHide,ItemBillNoHide,ItemBillDateHide,PrintName,IRSource,webUserId,transformPO,VAT_AMOUNT,TXNTIME,DATECREATED,CreatedFromOnline)");
+		query.append(" Values(" + obj.getRecNo()
+				+ ",'" + obj.getIrNo() + "','" + obj.getIrNoLocal() + "',");
 		query.append(" '" + sdf.format(obj.getIrDate()) + "',"
 				+ obj.getAccrefKey() + "," + obj.getVendorKey() + ","
 				+ obj.getAmount() + ",");
@@ -2821,7 +2821,7 @@ public class HBAQueries {
 				+ "','" + obj.getItemDesHide() + "','" + obj.getBillNoHide()
 				+ "','" + obj.getBillDateHide() + "',");
 		query.append(" '" + obj.getPrintName() + "','" + obj.getIrsource()
-				+ "'," + obj.getWebUserId()+ ",'" + obj.getTransformPO()+"'" +","+obj.getVatAmount() + ", getdate()");
+				+ "'," + obj.getWebUserId()+ ",'" + obj.getTransformPO()+"'" +","+obj.getVatAmount() + ", getdate() , getdate() , 'Y' ");
 		query.append(" )");
 		query.append(" ");
 		return query.toString();
@@ -2831,7 +2831,7 @@ public class HBAQueries {
 		// DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		String editedFromOnline = "Y";
 		query = new StringBuffer();
-		query.append("Update IRMAST set TxnID='" + obj.getTxnID() + "',IRNo='"
+		query.append("Update IRMAST set DATEMODIFIED=getdate() ,IRNo='"
 				+ obj.getIrNo() + "',IRNoLocal='" + obj.getIrNoLocal()
 				+ "',IRDate='" + sdf.format(obj.getIrDate())
 				+ "',APAccountKey=" + obj.getAccrefKey() + ",VendorKey="
@@ -3248,7 +3248,7 @@ public class HBAQueries {
 	/*-------------------------------------------------------------------------------------------Purchase Order--------------------------------------------------------------------------------------------------*/
 	public String addNewPurchaseOrder(PurchaseRequestModel obj) {
 		query = new StringBuffer();
-		query.append("Insert into PurchaseOrder (Rec_No,RefNumber,TxnDate, VendorRefKey, Address, EntityRefKey, ShipTo, ClassRefKey, TotalAmount, [Memo], Status,Source,webUserId,TransformMR,isfullyreceived,VAT_AMOUNT,TXNTIME)");
+		query.append("Insert into PurchaseOrder (Rec_No,RefNumber,TxnDate, VendorRefKey, Address, EntityRefKey, ShipTo, ClassRefKey, TotalAmount, [Memo], Status,Source,webUserId,TransformMR,isfullyreceived,VAT_AMOUNT,TXNTIME,DATECREATED,CreatedFromOnline)");
 		query.append(" Values(" + obj.getRecNo() 
 				+ ",'" + obj.getRefNUmber()
 				+ "','" + sdf.format(obj.getTxtnDate()) 
@@ -3265,14 +3265,14 @@ public class HBAQueries {
 				+",'"+obj.getTransformMR()+
 				"','"+obj.getIsFullyReceived()+"'"
 				+","+obj.getVatAmount()
-				+",getdate()");
+				+",getdate() , getdate() , 'Y' ");
 		query.append(" )");
 		return query.toString();
 	}
 
 	public String updateExistingPurchaseOrder(PurchaseRequestModel obj) {
 		query = new StringBuffer();
-		query.append("Update PurchaseOrder set RefNumber='"	+ obj.getRefNUmber() 
+		query.append("Update PurchaseOrder set DATEMODIFIED=getdate() , RefNumber='"	+ obj.getRefNUmber()
 				+ "',TxnDate='"	+ sdf.format(obj.getTxtnDate()) 
 				+ "',VendorRefKey="	+ obj.getVendorRefKEy() 
 				+ ",Address='" + obj.getAdress()
@@ -3284,7 +3284,7 @@ public class HBAQueries {
 				+ "',ClassRefKey=" + obj.getClassRefkey() 
 				+ ",Source='" + obj.getSource() 
 				+ "',webUserId=" + obj.getWebUserId()
-				+ "',isfullyreceived=" + obj.getIsFullyReceived()
+				//+ "',isfullyreceived=" + obj.getIsFullyReceived()
 				+ " where Rec_No=" + obj.getRecNo() );
 		return query.toString();
 	}
@@ -3568,7 +3568,9 @@ public class HBAQueries {
 
 	public String addNewJournalVoucherQuery(JournalVoucherModel obj, int webUserID) {
 		query = new StringBuffer();
-		query.append("Insert into JournalEntry(Rec_no,TxnNumber,TxnDate,RefNumber,QBStatus,Status,TotalAmount,PreTerRecNo,ReleaseRecNo,ContractRecNo,Notes,RevisedRecNo,DATECREATED,DATEMODIFIED,USERID,RVDifferedIncomeFlag,PVAdvancePaymentFlag,ModifiedUserID,webuserid) values(");
+		query.append("Insert into JournalEntry(Rec_no,TxnNumber,TxnDate,RefNumber,QBStatus,Status,TotalAmount,PreTerRecNo,ReleaseRecNo,ContractRecNo,Notes," +
+				"RevisedRecNo," +
+				"RVDifferedIncomeFlag,PVAdvancePaymentFlag,webuserid,DATECREATED ,TXNTIME ,CreatedFromOnline) values(");
 		query.append(obj.getRecno());
 		if(obj.getTxnNumber()!=null){
 			query.append(",'"+obj.getTxnNumber()+"'");
@@ -3587,7 +3589,7 @@ public class HBAQueries {
 		}
 		query.append(",'N','C'"); 
 		if(obj.getTotalAmount()!=0){
-			query.append(","+obj.getTxnNumber());
+			query.append(","+obj.getTotalAmount());
 		}else{
 			query.append(",0");
 		}
@@ -3598,19 +3600,19 @@ public class HBAQueries {
 			query.append(",' '");
 		}
 		query.append(",0");
-		query.append(",'"+sdf.format(now.getTime())+"','"+sdf.format(now.getTime())+"',0,'N','N',0,"+webUserID+")");
+		query.append(",'N','N',"+webUserID+" , getdate(), getdate(), 'Y' )");
 		return query.toString();
 	}
 
 	public String updateJournalVoucherQuery(JournalVoucherModel obj, int webUserID) {
 		query = new StringBuffer();
-		query.append("Update JournalEntry set TxnNumber='"+obj.getTxnNumber()+"'");
+		query.append("Update JournalEntry set DATEMODIFIED=getdate(), EditedFromOnline='Y' , TxnNumber='"+obj.getTxnNumber()+"'");
 		if(obj.getTxnDate()!=null)
 			query.append(",TxnDate='"+sdf.format(obj.getTxnDate())+"'");
 		query.append(",RefNumber='"+obj.getTxnNumber()
 				+"',TotalAmount="+obj.getTotalAmount()
 				+",Notes='"+obj.getNotes()
-				+"',DATEMODIFIED='"+sdf.format(now.getTime())
+				//+"',DATEMODIFIED='"+sdf.format(now.getTime())
 				+"',ModifiedUserID="+webUserID
 				+ " where Rec_NO="+ obj.getRecno());
 		return query.toString();
@@ -4283,7 +4285,7 @@ public class HBAQueries {
 
 	public String updateQuotationStatus(int quotationKey,String status,String statusDesc) {
 		query = new StringBuffer();
-		query.append("Update Quotation set " );
+		query.append("Update Quotation set DATEMODIFIED=getdate(), " );
 		query.append("Status ='"+status+"'");
 		query.append(" ,StatusDesc ='"+statusDesc+"'");
 		query.append("Where RecNo="+quotationKey);
@@ -4346,7 +4348,7 @@ public class HBAQueries {
 	
 	public String updateQuotationDelivery(int quotationKey,int deliveryRecNo) {
 		query = new StringBuffer();
-		query.append("Update Quotation set " );
+		query.append("Update Quotation set DATEMODIFIED=getdate()," );
 		query.append("DeliveryRecNo  ="+deliveryRecNo);
 		query.append(" ,Status='D'");
 		query.append(" ,StatusDesc ='Deliver'");
@@ -4470,7 +4472,7 @@ public class HBAQueries {
 	public String updateBankTransfer(BankTransferModel obj, int webUserID) {
 		Calendar c = Calendar.getInstance();
 		query = new StringBuffer();
-		query.append("Update Checkmast set " );
+		query.append("Update Checkmast set DATEMODIFIED=getdate(), " );
 		query.append("PvNo ='"+obj.getPvNo()+"'");
 		query.append(",PvDate = '"+sdf.format(obj.getPvDate())+"'");
 		query.append(",BankKey ="+ obj.getBankKey());
@@ -4494,7 +4496,7 @@ public class HBAQueries {
 		query.append(",ItemBillDateHide ='N'");
 		query.append(",PrintName ='"+obj.getPrintName()+"'");
 		query.append(",SwiftCode ='"+obj.getSwiftCode()+"'");
-		query.append(",DATEMODIFIED ='"+sdf.format(c.getTime())+"'");
+		//query.append(",DATEMODIFIED ='"+sdf.format(c.getTime())+"'");
 		query.append(",ModifiedUserID ="+webUserID);
 		query.append(" ,EditedFromOnline='Y' Where RecNo="+obj.getRecNo());
 		return query.toString();

@@ -143,6 +143,8 @@ public class EditEmployeeViewModel
 			{
 			selectedPosition=lstPosition.get(0);
 			}
+			selectedEmployee.setEmployeeType("L");
+			selectedEmployee.setEmployeeSalaryType("S");
 			selectedEmployee.setLocal("1");
 			selectedEmployee.setEnMiddleName("");
 			selectedEmployee.setEnLastName("");
@@ -521,7 +523,7 @@ public class EditEmployeeViewModel
 			}
 			else
 			{
-			Clients.showNotification("Erro at save Employee !!");
+			Clients.showNotification("Error at save Employee !!");
 			}
 			comp.detach();
 		}

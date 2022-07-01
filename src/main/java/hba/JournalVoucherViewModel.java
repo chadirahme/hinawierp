@@ -240,7 +240,7 @@ public class JournalVoucherViewModel {
 				result=data.updateJournalVoucher(model, webUserID);
 			}
 			if(result>0){
-				if (compSetup.getPvSerialNos().equals("S") && journalVoucherKey == 0) {
+				if (journalVoucherKey == 0) {
 					data.ConfigSerialNumberCashInvoice(SerialFields.JvEntry,journalVoucher.getTxnNumber(), 0);
 				}
 				data.deleteJournalLine(tmpRecNo);

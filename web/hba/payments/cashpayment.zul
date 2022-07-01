@@ -70,7 +70,7 @@
 									<cell>
 										<hlayout>
 											<checkbox checked="@bind(fx.chkApproved)" visible="false"></checkbox>
-											<label value="Status (New)"></label>
+											<label value="Status (New1)"></label>
 										</hlayout>
 									</cell>
 								</row>

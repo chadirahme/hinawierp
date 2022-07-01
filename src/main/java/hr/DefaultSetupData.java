@@ -228,8 +228,8 @@ public class DefaultSetupData {
 						 }
 						if(tmpNat.equals("L"))
 						{
-							tmpPensionEmp=rs.getInt("PENSION_EMP");
-							tmpPensionComp=rs.getInt("PENSION_COMP");
+							tmpPensionEmp=(int)rs.getFloat("PENSION_EMP");
+							tmpPensionComp=(int)rs.getFloat("PENSION_COMP");
 						}
 						if(tmpCounter==2)
 						{

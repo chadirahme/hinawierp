@@ -34,6 +34,14 @@ onCancel="modalDialog.detach()"
 			<listitem label="Employee" value="E"></listitem>
 			<listitem label="Labor" value="L"></listitem>
 			</listbox>
+
+	<label value="How to Generate Salary Sheet *"></label>
+	<listbox multiple="false" mold="select" selectedItem="@bind(fx.employeeSalaryType)" disabled="@bind(fx.employeeKey gt '0')">
+		<listitem label="HumanResources" value="S"></listitem>
+		<listitem label="Time Sheet" value="T"></listitem>
+	</listbox>
+
+
 </row>
 
 <row>

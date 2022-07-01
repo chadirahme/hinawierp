@@ -863,10 +863,10 @@ public class HRQueries
 		}
 		
 		query.append(" INSERT INTO EMPMAST (EMP_KEY,COMP_KEY,DEP_ID,POS_ID,LOC_ID,EMP_NO,ENGLISH_FIRST,ENGLISH_MIDDLE,ENGLISH_LAST,ENGLISH_FULL,ARABIC_FIRST,ARABIC_MIDDLE,ARABIC_LAST "+
-				",ARABIC_FULL,NAT_ID,BIRTH_DATE,SEX_ID,RELIGION_ID,MARITAL_ID,EMPLOYEEMENT_DATE , CREATE_DATE,EMP_TYPE,ACTIVE,NAT_FLAG,BIRTH_PLACE,BIRTH_COUNTRY,STATUS,Age,std_no ");
+				",ARABIC_FULL,NAT_ID,BIRTH_DATE,SEX_ID,RELIGION_ID,MARITAL_ID,EMPLOYEEMENT_DATE , CREATE_DATE,EMP_TYPE,ACTIVE,NAT_FLAG,BIRTH_PLACE,BIRTH_COUNTRY,STATUS,Age,std_no,BLOOD_TYPE,QBEDITSEQUANCE,SALARY_CREATE");
 		  if(dbUser.getMergedDatabse().equalsIgnoreCase("Yes"))
 		  {
-			  query.append(",qblistemp_key ");
+			  query.append(",qblistemp_key,QBListId ");
 		  }
 		
 		query.append(") " +
@@ -875,10 +875,10 @@ public class HRQueries
 						"' , '"+obj.getArMiddleName()+"' , '"+obj.getArLastName()+"' , '"+obj.getArabicName()+"' , "+obj.getNationalityID()+
 						", '"+sdf.format(obj.getDateOfBirth())+"' , "+obj.getSexId()+","+obj.getReligionId()+ "," +obj.getMaritalID()
 						 +", '"+sdf.format(obj.getEmployeementDate()) + "' , getdate() , '"+obj.getEmployeeType()+"','A', '"+obj.getLocal() +"' , '"+
-						obj.getPlaceOfBirth() +"' , "+obj.getCountryOfBirth() + ","+obj.getStatusId() +","+obj.getAge() +",'"+obj.getStandardNo()+"'");
+						obj.getPlaceOfBirth() +"' , "+obj.getCountryOfBirth() + ","+obj.getStatusId() +","+obj.getAge() +",'"+obj.getStandardNo()+"' , "+ obj.getBloodType()+",0 ,'"+obj.getEmployeeSalaryType()+"'");
 		 if(dbUser.getMergedDatabse().equalsIgnoreCase("Yes"))
 		  {
-			  query.append(","+obj.getQblistEmpKey()+"");
+			  query.append(","+obj.getQblistEmpKey()+",'Local-"+obj.getQblistEmpKey()+"'" );
 		  }
 		query.append(")");
 		
@@ -978,7 +978,8 @@ public class HRQueries
 	
 	public String addNewEmployeeinHBATableQuery(EmployeeModel obj)
 	{
-		String listID="NOTPOSTED";
+		//String listID="NOTPOSTED";
+		String listID="Local-"+obj.getQblistEmpKey();
 		query=new StringBuffer();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
 		String enFullName =obj.getEnFirstName().trim();
@@ -1038,7 +1039,7 @@ public class HRQueries
 			obj.setLocal("N");
 		}
 		
-		 query.append("update employee SET ListID='' , EditSequence ='', TimeCreated= getdate()");
+		 query.append("update employee SET TimeCreated= getdate()");
 		 query.append(", Name='" + obj.getFullName() + "' ,FirstName='" + obj.getEnFirstName() + "', MiddleName='" + obj.getEnMiddleName() + "' , LastName='" + obj.getEnLastName() + "' ");
 		 query.append(", ArName='" + obj.getArabicName() + "' ,FullName='" + obj.getFullName() + "' ,SubLevel=0 ,IsActive='Y' , BillAddress1='' , PrintChequeAs=''");
 		 query.append(", POSITION=" + obj.getPositionID() + " ,NATIONALITY=" + obj.getNationalityID() + "");
@@ -1056,7 +1057,8 @@ public class HRQueries
 	{
 		query=new StringBuffer();		
 		String listType="Employee";
-		String listID="NOTPOSTED";
+		//String listID="NOTPOSTED";
+		String listID="Local-"+obj.getQblistEmpKey();
 		query.append("INSERT INTO qblists(listType,listId,recNo,Name,ArName,FullName,Parent,IsActive,Sublevel,hremp_key)");
 		query.append(" VALUES( '" + listType + "','"+listID +"', " + obj.getQblistEmpKey()+" , '" + obj.getFullName()+"' , ");
 		query.append(" '"+obj.getArabicName()+"' , '"+obj.getFullName()+"' , '', 'Y' , " +0 +","+obj.getEmployeeKey()+"");
@@ -1068,7 +1070,7 @@ public class HRQueries
 	{
 		query=new StringBuffer();		
 		String listType="Employee";
-		query.append("update qblists set listType='"+listType+"',listId='',Name='"+obj.getFullName()+"',ArName='"+obj.getArabicName()+"',FullName='"+obj.getFullName()+"',Parent='',IsActive='Y',Sublevel="+0+",hremp_key="+obj.getEmployeeKey()+" where recNo="+obj.getQblistEmpKey()+"");
+		query.append("update qblists set listType='"+listType+"',Name='"+obj.getFullName()+"',ArName='"+obj.getArabicName()+"',FullName='"+obj.getFullName()+"',Parent='',IsActive='Y',Sublevel="+0+",hremp_key="+obj.getEmployeeKey()+" where recNo="+obj.getQblistEmpKey()+"");
 		return query.toString();		
 	}
 	

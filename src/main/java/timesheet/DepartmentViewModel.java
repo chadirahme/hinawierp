@@ -5,6 +5,11 @@ import hr.model.CompanyModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import layout.MenuModel;
 import model.HRListValuesModel;
@@ -108,6 +113,24 @@ public class DepartmentViewModel {
 	{
 		try
 		{
+//			List<String> descCollect =lstPositions.stream().map(x->x.getEnDescription()).collect(Collectors.toList());
+//			Set<String> resultGrp= descCollect.stream().collect(Collectors.groupingBy(Function.identity()
+//				, Collectors.counting()))    // create a map {1=1, 2=1, 3=2, 4=2, 5=1, 7=1, 9=2}
+//				.entrySet().stream()                 // Map -> Stream
+//				.filter(m -> m.getValue() > 1)       // if map value > 1, duplicate element
+//				.map(Map.Entry::getKey)
+//				.collect(Collectors.toSet());
+//
+//			if(resultGrp.size()>0){
+//				Messagebox.show(resultGrp.stream().map( n -> n.toString() ) .collect( Collectors.joining( "," ) )+ " Duplicates", "Department Setup",
+//						Messagebox.OK, Messagebox.INFORMATION);
+//
+//			}
+//
+//
+//			if(true)
+//			return;
+
 		for (HRListValuesModel item : lstPositions) {
 			if(item.getListId()>0)
 			{

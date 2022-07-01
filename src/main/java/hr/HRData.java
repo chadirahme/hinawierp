@@ -2007,6 +2007,7 @@ private Logger logger = Logger.getLogger(this.getClass());
 				obj.setEmployeeKey(empKey);
 				obj.setCompanyID(rs.getInt("COMP_KEY"));
 				obj.setEmployeeType(rs.getString("EMP_TYPE"));
+				obj.setEmployeeSalaryType(rs.getString("SALARY_CREATE"));
 				obj.setDepartmentID(rs.getInt("DEP_ID"));
 				obj.setPositionID(rs.getInt("POS_ID"));
 				obj.setEmployeeNo(rs.getString("EMP_NO"));

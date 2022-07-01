@@ -159,10 +159,10 @@
 						<listheader label="Marital Status" width="150px"
 							sort="auto('maritalStatus')" />
 							<listheader label="Project/Location" width="150px" sort="auto('projectName')" />
-						<listheader label="Team Name" width="100px"
+						<listheader label="Team Name" width="100px" visible="false"
 							sort="auto('workGroupName')" />
-						<listheader label="Supervisor" sort="auto('supervisorName')" width="150px"/>
-						<listheader label="Super-Supervisor" sort="auto('super_supervisorName')" width="150px"/>
+						<listheader label="Supervisor" sort="auto('supervisorName')" width="150px" visible="false"/>
+						<listheader label="Super-Supervisor" sort="auto('super_supervisorName')" width="150px" visible="false"/>
 						 <listheader label="Status" sort="auto('status')" width="150px" />
 						<listheader label="Status Description 1" sort="auto('employeeStatus')" width="150px" />
 						<listheader label="Status Description 2" sort="auto('statusDescription')" width="150px" /> 
